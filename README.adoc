@@ -4,10 +4,7 @@ IRIS stands for "Integration of Remote systems into Infection control Software" 
 
 This repository is used to manage the development and source code of IRIS.
 
-[NOTE]
-====
-The IRIS system is work in progress. If you are interested or have questions please reach out to us.
-====
+NOTE: The IRIS system is work in progress. If you are interested or have questions please reach out to us.
 
 == Concept
 
@@ -55,19 +52,13 @@ The servers are based on the following open source projects:
 - https://www.vavr.io/[Vavr] – for a better more functional programming style
 
 [[lombok]]
-[IMPORTANT]
-====
-    Make sure you have the Lombok plugin installed in your IDE so that your code can compile correctly.
-====
+IMPORTANT: Make sure you have the Lombok plugin installed in your IDE so that your code can compile correctly.
 
 === Maven profiles
 
 [[localDev]]
 localDev:: Includes H2 database driver as dependency and activates the `dev` Spring profile group and the `local` Spring profile.
-[NOTE]
-====
-    This profile is activated automaticly if there a file application-local.properties under src/main/resources.
-====
+NOTE: This profile is activated automaticly if there a file application-local.properties under src/main/resources.
 
 === Spring profiles
 
