@@ -1,0 +1,157 @@
+/*******************************************************************************
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *******************************************************************************/
+package de.healthIMIS.iris.public_server.data_submission.web;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import de.healthIMIS.iris.public_server.data_request.DataRequest;
+import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
+import de.healthIMIS.iris.public_server.data_request.DataRequest.Feature;
+import de.healthIMIS.iris.public_server.data_request.DataRequestRepository;
+import de.healthIMIS.iris.public_server.data_request.web.DataRequestRepresentations;
+import de.healthIMIS.iris.public_server.data_submission.ContactsSubmission;
+import de.healthIMIS.iris.public_server.data_submission.DataSubmission;
+import de.healthIMIS.iris.public_server.data_submission.DataSubmissionRepository;
+import de.healthIMIS.iris.public_server.data_submission.EventsSubmission;
+import de.healthIMIS.iris.public_server.data_submission.GuestsSubmission;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * Controller of the public end-points for apps to exchange data submissions.
+ * 
+ * @author Jens Kutzsche
+ */
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-18T08:11:24.698Z[GMT]")
+@RestController
+@Slf4j
+@RequiredArgsConstructor
+public class DataSubmissionApiController implements DataSubmissionApi {
+
+	private final @NonNull DataRequestRepository requests;
+	private final @NonNull DataSubmissionRepository submissions;
+	private final @NonNull DataRequestRepresentations representation;
+
+	@Override
+	public ResponseEntity<?> postContactsSubmission(
+		@Parameter(in = ParameterIn.PATH,
+			description = "The code of a data request sent by the health department.",
+			required = true,
+			schema = @Schema()) @PathVariable("code") DataRequestIdentifier code,
+		@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody ContactsSubmissionDto body) {
+
+		return handleRequest(
+			code,
+			body,
+			Feature.Contact,
+			it -> new ContactsSubmission(it.getId(), it.getDepartmentId(), body.getSalt(), body.getKeyReferenz(), body.getEncryptedData()));
+	}
+
+	@Override
+	public ResponseEntity<?> postEventsSubmission(
+		@Parameter(in = ParameterIn.PATH,
+			description = "The code of a data request sent by the health department.",
+			required = true,
+			schema = @Schema()) @PathVariable("code") DataRequestIdentifier code,
+		@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody EventsSubmissionDto body) {
+
+		return handleRequest(
+			code,
+			body,
+			Feature.Events,
+			it -> new EventsSubmission(it.getId(), it.getDepartmentId(), body.getSalt(), body.getKeyReferenz(), body.getEncryptedData()));
+	}
+
+	@Override
+	public ResponseEntity<?> postGuestsSubmission(
+		@Parameter(in = ParameterIn.PATH,
+			description = "The code of a data request sent by the health department.",
+			required = true,
+			schema = @Schema()) @PathVariable("code") DataRequestIdentifier code,
+		@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody GuestsSubmissionDto body) {
+
+		return handleRequest(
+			code,
+			body,
+			Feature.Guests,
+			it -> new GuestsSubmission(it.getId(), it.getDepartmentId(), body.getSalt(), body.getKeyReferenz(), body.getEncryptedData()));
+	}
+
+	private ResponseEntity<?> handleRequest(
+		DataRequestIdentifier code,
+		DataSubmissionDto body,
+		Feature feature,
+		Function<DataRequest, DataSubmission> submissionBuilder) {
+
+		return createAndSaveDataSubmission(code, body.getCheckCode(), feature, submissionBuilder).map(representation::toRepresentation)
+			.map(ResponseEntity::ok)
+			.orElseGet(() -> ResponseEntity.notFound().build());
+	}
+
+	private Optional<DataRequest> createAndSaveDataSubmission(
+		DataRequestIdentifier code,
+		@NotNull List<String> checkCodes,
+		Feature feature,
+		Function<DataRequest, DataSubmission> submissionBuilder) {
+
+		return requests.findById(code).filter(it -> matchesOnCheckCode(checkCodes, it)).filter(it -> matchesFeature(feature, it)).map(it -> {
+
+			var submission = submissions.save(submissionBuilder.apply(it));
+
+			log.debug(
+				"Submission - POST public + saved: {} (Type: {}; Department: {})",
+				submission.getRequestId().toString(),
+				submission.getClass().getSimpleName(),
+				submission.getDepartmentId());
+
+			return it;
+		});
+	}
+
+	private boolean matchesOnCheckCode(@NotNull List<String> checkCodes, DataRequest dataRequest) {
+
+		var requestCodes = new HashSet<String>(3);
+		if (dataRequest.getCheckCodeName() != null) {
+			requestCodes.add(dataRequest.getCheckCodeName());
+		}
+		if (dataRequest.getCheckCodeDayOfBirth() != null) {
+			requestCodes.add(dataRequest.getCheckCodeDayOfBirth());
+		}
+		if (dataRequest.getCheckCodeRandom() != null) {
+			requestCodes.add(dataRequest.getCheckCodeRandom());
+		}
+
+		return checkCodes.stream().anyMatch(requestCodes::contains);
+	}
+
+	private boolean matchesFeature(Feature feature, DataRequest dataRequest) {
+		return dataRequest.getFeatures().contains(feature);
+	}
+}
