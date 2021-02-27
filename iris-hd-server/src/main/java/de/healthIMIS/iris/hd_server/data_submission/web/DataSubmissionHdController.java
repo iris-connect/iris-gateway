@@ -12,17 +12,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package de.healthIMIS.iris.public_server.data_submission.web;
+package de.healthIMIS.iris.hd_server.data_submission.web;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.healthIMIS.iris.public_server.data_submission.DataSubmission;
-import de.healthIMIS.iris.public_server.data_submission.DataSubmissionRepository;
+import de.healthIMIS.iris.hd_server.core.DepartmentIdentifier;
+import de.healthIMIS.iris.hd_server.data_submission.DataSubmission;
+import de.healthIMIS.iris.hd_server.data_submission.DataSubmission.Feature;
+import de.healthIMIS.iris.hd_server.data_submission.DataSubmissionRepository;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -41,33 +44,32 @@ public class DataSubmissionHdController {
 	private final @NonNull DataSubmissionRepository submissions;
 
 	@GetMapping("/hd/data-submissions")
-	List<DataSubmissionInternalOutputDto> getDataSubmissions() {
+	List<DataSubmissionClientOutputDto> getDataSubmissions(@RequestParam("departmentId") DepartmentIdentifier departmentId) {
 
-		var dataSubmissions = submissions.findAll();
+		var dataSubmissions = submissions.findAllByDepartmentId(departmentId);
 
-		submissions.deleteAll(dataSubmissions);
+		submissions.deleteAll(dataSubmissions.toList());
 
 		var dtos =
-			StreamSupport.stream(dataSubmissions.spliterator(), false).map(it -> DataSubmissionInternalOutputDto.of(it)).collect(Collectors.toList());
+			StreamSupport.stream(dataSubmissions.spliterator(), false).map(it -> DataSubmissionClientOutputDto.of(it)).collect(Collectors.toList());
 
-		log.debug(
-			"Submission - GET hd server: {}",
-			dtos.stream().map(DataSubmissionInternalOutputDto::getRequestId).collect(Collectors.joining(", ")));
+		log.debug("Submission - GET internal: {}", dtos.stream().map(DataSubmissionClientOutputDto::getRequestId).collect(Collectors.joining(", ")));
 
 		return dtos;
 	}
 
 	@Data
-	static class DataSubmissionInternalOutputDto {
+	static class DataSubmissionClientOutputDto {
 
-		static DataSubmissionInternalOutputDto of(DataSubmission submission) {
-			return new DataSubmissionInternalOutputDto(
+		static DataSubmissionClientOutputDto of(DataSubmission submission) {
+			return new DataSubmissionClientOutputDto(
 				submission.getId().toString(),
 				submission.getRequestId().toString(),
 				submission.getDepartmentId().toString(),
 				submission.getSalt(),
 				submission.getKeyReferenz(),
-				submission.getEncryptedData());
+				submission.getEncryptedData(),
+				submission.getFeature());
 		}
 
 		private final String id;
@@ -81,5 +83,7 @@ public class DataSubmissionHdController {
 		private final String keyReferenz;
 
 		private final String encryptedData;
+
+		private final Feature feature;
 	}
 }

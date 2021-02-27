@@ -12,11 +12,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package de.healthIMIS.iris.public_server.data_request.web;
+package de.healthIMIS.iris.hd_server.data_request.web;
 
 import java.time.Instant;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -28,12 +27,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.healthIMIS.iris.public_server.data_request.DataRequest;
-import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
-import de.healthIMIS.iris.public_server.data_request.DataRequest.Feature;
-import de.healthIMIS.iris.public_server.data_request.DataRequest.Status;
-import de.healthIMIS.iris.public_server.data_request.DataRequestRepository;
-import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
+import de.healthIMIS.iris.hd_server.core.DepartmentIdentifier;
+import de.healthIMIS.iris.hd_server.core.SormasRefId;
+import de.healthIMIS.iris.hd_server.data_request.DataRequest;
+import de.healthIMIS.iris.hd_server.data_request.DataRequest.DataRequestIdentifier;
+import de.healthIMIS.iris.hd_server.data_request.DataRequest.Feature;
+import de.healthIMIS.iris.hd_server.data_request.DataRequest.Status;
+import de.healthIMIS.iris.hd_server.data_request.DataRequestRepository;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -53,26 +53,29 @@ public class DataRequestHdController {
 
 	@PutMapping("/hd/data-requests/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
-	DataRequestInternalInputDto putDataRequest(
+	DataRequestClientInputDto putDataRequest(
 		@PathVariable("id") DataRequestIdentifier id,
-		@Valid @RequestBody DataRequestInternalInputDto payload,
+		@Valid @RequestBody DataRequestClientInputDto payload,
 		Errors errors) {
 
 		var dataRequest = new DataRequest(
 			id,
-			DepartmentIdentifier.of(payload.departmentId),
+			payload.departmentId,
+			payload.refId,
 			payload.checkCodeName,
 			payload.checkCodeDayOfBirth,
 			payload.checkCodeRandom,
 			payload.requestStart,
 			payload.requestEnd,
+			payload.irisUserId,
+			payload.sormasUserId,
 			payload.features,
 			payload.status);
 
 		requests.save(dataRequest);
 
 		log.debug(
-			"Request - PUT hd server + saved: {} (Checkcodes: {}, {} and {})",
+			"Request - PUT hd client + saved: {} (Checkcodes: {}, {} and {})",
 			dataRequest.getId().toString(),
 			dataRequest.getCheckCodeName(),
 			dataRequest.getCheckCodeDayOfBirth(),
@@ -82,9 +85,13 @@ public class DataRequestHdController {
 	}
 
 	@Data
-	static class DataRequestInternalInputDto {
+	static class DataRequestClientInputDto {
 
-		private UUID departmentId;
+		private DepartmentIdentifier departmentId;
+
+		private SormasRefId refId;
+		private String irisUserId;
+		private String sormasUserId;
 
 		private String checkCodeName;
 		private String checkCodeDayOfBirth;
