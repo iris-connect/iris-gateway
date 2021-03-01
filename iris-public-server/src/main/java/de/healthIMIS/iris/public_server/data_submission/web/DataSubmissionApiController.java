@@ -126,7 +126,7 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 			var submission = submissions.save(submissionBuilder.apply(it));
 
 			log.debug(
-				"Submission - POST public + saved: {} (Type: {}; Department: {})",
+				"Submission - POST from public + saved: {} (Type: {}; Department: {})",
 				submission.getRequestId().toString(),
 				submission.getClass().getSimpleName(),
 				submission.getDepartmentId());

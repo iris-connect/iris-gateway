@@ -14,10 +14,15 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType;
@@ -36,11 +41,20 @@ public class IrisPublicServerApplication {
 		SpringApplication.run(IrisPublicServerApplication.class, args);
 	}
 
+	@Autowired
+	Environment env;
+
 	@Bean
 	FlywayMigrationStrategy getFlywayMigrationStrategy() {
 
-		if (log.isDebugEnabled()) {
-			return flyway -> {
+		return flyway -> {
+
+			var profiles_clean = List.of("psql_compose_db");
+			if (Arrays.stream(env.getActiveProfiles()).anyMatch(profiles_clean::contains)) {
+				flyway.clean();
+			}
+
+			if (log.isDebugEnabled()) {
 
 				var results = flyway.validateWithResult();
 
@@ -53,11 +67,9 @@ public class IrisPublicServerApplication {
 							? " | ErrorCode: " + errorDetails.errorCode + " | ErrorMessage: " + errorDetails.errorMessage
 							: "");
 				});
+			}
 
-				flyway.migrate();
-			};
-		} else {
-			return null;
-		}
+			flyway.migrate();
+		};
 	}
 }
