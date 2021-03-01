@@ -14,6 +14,10 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_submission;
 
+import java.time.LocalDateTime;
+
+import javax.transaction.Transactional;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.util.Streamable;
 
@@ -25,5 +29,12 @@ import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifi
  */
 public interface DataSubmissionRepository extends CrudRepository<DataSubmission, DataSubmissionIdentifier> {
 
+	@Transactional
+	Streamable<DataSubmission> findAllByMetadataLastModifiedIsBetweenOrderByMetadataLastModified(LocalDateTime from, LocalDateTime to);
+
+	@Transactional
+	int deleteAllByMetadataLastModifiedIsBefore(LocalDateTime lastSync);
+
+	@Transactional
 	Streamable<DataSubmission> findAllByDepartmentId(DepartmentIdentifier id);
 }

@@ -69,10 +69,11 @@ public class DataRequestHdController {
 			payload.features,
 			payload.status);
 
+		requests.deleteById(dataRequest.getId());
 		requests.save(dataRequest);
 
 		log.debug(
-			"Request - PUT hd server + saved: {} (Checkcodes: {}, {} and {})",
+			"Request - PUT from hd server + saved: {} (Checkcodes: {}, {} and {})",
 			dataRequest.getId().toString(),
 			dataRequest.getCheckCodeName(),
 			dataRequest.getCheckCodeDayOfBirth(),

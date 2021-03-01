@@ -77,7 +77,7 @@ public class DataRequestApiController implements DataRequestApi {
 
 	private DataRequest log(DataRequest request) {
 
-		log.debug("Request - GET public: {}", request.getId().toString());
+		log.debug("Request - GET from public: {}", request.getId().toString());
 
 		return request;
 	}

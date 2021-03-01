@@ -14,15 +14,28 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_submission.web;
 
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+import static io.vavr.Predicates.instanceOf;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.healthIMIS.iris.public_server.data_submission.ContactsSubmission;
 import de.healthIMIS.iris.public_server.data_submission.DataSubmission;
 import de.healthIMIS.iris.public_server.data_submission.DataSubmissionRepository;
+import de.healthIMIS.iris.public_server.data_submission.EventsSubmission;
+import de.healthIMIS.iris.public_server.data_submission.GuestsSubmission;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -41,20 +54,33 @@ public class DataSubmissionHdController {
 	private final @NonNull DataSubmissionRepository submissions;
 
 	@GetMapping("/hd/data-submissions")
-	List<DataSubmissionInternalOutputDto> getDataSubmissions() {
+	HttpEntity<List<DataSubmissionInternalOutputDto>> getDataSubmissions(@RequestParam("from") String fromStr) {
 
-		var dataSubmissions = submissions.findAll();
+		var from = LocalDateTime.parse(fromStr);
 
-		submissions.deleteAll(dataSubmissions);
+		// Shall prevent that within one millisecond (accuracy of the Last-Modified header) after
+		// loading additional records are added and thus records are transmitted twice or are forgotten.
+		var to = LocalDateTime.now().withNano(0);
 
-		var dtos =
-			StreamSupport.stream(dataSubmissions.spliterator(), false).map(it -> DataSubmissionInternalOutputDto.of(it)).collect(Collectors.toList());
+		var dataSubmissions = submissions.findAllByMetadataLastModifiedIsBetweenOrderByMetadataLastModified(from, to);
+
+		var dtos = dataSubmissions.map(DataSubmissionInternalOutputDto::of).toList();
 
 		log.debug(
-			"Submission - GET hd server: {}",
+			"Submission - GET from hd server: {}",
 			dtos.stream().map(DataSubmissionInternalOutputDto::getRequestId).collect(Collectors.joining(", ")));
 
-		return dtos;
+		return ResponseEntity.ok().lastModified(to.atZone(ZoneId.systemDefault())).body(dtos);
+	}
+
+	@DeleteMapping("/hd/data-submissions")
+	void deleteDataSubmissions(@RequestParam("from") String fromStr) {
+
+		var from = LocalDateTime.parse(fromStr);
+
+		var deleteCount = submissions.deleteAllByMetadataLastModifiedIsBefore(from);
+
+		log.debug("Submission - {} submissions deleted", deleteCount);
 	}
 
 	@Data
@@ -67,7 +93,8 @@ public class DataSubmissionHdController {
 				submission.getDepartmentId().toString(),
 				submission.getSalt(),
 				submission.getKeyReferenz(),
-				submission.getEncryptedData());
+				submission.getEncryptedData(),
+				determineFeature(submission));
 		}
 
 		private final String id;
@@ -81,5 +108,21 @@ public class DataSubmissionHdController {
 		private final String keyReferenz;
 
 		private final String encryptedData;
+
+		private final Feature feature;
+	}
+
+	private static Feature determineFeature(DataSubmission submission) {
+
+		return Match(submission).of(
+			Case($(instanceOf(ContactsSubmission.class)), Feature.Contact),
+			Case($(instanceOf(EventsSubmission.class)), Feature.Events),
+			Case($(instanceOf(GuestsSubmission.class)), Feature.Guests));
+	}
+
+	public enum Feature {
+		Contact,
+		Events,
+		Guests
 	}
 }
