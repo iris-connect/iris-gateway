@@ -40,19 +40,30 @@ $ mvnw spring-boot:run -PlocalDev <3>
 <3> Run the server with an in-memory database.
 <4> Switch to the health department server.
 
-=== Libraries
+==== Sample data
 
-The servers are based on the following open source projects:
+If the servers are started with the <<profiles,profile>> `psql_compose_db` or `h2_db`, then the following sample data is inserted into the database at each startup. The H2 db is in-memory and therefore not persistent. The Postgres db is emptied with the profile `psql_compose_db` at startup before the data is imported.
 
-- Spring Boot 2.4
-- Spring MVC
-- Spring Data
-- https://flywaydb.org[Flyway] – for database migration
-- https://projectlombok.org[Project Lombok] – for low level code generation
-- https://www.vavr.io/[Vavr] – for a better more functional programming style
+===== Data requests
 
-[[lombok]]
-IMPORTANT: Make sure you have the Lombok plugin installed in your IDE so that your code can compile correctly.
+[width="100%",options="header"]
+|====================
+| Request-ID / Code | Department-ID | Checkcode Name | Checkcode Day of Birth | Checkcode Random | From | To | Feature
+//-------------------
+| 790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80 | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | e7fcc353b0b13024d48f74a718d8d721 ⇒ MD5 of maxmuster | 27b0c9a67b0273a6150245f64863e81d ⇒ MD5 of 01011990 | ABCDEFGHIJ | now - 2 Days | | Contact
+| 2707fd28-9b4f-4140-b80e-d56d9aad831f | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | cd0087e4707045b33c144bf09305c2a5 ⇒ MD5 of thomasmüller | | 9876543XYZ | now - 4 Days  | now - 2 Days | Contact + Events
+| 3907e730-af89-4944-8e75-fbe6ba60c904 | 6afbbe9b-938c-46d7-93e4-7c9e1f737273 | bce7a55a7b8a8a89c33c4879fc545cc9 ⇒ MD5 of heikebaum | | 23456789AB | now - 4 Days  | now - 2 Days | Contact
+|====================
+
+===== Data submissions
+
+[width="100%",options="header"]
+|====================
+| Request-ID / Code | Department-ID | Salt | Key Referenz | Encrypte Data | Feature
+//-------------------
+| 790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80 | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | salt | key | DATA OF CONTACTS | Contact
+| 790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80 | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | salt | key | DATA OF EVENTS | Events
+|====================
 
 === Maven profiles
 
@@ -78,6 +89,7 @@ Activate the needed profile(s) by setting the `spring.profiles.active` property 
 
 ==== Profiles
 
+[[profiles]]
 [width="100%",cols="1,9"]
 |====================
 | local | Exclusively local profile which is not checked into the Git repository. Can be used to set special settings (e.g. work against a locally installed database). If the profile file `application-local.properties` exist, the <<localDev,Maven profile `localDev`>> is activated for easy local execution.
@@ -87,6 +99,20 @@ Activate the needed profile(s) by setting the `spring.profiles.active` property 
 | dev_env | Some additional configurations for execution during development (e.g. debug logging).
 | docker | Configuration for the Docker image with Postgres database at host postgres. This is intended for use with Docker-Compose: `iris/infrastructure/docker-compose_with-servers.yml`
 |====================
+
+=== Libraries
+
+The servers are based on the following open source projects:
+
+- Spring Boot 2.4
+- Spring MVC
+- Spring Data
+- https://flywaydb.org[Flyway] – for database migration
+- https://projectlombok.org[Project Lombok] – for low level code generation
+- https://www.vavr.io/[Vavr] – for a better more functional programming style
+
+[[lombok]]
+IMPORTANT: Make sure you have the Lombok plugin installed in your IDE so that your code can compile correctly.
 
 == Development 
 === Java parts
