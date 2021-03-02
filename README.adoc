@@ -1,3 +1,5 @@
+:toc: macro
+
 # image:logo/iris-logo.png[width=100] IRIS System
 
 IRIS stands for "Integration of Remote systems into Infection control Software" and is intended to be the central point of mediation between the various contact, event and guest tracking apps on the one hand and the infection control software (e.g. SORMAS) in the health departments on the other.
@@ -5,6 +7,8 @@ IRIS stands for "Integration of Remote systems into Infection control Software" 
 This repository is used to manage the development and source code of IRIS.
 
 NOTE: The IRIS system is work in progress. If you are interested or have questions please reach out to us.
+
+toc::[]
 
 == Concept
 
@@ -38,11 +42,14 @@ $ mvnw spring-boot:run -PlocalDev <3>
 <1> Clone the repository.
 <2> Switch to the public server.
 <3> Run the server with an in-memory database.
+    * Public server uses port *8090* by default
+    * HD server uses port *8091* by default
 <4> Switch to the health department server.
 
+[[sample_data]]
 ==== Sample data
 
-If the servers are started with the <<profiles,profile>> `psql_compose_db` or `h2_db`, then the following sample data is inserted into the database at each startup. The H2 db is in-memory and therefore not persistent. The Postgres db is emptied with the profile `psql_compose_db` at startup before the data is imported.
+If the servers are started with the <<profiles,Spring profile>> `psql_compose_db` or `h2_db`, then the following sample data is inserted into the database at each startup. The H2 db is in-memory and therefore not persistent. The Postgres db is cleaned with the profile `psql_compose_db` at startup before the data is imported.
 
 ===== Data requests
 
@@ -74,13 +81,14 @@ If the servers are started with the <<profiles,profile>> `psql_compose_db` or `h
 NOTE: This profile is activated automaticly if there a file application-local.properties under src/main/resources.
 |====================
 
+[[profiles]]
 === Spring profiles
 
 Activate the needed profile(s) by setting the `spring.profiles.active` property respective parameter or the `SPRING_PROFILES_ACTIVE` environment variable.
 
 ==== Profile groups
 
-[width="100%",cols="1,9"]
+[width="100%",cols="1a,9a"]
 |====================
 | dev | h2_db, dev_env
 | dev_psql | psql_compose_db, dev_env
@@ -89,16 +97,56 @@ Activate the needed profile(s) by setting the `spring.profiles.active` property 
 
 ==== Profiles
 
-[[profiles]]
-[width="100%",cols="1,9"]
+[width="100%",cols="1a,9a"]
 |====================
 | local | Exclusively local profile which is not checked into the Git repository. Can be used to set special settings (e.g. work against a locally installed database). If the profile file `application-local.properties` exist, the <<localDev,Maven profile `localDev`>> is activated for easy local execution.
 | h2_db | H2 in-memory database and H2 Console
+    
+NOTE: The <<sample_data,sample data>> are inserted at server startup.
+
 | psql_compose_db | Configuration for the Postgres database at localhost started with the Docker-Compose: `iris/infrastructure/docker-compose.yml`
+    
+NOTE: The database is cleaned and the <<sample_data,sample data>> are inserted at server startup.
+
 | prod_db | Configuration for the production database, where most settings are likely to be made via the respective environment.
+
 | dev_env | Some additional configurations for execution during development (e.g. debug logging).
+
 | docker | Configuration for the Docker image with Postgres database at host postgres. This is intended for use with Docker-Compose: `iris/infrastructure/docker-compose_with-servers.yml`
 |====================
+
+[[postgres]]
+=== PostgreSQL Database
+
+There is a Docker-Compose configuration (`infrastructure/docker-compose.yml`) which provides a Postgres db and a pgAdmin via Docker. 
+
+DB:: 
+    - login = postgres:postgres; 
+    - hostname in Docker = postgres
+    - port on host = 5432
+    - databases = iris_public + iris_hd
+    - Docker volume = psqldata_iris
+
+pgAdmin::
+    - login = postgres@healthIMIS.de:postgres
+    - port on host = 5555
+    
+=== Run with Docker
+
+You can build Docker images for the servers and run this with Docker.
+
+[source, bash]
+----
+$ cd iris/ <1>
+$ mvnw spring-boot:build-image <2>
+$ docker-compose -f infrastructure/docker-compose_with-servers.yml up -d <3>
+----
+<1> Switch to the root directory of the IRIS project.
+<2> Build the images for both servers.
+<3> Run the Postgres db, the pgAdmin, and the both server with Docker-Compose.
+    * Postgres DB and pgAdmin <<postgres,as above>>
+    * Public server uses port *8880* by default
+    * HD server uses port *8881* by default
 
 === Libraries
 
