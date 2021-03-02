@@ -56,26 +56,37 @@ IMPORTANT: Make sure you have the Lombok plugin installed in your IDE so that yo
 
 === Maven profiles
 
-[[localDev]]
-localDev:: Includes H2 database driver as dependency and activates the `dev` Spring profile group and the `local` Spring profile.
+[width="100%",cols="1a,9a"]
+|====================
+| [[localDev]] localDev | Includes H2 database driver as dependency and activates the `dev` Spring profile group and the `local` Spring profile.
+
 NOTE: This profile is activated automaticly if there a file application-local.properties under src/main/resources.
+|====================
 
 === Spring profiles
 
 Activate the needed profile(s) by setting the `spring.profiles.active` property respective parameter or the `SPRING_PROFILES_ACTIVE` environment variable.
 
 ==== Profile groups
-dev:: h2_db, dev_env
-dev_psql:: psql_compose_db, dev_env
-prod:: prod_db
+
+[width="100%",cols="1,9"]
+|====================
+| dev | h2_db, dev_env
+| dev_psql | psql_compose_db, dev_env
+| prod | prod_db
+|====================
 
 ==== Profiles
-local:: Exclusively local profile which is not checked into the Git repository. Can be used to set special settings (e.g. work against a locally installed database). If the profile file `application-local.properties` exist, the <<localDev,Maven profile `localDev`>> is activated for easy local execution.
-h2_db:: H2 in-memory database and H2 Console
-psql_compose_db:: Configuration for the Postgres database at localhost started with the Docker-Compose: `iris/infrastructure/docker-compose.yml`
-prod_db:: Configuration for the production database, where most settings are likely to be made via the respective environment.
-dev_env:: Some additional configurations for execution during development (e.g. debug logging).
-docker:: Configuration for the Docker image with Postgres database at host postgres. This is intended for use with Docker-Compose: `iris/infrastructure/docker-compose_with-servers.yml`
+
+[width="100%",cols="1,9"]
+|====================
+| local | Exclusively local profile which is not checked into the Git repository. Can be used to set special settings (e.g. work against a locally installed database). If the profile file `application-local.properties` exist, the <<localDev,Maven profile `localDev`>> is activated for easy local execution.
+| h2_db | H2 in-memory database and H2 Console
+| psql_compose_db | Configuration for the Postgres database at localhost started with the Docker-Compose: `iris/infrastructure/docker-compose.yml`
+| prod_db | Configuration for the production database, where most settings are likely to be made via the respective environment.
+| dev_env | Some additional configurations for execution during development (e.g. debug logging).
+| docker | Configuration for the Docker image with Postgres database at host postgres. This is intended for use with Docker-Compose: `iris/infrastructure/docker-compose_with-servers.yml`
+|====================
 
 == Development 
 === Java parts
