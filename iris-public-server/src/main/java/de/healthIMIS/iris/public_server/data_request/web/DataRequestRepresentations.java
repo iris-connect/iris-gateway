@@ -25,7 +25,6 @@ import org.springframework.hateoas.Links;
 import org.springframework.stereotype.Component;
 
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
-import de.healthIMIS.iris.public_server.data_request.DataRequestRepository;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.Feature;
 import de.healthIMIS.iris.public_server.data_submission.web.DataSubmissionApi;
 import de.healthIMIS.iris.public_server.department.DepartmentManager;
@@ -42,7 +41,7 @@ import lombok.RequiredArgsConstructor;
 public class DataRequestRepresentations {
 
 	private final @NonNull DepartmentManager departments;
-	
+
 	public EntityModel<DataRequestDto> toRepresentation(DataRequest dataRequest) {
 
 		var request = new DataRequestDto().start(dataRequest.getRequestStart()).end(dataRequest.getRequestEnd());
@@ -57,13 +56,16 @@ public class DataRequestRepresentations {
 		Links links = Links.of(linkTo(methodOn(DataRequestApiController.class).getDataRequestByCode(dataRequest.getId())).withSelfRel())
 			.andIf(
 				dataRequest.getFeatures().contains(Feature.Contact),
-				linkTo(methodOn(DataSubmissionApi.class).postContactsSubmission(dataRequest.getId(), null)).withRel(CONTACTS_SUBMISSION))
+				linkTo(methodOn(DataSubmissionApi.class).postContactsSubmission(dataRequest.getId(), null)).withRel(CONTACTS_SUBMISSION)
+					.withTitle("Contacts"))
 			.andIf(
 				dataRequest.getFeatures().contains(Feature.Events),
-				linkTo(methodOn(DataSubmissionApi.class).postEventsSubmission(dataRequest.getId(), null)).withRel(EVENTS_SUBMISSION))
+				linkTo(methodOn(DataSubmissionApi.class).postEventsSubmission(dataRequest.getId(), null)).withRel(EVENTS_SUBMISSION)
+					.withTitle("Events"))
 			.andIf(
 				dataRequest.getFeatures().contains(Feature.Guests),
-				linkTo(methodOn(DataSubmissionApi.class).postGuestsSubmission(dataRequest.getId(), null)).withRel(GUESTS_SUBMISSION));
+				linkTo(methodOn(DataSubmissionApi.class).postGuestsSubmission(dataRequest.getId(), null)).withRel(GUESTS_SUBMISSION)
+					.withTitle("Guests"));
 
 		return model.add(links);
 	}

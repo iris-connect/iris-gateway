@@ -37,7 +37,7 @@ public interface DataRequestApi {
 		@ApiResponse(responseCode = "404", description = "The specified resource was not found.") })
 	@RequestMapping(value = "/data-requests/{code}",
 		produces = {
-			"application/vnd.iris.api.v1+hal+json" },
+			"application/hal+json" },
 		method = RequestMethod.GET)
 	ResponseEntity<?> getDataRequestByCode(
 		@Parameter(in = ParameterIn.PATH,
@@ -56,7 +56,7 @@ public interface DataRequestApi {
 		@ApiResponse(responseCode = "404", description = "The specified resource was not found.") })
 	@RequestMapping(value = "/data-requests",
 		produces = {
-			"application/vnd.iris.api.v1+hal+json" },
+			"application/hal+json" },
 		method = RequestMethod.GET)
 	ResponseEntity<?> getDataRequestByTeleCode(
 		@NotNull @Parameter(in = ParameterIn.QUERY,
