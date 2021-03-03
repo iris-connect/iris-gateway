@@ -14,8 +14,9 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_request;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.UUID;
@@ -57,9 +58,9 @@ public class DataRequestDataInitializer implements DataInitializer {
 				REQ_ID_1,
 				DepartmentDataInitializer.DEPARTMENT_ID_1,
 				"e7fcc353b0b13024d48f74a718d8d721",
-				"27b0c9a67b0273a6150245f64863e81d",
-				"abcdefghij",
-				Instant.now().minus(2, ChronoUnit.DAYS),
+				"c82c1cd77fbd144003b1e476718f66ce",
+				"ABCDEFGHKL",
+				Instant.now().minus(2, DAYS),
 				null,
 				EnumSet.of(Feature.Contact),
 				Status.Open));
@@ -68,11 +69,11 @@ public class DataRequestDataInitializer implements DataInitializer {
 			new DataRequest(
 				REQ_ID_2,
 				DepartmentDataInitializer.DEPARTMENT_ID_1,
+				"cd0087e4707045b33c144bf09305c2a5",
 				null,
-				null,
-				null,
-				Instant.now().minus(4, ChronoUnit.DAYS),
-				Instant.now().minus(2, ChronoUnit.DAYS),
+				"9876543XYZ",
+				Instant.now().minus(4, DAYS),
+				Instant.now().minus(2, DAYS),
 				EnumSet.of(Feature.Contact, Feature.Events),
 				Status.Open));
 
@@ -80,11 +81,11 @@ public class DataRequestDataInitializer implements DataInitializer {
 			new DataRequest(
 				REQ_ID_3,
 				DepartmentDataInitializer.DEPARTMENT_ID_2,
+				"bce7a55a7b8a8a89c33c4879fc545cc9",
 				null,
-				null,
-				null,
-				Instant.now().minus(4, ChronoUnit.DAYS),
-				Instant.now().minus(2, ChronoUnit.DAYS),
+				"23456789AB",
+				Instant.now().minus(4, DAYS),
+				Instant.now().minus(2, DAYS),
 				EnumSet.of(Feature.Contact),
 				Status.Open));
 

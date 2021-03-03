@@ -43,9 +43,9 @@ public interface DataSubmissionApi {
 		@ApiResponse(responseCode = "422", description = "The transferred entity is not expected for the data request.") })
 	@RequestMapping(value = "/data-submissions/{code}/contacts",
 		produces = {
-			"application/vnd.iris.api.v1+hal+json" },
+			"application/hal+json" },
 		consumes = {
-			"application/vnd.iris.api.v1+hal+json" },
+			"application/json" },
 		method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	ResponseEntity<?> postContactsSubmission(
@@ -70,9 +70,9 @@ public interface DataSubmissionApi {
 		@ApiResponse(responseCode = "422", description = "The transferred entity is not expected for the data request.") })
 	@RequestMapping(value = "/data-submissions/{code}/events",
 		produces = {
-			"application/vnd.iris.api.v1+hal+json" },
+			"application/hal+json" },
 		consumes = {
-			"application/vnd.iris.api.v1+hal+json" },
+			"application/json" },
 		method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	ResponseEntity<?> postEventsSubmission(
@@ -97,9 +97,9 @@ public interface DataSubmissionApi {
 		@ApiResponse(responseCode = "422", description = "The transferred entity is not expected for the data request.") })
 	@RequestMapping(value = "/data-submissions/{code}/guests",
 		produces = {
-			"application/vnd.iris.api.v1+hal+json" },
+			"application/hal+json" },
 		consumes = {
-			"application/vnd.iris.api.v1+hal+json" },
+			"application/json" },
 		method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	ResponseEntity<?> postGuestsSubmission(
