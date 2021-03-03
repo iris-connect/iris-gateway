@@ -55,7 +55,7 @@ If the servers are started with the <<profiles,Spring profile>> `psql_compose_db
 
 [width="100%",options="header"]
 |====================
-| Request-ID / Code | Department-ID | Checkcode Name | Checkcode Day of Birth | Checkcode Random | From | To | Feature
+| Request-ID / Code | Department-ID | Check code - Name | Check code - Day of Birth | Check code - Random | From | To | Feature
 //-------------------
 | 790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80 | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | e7fcc353b0b13024d48f74a718d8d721 ⇒ MD5 of maxmuster | 27b0c9a67b0273a6150245f64863e81d ⇒ MD5 of 01011990 | ABCDEFGHIJ | now - 2 Days | | Contact
 | 2707fd28-9b4f-4140-b80e-d56d9aad831f | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | cd0087e4707045b33c144bf09305c2a5 ⇒ MD5 of thomasmüller | | 9876543XYZ | now - 4 Days  | now - 2 Days | Contact + Events
@@ -71,6 +71,20 @@ If the servers are started with the <<profiles,Spring profile>> `psql_compose_db
 | 790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80 | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | salt | key | DATA OF CONTACTS | Contact
 | 790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80 | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | salt | key | DATA OF EVENTS | Events
 |====================
+
+==== Dummy App
+
+There is a small Java CLI application as dummy citizen app in the folder `iris-dummy-app` for test and demonstration suppose. This app uses the public API of IRIS, read data requests for a code and put data submissions. For use, the public server must be running!
+
+[source, bash]
+----
+$ cd iris/iris-dummy-app <1>
+$ mvnw package <2>
+$ java -jar target/iris-dummy-app-0.0.1-SNAPSHOT-jar-with-dependencies.jar <3>
+----
+<1> Switch to the dummy app project.
+<2> Build the app as Jar with all dependencies.
+<3> Run the application in a command line. With the parameter `-h` you get a help output.
 
 === Maven profiles
 
