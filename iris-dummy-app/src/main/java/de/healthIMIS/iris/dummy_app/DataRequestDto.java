@@ -23,7 +23,9 @@ public class DataRequestDto {
 
 	private String createdAt = null;
 
-	private byte[] keyOfHealthDepartment = null;
+	private String keyOfHealthDepartment = null;
+
+	private String keyReferenz = null;
 
 	private String start = null;
 
