@@ -84,8 +84,8 @@ public class DataSubmissionDto {
 	 * 
 	 * @return salt
 	 **/
-	@Schema(required = true, description = "Salt used for encryption.")
-	@NotNull
+	@Schema(required = false, description = "Salt used for encryption.")
+//	@NotNull
 
 	public String getSalt() {
 		return salt;

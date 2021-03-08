@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,9 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
-import de.healthIMIS.iris.public_server.data_request.DataRequest.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.Status;
 import de.healthIMIS.iris.public_server.data_request.DataRequestRepository;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
@@ -52,7 +53,7 @@ public class DataRequestHdController {
 	private final @NonNull DataRequestRepository requests;
 
 	@PutMapping("/hd/data-requests/{id}")
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.OK)
 	DataRequestInternalInputDto putDataRequest(
 		@PathVariable("id") DataRequestIdentifier id,
 		@Valid @RequestBody DataRequestInternalInputDto payload,
@@ -69,7 +70,10 @@ public class DataRequestHdController {
 			payload.features,
 			payload.status);
 
-		requests.deleteById(dataRequest.getId());
+		try {
+			requests.deleteById(dataRequest.getId());
+		} catch (EmptyResultDataAccessException e) {
+		}
 		requests.save(dataRequest);
 
 		log.debug(

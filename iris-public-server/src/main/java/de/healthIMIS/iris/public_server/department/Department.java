@@ -18,23 +18,42 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 
+import de.healthIMIS.iris.public_server.core.Aggregate;
 import de.healthIMIS.iris.public_server.core.Id;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author Jens Kutzsche
  */
+@Entity
+@Table(name = "department")
+@NoArgsConstructor(force = true)
 @Getter
-@RequiredArgsConstructor(staticName = "of")
-public class Department {
+@Setter(AccessLevel.PACKAGE)
+public class Department extends Aggregate<Department, Department.DepartmentIdentifier> {
 
-	private final DepartmentIdentifier id;
 	private final String name;
+	private String keyReferenz;
+	private final @Lob String publicKey;
+
+	public Department(DepartmentIdentifier id, String name, String keyReferenz, String publicKey) {
+
+		super();
+
+		this.id = id;
+		this.name = name;
+		this.keyReferenz = keyReferenz;
+		this.publicKey = publicKey;
+	}
 
 	@Embeddable
 	@EqualsAndHashCode

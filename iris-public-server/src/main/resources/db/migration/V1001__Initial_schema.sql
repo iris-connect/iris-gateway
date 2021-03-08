@@ -24,13 +24,23 @@ CREATE TABLE data_request_feature (
 
 CREATE TABLE data_submission (
 	submission_id uuid NOT NULL,
-	submission_type varchar(31),
 	request_id uuid NOT NULL,
 	department_id uuid NOT NULL,
-	salt varchar(50) NOT NULL,
+	salt varchar(50) NULL,
 	key_referenz varchar(50) NOT NULL,
+	feature varchar(50) NOT NULL,
 	encrypted_data text NULL,
 	created timestamp NOT NULL,
 	last_modified timestamp NOT NULL,
 	CONSTRAINT submission_pkey PRIMARY KEY (submission_id)
 );
+
+CREATE TABLE department (
+	department_id uuid NOT NULL,
+	name varchar(50) NULL,
+	public_key text NOT NULL,
+	key_referenz varchar(50) NOT NULL,
+	created timestamp NOT NULL,
+	last_modified timestamp NOT NULL,
+	CONSTRAINT department_pkey PRIMARY KEY (department_id)
+)

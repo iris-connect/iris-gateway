@@ -24,10 +24,11 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.stereotype.Component;
 
+import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
-import de.healthIMIS.iris.public_server.data_request.DataRequest.Feature;
 import de.healthIMIS.iris.public_server.data_submission.web.DataSubmissionApi;
-import de.healthIMIS.iris.public_server.department.DepartmentManager;
+import de.healthIMIS.iris.public_server.department.Department;
+import de.healthIMIS.iris.public_server.department.DepartmentRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -40,15 +41,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DataRequestRepresentations {
 
-	private final @NonNull DepartmentManager departments;
+	private final @NonNull DepartmentRepository departments;
 
 	public EntityModel<DataRequestDto> toRepresentation(DataRequest dataRequest) {
 
 		var request = new DataRequestDto().start(dataRequest.getRequestStart()).end(dataRequest.getRequestEnd());
 
-		var department = departments.findById(dataRequest.getDepartmentId());
-		if (department.isPresent()) {
-			request = request.healthDepartment(department.get().getName());
+		var departmentOpt = departments.findById(dataRequest.getDepartmentId());
+		if (departmentOpt.isPresent()) {
+
+			Department department = departmentOpt.get();
+
+			request = request.healthDepartment(department.getName());
+			request = request.keyOfHealthDepartment(department.getPublicKey());
+			request = request.keyReferenz(department.getKeyReferenz());
 		}
 
 		var model = EntityModel.of(request);

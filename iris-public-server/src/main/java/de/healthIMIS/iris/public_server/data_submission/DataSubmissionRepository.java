@@ -36,5 +36,11 @@ public interface DataSubmissionRepository extends CrudRepository<DataSubmission,
 	int deleteAllByMetadataLastModifiedIsBefore(LocalDateTime lastSync);
 
 	@Transactional
-	Streamable<DataSubmission> findAllByDepartmentId(DepartmentIdentifier id);
+	Streamable<DataSubmission> findAllByDepartmentIdAndMetadataLastModifiedIsBetweenOrderByMetadataLastModified(
+		DepartmentIdentifier id,
+		LocalDateTime from,
+		LocalDateTime to);
+
+	@Transactional
+	int deleteAllByDepartmentIdAndMetadataLastModifiedIsBefore(DepartmentIdentifier id, LocalDateTime lastSync);
 }

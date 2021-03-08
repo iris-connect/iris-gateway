@@ -42,7 +42,10 @@ public class DataRequestDto {
 	private Instant createdAt = null;
 
 	@JsonProperty("keyOfHealthDepartment")
-	private byte[] keyOfHealthDepartment = null;
+	private String keyOfHealthDepartment = null;
+
+	@JsonProperty("keyReferenz")
+	private String keyReferenz = null;
 
 	@JsonProperty("start")
 	private Instant start = null;
@@ -92,7 +95,7 @@ public class DataRequestDto {
 		this.createdAt = createdAt;
 	}
 
-	public DataRequestDto keyOfHealthDepartment(byte[] keyOfHealthDepartment) {
+	public DataRequestDto keyOfHealthDepartment(String keyOfHealthDepartment) {
 		this.keyOfHealthDepartment = keyOfHealthDepartment;
 		return this;
 	}
@@ -104,12 +107,32 @@ public class DataRequestDto {
 	 **/
 	@Schema(description = "The key of the requesting health department that must be used for encryption.")
 
-	public byte[] getKeyOfHealthDepartment() {
+	public String getKeyOfHealthDepartment() {
 		return keyOfHealthDepartment;
 	}
 
-	public void setKeyOfHealthDepartment(byte[] keyOfHealthDepartment) {
+	public void setKeyOfHealthDepartment(String keyOfHealthDepartment) {
 		this.keyOfHealthDepartment = keyOfHealthDepartment;
+	}
+
+	public DataRequestDto keyReferenz(String keyReferenz) {
+		this.keyReferenz = keyReferenz;
+		return this;
+	}
+
+	/**
+	 * The key of the requesting health department that must be used for encryption.
+	 * 
+	 * @return keyReferenz
+	 **/
+	@Schema(description = "The key of the requesting health department that must be used for encryption.")
+
+	public String getKeyReferenz() {
+		return keyReferenz;
+	}
+
+	public void setKeyReferenz(String keyReferenz) {
+		this.keyReferenz = keyReferenz;
 	}
 
 	public DataRequestDto start(Instant start) {

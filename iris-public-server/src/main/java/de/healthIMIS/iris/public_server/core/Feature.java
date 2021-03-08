@@ -12,21 +12,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package de.healthIMIS.iris.public_server.department;
+package de.healthIMIS.iris.public_server.core;
 
-import java.util.Optional;
-
-import org.springframework.stereotype.Component;
-
-import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
-
-/**
- * @author Jens Kutzsche
- */
-@Component
-public class DepartmentManager {
-
-	public Optional<Department> findById(DepartmentIdentifier id) {
-		return Optional.of(Department.of(id, "Test GA"));
-	}
+public enum Feature {
+	Contact,
+	Events,
+	Guests
 }

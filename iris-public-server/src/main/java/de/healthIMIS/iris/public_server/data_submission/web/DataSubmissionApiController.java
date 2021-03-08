@@ -17,7 +17,6 @@ package de.healthIMIS.iris.public_server.data_submission.web;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -27,16 +26,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
-import de.healthIMIS.iris.public_server.data_request.DataRequest.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequestRepository;
 import de.healthIMIS.iris.public_server.data_request.web.DataRequestRepresentations;
-import de.healthIMIS.iris.public_server.data_submission.ContactsSubmission;
 import de.healthIMIS.iris.public_server.data_submission.DataSubmission;
 import de.healthIMIS.iris.public_server.data_submission.DataSubmissionRepository;
-import de.healthIMIS.iris.public_server.data_submission.EventsSubmission;
-import de.healthIMIS.iris.public_server.data_submission.GuestsSubmission;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -67,11 +63,7 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 			schema = @Schema()) @PathVariable("code") DataRequestIdentifier code,
 		@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody ContactsSubmissionDto body) {
 
-		return handleRequest(
-			code,
-			body,
-			Feature.Contact,
-			it -> new ContactsSubmission(it.getId(), it.getDepartmentId(), body.getSalt(), body.getKeyReferenz(), body.getEncryptedData()));
+		return handleRequest(code, body, body.getEncryptedData(), Feature.Contact);
 	}
 
 	@Override
@@ -82,11 +74,7 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 			schema = @Schema()) @PathVariable("code") DataRequestIdentifier code,
 		@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody EventsSubmissionDto body) {
 
-		return handleRequest(
-			code,
-			body,
-			Feature.Events,
-			it -> new EventsSubmission(it.getId(), it.getDepartmentId(), body.getSalt(), body.getKeyReferenz(), body.getEncryptedData()));
+		return handleRequest(code, body, body.getEncryptedData(), Feature.Events);
 	}
 
 	@Override
@@ -97,33 +85,26 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 			schema = @Schema()) @PathVariable("code") DataRequestIdentifier code,
 		@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody GuestsSubmissionDto body) {
 
-		return handleRequest(
-			code,
-			body,
-			Feature.Guests,
-			it -> new GuestsSubmission(it.getId(), it.getDepartmentId(), body.getSalt(), body.getKeyReferenz(), body.getEncryptedData()));
+		return handleRequest(code, body, body.getEncryptedData(), Feature.Guests);
 	}
 
-	private ResponseEntity<?> handleRequest(
-		DataRequestIdentifier code,
-		DataSubmissionDto body,
-		Feature feature,
-		Function<DataRequest, DataSubmission> submissionBuilder) {
+	private ResponseEntity<?> handleRequest(DataRequestIdentifier code, DataSubmissionDto body, String encryptedData, Feature feature) {
 
-		return createAndSaveDataSubmission(code, body.getCheckCode(), feature, submissionBuilder).map(representation::toRepresentation)
+		return createAndSaveDataSubmission(code, body, encryptedData, feature).map(representation::toRepresentation)
 			.map(ResponseEntity::ok)
 			.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 	private Optional<DataRequest> createAndSaveDataSubmission(
 		DataRequestIdentifier code,
-		@NotNull List<String> checkCodes,
-		Feature feature,
-		Function<DataRequest, DataSubmission> submissionBuilder) {
+		@NotNull DataSubmissionDto body,
+		String encryptedData,
+		Feature feature) {
 
-		return requests.findById(code).filter(it -> matchesOnCheckCode(checkCodes, it)).filter(it -> matchesFeature(feature, it)).map(it -> {
+		return requests.findById(code).filter(it -> matchesOnCheckCode(body.getCheckCode(), it)).filter(it -> matchesFeature(feature, it)).map(it -> {
 
-			var submission = submissions.save(submissionBuilder.apply(it));
+			var submission = new DataSubmission(it.getId(), it.getDepartmentId(), body.getSalt(), body.getKeyReferenz(), encryptedData, feature);
+			submission = submissions.save(submission);
 
 			log.debug(
 				"Submission - POST from public + saved: {} (Type: {}; Department: {})",
