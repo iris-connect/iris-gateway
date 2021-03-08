@@ -17,14 +17,16 @@ package de.healthIMIS.iris.public_server.data_submission;
 import java.io.Serializable;
 import java.util.UUID;
 
-import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import de.healthIMIS.iris.public_server.core.Aggregate;
+import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.core.Id;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
@@ -42,9 +44,7 @@ import lombok.Setter;
  */
 @Entity
 @Table(name = "data_submission")
-@Inheritance
-@DiscriminatorColumn(name = "submission_type")
-@NoArgsConstructor(force = true)
+@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @Getter
 @Setter(AccessLevel.PACKAGE)
 public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.DataSubmissionIdentifier> {
@@ -56,7 +56,17 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 	private String keyReferenz;
 	private @Lob String encryptedData;
 
-	public DataSubmission(DataRequestIdentifier requestId, DepartmentIdentifier departmentId, String salt, String keyReferenz, String encryptedData) {
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Feature feature;
+
+	public DataSubmission(
+		DataRequestIdentifier requestId,
+		DepartmentIdentifier departmentId,
+		String salt,
+		String keyReferenz,
+		String encryptedData,
+		Feature feature) {
 
 		super();
 
@@ -66,6 +76,7 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 		this.salt = salt;
 		this.keyReferenz = keyReferenz;
 		this.encryptedData = encryptedData;
+		this.feature = feature;
 	}
 
 	@Embeddable

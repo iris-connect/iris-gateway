@@ -24,8 +24,8 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 import de.healthIMIS.iris.public_server.core.DataInitializer;
+import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
-import de.healthIMIS.iris.public_server.data_request.DataRequest.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.Status;
 import de.healthIMIS.iris.public_server.department.DepartmentDataInitializer;
 import lombok.RequiredArgsConstructor;

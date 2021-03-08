@@ -14,15 +14,13 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.department;
 
-import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.CrudRepository;
 
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
 
 /**
  * @author Jens Kutzsche
  */
-@NoRepositoryBean
-public interface DepartmentRepository extends Repository<Department, DepartmentIdentifier> {
+public interface DepartmentRepository extends CrudRepository<Department, DepartmentIdentifier> {
 
 }

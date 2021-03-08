@@ -17,6 +17,7 @@ package de.healthIMIS.iris.public_server.data_submission.web;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.validation.annotation.Validated;
 
@@ -48,6 +49,7 @@ public class ContactsSubmissionDto extends DataSubmissionDto {
 	@Schema(description = "")
 
 	@Valid
+	@Pattern(regexp = "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$")
 	public String getEncryptedData() {
 		return encryptedData;
 	}

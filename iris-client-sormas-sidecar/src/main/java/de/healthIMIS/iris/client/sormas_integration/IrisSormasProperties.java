@@ -12,27 +12,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package de.healthIMIS.iris.public_server.data_submission;
+package de.healthIMIS.iris.client.sormas_integration;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import java.net.InetAddress;
 
-import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
-import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
-import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
-@Entity
-@DiscriminatorValue("Guests")
-@NoArgsConstructor(force = true)
-public class GuestsSubmission extends DataSubmission {
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-	public GuestsSubmission(
-		DataRequestIdentifier requestId,
-		DepartmentIdentifier departmentId,
-		String salt,
-		String keyReferenz,
-		String encryptedData) {
+/**
+ * @author Jens Kutzsche
+ *
+ */
+@ConstructorBinding
+@RequiredArgsConstructor
+@ConfigurationProperties("iris.sormas")
+@Getter
+public class IrisSormasProperties {
 
-		super(requestId, departmentId, salt, keyReferenz, encryptedData);
-	}
+	private final @NonNull InetAddress serverAddress;
+	private final @NonNull Integer serverPort;
+	private final @NonNull String user;
+	private final @NonNull String password;
 }

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import org.springframework.stereotype.Component;
 
 import de.healthIMIS.iris.public_server.core.DataInitializer;
+import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequestDataInitializer;
 import de.healthIMIS.iris.public_server.department.DepartmentDataInitializer;
 import lombok.RequiredArgsConstructor;
@@ -43,15 +44,22 @@ class DataSubmissionDataInitializer implements DataInitializer {
 		var list = new ArrayList<DataSubmission>();
 
 		list.add(
-			new ContactsSubmission(
+			new DataSubmission(
 				DataRequestDataInitializer.REQ_ID_1,
 				DepartmentDataInitializer.DEPARTMENT_ID_1,
 				"salt",
 				"key",
-				"DATA OF CONTACTS"));
+				"DATA OF CONTACTS",
+				Feature.Contact));
 
 		list.add(
-			new EventsSubmission(DataRequestDataInitializer.REQ_ID_1, DepartmentDataInitializer.DEPARTMENT_ID_1, "salt", "key", "DATA OF EVENTS"));
+			new DataSubmission(
+				DataRequestDataInitializer.REQ_ID_1,
+				DepartmentDataInitializer.DEPARTMENT_ID_1,
+				"salt",
+				"key",
+				"DATA OF EVENTS",
+				Feature.Events));
 
 		submissions.saveAll(list);
 	}

@@ -31,6 +31,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import de.healthIMIS.iris.public_server.core.Aggregate;
+import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.core.Id;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
 import lombok.AccessLevel;
@@ -116,12 +117,6 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 		public String toString() {
 			return requestId.toString();
 		}
-	}
-
-	public enum Feature {
-		Contact,
-		Events,
-		Guests
 	}
 
 	public enum Status {
