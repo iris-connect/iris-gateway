@@ -1,14 +1,25 @@
 package de.healthIMIS.iris.dummy_app;
 
-import static org.springframework.hateoas.client.Hop.rel;
-
 import java.net.URI;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -16,13 +27,19 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.client.Hop;
 import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.hateoas.client.Traverson;
 import org.springframework.hateoas.mediatype.hal.HalLinkDiscoverer;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,11 +69,15 @@ public class IrisDummyApp {
 	 * Date of birth of the user - is used for check code
 	 */
 	private final LocalDate dateOfBirth;
+	/**
+	 * Random Checkcode - is used as fallback
+	 */
+	private final String randomCode;
 
 	private final LinkDiscoverer discoverer = new HalLinkDiscoverer();
-	private final RestTemplate template = new RestTemplate();
 	private final ObjectMapper mapper = new ObjectMapper();
 	private final TextIO textIO = TextIoFactory.getTextIO();
+	private RestTemplate rest;
 	private Traverson traverson;
 
 	/**
@@ -64,14 +85,23 @@ public class IrisDummyApp {
 	 * 
 	 * @param args
 	 * @throws ParseException
+	 * @throws KeyStoreException
+	 * @throws NoSuchAlgorithmException
+	 * @throws KeyManagementException
 	 */
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) throws ParseException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 
 		var options = new Options();
 		options.addOption(new Option("h", "help", false, "print this message"));
 		options.addOption(Option.builder("a").longOpt("address").desc("the address of the API (default = http://localhost:8090)").hasArg().build());
 		options.addOption(Option.builder("n").longOpt("name").desc("name of the user (default = Max Muster)").hasArg().build());
 		options.addOption(Option.builder("b").longOpt("birth").desc("date of birth of the user (default = 1990-01-01)").hasArg().build());
+		options.addOption(
+			Option.builder("r")
+				.longOpt("random")
+				.desc("random checkcode - can be fixed for development in the client (default = ABCDEFGHKL)")
+				.hasArg()
+				.build());
 		options.addOption(Option.builder("d").longOpt("debug").desc("enable debug output").build());
 
 		var parser = new DefaultParser();
@@ -94,19 +124,33 @@ public class IrisDummyApp {
 		}
 
 		// functional options
-		var address = cmd.getOptionValue("a", "http://localhost:8090");
+		var address = cmd.getOptionValue("a", "https://localhost:8443");
 		var name = cmd.getOptionValue("n", "Max Muster");
 		var dateOfBirth = LocalDate.parse(cmd.getOptionValue("b", "1990-01-01"));
+		var randomCode = cmd.getOptionValue("r", "ABCDEFGHKL");
 
-		new IrisDummyApp(debug, address, name, dateOfBirth).run();
+		new IrisDummyApp(debug, address, name, dateOfBirth, randomCode).run();
 	}
 
 	/**
-	 * Instantiates the helper library and starts the input cycle.
+	 * Instantiates the helper library, disables SSL trust check for development and starts the input cycle.
+	 * 
+	 * @throws KeyStoreException
+	 * @throws NoSuchAlgorithmException
+	 * @throws KeyManagementException
 	 */
-	private void run() {
+	private void run() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+
+		var sslContext = new SSLContextBuilder().loadTrustMaterial((chain, authType) -> true) // trust all server certificates
+			.build();
+
+		var socketFactory = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
+		var httpClient = HttpClientBuilder.create().setSSLSocketFactory(socketFactory).build();
+
+		rest = new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
 
 		traverson = new Traverson(URI.create(address), MediaTypes.HAL_JSON);
+		traverson.setRestOperations(rest);
 
 		textIO.getTextTerminal().printf("\nAPI-Address: %s; User name: %s; Date of Birth: %s\n\n", address, name, dateOfBirth);
 
@@ -128,7 +172,7 @@ public class IrisDummyApp {
 			.read("Code");
 
 		// get data request object
-		var getByCodeHop = rel("GetDataRequestByCode").withParameter("code", code);
+		var getByCodeHop = Hop.rel("GetDataRequestByCode").withParameter("code", code);
 
 		var dataRequest = traverson.follow(getByCodeHop).toObject(DataRequestDto.class);
 
@@ -161,12 +205,13 @@ public class IrisDummyApp {
 			if (link.hasRel("PostContactsSubmission")) {
 
 				var content = mapper.writeValueAsString(createContacts());
-				postSubmission(link, content);
+				content = encryptContent(content, dataRequest.getKeyOfHealthDepartment());
+				postSubmission(link, content, dataRequest.getKeyReferenz());
 
 			} else if (link.hasRel("PostEventsSubmission")) {
-				postSubmission(link, createEvents());
+				postSubmission(link, createEvents(), dataRequest.getKeyReferenz());
 			} else if (link.hasRel("PostGuestsSubmission")) {
-				postSubmission(link, createGuests());
+				postSubmission(link, createGuests(), dataRequest.getKeyReferenz());
 			}
 
 		} catch (Exception e) {
@@ -220,28 +265,62 @@ public class IrisDummyApp {
 	}
 
 	/**
+	 * Encrypts the content with the given key from data request.
+	 * 
+	 * @param content
+	 * @param keyOfHealthDepartment
+	 * @throws NoSuchPaddingException
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 * @throws InvalidKeyException
+	 * @throws BadPaddingException
+	 * @throws IllegalBlockSizeException
+	 */
+	private String encryptContent(String content, String keyOfHealthDepartment)
+		throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, IllegalBlockSizeException,
+		BadPaddingException {
+
+		var keyBytes = Base64.getDecoder().decode(keyOfHealthDepartment);
+
+		var kf = KeyFactory.getInstance("RSA");
+		var publicKey = kf.generatePublic(new X509EncodedKeySpec(keyBytes));
+
+		var cipher = Cipher.getInstance("RSA");
+		cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+
+		String klarText = content;
+		byte[] encryptedArray = cipher.doFinal(klarText.getBytes());
+
+		var ret = Base64.getEncoder().encodeToString(encryptedArray);
+
+		if (debug) {
+			textIO.getTextTerminal().printf("Text to encrypt:           %s\n\n", klarText);
+			textIO.getTextTerminal().printf("Text encrypted:            %s\n\n", ret);
+		}
+
+		return ret;
+	}
+
+	/**
 	 * Send a POST request for the given data submission to the given Link to the API.
 	 * 
 	 * @param template
 	 * @param textIO
-	 *            TODO
 	 * @param link
 	 * @param content
+	 * @param keyReferenz
 	 */
-	private void postSubmission(Link link, String content) {
+	private void postSubmission(Link link, String content, String keyReferenz) {
 
-		var salt = "saltX";
-		var keyReferenz = "keyX";
+		var submission = new DataSubmissionDto().checkCode(determineCheckcode()).keyReferenz(keyReferenz).encryptedData(content);
 
-		var submission = new DataSubmissionDto().checkCode(determineCheckcode()).salt(salt).keyReferenz(keyReferenz).encryptedData(content);
-
-		textIO.getTextTerminal().printf("\nData submission is sent to healt department with salt '%s' and key referenz '%s'", salt, keyReferenz);
+		textIO.getTextTerminal().printf("\nData submission is sent to healt department with key referenz '%s'", keyReferenz);
 		if (debug) {
 			textIO.getTextTerminal().printf("\nContent of the data submission unencrypted:\n %s", content);
 		}
 		textIO.getTextTerminal().printf("\n\n");
 
-		template.postForObject(link.getHref(), submission, DataRequestDto.class);
+		rest.postForObject(link.getHref(), submission, DataRequestDto.class);
 	}
 
 	/**
@@ -273,6 +352,10 @@ public class IrisDummyApp {
 			if (debug) {
 				textIO.getTextTerminal().printf("\nCheck code for date of birth is MD5 of '%s' = '%s'\n\n", date, dateHash);
 			}
+		}
+
+		if (randomCode != null) {
+			ret.add(randomCode);
 		}
 
 		return ret;
