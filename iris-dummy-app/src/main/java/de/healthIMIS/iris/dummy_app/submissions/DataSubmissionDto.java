@@ -28,8 +28,8 @@ public class DataSubmissionDto {
 	@JsonProperty("checkCode")
 	private List<String> checkCode = new ArrayList<String>();
 
-	@JsonProperty("salt")
-	private String salt = null;
+	@JsonProperty("secret")
+	private String secret = null;
 
 	@JsonProperty("keyReferenz")
 	private String keyReferenz = null;
@@ -79,22 +79,22 @@ public class DataSubmissionDto {
 		this.checkCode = checkCode;
 	}
 
-	public DataSubmissionDto salt(String salt) {
-		this.salt = salt;
+	public DataSubmissionDto secret(String secret) {
+		this.secret = secret;
 		return this;
 	}
 
 	/**
-	 * Salt used for encryption.
+	 * The encrypted secret key for encryption.
 	 * 
-	 * @return salt
+	 * @return secret
 	 **/
-	public String getSalt() {
-		return salt;
+	public String getSecret() {
+		return secret;
 	}
 
-	public void setSalt(String salt) {
-		this.salt = salt;
+	public void setSecret(String secret) {
+		this.secret = secret;
 	}
 
 	public DataSubmissionDto keyReferenz(String keyReferenz) {
@@ -125,13 +125,13 @@ public class DataSubmissionDto {
 		}
 		DataSubmissionDto dataSubmission = (DataSubmissionDto) o;
 		return Objects.equals(this.checkCode, dataSubmission.checkCode)
-			&& Objects.equals(this.salt, dataSubmission.salt)
+			&& Objects.equals(this.secret, dataSubmission.secret)
 			&& Objects.equals(this.keyReferenz, dataSubmission.keyReferenz);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(checkCode, salt, keyReferenz);
+		return Objects.hash(checkCode, secret, keyReferenz);
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public class DataSubmissionDto {
 		sb.append("class DataSubmission {\n");
 
 		sb.append("    checkCode: ").append(toIndentedString(checkCode)).append("\n");
-		sb.append("    salt: ").append(toIndentedString(salt)).append("\n");
+		sb.append("    secret: ").append(toIndentedString(secret)).append("\n");
 		sb.append("    keyReferenz: ").append(toIndentedString(keyReferenz)).append("\n");
 		sb.append("}");
 		return sb.toString();

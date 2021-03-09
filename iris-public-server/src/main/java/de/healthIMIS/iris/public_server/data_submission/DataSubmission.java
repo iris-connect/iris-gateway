@@ -52,7 +52,7 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 	private DataRequestIdentifier requestId;
 	private DepartmentIdentifier departmentId;
 
-	private String salt;
+	private String secret;
 	private String keyReferenz;
 	private @Lob String encryptedData;
 
@@ -63,7 +63,7 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 	public DataSubmission(
 		DataRequestIdentifier requestId,
 		DepartmentIdentifier departmentId,
-		String salt,
+		String secret,
 		String keyReferenz,
 		String encryptedData,
 		Feature feature) {
@@ -73,7 +73,7 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 		this.id = DataSubmissionIdentifier.random();
 		this.requestId = requestId;
 		this.departmentId = departmentId;
-		this.salt = salt;
+		this.secret = secret;
 		this.keyReferenz = keyReferenz;
 		this.encryptedData = encryptedData;
 		this.feature = feature;

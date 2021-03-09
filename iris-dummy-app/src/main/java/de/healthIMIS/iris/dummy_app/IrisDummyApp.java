@@ -6,6 +6,7 @@ import java.security.KeyFactory;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDate;
@@ -19,7 +20,9 @@ import java.util.stream.Stream;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -52,6 +55,11 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class IrisDummyApp {
+
+	static final String ENCRYPTION_ALGORITHM = "AES";
+	static final int ENCRYPTION_KEY_LENGTH = 256;
+	static final String KEY_ENCRYPTION_ALGORITHM = "RSA";
+	static final String TRANSFORMATION = "RSA/ECB/PKCS1Padding";
 
 	/**
 	 * is debug output enable
@@ -199,19 +207,27 @@ public class IrisDummyApp {
 
 		var link = determineNextPostOperation(links);
 
-		// entering the requested data and submitting the data submission to the server
 		try {
 
+			// generates the key for data transmission and encrypts it with the public key of the health department
+			var kf = KeyFactory.getInstance(KEY_ENCRYPTION_ALGORITHM);
+			var keyBytes = Base64.getDecoder().decode(dataRequest.getKeyOfHealthDepartment());
+			var publicKey = kf.generatePublic(new X509EncodedKeySpec(keyBytes));
+
+			var secretKey = generateSymmetricKey();
+			var encryptedSecretKey = Base64.getEncoder().encodeToString(encryptSecretKey(secretKey, publicKey));
+
+			// entering the requested data and submitting the data submission to the server
 			if (link.hasRel("PostContactsSubmission")) {
 
 				var content = mapper.writeValueAsString(createContacts());
-				content = encryptContent(content, dataRequest.getKeyOfHealthDepartment());
-				postSubmission(link, content, dataRequest.getKeyReferenz());
+				content = encryptContent(content, secretKey);
+				postSubmission(link, content, encryptedSecretKey, dataRequest.getKeyReferenz());
 
 			} else if (link.hasRel("PostEventsSubmission")) {
-				postSubmission(link, createEvents(), dataRequest.getKeyReferenz());
+				postSubmission(link, createEvents(), encryptedSecretKey, dataRequest.getKeyReferenz());
 			} else if (link.hasRel("PostGuestsSubmission")) {
-				postSubmission(link, createGuests(), dataRequest.getKeyReferenz());
+				postSubmission(link, createGuests(), encryptedSecretKey, dataRequest.getKeyReferenz());
 			}
 
 		} catch (Exception e) {
@@ -266,53 +282,56 @@ public class IrisDummyApp {
 
 	/**
 	 * Encrypts the content with the given key from data request.
-	 * 
-	 * @param content
-	 * @param keyOfHealthDepartment
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeySpecException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
 	 */
-	private String encryptContent(String content, String keyOfHealthDepartment)
+	private String encryptContent(String content, SecretKey secretKey)
 		throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, IllegalBlockSizeException,
 		BadPaddingException {
 
-		var keyBytes = Base64.getDecoder().decode(keyOfHealthDepartment);
-
-		var kf = KeyFactory.getInstance("RSA");
-		var publicKey = kf.generatePublic(new X509EncodedKeySpec(keyBytes));
-
-		var cipher = Cipher.getInstance("RSA");
-		cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-
-		String klarText = content;
-		byte[] encryptedArray = cipher.doFinal(klarText.getBytes());
+		var encryptedArray = encryptText(content, secretKey);
 
 		var ret = Base64.getEncoder().encodeToString(encryptedArray);
 
 		if (debug) {
-			textIO.getTextTerminal().printf("Text to encrypt:           %s\n\n", klarText);
+			textIO.getTextTerminal().printf("Text to encrypt:           %s\n\n", content);
 			textIO.getTextTerminal().printf("Text encrypted:            %s\n\n", ret);
 		}
 
 		return ret;
 	}
 
+	SecretKey generateSymmetricKey() throws NoSuchAlgorithmException {
+
+		var generator = KeyGenerator.getInstance(ENCRYPTION_ALGORITHM);
+		generator.init(ENCRYPTION_KEY_LENGTH);
+
+		return generator.generateKey();
+	}
+
+	byte[] encryptText(String textToEncrypt, SecretKey secretKey)
+		throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
+
+		var cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
+		cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+		return cipher.doFinal(textToEncrypt.getBytes());
+	}
+
+	byte[] encryptSecretKey(SecretKey secretKey, PublicKey publicKey)
+		throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
+
+		var cipher = Cipher.getInstance(TRANSFORMATION);
+		cipher.init(Cipher.PUBLIC_KEY, publicKey);
+
+		return cipher.doFinal(secretKey.getEncoded());
+	}
+
 	/**
 	 * Send a POST request for the given data submission to the given Link to the API.
-	 * 
-	 * @param template
-	 * @param textIO
-	 * @param link
-	 * @param content
-	 * @param keyReferenz
 	 */
-	private void postSubmission(Link link, String content, String keyReferenz) {
+	private void postSubmission(Link link, String content, String encryptedSecretKey, String keyReferenz) {
 
-		var submission = new DataSubmissionDto().checkCode(determineCheckcode()).keyReferenz(keyReferenz).encryptedData(content);
+		var submission =
+			new DataSubmissionDto().checkCode(determineCheckcode()).keyReferenz(keyReferenz).secret(encryptedSecretKey).encryptedData(content);
 
 		textIO.getTextTerminal().printf("\nData submission is sent to healt department with key referenz '%s'", keyReferenz);
 		if (debug) {
