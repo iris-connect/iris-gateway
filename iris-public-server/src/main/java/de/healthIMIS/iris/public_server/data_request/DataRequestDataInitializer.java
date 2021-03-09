@@ -62,7 +62,7 @@ public class DataRequestDataInitializer implements DataInitializer {
 				"ABCDEFGHKL",
 				Instant.now().minus(2, DAYS),
 				null,
-				EnumSet.of(Feature.Contact),
+				EnumSet.of(Feature.Contacts),
 				Status.Open));
 
 		list.add(
@@ -74,7 +74,7 @@ public class DataRequestDataInitializer implements DataInitializer {
 				"9876543XYZ",
 				Instant.now().minus(4, DAYS),
 				Instant.now().minus(2, DAYS),
-				EnumSet.of(Feature.Contact, Feature.Events),
+				EnumSet.of(Feature.Contacts, Feature.Events),
 				Status.Open));
 
 		list.add(
@@ -86,7 +86,7 @@ public class DataRequestDataInitializer implements DataInitializer {
 				"23456789AB",
 				Instant.now().minus(4, DAYS),
 				Instant.now().minus(2, DAYS),
-				EnumSet.of(Feature.Contact),
+				EnumSet.of(Feature.Contacts),
 				Status.Open));
 
 		requests.saveAll(list);

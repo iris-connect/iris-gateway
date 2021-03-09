@@ -61,7 +61,7 @@ public class DataRequestRepresentations {
 
 		Links links = Links.of(linkTo(methodOn(DataRequestApiController.class).getDataRequestByCode(dataRequest.getId())).withSelfRel())
 			.andIf(
-				dataRequest.getFeatures().contains(Feature.Contact),
+				dataRequest.getFeatures().contains(Feature.Contacts),
 				linkTo(methodOn(DataSubmissionApi.class).postContactsSubmission(dataRequest.getId(), null)).withRel(CONTACTS_SUBMISSION)
 					.withTitle("Contacts"))
 			.andIf(
