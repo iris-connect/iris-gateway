@@ -63,7 +63,7 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 			schema = @Schema()) @PathVariable("code") DataRequestIdentifier code,
 		@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody ContactsSubmissionDto body) {
 
-		return handleRequest(code, body, body.getEncryptedData(), Feature.Contact);
+		return handleRequest(code, body, body.getEncryptedData(), Feature.Contacts);
 	}
 
 	@Override

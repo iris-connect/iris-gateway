@@ -15,7 +15,7 @@
 package de.healthIMIS.iris.public_server.core;
 
 public enum Feature {
-	Contact,
+	Contacts,
 	Events,
 	Guests
 }
