@@ -117,7 +117,7 @@ public class DataSubmissionHdController {
 				submission.getId().toString(),
 				submission.getRequestId().toString(),
 				submission.getDepartmentId().toString(),
-				submission.getSalt(),
+				submission.getSecret(),
 				submission.getKeyReferenz(),
 				submission.getEncryptedData(),
 				submission.getFeature());
@@ -129,7 +129,7 @@ public class DataSubmissionHdController {
 
 		private final String departmentId;
 
-		private final String salt;
+		private final String secret;
 
 		private final String keyReferenz;
 

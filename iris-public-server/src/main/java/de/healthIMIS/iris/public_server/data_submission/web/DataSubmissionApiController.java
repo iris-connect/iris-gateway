@@ -103,7 +103,7 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 
 		return requests.findById(code).filter(it -> matchesOnCheckCode(body.getCheckCode(), it)).filter(it -> matchesFeature(feature, it)).map(it -> {
 
-			var submission = new DataSubmission(it.getId(), it.getDepartmentId(), body.getSalt(), body.getKeyReferenz(), encryptedData, feature);
+			var submission = new DataSubmission(it.getId(), it.getDepartmentId(), body.getSecret(), body.getKeyReferenz(), encryptedData, feature);
 			submission = submissions.save(submission);
 
 			log.debug(

@@ -26,7 +26,7 @@ CREATE TABLE data_submission (
 	submission_id uuid NOT NULL,
 	request_id uuid NOT NULL,
 	department_id uuid NOT NULL,
-	salt varchar(50) NULL,
+	secret varchar(1000) NULL,
 	key_referenz varchar(50) NOT NULL,
 	feature varchar(50) NOT NULL,
 	encrypted_data text NULL,
