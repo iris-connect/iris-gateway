@@ -62,6 +62,8 @@ public class DataRequestHdController {
 		var dataRequest = new DataRequest(
 			id,
 			DepartmentIdentifier.of(payload.departmentId),
+			payload.getRkiCode(),
+			payload.getTeleCode(),
 			payload.checkCodeName,
 			payload.checkCodeDayOfBirth,
 			payload.checkCodeRandom,
@@ -90,6 +92,9 @@ public class DataRequestHdController {
 	static class DataRequestInternalInputDto {
 
 		private UUID departmentId;
+		private String rkiCode;
+
+		private String teleCode;
 
 		private String checkCodeName;
 		private String checkCodeDayOfBirth;

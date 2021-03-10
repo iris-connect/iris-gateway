@@ -81,6 +81,7 @@ public class IrisDummyApp {
 	 * Random Checkcode - is used as fallback
 	 */
 	private final String randomCode;
+	private final boolean useTeleCode;
 
 	private final LinkDiscoverer discoverer = new HalLinkDiscoverer();
 	private final ObjectMapper mapper = new ObjectMapper();
@@ -111,6 +112,7 @@ public class IrisDummyApp {
 				.hasArg()
 				.build());
 		options.addOption(Option.builder("d").longOpt("debug").desc("enable debug output").build());
+		options.addOption(Option.builder("t").longOpt("telecode").desc("uses a teleCode instead of a code").build());
 
 		var parser = new DefaultParser();
 		var cmd = parser.parse(options, args);
@@ -136,8 +138,9 @@ public class IrisDummyApp {
 		var name = cmd.getOptionValue("n", "Max Muster");
 		var dateOfBirth = LocalDate.parse(cmd.getOptionValue("b", "1990-01-01"));
 		var randomCode = cmd.getOptionValue("r", "ABCDEFGHKL");
+		var useTeleCode = cmd.hasOption('t');
 
-		new IrisDummyApp(debug, address, name, dateOfBirth, randomCode).run();
+		new IrisDummyApp(debug, address, name, dateOfBirth, randomCode, useTeleCode).run();
 	}
 
 	/**
@@ -173,16 +176,9 @@ public class IrisDummyApp {
 	 */
 	private void cycle() {
 
-		// read the code
-		var code = textIO.newStringInputReader()
-			.withDefaultValue("790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80")
-			.withPattern("[a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8}")
-			.read("Code");
+		var hop = useTeleCode ? getHopByTeleCode() : getHopByCode();
 
-		// get data request object
-		var getByCodeHop = Hop.rel("GetDataRequestByCode").withParameter("code", code);
-
-		var dataRequest = traverson.follow(getByCodeHop).toObject(DataRequestDto.class);
+		var dataRequest = traverson.follow(hop).toObject(DataRequestDto.class);
 
 		textIO.getTextTerminal()
 			.printf(
@@ -192,7 +188,7 @@ public class IrisDummyApp {
 				dataRequest.getEnd());
 
 		// determines the existing links for the next POST operation 
-		var response = traverson.follow(getByCodeHop).toObject(String.class);
+		var response = traverson.follow(hop).toObject(String.class);
 
 		var postContacts = discoverer.findLinkWithRel("PostContactsSubmission", response);
 		var postEvents = discoverer.findLinkWithRel("PostEventsSubmission", response);
@@ -233,6 +229,36 @@ public class IrisDummyApp {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	private Hop getHopByTeleCode() {
+
+		// read the teleCode
+		var teleCode = textIO.newStringInputReader().withPattern("[A-HKMNP-Z1-9]{9}[A-F1-9]").read("TeleCode");
+
+		// read the ZIP
+		var zip = textIO.newStringInputReader().withPattern("[0-9]{5}").read("ZIP");
+
+		// get data request object
+		return Hop.rel("GetDataRequestByTeleCode").withParameter("teleCode", teleCode).withParameter("zip", zip);
+	}
+
+	/**
+	 * @return
+	 */
+	private Hop getHopByCode() {
+
+		// read the code
+		var code = textIO.newStringInputReader()
+			.withDefaultValue("790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80")
+			.withPattern("[a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8}")
+			.read("Code");
+
+		// get data request object
+		return Hop.rel("GetDataRequestByCode").withParameter("code", code);
 	}
 
 	/**

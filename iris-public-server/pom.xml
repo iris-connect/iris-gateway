@@ -27,6 +27,7 @@
 		<docker.image.prefix>de.health_imis</docker.image.prefix>
 		<springfox-version>3.0.0</springfox-version>
 		<vavr-version>0.10.3</vavr-version>
+		<xmlprojector-version>1.4.18</xmlprojector-version>
 	</properties>
 
 	<profiles>
@@ -109,6 +110,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
+		</dependency>
+
+		<!-- For XML projection of RKI PLZTool data -->
+		<dependency>
+			<groupId>org.xmlbeam</groupId>
+			<artifactId>xmlprojector</artifactId>
+			<version>${xmlprojector-version}</version>
 		</dependency>
 
 		<!-- Third party libs -->
