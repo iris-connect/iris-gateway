@@ -54,6 +54,9 @@ import lombok.Setter;
 public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestIdentifier> {
 
 	private DepartmentIdentifier departmentId;
+	private String rkiCode;
+
+	private String teleCode;
 
 	private String checkCodeName;
 	private String checkCodeDayOfBirth;
@@ -75,6 +78,8 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 	public DataRequest(
 		DataRequestIdentifier id,
 		DepartmentIdentifier departmentId,
+		String rkiCode,
+		String teleCode,
 		String checkCodeName,
 		String checkCodeDayOfBirth,
 		String checkCodeRandom,
@@ -87,6 +92,8 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 
 		this.id = id;
 		this.departmentId = departmentId;
+		this.rkiCode = rkiCode;
+		this.teleCode = teleCode;
 		this.checkCodeName = checkCodeName;
 		this.checkCodeDayOfBirth = checkCodeDayOfBirth;
 		this.checkCodeRandom = checkCodeRandom;

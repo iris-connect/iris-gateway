@@ -14,11 +14,13 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_request.web;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
 import de.healthIMIS.iris.public_server.data_request.DataRequestRepository;
+import de.healthIMIS.iris.public_server.rki.HealthDepartments;
+import de.healthIMIS.iris.public_server.rki.HealthDepartments.HealthDepartment;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -46,6 +50,7 @@ public class DataRequestApiController implements DataRequestApi {
 
 	private final @NonNull DataRequestRepository requests;
 	private final @NonNull DataRequestRepresentations representation;
+	private final @NonNull HealthDepartments rkiDepartments;
 
 	@Override
 	public ResponseEntity<?> getDataRequestByCode(
@@ -72,7 +77,26 @@ public class DataRequestApiController implements DataRequestApi {
 			required = true,
 			schema = @Schema()) @Valid @RequestParam(value = "zip", required = true) String zip) {
 
-		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+		var department = rkiDepartments.findDepartmentWithExact(zip);
+
+		return department.or(() -> createError(zip, null))
+			.flatMap(it -> requests.findByTeleCodeAndRkiCode(teleCode, it.getCode()))
+			.map(this::log)
+			.map(representation::toRepresentation)
+			.map(ResponseEntity::ok)
+			.orElseGet(() -> ResponseEntity.notFound().build());
+	}
+
+	private Optional<? extends HealthDepartment> createError(String zip, Errors errors) {
+
+//		errors.rejectValue(
+//			"zip",
+//			"wrong.zipCode",
+//			new Object[] {
+//				zip },
+//			"");
+
+		return Optional.empty();
 	}
 
 	private DataRequest log(DataRequest request) {
