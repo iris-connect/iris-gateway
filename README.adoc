@@ -33,11 +33,11 @@ Run the servers.
 ----
 $ git clone git@github.com:healthIMIS/IRIS.git iris <1>
 $ cd iris/iris-public-server <2>
-$ mvnw spring-boot:run -PlocalDev <3>
+$ ./mvnw spring-boot:run -PlocalDev <3>
 
 # in a secound console
 $ cd iris/iris-hd-server <4>
-$ mvnw spring-boot:run -PlocalDev <3>
+$ ./mvnw spring-boot:run -PlocalDev <3>
 ----
 <1> Clone the repository.
 <2> Switch to the public server.
@@ -79,7 +79,7 @@ There is a small Java CLI application as dummy citizen app in the folder `iris-d
 [source, bash]
 ----
 $ cd iris/iris-dummy-app <1>
-$ mvnw package <2>
+$ ./mvnw package <2>
 $ java -jar target/iris-dummy-app-0.0.1-SNAPSHOT-jar-with-dependencies.jar <3>
 ----
 <1> Switch to the dummy app project.
@@ -152,7 +152,7 @@ You can build Docker images for the servers and run this with Docker.
 [source, bash]
 ----
 $ cd iris/ <1>
-$ mvnw spring-boot:build-image <2>
+$ ./mvnw spring-boot:build-image <2>
 $ docker-compose -f infrastructure/docker-compose_with-servers.yml up -d <3>
 ----
 <1> Switch to the root directory of the IRIS project.
