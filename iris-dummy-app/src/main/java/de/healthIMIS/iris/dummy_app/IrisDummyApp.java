@@ -1,5 +1,8 @@
 package de.healthIMIS.iris.dummy_app;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 import java.net.URI;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -42,6 +45,9 @@ import org.springframework.hateoas.client.Hop;
 import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.hateoas.client.Traverson;
 import org.springframework.hateoas.mediatype.hal.HalLinkDiscoverer;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
@@ -339,7 +345,7 @@ public class IrisDummyApp {
 		var cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
 		cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
-		return cipher.doFinal(textToEncrypt.getBytes());
+		return cipher.doFinal(textToEncrypt.getBytes(UTF_8));
 	}
 
 	byte[] encryptSecretKey(SecretKey secretKey, PublicKey publicKey)
@@ -365,7 +371,10 @@ public class IrisDummyApp {
 		}
 		textIO.getTextTerminal().printf("\n\n");
 
-		rest.postForObject(link.getHref(), submission, DataRequestDto.class);
+		var headers = new HttpHeaders();
+		headers.setContentType(new MediaType(APPLICATION_JSON, UTF_8));
+
+		rest.postForObject(link.getHref(), new HttpEntity<>(submission, headers), DataRequestDto.class);
 	}
 
 	/**
