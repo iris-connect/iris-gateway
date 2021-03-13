@@ -45,7 +45,7 @@ public interface DataSubmissionApi {
 		produces = {
 			"application/hal+json" },
 		consumes = {
-			"application/json" },
+			"application/json; charset=UTF-8" },
 		method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	ResponseEntity<?> postContactsSubmission(
@@ -72,7 +72,7 @@ public interface DataSubmissionApi {
 		produces = {
 			"application/hal+json" },
 		consumes = {
-			"application/json" },
+			"application/json; charset=UTF-8" },
 		method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	ResponseEntity<?> postEventsSubmission(
@@ -99,7 +99,7 @@ public interface DataSubmissionApi {
 		produces = {
 			"application/hal+json" },
 		consumes = {
-			"application/json" },
+			"application/json; charset=UTF-8" },
 		method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	ResponseEntity<?> postGuestsSubmission(
