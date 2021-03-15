@@ -50,7 +50,7 @@ class DataSubmissionDataInitializer implements DataInitializer {
 				"salt",
 				"key",
 				"DATA OF CONTACTS",
-				Feature.Contacts));
+				Feature.Contacts_Events));
 
 		list.add(
 			new DataSubmission(
@@ -59,7 +59,7 @@ class DataSubmissionDataInitializer implements DataInitializer {
 				"salt",
 				"key",
 				"DATA OF EVENTS",
-				Feature.Events));
+				Feature.Contacts_Events));
 
 		submissions.saveAll(list);
 	}

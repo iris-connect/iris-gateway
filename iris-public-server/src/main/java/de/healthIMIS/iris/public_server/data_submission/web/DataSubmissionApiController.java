@@ -56,25 +56,17 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 	private final @NonNull DataRequestRepresentations representation;
 
 	@Override
-	public ResponseEntity<?> postContactsSubmission(
+	public ResponseEntity<?> postContactsEventsSubmission(
 		@Parameter(in = ParameterIn.PATH,
 			description = "The code of a data request sent by the health department.",
 			required = true,
 			schema = @Schema()) @PathVariable("code") DataRequestIdentifier code,
-		@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody ContactsSubmissionDto body) {
-
-		return handleRequest(code, body, body.getEncryptedData(), Feature.Contacts);
-	}
-
-	@Override
-	public ResponseEntity<?> postEventsSubmission(
-		@Parameter(in = ParameterIn.PATH,
-			description = "The code of a data request sent by the health department.",
+		@Parameter(in = ParameterIn.DEFAULT,
+			description = "",
 			required = true,
-			schema = @Schema()) @PathVariable("code") DataRequestIdentifier code,
-		@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody EventsSubmissionDto body) {
+			schema = @Schema()) @Valid @RequestBody ContactsEventsSubmissionDto body) {
 
-		return handleRequest(code, body, body.getEncryptedData(), Feature.Events);
+		return handleRequest(code, body, body.getEncryptedData(), Feature.Contacts_Events);
 	}
 
 	@Override

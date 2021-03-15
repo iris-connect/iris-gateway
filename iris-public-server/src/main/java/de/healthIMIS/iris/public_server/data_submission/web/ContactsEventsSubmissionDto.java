@@ -31,12 +31,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-18T08:11:24.698Z[GMT]")
 
-public class ContactsSubmissionDto extends DataSubmissionDto {
+public class ContactsEventsSubmissionDto extends DataSubmissionDto {
 
 	@JsonProperty("encryptedData")
 	private String encryptedData = null;
 
-	public ContactsSubmissionDto encryptedData(String encryptedData) {
+	public ContactsEventsSubmissionDto encryptedData(String encryptedData) {
 		this.encryptedData = encryptedData;
 		return this;
 	}
@@ -66,7 +66,7 @@ public class ContactsSubmissionDto extends DataSubmissionDto {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		ContactsSubmissionDto contactsSubmission = (ContactsSubmissionDto) o;
+		ContactsEventsSubmissionDto contactsSubmission = (ContactsEventsSubmissionDto) o;
 		return Objects.equals(this.encryptedData, contactsSubmission.encryptedData) && super.equals(o);
 	}
 

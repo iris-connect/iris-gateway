@@ -24,8 +24,7 @@ public interface IrisLinkRelations {
 	LinkRelation REQUEST_BY_CODE = LinkRelation.of("GetDataRequestByCode");
 	LinkRelation REQUEST_BY_TELECODE = LinkRelation.of("GetDataRequestByTeleCode");
 
-	LinkRelation CONTACTS_SUBMISSION = LinkRelation.of("PostContactsSubmission");
-	LinkRelation EVENTS_SUBMISSION = LinkRelation.of("PostEventsSubmission");
+	LinkRelation CONTACTS_EVENTS_SUBMISSION = LinkRelation.of("PostContactsEventsSubmission");
 	LinkRelation GUESTS_SUBMISSION = LinkRelation.of("PostGuestsSubmission");
 
 	LinkRelation NOTIFICATIONS = LinkRelation.of("GetNotifications");

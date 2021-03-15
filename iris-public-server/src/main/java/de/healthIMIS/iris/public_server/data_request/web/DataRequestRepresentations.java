@@ -14,8 +14,7 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_request.web;
 
-import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.CONTACTS_SUBMISSION;
-import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.EVENTS_SUBMISSION;
+import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.CONTACTS_EVENTS_SUBMISSION;
 import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.GUESTS_SUBMISSION;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -61,13 +60,9 @@ public class DataRequestRepresentations {
 
 		Links links = Links.of(linkTo(methodOn(DataRequestApiController.class).getDataRequestByCode(dataRequest.getId())).withSelfRel())
 			.andIf(
-				dataRequest.getFeatures().contains(Feature.Contacts),
-				linkTo(methodOn(DataSubmissionApi.class).postContactsSubmission(dataRequest.getId(), null)).withRel(CONTACTS_SUBMISSION)
-					.withTitle("Contacts"))
-			.andIf(
-				dataRequest.getFeatures().contains(Feature.Events),
-				linkTo(methodOn(DataSubmissionApi.class).postEventsSubmission(dataRequest.getId(), null)).withRel(EVENTS_SUBMISSION)
-					.withTitle("Events"))
+				dataRequest.getFeatures().contains(Feature.Contacts_Events),
+				linkTo(methodOn(DataSubmissionApi.class).postContactsEventsSubmission(dataRequest.getId(), null)).withRel(CONTACTS_EVENTS_SUBMISSION)
+					.withTitle("Contacts and Events"))
 			.andIf(
 				dataRequest.getFeatures().contains(Feature.Guests),
 				linkTo(methodOn(DataSubmissionApi.class).postGuestsSubmission(dataRequest.getId(), null)).withRel(GUESTS_SUBMISSION)

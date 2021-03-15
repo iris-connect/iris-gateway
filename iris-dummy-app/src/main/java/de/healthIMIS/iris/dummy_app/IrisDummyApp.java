@@ -60,6 +60,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ch.qos.logback.classic.Level;
 import de.healthIMIS.iris.dummy_app.submissions.ContactPerson;
 import de.healthIMIS.iris.dummy_app.submissions.ContactPersonList;
+import de.healthIMIS.iris.dummy_app.submissions.ContactsAndEvents;
 import de.healthIMIS.iris.dummy_app.submissions.DataSubmissionDto;
 import de.healthIMIS.iris.dummy_app.submissions.Event;
 import de.healthIMIS.iris.dummy_app.submissions.EventList;
@@ -69,6 +70,9 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class IrisDummyApp {
+
+	private static final String GUESTS_REL = "PostGuestsSubmission";
+	private static final String CONTACTS_EVENTS_REL = "PostContactsEventsSubmission";
 
 	static final String ENCRYPTION_ALGORITHM = "AES";
 	static final int ENCRYPTION_KEY_LENGTH = 256;
@@ -214,11 +218,10 @@ public class IrisDummyApp {
 		// determines the existing links for the next POST operation 
 		var response = traverson.follow(hop).toObject(String.class);
 
-		var postContacts = discoverer.findLinkWithRel("PostContactsSubmission", response);
-		var postEvents = discoverer.findLinkWithRel("PostEventsSubmission", response);
-		var postGuests = discoverer.findLinkWithRel("PostGuestsSubmission", response);
+		var postContactsEvents = discoverer.findLinkWithRel(CONTACTS_EVENTS_REL, response);
+		var postGuests = discoverer.findLinkWithRel(GUESTS_REL, response);
 
-		var links = Stream.of(postContacts, postEvents, postGuests).flatMap(Optional<Link>::stream).collect(Collectors.toList());
+		var links = Stream.of(postContactsEvents, postGuests).flatMap(Optional<Link>::stream).collect(Collectors.toList());
 
 		if (links.isEmpty()) {
 			// exit the method if there is no link 
@@ -240,11 +243,9 @@ public class IrisDummyApp {
 			// entering the requested data and submitting the data submission to the server
 			Object contentObject = null;
 
-			if (link.hasRel("PostContactsSubmission")) {
-				contentObject = createContacts();
-			} else if (link.hasRel("PostEventsSubmission")) {
-				contentObject = createEvents();
-			} else if (link.hasRel("PostGuestsSubmission")) {
+			if (link.hasRel(CONTACTS_EVENTS_REL)) {
+				contentObject = createContactsAndEvents();
+			} else if (link.hasRel(GUESTS_REL)) {
 				contentObject = createGuests();
 			}
 
@@ -291,71 +292,87 @@ public class IrisDummyApp {
 	}
 
 	/**
-	 * Lets the user enter the data for contacts and creates a DTO from it.
+	 * Lets the user enter the data for contacts and events and creates a DTO from it.
 	 * 
 	 * @return
 	 */
-	private ContactPersonList createContacts() {
+	private ContactsAndEvents createContactsAndEvents() {
 
-		var list = new ContactPersonList();
+		var contactList = new ContactPersonList();
+		var eventList = new EventList();
 
 		if (properties == null) {
-			do {
-				var contactPerson = new ContactPerson();
 
-				contactPerson.firstName(textIO.newStringInputReader().read("First name"));
-				contactPerson.lastName(textIO.newStringInputReader().read("Last name"));
+			ContactsEvents selection;
+			while ((selection = textIO.newEnumInputReader(ContactsEvents.class).withAllValuesNumbered().read("Select …")) != ContactsEvents.Stop) {
 
-				list.addContactPersonsItem(contactPerson);
+				if (selection == ContactsEvents.Contacts) {
+					contactList.addContactPersonsItem(createContact());
+				} else if (selection == ContactsEvents.Events) {
+					eventList.addEventsItem(createEvent());
+				}
 			}
-			while (textIO.newBooleanInputReader().withDefaultValue(Boolean.TRUE).read("More contacts?"));
+
 		} else {
-
-			for (int i = 0; properties.containsKey("contact." + i + ".lastName"); i++) {
-
-				var contactPerson = new ContactPerson();
-				contactPerson.firstName(properties.getProperty("contact." + i + ".firstName"));
-				contactPerson.lastName(properties.getProperty("contact." + i + ".lastName"));
-				list.addContactPersonsItem(contactPerson);
-			}
+			readContactsAndEvents(contactList, eventList);
 		}
 
-		return list;
+		return new ContactsAndEvents().contacts(contactList).events(eventList);
 	}
 
 	/**
-	 * Lets the user enter the data for events and creates a DTO from it.
+	 * Read contacts and events from properties file.
+	 * 
+	 * @param contactList
+	 * @param eventList
+	 */
+	private void readContactsAndEvents(ContactPersonList contactList, EventList eventList) {
+
+		for (int i = 0; properties.containsKey("contact." + i + ".lastName"); i++) {
+
+			var contactPerson = new ContactPerson();
+			contactPerson.firstName(properties.getProperty("contact." + i + ".firstName"));
+			contactPerson.lastName(properties.getProperty("contact." + i + ".lastName"));
+			contactList.addContactPersonsItem(contactPerson);
+		}
+
+		for (int i = 0; properties.containsKey("event." + i + ".title"); i++) {
+
+			var event = new Event();
+			event.name(properties.getProperty("event." + i + ".title"));
+			event.additionalInformation(properties.getProperty("event." + i + ".infos"));
+			eventList.addEventsItem(event);
+		}
+	}
+
+	/**
+	 * Lets the user enter the data for a contact.
 	 * 
 	 * @return
 	 */
-	private EventList createEvents() {
+	private ContactPerson createContact() {
 
-		var list = new EventList();
+		var contactPerson = new ContactPerson();
 
-		if (properties == null) {
+		contactPerson.firstName(textIO.newStringInputReader().read("First name"));
+		contactPerson.lastName(textIO.newStringInputReader().read("Last name"));
 
-			do {
-				var event = new Event();
+		return contactPerson;
+	}
 
-				event.name(textIO.newStringInputReader().read("Event name"));
-				event.additionalInformation(textIO.newStringInputReader().read("Additional informations"));
+	/**
+	 * Lets the user enter the data for an event.
+	 * 
+	 * @return
+	 */
+	private Event createEvent() {
 
-				list.addEventsItem(event);
-			}
-			while (textIO.newBooleanInputReader().withDefaultValue(Boolean.TRUE).read("More events?"));
+		var event = new Event();
 
-		} else {
+		event.name(textIO.newStringInputReader().read("Event name"));
+		event.additionalInformation(textIO.newStringInputReader().read("Additional informations"));
 
-			for (int i = 0; properties.containsKey("event." + i + ".title"); i++) {
-
-				var event = new Event();
-				event.name(properties.getProperty("event." + i + ".title"));
-				event.additionalInformation(properties.getProperty("event." + i + ".infos"));
-				list.addEventsItem(event);
-			}
-		}
-
-		return list;
+		return event;
 	}
 
 	/**
@@ -513,5 +530,11 @@ public class IrisDummyApp {
 		}
 
 		return options.get(0);
+	}
+
+	enum ContactsEvents {
+		Contacts,
+		Events,
+		Stop
 	}
 }
