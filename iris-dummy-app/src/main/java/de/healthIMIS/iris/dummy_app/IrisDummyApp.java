@@ -3,6 +3,9 @@ package de.healthIMIS.iris.dummy_app;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -92,11 +96,13 @@ public class IrisDummyApp {
 	 */
 	private final String randomCode;
 	private final boolean useTeleCode;
+	private final Properties properties;
 
 	private final LinkDiscoverer discoverer = new HalLinkDiscoverer();
 	private final ObjectMapper mapper = new ObjectMapper();
 	private final TextIO textIO = TextIoFactory.getTextIO();
 	private RestTemplate rest;
+
 	private Traverson traverson;
 
 	/**
@@ -107,8 +113,9 @@ public class IrisDummyApp {
 	 * @throws KeyStoreException
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyManagementException
+	 * @throws IOException
 	 */
-	public static void main(String[] args) throws ParseException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+	public static void main(String[] args) throws ParseException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
 
 		var options = new Options();
 		options.addOption(new Option("h", "help", false, "print this message"));
@@ -123,6 +130,7 @@ public class IrisDummyApp {
 				.build());
 		options.addOption(Option.builder("d").longOpt("debug").desc("enable debug output").build());
 		options.addOption(Option.builder("t").longOpt("telecode").desc("uses a teleCode instead of a code").build());
+		options.addOption(Option.builder("f").longOpt("inputfile").desc("properties file with data for automatic input").hasArg().build());
 
 		var parser = new DefaultParser();
 		var cmd = parser.parse(options, args);
@@ -150,7 +158,13 @@ public class IrisDummyApp {
 		var randomCode = cmd.getOptionValue("r", "ABCDEFGHKL");
 		var useTeleCode = cmd.hasOption('t');
 
-		new IrisDummyApp(debug, address, name, dateOfBirth, randomCode, useTeleCode).run();
+		var file = cmd.getOptionValue('f');
+		var properties = new Properties();
+		var stream = new BufferedInputStream(new FileInputStream(file));
+		properties.load(stream);
+		stream.close();
+
+		new IrisDummyApp(debug, address, name, dateOfBirth, randomCode, useTeleCode, properties).run();
 	}
 
 	/**
@@ -285,15 +299,26 @@ public class IrisDummyApp {
 
 		var list = new ContactPersonList();
 
-		do {
-			var contactPerson = new ContactPerson();
+		if (properties == null) {
+			do {
+				var contactPerson = new ContactPerson();
 
-			contactPerson.firstName(textIO.newStringInputReader().read("First name"));
-			contactPerson.lastName(textIO.newStringInputReader().read("Last name"));
+				contactPerson.firstName(textIO.newStringInputReader().read("First name"));
+				contactPerson.lastName(textIO.newStringInputReader().read("Last name"));
 
-			list.addContactPersonsItem(contactPerson);
+				list.addContactPersonsItem(contactPerson);
+			}
+			while (textIO.newBooleanInputReader().withDefaultValue(Boolean.TRUE).read("More contacts?"));
+		} else {
+
+			for (int i = 0; properties.containsKey("contact." + i + ".lastName"); i++) {
+
+				var contactPerson = new ContactPerson();
+				contactPerson.firstName(properties.getProperty("contact." + i + ".firstName"));
+				contactPerson.lastName(properties.getProperty("contact." + i + ".lastName"));
+				list.addContactPersonsItem(contactPerson);
+			}
 		}
-		while (textIO.newBooleanInputReader().withDefaultValue(Boolean.TRUE).read("More contacts?"));
 
 		return list;
 	}
@@ -307,15 +332,28 @@ public class IrisDummyApp {
 
 		var list = new EventList();
 
-		do {
-			var event = new Event();
+		if (properties == null) {
 
-			event.name(textIO.newStringInputReader().read("Event name"));
-			event.additionalInformation(textIO.newStringInputReader().read("Additional informations"));
+			do {
+				var event = new Event();
 
-			list.addEventsItem(event);
+				event.name(textIO.newStringInputReader().read("Event name"));
+				event.additionalInformation(textIO.newStringInputReader().read("Additional informations"));
+
+				list.addEventsItem(event);
+			}
+			while (textIO.newBooleanInputReader().withDefaultValue(Boolean.TRUE).read("More events?"));
+
+		} else {
+
+			for (int i = 0; properties.containsKey("event." + i + ".title"); i++) {
+
+				var event = new Event();
+				event.name(properties.getProperty("event." + i + ".title"));
+				event.additionalInformation(properties.getProperty("event." + i + ".infos"));
+				list.addEventsItem(event);
+			}
 		}
-		while (textIO.newBooleanInputReader().withDefaultValue(Boolean.TRUE).read("More events?"));
 
 		return list;
 	}
@@ -329,15 +367,28 @@ public class IrisDummyApp {
 
 		var list = new GuestList();
 
-		do {
-			var guest = new Guest();
+		if (properties == null) {
 
-			guest.firstName(textIO.newStringInputReader().read("First name"));
-			guest.lastName(textIO.newStringInputReader().read("Last name"));
+			do {
+				var guest = new Guest();
 
-			list.addGuestsItem(guest);
+				guest.firstName(textIO.newStringInputReader().read("First name"));
+				guest.lastName(textIO.newStringInputReader().read("Last name"));
+
+				list.addGuestsItem(guest);
+			}
+			while (textIO.newBooleanInputReader().withDefaultValue(Boolean.TRUE).read("More guests?"));
+
+		} else {
+
+			for (int i = 0; properties.containsKey("guest." + i + ".lastName"); i++) {
+
+				var guest = new Guest();
+				guest.firstName(properties.getProperty("guest." + i + ".firstName"));
+				guest.lastName(properties.getProperty("guest." + i + ".lastName"));
+				list.addGuestsItem(guest);
+			}
 		}
-		while (textIO.newBooleanInputReader().withDefaultValue(Boolean.TRUE).read("More guests?"));
 
 		return list;
 	}
