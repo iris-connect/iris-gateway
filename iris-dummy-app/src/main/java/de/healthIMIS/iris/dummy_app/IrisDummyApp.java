@@ -57,6 +57,8 @@ import ch.qos.logback.classic.Level;
 import de.healthIMIS.iris.dummy_app.submissions.ContactPerson;
 import de.healthIMIS.iris.dummy_app.submissions.ContactPersonList;
 import de.healthIMIS.iris.dummy_app.submissions.DataSubmissionDto;
+import de.healthIMIS.iris.dummy_app.submissions.Event;
+import de.healthIMIS.iris.dummy_app.submissions.EventList;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -220,16 +222,21 @@ public class IrisDummyApp {
 			var encryptedSecretKey = Base64.getEncoder().encodeToString(encryptSecretKey(secretKey, publicKey));
 
 			// entering the requested data and submitting the data submission to the server
-			if (link.hasRel("PostContactsSubmission")) {
+			Object contentObject = null;
 
-				var content = mapper.writeValueAsString(createContacts());
+			if (link.hasRel("PostContactsSubmission")) {
+				contentObject = createContacts();
+			} else if (link.hasRel("PostEventsSubmission")) {
+				contentObject = createEvents();
+			} else if (link.hasRel("PostGuestsSubmission")) {
+				contentObject = createGuests();
+			}
+
+			if (contentObject != null) {
+
+				var content = mapper.writeValueAsString(contentObject);
 				content = encryptContent(content, secretKey);
 				postSubmission(link, content, encryptedSecretKey, dataRequest.getKeyReferenz());
-
-			} else if (link.hasRel("PostEventsSubmission")) {
-				postSubmission(link, createEvents(), encryptedSecretKey, dataRequest.getKeyReferenz());
-			} else if (link.hasRel("PostGuestsSubmission")) {
-				postSubmission(link, createGuests(), encryptedSecretKey, dataRequest.getKeyReferenz());
 			}
 
 		} catch (Exception e) {
@@ -270,12 +277,11 @@ public class IrisDummyApp {
 	/**
 	 * Lets the user enter the data for contacts and creates a DTO from it.
 	 * 
-	 * @param textIO
 	 * @return
 	 */
 	private ContactPersonList createContacts() {
 
-		ContactPersonList list = new ContactPersonList();
+		var list = new ContactPersonList();
 
 		do {
 			var contactPerson = new ContactPerson();
@@ -293,12 +299,23 @@ public class IrisDummyApp {
 	/**
 	 * Lets the user enter the data for events and creates a DTO from it.
 	 * 
-	 * @param textIO
 	 * @return
 	 */
-	private String createEvents() {
+	private EventList createEvents() {
 
-		return textIO.newStringInputReader().withDefaultValue("Data").read("Content");
+		var list = new EventList();
+
+		do {
+			var event = new Event();
+
+			event.name(textIO.newStringInputReader().read("Event name"));
+			event.additionalInformation(textIO.newStringInputReader().read("Additional informations"));
+
+			list.addEventsItem(event);
+		}
+		while (textIO.newBooleanInputReader().withDefaultValue(Boolean.TRUE).read("More events?"));
+
+		return list;
 	}
 
 	/**
