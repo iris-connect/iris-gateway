@@ -28,6 +28,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import de.healthIMIS.iris.public_server.core.Aggregate;
@@ -65,6 +66,8 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 	private Instant requestStart;
 	private Instant requestEnd;
 
+	private @Lob String requestDetails;
+
 	@Enumerated(EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "data_request_feature", joinColumns = @JoinColumn(name = "request_id"))
@@ -85,6 +88,7 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 		String checkCodeRandom,
 		Instant requestStart,
 		Instant requestEnd,
+		String requestDetails,
 		Set<Feature> features,
 		Status status) {
 
@@ -99,6 +103,7 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 		this.checkCodeRandom = checkCodeRandom;
 		this.requestStart = requestStart;
 		this.requestEnd = requestEnd;
+		this.requestDetails = requestDetails;
 		this.features = features;
 		this.status = status;
 	}

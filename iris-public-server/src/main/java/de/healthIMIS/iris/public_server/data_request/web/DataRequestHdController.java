@@ -69,6 +69,7 @@ public class DataRequestHdController {
 			payload.checkCodeRandom,
 			payload.requestStart,
 			payload.requestEnd,
+			payload.getRequestDetails(),
 			payload.features,
 			payload.status);
 
@@ -102,6 +103,8 @@ public class DataRequestHdController {
 
 		private Instant requestStart;
 		private Instant requestEnd;
+
+		private String requestDetails;
 
 		private Set<Feature> features;
 		private Status status;
