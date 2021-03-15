@@ -28,7 +28,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-18T08:11:24.698Z[GMT]")
 public interface DataSubmissionApi {
 
-	@Operation(summary = "Receives a data submission of contacts for the health department and transmits them in the further process.",
+	@Operation(summary = "Receives a data submission of contacts and events for the health department and transmits them in the further process.",
 		description = "",
 		tags = {})
 	@ApiResponses(value = {
@@ -41,46 +41,22 @@ public interface DataSubmissionApi {
 		@ApiResponse(responseCode = "404", description = "The specified resource was not found."),
 
 		@ApiResponse(responseCode = "422", description = "The transferred entity is not expected for the data request.") })
-	@RequestMapping(value = "/data-submissions/{code}/contacts",
+	@RequestMapping(value = "/data-submissions/{code}/contacts_events",
 		produces = {
 			"application/hal+json" },
 		consumes = {
 			"application/json; charset=UTF-8" },
 		method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
-	ResponseEntity<?> postContactsSubmission(
+	ResponseEntity<?> postContactsEventsSubmission(
 		@Parameter(in = ParameterIn.PATH,
 			description = "The code of a data request sent by the health department.",
 			required = true,
 			schema = @Schema()) @PathVariable("code") DataRequestIdentifier code,
-		@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody ContactsSubmissionDto body);
-
-	@Operation(summary = "Receives a data submission of events for the health department and transmits them in the further process.",
-		description = "",
-		tags = {})
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "201",
-			description = "A data request with all parameters relevant for the data submission and the links to the next possible steps for data submission.",
-			content = @Content(schema = @Schema(implementation = DataRequestDto.class))),
-
-		@ApiResponse(responseCode = "401", description = "The client is unauthorized to access this API."),
-
-		@ApiResponse(responseCode = "404", description = "The specified resource was not found."),
-
-		@ApiResponse(responseCode = "422", description = "The transferred entity is not expected for the data request.") })
-	@RequestMapping(value = "/data-submissions/{code}/events",
-		produces = {
-			"application/hal+json" },
-		consumes = {
-			"application/json; charset=UTF-8" },
-		method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
-	ResponseEntity<?> postEventsSubmission(
-		@Parameter(in = ParameterIn.PATH,
-			description = "The code of a data request sent by the health department.",
+		@Parameter(in = ParameterIn.DEFAULT,
+			description = "",
 			required = true,
-			schema = @Schema()) @PathVariable("code") DataRequestIdentifier code,
-		@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody EventsSubmissionDto body);
+			schema = @Schema()) @Valid @RequestBody ContactsEventsSubmissionDto body);
 
 	@Operation(summary = "Receives a data submission of guests for the health department and transmits them in the further process.",
 		description = "",

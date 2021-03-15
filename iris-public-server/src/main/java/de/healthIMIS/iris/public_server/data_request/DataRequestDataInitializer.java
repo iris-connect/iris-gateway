@@ -65,7 +65,7 @@ public class DataRequestDataInitializer implements DataInitializer {
 				Instant.now().minus(2, DAYS),
 				null,
 				null,
-				EnumSet.of(Feature.Contacts),
+				EnumSet.of(Feature.Contacts_Events),
 				Status.Open));
 
 		list.add(
@@ -80,7 +80,7 @@ public class DataRequestDataInitializer implements DataInitializer {
 				Instant.now().minus(4, DAYS),
 				Instant.now().minus(2, DAYS),
 				null,
-				EnumSet.of(Feature.Contacts, Feature.Events),
+				EnumSet.of(Feature.Contacts_Events),
 				Status.Open));
 
 		list.add(
@@ -95,7 +95,7 @@ public class DataRequestDataInitializer implements DataInitializer {
 				Instant.now().minus(4, DAYS),
 				Instant.now().minus(2, DAYS),
 				null,
-				EnumSet.of(Feature.Contacts),
+				EnumSet.of(Feature.Contacts_Events),
 				Status.Open));
 
 		requests.saveAll(list);
