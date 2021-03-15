@@ -53,6 +53,9 @@ public class DataRequestDto {
 	@JsonProperty("end")
 	private Instant end = null;
 
+	@JsonProperty("requestDetails")
+	private String requestDetails = null;
+
 	public DataRequestDto healthDepartment(String healthDepartment) {
 		this.healthDepartment = healthDepartment;
 		return this;
@@ -176,6 +179,29 @@ public class DataRequestDto {
 
 	public void setEnd(Instant end) {
 		this.end = end;
+	}
+
+	public DataRequestDto requestDetails(String requestDetails) {
+		this.requestDetails = requestDetails;
+		return this;
+	}
+
+	/**
+	 * Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table and environment,
+	 * seat, rank, ...).
+	 * 
+	 * @return end
+	 **/
+	@Schema(
+		description = "Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table and environment, seat, rank, ...).")
+
+	@Valid
+	public String getRequestDetails() {
+		return requestDetails;
+	}
+
+	public void setRequestDetails(String requestDetails) {
+		this.requestDetails = requestDetails;
 	}
 
 	@Override

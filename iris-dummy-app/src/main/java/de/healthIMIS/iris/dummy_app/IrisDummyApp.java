@@ -59,6 +59,8 @@ import de.healthIMIS.iris.dummy_app.submissions.ContactPersonList;
 import de.healthIMIS.iris.dummy_app.submissions.DataSubmissionDto;
 import de.healthIMIS.iris.dummy_app.submissions.Event;
 import de.healthIMIS.iris.dummy_app.submissions.EventList;
+import de.healthIMIS.iris.dummy_app.submissions.Guest;
+import de.healthIMIS.iris.dummy_app.submissions.GuestList;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -321,12 +323,23 @@ public class IrisDummyApp {
 	/**
 	 * Lets the user enter the data for guests and creates a DTO from it.
 	 * 
-	 * @param textIO
 	 * @return
 	 */
-	private String createGuests() {
+	private GuestList createGuests() {
 
-		return textIO.newStringInputReader().withDefaultValue("Data").read("Content");
+		var list = new GuestList();
+
+		do {
+			var guest = new Guest();
+
+			guest.firstName(textIO.newStringInputReader().read("First name"));
+			guest.lastName(textIO.newStringInputReader().read("Last name"));
+
+			list.addGuestsItem(guest);
+		}
+		while (textIO.newBooleanInputReader().withDefaultValue(Boolean.TRUE).read("More guests?"));
+
+		return list;
 	}
 
 	/**
