@@ -1,6 +1,9 @@
 package de.healthIMIS.iris.dummy_app;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.codec.binary.Base64.decodeBase64;
+import static org.apache.commons.codec.binary.Base64.encodeBase64String;
+import static org.apache.commons.codec.digest.DigestUtils.md5;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import java.io.BufferedInputStream;
@@ -17,7 +20,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -36,7 +38,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -234,11 +236,11 @@ public class IrisDummyApp {
 
 			// generates the key for data transmission and encrypts it with the public key of the health department
 			var kf = KeyFactory.getInstance(KEY_ENCRYPTION_ALGORITHM);
-			var keyBytes = Base64.getDecoder().decode(dataRequest.getKeyOfHealthDepartment());
+			var keyBytes = decodeBase64(dataRequest.getKeyOfHealthDepartment());
 			var publicKey = kf.generatePublic(new X509EncodedKeySpec(keyBytes));
 
 			var secretKey = generateSymmetricKey();
-			var encryptedSecretKey = Base64.getEncoder().encodeToString(encryptSecretKey(secretKey, publicKey));
+			var encryptedSecretKey = encodeBase64String(encryptSecretKey(secretKey, publicKey));
 
 			// entering the requested data and submitting the data submission to the server
 			Object contentObject = null;
@@ -419,7 +421,7 @@ public class IrisDummyApp {
 
 		var encryptedArray = encryptText(content, secretKey);
 
-		var ret = Base64.getEncoder().encodeToString(encryptedArray);
+		var ret = Base64.encodeBase64String(encryptedArray);
 
 		if (debug) {
 			textIO.getTextTerminal().printf("Text to encrypt:           %s\n\n", content);
@@ -487,7 +489,7 @@ public class IrisDummyApp {
 		if (name != null) {
 
 			var nameMod = name.toLowerCase().replaceAll("[^\\pL\\pN]", "");
-			var nameHash = DigestUtils.md5Hex(nameMod);
+			var nameHash = encodeBase64String(md5(nameMod));
 			ret.add(nameHash);
 
 			if (debug) {
@@ -498,7 +500,7 @@ public class IrisDummyApp {
 		if (dateOfBirth != null) {
 
 			var date = dateOfBirth.getYear() * 10000 + dateOfBirth.getMonthValue() * 100 + dateOfBirth.getDayOfMonth();
-			var dateHash = DigestUtils.md5Hex(Integer.toString(date));
+			var dateHash = encodeBase64String(md5(Integer.toString(date)));
 			ret.add(dateHash);
 
 			if (debug) {
