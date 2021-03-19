@@ -10,42 +10,61 @@ NOTE: The IRIS system is work in progress. If you are interested or have questio
 
 toc::[]
 
+////
 == Concept
 
 There is a concept written in German which describes the IRIS system: https://github.com/healthIMIS/IRIS-Concept/releases/latest[Last release of the concept]
+////
 
-== IRIS Servers
+== IRIS System
 
-There are two servers in the IRIS system:
+There are two services in the IRIS system:
 
-- One for the public Internet, which provides a REST API for the citizen apps and receives the apps' data.
-- The second for a secure government network, which fetches the data from the public server and makes it available to the health departments.
+- One server (`public-server`) for the public Internet, which provides a REST API for the citizen apps and receives the apps' data.
+- A service on the health department's side (`client-sormas-sidecar`), which feeds the data into the department's Sormas and generally takes care of the communication with Sormas.
+- _A second server (`hd-server`) is for a secure government network, which fetches the data from the public server and makes it available to the health departments. This is not being used at the moment, as it is still unclear whether it will be needed!_
 
-The servers are Spring Boot based applications exposing RESTful APIs and running without a user interface.
+The services are Spring Boot based applications exposing RESTful APIs and running without a user interface.
 
-These are standard Maven projects and just be imported in any IDE. For convenience, enable the <<localDev,`localDev` Maven profile>> so that running the servers from your IDE does not need to access a database, but uses H2 in-memory. <<lombok,Note the use of lombok!>>
+These are standard Maven projects and just be imported in any IDE. For convenience, enable the <<localDev,`localDev` Maven profile>> so that running the services from your IDE does not need to access a database, but uses H2 in-memory. <<lombok,Note the use of lombok!>>
+
+Further components are:
+
+- A simple CLI application for tests and demonstration (`dummy-app`).
+- A very simple web application (`dummy-web`) - this should be outdated.
+- The client library for SORMAS' REST-API (`sormas-api-client`).
 
 === Quickstart
 
-Run the servers.
+To work with SORMAS you should clone it from https://github.com/hzi-braunschweig/SORMAS-Project and look at https://github.com/hzi-braunschweig/SORMAS-Project/blob/development/sormas-cargoserver/README.md
+
+Run the services.
 
 [source, bash]
 ----
 $ git clone git@github.com:healthIMIS/IRIS.git iris <1>
+
 $ cd iris/iris-public-server <2>
 $ ./mvnw spring-boot:run -PlocalDev <3>
 
 # in a secound console
-$ cd iris/iris-hd-server <4>
-$ ./mvnw spring-boot:run -PlocalDev <3>
+$ cd iris/iris-sormas-api-client <4>
+$ ./mvnw install <5>
+
+$ cd iris/iris-client-sormas-sidecar <6>
+$ ./mvnw spring-boot:run -PlocalDev <7>
 ----
 <1> Clone the repository.
 <2> Switch to the public server.
 <3> Run the server with an in-memory database.
     * Public server uses port *8090* by default
-    * HD server uses port *8091* by default
-<4> Switch to the health department server.
+<4> Switch to the SORMAS REST client.
+<5> Build this library and put it into the maven repository. This does not have to be done over and over again, but only initially once and for the rare changes to the library.
+<6> Switch to the health department client.
+<7> Run the service with an in-memory database.
 
+////
+// are currently not generated
 [[sample_data]]
 ==== Sample data
 
@@ -71,6 +90,7 @@ If the servers are started with the <<profiles,Spring profile>> `psql_compose_db
 | 790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80 | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | salt | key | DATA OF CONTACTS | Contact
 | 790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80 | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | salt | key | DATA OF EVENTS | Events
 |====================
+////
 
 ==== Dummy App
 
@@ -104,7 +124,7 @@ Activate the needed profile(s) by setting the `spring.profiles.active` property 
 
 [width="100%",cols="1a,9a"]
 |====================
-| dev | h2_db, dev_env
+| dev | h2_db, dev_env, local
 | dev_psql | psql_compose_db, dev_env
 | prod | prod_db
 |====================
@@ -137,8 +157,8 @@ There is a Docker-Compose configuration (`infrastructure/docker-compose.yml`) wh
 DB:: 
     - login = postgres:postgres; 
     - hostname in Docker = postgres
-    - port on host = 5432
-    - databases = iris_public + iris_hd
+    - port on host = 5433
+    - databases = iris_public + iris_hd + iris_client
     - Docker volume = psqldata_iris
 
 pgAdmin::
@@ -147,24 +167,32 @@ pgAdmin::
     
 === Run with Docker
 
-You can build Docker images for the servers and run this with Docker.
+You can build Docker images for the services and run this with Docker.
 
 [source, bash]
 ----
-$ cd iris/ <1>
-$ ./mvnw spring-boot:build-image <2>
-$ docker-compose -f infrastructure/docker-compose_with-servers.yml up -d <3>
+$ cd iris/iris-sormas-api-client <1>
+$ ./mvnw install <2>
+$ cd ../infrastructure
+$ cp sormas.env.example sormas.env <3>
+$ nano sormas.env <3>
+
+$ cd .. <3>
+$ ./mvnw spring-boot:build-image <4>
+$ docker-compose -f infrastructure/docker-compose_with-servers.yml up -d <5>
 ----
-<1> Switch to the root directory of the IRIS project.
-<2> Build the images for both servers.
-<3> Run the Postgres db, the pgAdmin, and the both server with Docker-Compose.
+<1> Switch to the SORMAS REST client.
+<2> Build this library and put it into the maven repository. This does not have to be done over and over again, but only initially once and for the rare changes to the library.
+<3> Copy the example of the sormas.env and edit this. Insert the username and password of the IRIS user in your SORMAS test instance.
+<4> Switch back to the root directory of the IRIS project.
+<5> Build the images for both services.
+<6> Run the Postgres db, the pgAdmin, the public server and the client service with Docker-Compose.
     * Postgres DB and pgAdmin <<postgres,as above>>
-    * Public server uses port *8880* by default
-    * HD server uses port *8881* by default
+    * Public server uses port *8843* by default
 
 === Libraries
 
-The servers are based on the following open source projects:
+The services are based on the following open source projects:
 
 - Spring Boot 2.4
 - Spring MVC
