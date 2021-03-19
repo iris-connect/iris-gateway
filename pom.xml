@@ -16,7 +16,6 @@
 		<module>iris-public-server</module>
 		<!--  <module>iris-hd-server</module> -->
 		<module>iris-client-sormas-sidecar</module>
-		<!--  <module>iris-sormas-api-client</module> -->
 		<module>iris-dummy-app</module>
 	</modules>
 
