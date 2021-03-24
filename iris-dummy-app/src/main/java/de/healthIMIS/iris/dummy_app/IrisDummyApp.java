@@ -125,7 +125,7 @@ public class IrisDummyApp {
 
 		var options = new Options();
 		options.addOption(new Option("h", "help", false, "print this message"));
-		options.addOption(Option.builder("a").longOpt("address").desc("the address of the API (default = http://localhost:8090)").hasArg().build());
+		options.addOption(Option.builder("a").longOpt("address").desc("the address of the API (default = http://localhost:18443)").hasArg().build());
 		options.addOption(Option.builder("n").longOpt("name").desc("name of the user (default = Max Muster)").hasArg().build());
 		options.addOption(Option.builder("b").longOpt("birth").desc("date of birth of the user (default = 1990-01-01)").hasArg().build());
 		options.addOption(
@@ -158,17 +158,21 @@ public class IrisDummyApp {
 		}
 
 		// functional options
-		var address = cmd.getOptionValue("a", "https://localhost:8443");
+		var address = cmd.getOptionValue("a", "https://localhost:18443");
 		var name = cmd.getOptionValue("n", "Max Muster");
 		var dateOfBirth = LocalDate.parse(cmd.getOptionValue("b", "1990-01-01"));
 		var randomCode = cmd.getOptionValue("r", "ABCDEFGHKL");
 		var useTeleCode = cmd.hasOption('t');
 
 		var file = cmd.getOptionValue('f');
-		var properties = new Properties();
-		var stream = new BufferedInputStream(new FileInputStream(file));
-		properties.load(stream);
-		stream.close();
+
+		Properties properties = null;
+		if (file != null) {
+			properties = new Properties();
+			try (var stream = new BufferedInputStream(new FileInputStream(file))) {
+				properties.load(stream);
+			}
+		}
 
 		new IrisDummyApp(debug, address, name, dateOfBirth, randomCode, useTeleCode, properties).run();
 	}
@@ -534,7 +538,7 @@ public class IrisDummyApp {
 		return options.get(0);
 	}
 
-	enum ContactsEvents {
+	public enum ContactsEvents {
 		Contacts,
 		Events,
 		Stop
