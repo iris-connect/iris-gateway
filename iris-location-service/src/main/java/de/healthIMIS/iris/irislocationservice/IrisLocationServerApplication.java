@@ -9,5 +9,4 @@ public class IrisLocationServerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(IrisLocationServerApplication.class, args);
 	}
-
 }
