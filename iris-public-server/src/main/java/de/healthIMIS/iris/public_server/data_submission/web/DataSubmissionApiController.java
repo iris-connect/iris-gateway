@@ -83,8 +83,8 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 	private ResponseEntity<?> handleRequest(DataRequestIdentifier code, DataSubmissionDto body, String encryptedData, Feature feature) {
 
 		return createAndSaveDataSubmission(code, body, encryptedData, feature).map(representation::toRepresentation)
-			.map(ResponseEntity::ok)
-			.orElseGet(() -> ResponseEntity.notFound().build());
+			.map(it -> ResponseEntity.accepted().build())
+			.orElseGet(ResponseEntity.notFound()::build);
 	}
 
 	private Optional<DataRequest> createAndSaveDataSubmission(

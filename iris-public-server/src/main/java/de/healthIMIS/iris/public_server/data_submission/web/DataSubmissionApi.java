@@ -16,11 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
-import de.healthIMIS.iris.public_server.data_request.web.DataRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -32,9 +30,8 @@ public interface DataSubmissionApi {
 		description = "",
 		tags = {})
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "201",
-			description = "A data request with all parameters relevant for the data submission and the links to the next possible steps for data submission.",
-			content = @Content(schema = @Schema(implementation = DataRequestDto.class))),
+		@ApiResponse(responseCode = "202",
+			description = "Submission was accepted and saved for later processing by the client in the health department."),
 
 		@ApiResponse(responseCode = "401", description = "The client is unauthorized to access this API."),
 
@@ -62,9 +59,8 @@ public interface DataSubmissionApi {
 		description = "",
 		tags = {})
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "201",
-			description = "A data request with all parameters relevant for the data submission and the links to the next possible steps for data submission.",
-			content = @Content(schema = @Schema(implementation = DataRequestDto.class))),
+		@ApiResponse(responseCode = "202",
+			description = "Submission was accepted and saved for later processing by the client in the health department."),
 
 		@ApiResponse(responseCode = "401", description = "The client is unauthorized to access this API."),
 
