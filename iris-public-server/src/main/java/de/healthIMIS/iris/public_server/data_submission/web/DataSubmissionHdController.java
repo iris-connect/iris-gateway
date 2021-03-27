@@ -14,6 +14,15 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_submission.web;
 
+import de.healthIMIS.iris.public_server.core.Feature;
+import de.healthIMIS.iris.public_server.data_submission.DataSubmission;
+import de.healthIMIS.iris.public_server.data_submission.DataSubmissionRepository;
+import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
+import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -25,15 +34,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import de.healthIMIS.iris.public_server.core.Feature;
-import de.healthIMIS.iris.public_server.data_submission.DataSubmission;
-import de.healthIMIS.iris.public_server.data_submission.DataSubmissionRepository;
-import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Controller of the internal end-points for health department site to exchange data submissions.
@@ -47,30 +47,29 @@ public class DataSubmissionHdController {
 
 	private final @NonNull DataSubmissionRepository submissions;
 
-//	@GetMapping("/hd/data-submissions")
-//	HttpEntity<List<DataSubmissionInternalOutputDto>> getDataSubmissions(@RequestParam("from") String fromStr) {
-//
-//		var from = LocalDateTime.parse(fromStr);
-//
-//		// Shall prevent that within one millisecond (accuracy of the Last-Modified header) after
-//		// loading additional records are added and thus records are transmitted twice or are forgotten.
-//		var to = LocalDateTime.now().withNano(0);
-//
-//		var dataSubmissions = submissions.findAllByMetadataLastModifiedIsBetweenOrderByMetadataLastModified(from, to);
-//
-//		var dtos = dataSubmissions.map(DataSubmissionInternalOutputDto::of).toList();
-//
-//		log.debug(
-//			"Submission - GET from hd server: {}",
-//			dtos.stream().map(DataSubmissionInternalOutputDto::getRequestId).collect(Collectors.joining(", ")));
-//
-//		return ResponseEntity.ok().lastModified(to.atZone(ZoneId.systemDefault())).body(dtos);
-//	}
+	// @GetMapping("/hd/data-submissions")
+	// HttpEntity<List<DataSubmissionInternalOutputDto>> getDataSubmissions(@RequestParam("from") String fromStr) {
+	//
+	// var from = LocalDateTime.parse(fromStr);
+	//
+	// // Shall prevent that within one millisecond (accuracy of the Last-Modified header) after
+	// // loading additional records are added and thus records are transmitted twice or are forgotten.
+	// var to = LocalDateTime.now().withNano(0);
+	//
+	// var dataSubmissions = submissions.findAllByMetadataLastModifiedIsBetweenOrderByMetadataLastModified(from, to);
+	//
+	// var dtos = dataSubmissions.map(DataSubmissionInternalOutputDto::of).toList();
+	//
+	// log.debug(
+	// "Submission - GET from hd server: {}",
+	// dtos.stream().map(DataSubmissionInternalOutputDto::getRequestId).collect(Collectors.joining(", ")));
+	//
+	// return ResponseEntity.ok().lastModified(to.atZone(ZoneId.systemDefault())).body(dtos);
+	// }
 
 	@GetMapping("/hd/data-submissions")
 	HttpEntity<List<DataSubmissionInternalOutputDto>> getDataSubmissions(
-		@RequestParam("departmentId") DepartmentIdentifier departmentId,
-		@RequestParam("from") String fromStr) {
+			@RequestParam("departmentId") DepartmentIdentifier departmentId, @RequestParam("from") String fromStr) {
 
 		var from = LocalDateTime.parse(fromStr);
 
@@ -78,29 +77,30 @@ public class DataSubmissionHdController {
 		// loading additional records are added and thus records are transmitted twice or are forgotten.
 		var to = LocalDateTime.now().withNano(0);
 
-		var dataSubmissions = submissions.findAllByDepartmentIdAndMetadataLastModifiedIsBetweenOrderByMetadataLastModified(departmentId, from, to);
+		var dataSubmissions = submissions
+				.findAllByDepartmentIdAndMetadataLastModifiedIsBetweenOrderByMetadataLastModified(departmentId, from, to);
 
 		var dtos = dataSubmissions.map(DataSubmissionInternalOutputDto::of).toList();
 
-		log.debug(
-			"Submission - GET from hd server: {}",
-			dtos.stream().map(DataSubmissionInternalOutputDto::getRequestId).collect(Collectors.joining(", ")));
+		log.debug("Submission - GET from hd server: {}",
+				dtos.stream().map(DataSubmissionInternalOutputDto::getRequestId).collect(Collectors.joining(", ")));
 
 		return ResponseEntity.ok().lastModified(to.atZone(ZoneId.systemDefault())).body(dtos);
 	}
 
-//	@DeleteMapping("/hd/data-submissions")
-//	void deleteDataSubmissions(@RequestParam("from") String fromStr) {
-//
-//		var from = LocalDateTime.parse(fromStr);
-//
-//		var deleteCount = submissions.deleteAllByMetadataLastModifiedIsBefore(from);
-//
-//		log.debug("Submission - {} submissions deleted", deleteCount);
-//	}
+	// @DeleteMapping("/hd/data-submissions")
+	// void deleteDataSubmissions(@RequestParam("from") String fromStr) {
+	//
+	// var from = LocalDateTime.parse(fromStr);
+	//
+	// var deleteCount = submissions.deleteAllByMetadataLastModifiedIsBefore(from);
+	//
+	// log.debug("Submission - {} submissions deleted", deleteCount);
+	// }
 
 	@DeleteMapping("/hd/data-submissions")
-	void deleteDataSubmissions(@RequestParam("departmentId") DepartmentIdentifier departmentId, @RequestParam("from") String fromStr) {
+	void deleteDataSubmissions(@RequestParam("departmentId") DepartmentIdentifier departmentId,
+			@RequestParam("from") String fromStr) {
 
 		var from = LocalDateTime.parse(fromStr);
 
@@ -113,14 +113,9 @@ public class DataSubmissionHdController {
 	static class DataSubmissionInternalOutputDto {
 
 		static DataSubmissionInternalOutputDto of(DataSubmission submission) {
-			return new DataSubmissionInternalOutputDto(
-				submission.getId().toString(),
-				submission.getRequestId().toString(),
-				submission.getDepartmentId().toString(),
-				submission.getSecret(),
-				submission.getKeyReferenz(),
-				submission.getEncryptedData(),
-				submission.getFeature());
+			return new DataSubmissionInternalOutputDto(submission.getId().toString(), submission.getRequestId().toString(),
+					submission.getDepartmentId().toString(), submission.getSecret(), submission.getKeyReferenz(),
+					submission.getEncryptedData(), submission.getFeature());
 		}
 
 		private final String id;

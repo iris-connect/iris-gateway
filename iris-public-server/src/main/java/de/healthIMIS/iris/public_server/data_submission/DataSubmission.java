@@ -14,17 +14,6 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_submission;
 
-import java.io.Serializable;
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Lob;
-import javax.persistence.Table;
-
 import de.healthIMIS.iris.public_server.core.Aggregate;
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.core.Id;
@@ -36,6 +25,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 
 /**
  * A data submission from an app of a citizen or event/location operator to the health department.
@@ -56,17 +56,11 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 	private String keyReferenz;
 	private @Lob String encryptedData;
 
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Enumerated(EnumType.STRING) @Column(nullable = false)
 	private Feature feature;
 
-	public DataSubmission(
-		DataRequestIdentifier requestId,
-		DepartmentIdentifier departmentId,
-		String secret,
-		String keyReferenz,
-		String encryptedData,
-		Feature feature) {
+	public DataSubmission(DataRequestIdentifier requestId, DepartmentIdentifier departmentId, String secret,
+			String keyReferenz, String encryptedData, Feature feature) {
 
 		super();
 

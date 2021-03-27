@@ -14,14 +14,7 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_request;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.UUID;
-
-import org.springframework.stereotype.Component;
+import static java.time.temporal.ChronoUnit.*;
 
 import de.healthIMIS.iris.public_server.core.DataInitializer;
 import de.healthIMIS.iris.public_server.core.Feature;
@@ -31,14 +24,24 @@ import de.healthIMIS.iris.public_server.department.DepartmentDataInitializer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.UUID;
+
+import org.springframework.stereotype.Component;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class DataRequestDataInitializer implements DataInitializer {
 
-	public static final DataRequestIdentifier REQ_ID_1 = DataRequestIdentifier.of(UUID.fromString("790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80"));
-	static final DataRequestIdentifier REQ_ID_2 = DataRequestIdentifier.of(UUID.fromString("2707fd28-9b4f-4140-b80e-d56d9aad831f"));
-	static final DataRequestIdentifier REQ_ID_3 = DataRequestIdentifier.of(UUID.fromString("3907e730-af89-4944-8e75-fbe6ba60c904"));
+	public static final DataRequestIdentifier REQ_ID_1 = DataRequestIdentifier
+			.of(UUID.fromString("790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80"));
+	static final DataRequestIdentifier REQ_ID_2 = DataRequestIdentifier
+			.of(UUID.fromString("2707fd28-9b4f-4140-b80e-d56d9aad831f"));
+	static final DataRequestIdentifier REQ_ID_3 = DataRequestIdentifier
+			.of(UUID.fromString("3907e730-af89-4944-8e75-fbe6ba60c904"));
 
 	private final DataRequestRepository requests;
 
@@ -53,50 +56,17 @@ public class DataRequestDataInitializer implements DataInitializer {
 
 		var list = new ArrayList<DataRequest>();
 
-		list.add(
-			new DataRequest(
-				REQ_ID_1,
-				DepartmentDataInitializer.DEPARTMENT_ID_1,
-				"1.14.6.27.01.",
-				"ABCDEFGHKM",
-				"e7fcc353b0b13024d48f74a718d8d721",
-				"c82c1cd77fbd144003b1e476718f66ce",
-				"ABCDEFGHKL",
-				Instant.now().minus(2, DAYS),
-				null,
-				null,
-				EnumSet.of(Feature.Contacts_Events),
-				Status.Open));
+		list.add(new DataRequest(REQ_ID_1, DepartmentDataInitializer.DEPARTMENT_ID_1, "1.14.6.27.01.", "ABCDEFGHKM",
+				"e7fcc353b0b13024d48f74a718d8d721", "c82c1cd77fbd144003b1e476718f66ce", "ABCDEFGHKL",
+				Instant.now().minus(2, DAYS), null, null, EnumSet.of(Feature.Contacts_Events), Status.Open));
 
-		list.add(
-			new DataRequest(
-				REQ_ID_2,
-				DepartmentDataInitializer.DEPARTMENT_ID_1,
-				"1.14.6.27.01.",
-				"ABCDEFGHKN",
-				"cd0087e4707045b33c144bf09305c2a5",
-				null,
-				"9876543XYZ",
-				Instant.now().minus(4, DAYS),
-				Instant.now().minus(2, DAYS),
-				null,
-				EnumSet.of(Feature.Contacts_Events),
-				Status.Open));
+		list.add(new DataRequest(REQ_ID_2, DepartmentDataInitializer.DEPARTMENT_ID_1, "1.14.6.27.01.", "ABCDEFGHKN",
+				"cd0087e4707045b33c144bf09305c2a5", null, "9876543XYZ", Instant.now().minus(4, DAYS),
+				Instant.now().minus(2, DAYS), null, EnumSet.of(Feature.Contacts_Events), Status.Open));
 
-		list.add(
-			new DataRequest(
-				REQ_ID_3,
-				DepartmentDataInitializer.DEPARTMENT_ID_2,
-				"1.14.6.27.01.",
-				"ABCDEFGHKO",
-				"bce7a55a7b8a8a89c33c4879fc545cc9",
-				null,
-				"23456789AB",
-				Instant.now().minus(4, DAYS),
-				Instant.now().minus(2, DAYS),
-				null,
-				EnumSet.of(Feature.Contacts_Events),
-				Status.Open));
+		list.add(new DataRequest(REQ_ID_3, DepartmentDataInitializer.DEPARTMENT_ID_2, "1.14.6.27.01.", "ABCDEFGHKO",
+				"bce7a55a7b8a8a89c33c4879fc545cc9", null, "23456789AB", Instant.now().minus(4, DAYS),
+				Instant.now().minus(2, DAYS), null, EnumSet.of(Feature.Contacts_Events), Status.Open));
 
 		requests.saveAll(list);
 	}

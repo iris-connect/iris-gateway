@@ -14,6 +14,8 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_submission.web;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,19 +27,18 @@ import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 /**
  * Basic data type of a data submission which contains the unencrypted metadata needed for processing.
  */
-@Schema(description = "Basic data type of a data submission which contains the unencrypted metadata needed for processing.")
+@Schema(
+		description = "Basic data type of a data submission which contains the unencrypted metadata needed for processing.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-18T08:11:24.698Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen",
+		date = "2021-02-18T08:11:24.698Z[GMT]")
 
 public class DataSubmissionDto {
 
-	@JsonProperty("checkCode")
-	@Valid
+	@JsonProperty("checkCode") @Valid
 	private List<String> checkCode = new ArrayList<String>();
 
 	@JsonProperty("secret")
@@ -57,13 +58,13 @@ public class DataSubmissionDto {
 	}
 
 	/**
-	 * An array of up to three check codes, one of them must be correct for the data to be accepted. For details, please refer to section
-	 * \"Prüfcode\" in concept at https://github.com/healthIMIS/IRIS-Concept/releases/latest
+	 * An array of up to three check codes, one of them must be correct for the data to be accepted. For details, please
+	 * refer to section \"Prüfcode\" in concept at https://github.com/healthIMIS/IRIS-Concept/releases/latest
 	 * 
 	 * @return checkCode
 	 **/
 	@Schema(required = true,
-		description = "An array of up to three check codes, one of them must be correct for the data to be accepted. For details, please refer to section \"Prüfcode\" in concept at https://github.com/healthIMIS/IRIS-Concept/releases/latest")
+			description = "An array of up to three check codes, one of them must be correct for the data to be accepted. For details, please refer to section \"Prüfcode\" in concept at https://github.com/healthIMIS/IRIS-Concept/releases/latest")
 	@NotNull
 
 	public List<String> getCheckCode() {
@@ -123,8 +124,8 @@ public class DataSubmissionDto {
 		}
 		DataSubmissionDto dataSubmission = (DataSubmissionDto) o;
 		return Objects.equals(this.checkCode, dataSubmission.checkCode)
-			&& Objects.equals(this.secret, dataSubmission.secret)
-			&& Objects.equals(this.keyReferenz, dataSubmission.keyReferenz);
+				&& Objects.equals(this.secret, dataSubmission.secret)
+				&& Objects.equals(this.keyReferenz, dataSubmission.keyReferenz);
 	}
 
 	@Override
@@ -145,8 +146,7 @@ public class DataSubmissionDto {
 	}
 
 	/**
-	 * Convert the given object to string with each line indented by 4 spaces
-	 * (except the first line).
+	 * Convert the given object to string with each line indented by 4 spaces (except the first line).
 	 */
 	private String toIndentedString(java.lang.Object o) {
 		if (o == null) {

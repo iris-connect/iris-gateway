@@ -14,9 +14,9 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_request;
 
-import org.springframework.data.repository.CrudRepository;
-
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
+
+import org.springframework.data.repository.CrudRepository;
 
 /**
  * @author Jens Kutzsche

@@ -14,10 +14,6 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_request.web;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
 import de.healthIMIS.iris.public_server.data_request.DataRequestRepository;
@@ -29,12 +25,17 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
 /**
  * Controller of the public end-points for apps to exchange data requests.
  * 
  * @author Jens Kutzsche
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-18T08:11:24.698Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen",
+		date = "2021-02-18T08:11:24.698Z[GMT]")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -46,16 +47,11 @@ public class DataRequestApiController implements DataRequestApi {
 
 	@Override
 	public ResponseEntity<?> getDataRequestByCode(
-		@Parameter(in = ParameterIn.PATH,
-			description = "The code of a data request sent by the health department.",
-			required = true,
-			schema = @Schema()) @PathVariable("code") DataRequestIdentifier code) {
+			@Parameter(in = ParameterIn.PATH, description = "The code of a data request sent by the health department.",
+					required = true, schema = @Schema()) @PathVariable("code") DataRequestIdentifier code) {
 
-		return requests.findById(code)
-			.map(this::log)
-			.map(representation::toRepresentation)
-			.map(ResponseEntity::ok)
-			.orElseGet(() -> ResponseEntity.notFound().build());
+		return requests.findById(code).map(this::log).map(representation::toRepresentation).map(ResponseEntity::ok)
+				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 	private DataRequest log(DataRequest request) {

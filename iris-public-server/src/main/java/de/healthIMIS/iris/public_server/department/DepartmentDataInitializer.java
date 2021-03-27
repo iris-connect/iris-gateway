@@ -14,12 +14,14 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.department;
 
-import java.util.UUID;
-
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
+
+import java.util.UUID;
 
 public class DepartmentDataInitializer {
 
-	public static final DepartmentIdentifier DEPARTMENT_ID_1 = DepartmentIdentifier.of(UUID.fromString("a04d2e43-3d1a-464e-9926-e190ccf2dd03"));
-	public static final DepartmentIdentifier DEPARTMENT_ID_2 = DepartmentIdentifier.of(UUID.fromString("6afbbe9b-938c-46d7-93e4-7c9e1f737273"));
+	public static final DepartmentIdentifier DEPARTMENT_ID_1 = DepartmentIdentifier
+			.of(UUID.fromString("a04d2e43-3d1a-464e-9926-e190ccf2dd03"));
+	public static final DepartmentIdentifier DEPARTMENT_ID_2 = DepartmentIdentifier
+			.of(UUID.fromString("6afbbe9b-938c-46d7-93e4-7c9e1f737273"));
 }

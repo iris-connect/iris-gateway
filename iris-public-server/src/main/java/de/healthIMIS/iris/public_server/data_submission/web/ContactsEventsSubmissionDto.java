@@ -14,6 +14,8 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_submission.web;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -23,13 +25,12 @@ import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 /**
  * ContactsSubmission
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-18T08:11:24.698Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen",
+		date = "2021-02-18T08:11:24.698Z[GMT]")
 
 public class ContactsEventsSubmissionDto extends DataSubmissionDto {
 
@@ -86,8 +87,7 @@ public class ContactsEventsSubmissionDto extends DataSubmissionDto {
 	}
 
 	/**
-	 * Convert the given object to string with each line indented by 4 spaces
-	 * (except the first line).
+	 * Convert the given object to string with each line indented by 4 spaces (except the first line).
 	 */
 	private String toIndentedString(java.lang.Object o) {
 		if (o == null) {

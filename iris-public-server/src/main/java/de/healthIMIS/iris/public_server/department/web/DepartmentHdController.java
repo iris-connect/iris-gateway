@@ -14,6 +14,14 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.department.web;
 
+import de.healthIMIS.iris.public_server.department.Department;
+import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
+import de.healthIMIS.iris.public_server.department.DepartmentRepository;
+import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.validation.Valid;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -24,14 +32,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import de.healthIMIS.iris.public_server.department.Department;
-import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
-import de.healthIMIS.iris.public_server.department.DepartmentRepository;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Controller of the internal end-points for department informations.
@@ -47,21 +47,18 @@ public class DepartmentHdController {
 
 	@PutMapping("/hd/departments/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	DepartmentDto putDataRequest(@PathVariable("id") DepartmentIdentifier id, @Valid @RequestBody DepartmentDto payload, Errors errors) {
+	DepartmentDto putDataRequest(@PathVariable("id") DepartmentIdentifier id, @Valid @RequestBody DepartmentDto payload,
+			Errors errors) {
 
 		var department = new Department(id, payload.getName(), payload.getKeyReferenz(), payload.key);
 
 		try {
 			departments.deleteById(department.getId());
-		} catch (EmptyResultDataAccessException e) {
-		}
+		} catch (EmptyResultDataAccessException e) {}
 		departments.save(department);
 
-		log.debug(
-			"Department - PUT from hd + saved: {} (Name: {}; Key-Referenz: {})",
-			department.getId().toString(),
-			department.getName(),
-			department.getKeyReferenz());
+		log.debug("Department - PUT from hd + saved: {} (Name: {}; Key-Referenz: {})", department.getId().toString(),
+				department.getName(), department.getKeyReferenz());
 
 		return payload;
 	}

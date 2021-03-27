@@ -14,6 +14,8 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.web;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,8 +24,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.preauth.x509.SubjectDnX509PrincipalExtractor;
 import org.springframework.security.web.authentication.preauth.x509.X509AuthenticationFilter;
-
-import lombok.RequiredArgsConstructor;
 
 /**
  * @author Jens Kutzsche
@@ -50,16 +50,9 @@ public class IrisWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapt
 			}
 		});
 
-//		httpSecurity.antMatcher("/**").authorizeRequests().anyRequest().authenticated();
-		httpSecurity.antMatcher("/hd/**")
-			.csrf()
-			.disable()
-			.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-			.addFilter(filter)
-			.authorizeRequests()
-			.anyRequest()
-			.authenticated();
+		// httpSecurity.antMatcher("/**").authorizeRequests().anyRequest().authenticated();
+		httpSecurity.antMatcher("/hd/**").csrf().disable().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().addFilter(filter).authorizeRequests().anyRequest()
+				.authenticated();
 	}
 }

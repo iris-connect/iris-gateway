@@ -14,12 +14,6 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.web;
 
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
@@ -30,40 +24,36 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-18T08:11:24.698Z[GMT]")
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen",
+		date = "2021-02-18T08:11:24.698Z[GMT]")
 @Configuration
 public class SwaggerDocumentationConfig {
 
 	@Bean
 	public Docket customImplementation() {
-		return new Docket(DocumentationType.OAS_30).select()
-			.apis(RequestHandlerSelectors.basePackage("io.swagger.api"))
-			.build()
-			.directModelSubstitute(LocalDate.class, java.sql.Date.class)
-			.directModelSubstitute(OffsetDateTime.class, java.util.Date.class)
-			.apiInfo(apiInfo());
+		return new Docket(DocumentationType.OAS_30).select().apis(RequestHandlerSelectors.basePackage("io.swagger.api"))
+				.build().directModelSubstitute(LocalDate.class, java.sql.Date.class)
+				.directModelSubstitute(OffsetDateTime.class, java.util.Date.class).apiInfo(apiInfo());
 	}
 
 	ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("IRIS Public API")
-			.description(
+		return new ApiInfoBuilder().title("IRIS Public API").description(
 				"The public API of IRIS (Integration of Remote systems Into SORMAS). Through this API, the many contact tracking apps and the like can submit your data to health departments via IRIS")
-			.license("GNU AGPL v3")
-			.licenseUrl("https://www.gnu.org/licenses/agpl-3.0.de.html")
-			.termsOfServiceUrl("")
-			.version("1.0.0")
-			.contact(new Contact("", "", "jens.kutzsche@gebea.de"))
-			.build();
+				.license("GNU AGPL v3").licenseUrl("https://www.gnu.org/licenses/agpl-3.0.de.html").termsOfServiceUrl("")
+				.version("1.0.0").contact(new Contact("", "", "jens.kutzsche@gebea.de")).build();
 	}
 
 	@Bean
 	public OpenAPI openApi() {
-		return new OpenAPI().info(
-			new Info().title("IRIS Public API")
-				.description(
-					"The public API of IRIS (Integration of Remote systems Into SORMAS). Through this API, the many contact tracking apps and the like can submit your data to health departments via IRIS")
-				.termsOfService("")
-				.version("1.0.0")
+		return new OpenAPI().info(new Info().title("IRIS Public API").description(
+				"The public API of IRIS (Integration of Remote systems Into SORMAS). Through this API, the many contact tracking apps and the like can submit your data to health departments via IRIS")
+				.termsOfService("").version("1.0.0")
 				.license(new License().name("GNU AGPL v3").url("https://www.gnu.org/licenses/agpl-3.0.de.html"))
 				.contact(new io.swagger.v3.oas.models.info.Contact().email("jens.kutzsche@gebea.de")));
 	}

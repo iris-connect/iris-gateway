@@ -14,23 +14,6 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_request;
 
-import java.io.Serializable;
-import java.time.Instant;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.Table;
-
 import de.healthIMIS.iris.public_server.core.Aggregate;
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.core.Id;
@@ -41,6 +24,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.persistence.*;
 
 /**
  * A data request from the health department to a citizen or event/location operator.
@@ -68,29 +58,17 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 
 	private @Lob String requestDetails;
 
-	@Enumerated(EnumType.STRING)
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "data_request_feature", joinColumns = @JoinColumn(name = "request_id"))
-	@Column(name = "feature", nullable = false)
+	@Enumerated(EnumType.STRING) @ElementCollection(fetch = FetchType.EAGER) @CollectionTable(
+			name = "data_request_feature",
+			joinColumns = @JoinColumn(name = "request_id")) @Column(name = "feature", nullable = false)
 	private Set<Feature> features;
 
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Enumerated(EnumType.STRING) @Column(nullable = false)
 	private Status status = Status.Open;
 
-	public DataRequest(
-		DataRequestIdentifier id,
-		DepartmentIdentifier departmentId,
-		String rkiCode,
-		String teleCode,
-		String checkCodeName,
-		String checkCodeDayOfBirth,
-		String checkCodeRandom,
-		Instant requestStart,
-		Instant requestEnd,
-		String requestDetails,
-		Set<Feature> features,
-		Status status) {
+	public DataRequest(DataRequestIdentifier id, DepartmentIdentifier departmentId, String rkiCode, String teleCode,
+			String checkCodeName, String checkCodeDayOfBirth, String checkCodeRandom, Instant requestStart,
+			Instant requestEnd, String requestDetails, Set<Feature> features, Status status) {
 
 		super();
 
