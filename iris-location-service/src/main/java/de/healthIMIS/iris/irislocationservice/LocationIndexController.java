@@ -6,17 +6,24 @@ package de.healthIMIS.iris.irislocationservice;
  */
 
 
-@RestController
-public class LocationIndexController implements SearchApi {
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RestController;
 
-    private static final Logger log = LoggerFactory.getLogger(SearchApiController.class);
+import javax.servlet.http.HttpServletRequest;
+
+@RestController
+public class LocationIndexController implements LocationIndexApi {
+
+    private static final Logger log = LoggerFactory.getLogger(LocationIndexApi.class);
 
     private final ObjectMapper objectMapper;
 
     private final HttpServletRequest request;
 
     @org.springframework.beans.factory.annotation.Autowired
-    public SearchApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+    public LocationIndexController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
     }

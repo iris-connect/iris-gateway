@@ -1,1 +1,5 @@
-// For implementing a full-text-search algorithm
+package de.healthIMIS.iris.irislocationservice;
+
+interface FullTextSearch {
+    LocationList search(String keyword);
+}
