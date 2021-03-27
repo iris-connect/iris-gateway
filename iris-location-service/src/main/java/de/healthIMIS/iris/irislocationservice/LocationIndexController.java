@@ -23,7 +23,7 @@ public class LocationIndexController implements LocationIndexApi {
     private final HttpServletRequest request;
 
     @org.springframework.beans.factory.annotation.Autowired
-    public LocationIndexController(ObjectMapper objectMapper, HttpServletRequest request) {
+    public LocationIndexController(ObjectMapper objgectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
     }
