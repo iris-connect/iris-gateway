@@ -1,1 +1,0 @@
-// For implementing a full-text-search algorithm
