@@ -1,5 +1,7 @@
 package de.healthIMIS.iris.irislocationservice;
 
+import org.springframework.validation.annotation.Validated;
+
 @Validated
 public interface LocationIndexApi {
     @Operation(summary = "Deletes contact information about a specific location identified by the provider owned ID.", description = "", security = {
