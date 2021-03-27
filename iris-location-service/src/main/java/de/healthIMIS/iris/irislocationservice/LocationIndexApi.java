@@ -1,6 +1,23 @@
 package de.healthIMIS.iris.irislocationservice;
 
+import de.healthIMIS.iris.irislocationservice.dto.LocationList;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
 
 @Validated
 public interface LocationIndexApi {
@@ -12,6 +29,7 @@ public interface LocationIndexApi {
             @ApiResponse(responseCode = "401", description = "The client is unauthorized to access this API."),
 
             @ApiResponse(responseCode = "404", description = "The specified resource was not found.") })
+
     @RequestMapping(value = "/search-index/locations/{id}",
             method = RequestMethod.DELETE)
     ResponseEntity<Void> deleteLocationFromSearchIndex(@Parameter(in = ParameterIn.PATH, description = "The unique ID of a location in the context of the provider.", required=true, schema=@Schema()) @PathVariable("id") String id);
