@@ -14,13 +14,15 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.web;
 
+import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.DELETE_LOCATIONS;
+import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.LOCATIONS_TO_SEARCH_INDEX;
 import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.REQUEST_BY_CODE;
-import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.REQUEST_BY_TELECODE;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
 
 import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
@@ -43,7 +45,8 @@ public class DefaultApiController implements DefaultApi {
 
 		Links links = Links.of(MvcLink.of(on(DefaultApi.class).rootGet(), IanaLinkRelations.SELF))
 			.and(linkTo(methodOn(DataRequestApi.class).getDataRequestByCode(null)).withRel(REQUEST_BY_CODE))
-			.and(linkTo(methodOn(DataRequestApi.class).getDataRequestByTeleCode(null, null)).withRel(REQUEST_BY_TELECODE));
+			.and(Link.of("/search-index/locations").withRel(LOCATIONS_TO_SEARCH_INDEX))
+			.and(Link.of("/search-index/locations/{id}").withRel(DELETE_LOCATIONS));
 
 		return HalModelBuilder.emptyHalModel().links(links).build();
 	}

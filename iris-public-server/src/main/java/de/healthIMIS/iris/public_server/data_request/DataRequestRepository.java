@@ -14,8 +14,6 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_request;
 
-import java.util.Optional;
-
 import org.springframework.data.repository.CrudRepository;
 
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
@@ -25,5 +23,4 @@ import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIden
  */
 public interface DataRequestRepository extends CrudRepository<DataRequest, DataRequestIdentifier> {
 
-	Optional<DataRequest> findByTeleCodeAndRkiCode(String teleCode, String rkiCode);
 }
