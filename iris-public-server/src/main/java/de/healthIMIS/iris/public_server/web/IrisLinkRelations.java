@@ -22,10 +22,10 @@ import org.springframework.hateoas.LinkRelation;
 public interface IrisLinkRelations {
 
 	LinkRelation REQUEST_BY_CODE = LinkRelation.of("GetDataRequestByCode");
-	LinkRelation REQUEST_BY_TELECODE = LinkRelation.of("GetDataRequestByTeleCode");
+
+	LinkRelation LOCATIONS_TO_SEARCH_INDEX = LinkRelation.of("PutLocationsToSearchIndex");
+	LinkRelation DELETE_LOCATIONS = LinkRelation.of("DeleteLocationsFromSearchIndex");
 
 	LinkRelation CONTACTS_EVENTS_SUBMISSION = LinkRelation.of("PostContactsEventsSubmission");
 	LinkRelation GUESTS_SUBMISSION = LinkRelation.of("PostGuestsSubmission");
-
-	LinkRelation NOTIFICATIONS = LinkRelation.of("GetNotifications");
 }
