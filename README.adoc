@@ -208,7 +208,7 @@ IMPORTANT: Make sure you have the Lombok plugin installed in your IDE so that yo
 
 In order to be not limited in the amount of data, a hybrid encryption with symmetric encryption of the data and asymmetric encryption of the symmetric key is used for the encryption of the contact data.
 
-1. The apps and applications get the public key of the health department as a 2048-bit RSA key from the IRIS+ server. This key is base64-encoded in the Private Enhanced Mail (PEM) format.
+1. The apps and applications get the public key of the health department as a 4096-bit RSA key from the IRIS+ server. This key is base64-encoded in the Private Enhanced Mail (PEM) format.
 2. The app generates a 256-bit AES key.
 3. With this key the data is encrypted (algorithm: AES).
 4. The AES key must be encrypted with the public RSA key of the health department. (algorithm: RSA with Optimal Asymmetric Encryption Padding (OAEP))
