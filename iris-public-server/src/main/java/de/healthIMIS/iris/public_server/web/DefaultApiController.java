@@ -14,12 +14,11 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.web;
 
-import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.DELETE_LOCATIONS;
-import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.LOCATIONS_TO_SEARCH_INDEX;
-import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.REQUEST_BY_CODE;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
+import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+
+import de.healthIMIS.iris.public_server.data_request.web.DataRequestApi;
 
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
@@ -29,14 +28,13 @@ import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.mvc.MvcLink;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.healthIMIS.iris.public_server.data_request.web.DataRequestApi;
-
 /**
  * Controller for the entry point to the IRIS API
  * 
  * @author Jens Kutzsche
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-18T08:11:24.698Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen",
+		date = "2021-02-18T08:11:24.698Z[GMT]")
 @RestController
 public class DefaultApiController implements DefaultApi {
 
@@ -44,9 +42,9 @@ public class DefaultApiController implements DefaultApi {
 	public RepresentationModel<?> rootGet() {
 
 		Links links = Links.of(MvcLink.of(on(DefaultApi.class).rootGet(), IanaLinkRelations.SELF))
-			.and(linkTo(methodOn(DataRequestApi.class).getDataRequestByCode(null)).withRel(REQUEST_BY_CODE))
-			.and(Link.of("/search-index/locations").withRel(LOCATIONS_TO_SEARCH_INDEX))
-			.and(Link.of("/search-index/locations/{id}").withRel(DELETE_LOCATIONS));
+				.and(linkTo(methodOn(DataRequestApi.class).getDataRequestByCode(null)).withRel(REQUEST_BY_CODE))
+				.and(Link.of("/search-index/locations").withRel(LOCATIONS_TO_SEARCH_INDEX))
+				.and(Link.of("/search-index/locations/{id}").withRel(DELETE_LOCATIONS));
 
 		return HalModelBuilder.emptyHalModel().links(links).build();
 	}

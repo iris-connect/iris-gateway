@@ -14,6 +14,8 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_request.web;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.Instant;
 import java.util.Objects;
 
@@ -24,14 +26,13 @@ import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 /**
  * A data request with all parameters relevant for the data submission.
  */
 @Schema(description = "A data request with all parameters relevant for the data submission.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-18T08:11:24.698Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen",
+		date = "2021-02-18T08:11:24.698Z[GMT]")
 
 public class DataRequestDto {
 
@@ -187,13 +188,13 @@ public class DataRequestDto {
 	}
 
 	/**
-	 * Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table and environment,
-	 * seat, rank, ...).
+	 * Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table
+	 * and environment, seat, rank, ...).
 	 * 
 	 * @return end
 	 **/
 	@Schema(
-		description = "Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table and environment, seat, rank, ...).")
+			description = "Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table and environment, seat, rank, ...).")
 
 	@Valid
 	public String getRequestDetails() {
@@ -214,10 +215,9 @@ public class DataRequestDto {
 		}
 		DataRequestDto dataRequest = (DataRequestDto) o;
 		return Objects.equals(this.healthDepartment, dataRequest.healthDepartment)
-			&& Objects.equals(this.createdAt, dataRequest.createdAt)
-			&& Objects.equals(this.keyOfHealthDepartment, dataRequest.keyOfHealthDepartment)
-			&& Objects.equals(this.start, dataRequest.start)
-			&& Objects.equals(this.end, dataRequest.end);
+				&& Objects.equals(this.createdAt, dataRequest.createdAt)
+				&& Objects.equals(this.keyOfHealthDepartment, dataRequest.keyOfHealthDepartment)
+				&& Objects.equals(this.start, dataRequest.start) && Objects.equals(this.end, dataRequest.end);
 	}
 
 	@Override
@@ -240,8 +240,7 @@ public class DataRequestDto {
 	}
 
 	/**
-	 * Convert the given object to string with each line indented by 4 spaces
-	 * (except the first line).
+	 * Convert the given object to string with each line indented by 4 spaces (except the first line).
 	 */
 	private String toIndentedString(java.lang.Object o) {
 		if (o == null) {

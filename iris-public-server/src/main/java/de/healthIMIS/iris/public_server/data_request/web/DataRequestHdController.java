@@ -14,6 +14,17 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_request.web;
 
+import de.healthIMIS.iris.public_server.core.Feature;
+import de.healthIMIS.iris.public_server.data_request.DataRequest;
+import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
+import de.healthIMIS.iris.public_server.data_request.DataRequest.Status;
+import de.healthIMIS.iris.public_server.data_request.DataRequestRepository;
+import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
+import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
@@ -29,17 +40,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.healthIMIS.iris.public_server.core.Feature;
-import de.healthIMIS.iris.public_server.data_request.DataRequest;
-import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
-import de.healthIMIS.iris.public_server.data_request.DataRequest.Status;
-import de.healthIMIS.iris.public_server.data_request.DataRequestRepository;
-import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * Controller of the internal end-points for health department site to exchange data requests.
  * 
@@ -54,37 +54,20 @@ public class DataRequestHdController {
 
 	@PutMapping("/hd/data-requests/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	DataRequestInternalInputDto putDataRequest(
-		@PathVariable("id") DataRequestIdentifier id,
-		@Valid @RequestBody DataRequestInternalInputDto payload,
-		Errors errors) {
+	DataRequestInternalInputDto putDataRequest(@PathVariable("id") DataRequestIdentifier id,
+			@Valid @RequestBody DataRequestInternalInputDto payload, Errors errors) {
 
-		var dataRequest = new DataRequest(
-			id,
-			DepartmentIdentifier.of(payload.departmentId),
-			payload.getRkiCode(),
-			payload.getTeleCode(),
-			payload.checkCodeName,
-			payload.checkCodeDayOfBirth,
-			payload.checkCodeRandom,
-			payload.requestStart,
-			payload.requestEnd,
-			payload.getRequestDetails(),
-			payload.features,
-			payload.status);
+		var dataRequest = new DataRequest(id, DepartmentIdentifier.of(payload.departmentId), payload.getRkiCode(),
+				payload.getTeleCode(), payload.checkCodeName, payload.checkCodeDayOfBirth, payload.checkCodeRandom,
+				payload.requestStart, payload.requestEnd, payload.getRequestDetails(), payload.features, payload.status);
 
 		try {
 			requests.deleteById(dataRequest.getId());
-		} catch (EmptyResultDataAccessException e) {
-		}
+		} catch (EmptyResultDataAccessException e) {}
 		requests.save(dataRequest);
 
-		log.debug(
-			"Request - PUT from hd server + saved: {} (Checkcodes: {}, {} and {})",
-			dataRequest.getId().toString(),
-			dataRequest.getCheckCodeName(),
-			dataRequest.getCheckCodeDayOfBirth(),
-			dataRequest.getCheckCodeRandom());
+		log.debug("Request - PUT from hd server + saved: {} (Checkcodes: {}, {} and {})", dataRequest.getId().toString(),
+				dataRequest.getCheckCodeName(), dataRequest.getCheckCodeDayOfBirth(), dataRequest.getCheckCodeRandom());
 
 		return payload;
 	}

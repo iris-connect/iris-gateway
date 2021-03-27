@@ -14,11 +14,11 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server;
 
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
-import static org.springframework.http.HttpMethod.PATCH;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
-import static org.springframework.http.HttpMethod.resolve;
+import static org.apache.commons.lang3.StringUtils.*;
+import static org.springframework.http.HttpMethod.*;
+
+import lombok.extern.slf4j.Slf4j;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -43,9 +43,6 @@ import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.CharacterEncodingFilter;
-
-import lombok.extern.slf4j.Slf4j;
-import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @Slf4j
 @SpringBootApplication
@@ -79,8 +76,7 @@ public class IrisPublicServerApplication {
 
 					var errorDetails = it.errorDetails;
 
-					log.debug(
-						"ValidateOutput: " + it.description + errorDetails != null
+					log.debug("ValidateOutput: " + it.description + errorDetails != null
 							? " | ErrorCode: " + errorDetails.errorCode + " | ErrorMessage: " + errorDetails.errorMessage
 							: "");
 				});
@@ -107,7 +103,7 @@ public class IrisPublicServerApplication {
 
 		@Override
 		protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
+				throws ServletException, IOException {
 
 			if (isUpdateMethod(request) && isUtf8Missing(request)) {
 

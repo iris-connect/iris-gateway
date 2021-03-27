@@ -14,14 +14,8 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_request.web;
 
-import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.CONTACTS_EVENTS_SUBMISSION;
-import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.GUESTS_SUBMISSION;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Links;
-import org.springframework.stereotype.Component;
+import static de.healthIMIS.iris.public_server.web.IrisLinkRelations.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
@@ -30,6 +24,10 @@ import de.healthIMIS.iris.public_server.department.Department;
 import de.healthIMIS.iris.public_server.department.DepartmentRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Links;
+import org.springframework.stereotype.Component;
 
 /**
  * Responsible for the REST representations
@@ -58,15 +56,14 @@ public class DataRequestRepresentations {
 
 		var model = EntityModel.of(request);
 
-		Links links = Links.of(linkTo(methodOn(DataRequestApiController.class).getDataRequestByCode(dataRequest.getId())).withSelfRel())
-			.andIf(
-				dataRequest.getFeatures().contains(Feature.Contacts_Events),
-				linkTo(methodOn(DataSubmissionApi.class).postContactsEventsSubmission(dataRequest.getId(), null)).withRel(CONTACTS_EVENTS_SUBMISSION)
-					.withTitle("Contacts and Events"))
-			.andIf(
-				dataRequest.getFeatures().contains(Feature.Guests),
-				linkTo(methodOn(DataSubmissionApi.class).postGuestsSubmission(dataRequest.getId(), null)).withRel(GUESTS_SUBMISSION)
-					.withTitle("Guests"));
+		Links links = Links
+				.of(linkTo(methodOn(DataRequestApiController.class).getDataRequestByCode(dataRequest.getId())).withSelfRel())
+				.andIf(dataRequest.getFeatures().contains(Feature.Contacts_Events),
+						linkTo(methodOn(DataSubmissionApi.class).postContactsEventsSubmission(dataRequest.getId(), null))
+								.withRel(CONTACTS_EVENTS_SUBMISSION).withTitle("Contacts and Events"))
+				.andIf(dataRequest.getFeatures().contains(Feature.Guests),
+						linkTo(methodOn(DataSubmissionApi.class).postGuestsSubmission(dataRequest.getId(), null))
+								.withRel(GUESTS_SUBMISSION).withTitle("Guests"));
 
 		return model.add(links);
 	}

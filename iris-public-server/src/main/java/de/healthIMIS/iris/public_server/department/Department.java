@@ -14,14 +14,6 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.department;
 
-import java.io.Serializable;
-import java.util.UUID;
-
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
-
 import de.healthIMIS.iris.public_server.core.Aggregate;
 import de.healthIMIS.iris.public_server.core.Id;
 import lombok.AccessLevel;
@@ -30,6 +22,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.UUID;
+
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 
 /**
  * @author Jens Kutzsche

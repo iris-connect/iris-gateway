@@ -29,7 +29,8 @@ public class HealthDepartmentsConfiguration {
 		var config = new DefaultXMLFactoriesConfig().setNamespacePhilosophy(NamespacePhilosophy.AGNOSTIC);
 		var projector = new XBProjector(config);
 
-		projector.config().setTypeConverter(new DefaultTypeConverter(Locale.getDefault(), TimeZone.getTimeZone(ZONE_BERLIN)));
+		projector.config()
+				.setTypeConverter(new DefaultTypeConverter(Locale.getDefault(), TimeZone.getTimeZone(ZONE_BERLIN)));
 
 		try {
 			return projector.io().fromURLAnnotation(HealthDepartments.class);

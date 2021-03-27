@@ -60,7 +60,8 @@ public class ContactsAndEvents {
 			return false;
 		}
 		ContactsAndEvents contactsAndEvents = (ContactsAndEvents) o;
-		return Objects.equals(this.contacts, contactsAndEvents.contacts) && Objects.equals(this.events, contactsAndEvents.events);
+		return Objects.equals(this.contacts, contactsAndEvents.contacts)
+				&& Objects.equals(this.events, contactsAndEvents.events);
 	}
 
 	@Override
@@ -80,8 +81,7 @@ public class ContactsAndEvents {
 	}
 
 	/**
-	 * Convert the given object to string with each line indented by 4 spaces
-	 * (except the first line).
+	 * Convert the given object to string with each line indented by 4 spaces (except the first line).
 	 */
 	private String toIndentedString(java.lang.Object o) {
 		if (o == null) {

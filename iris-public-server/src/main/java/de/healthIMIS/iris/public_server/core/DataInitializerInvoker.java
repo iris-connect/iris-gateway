@@ -14,6 +14,10 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.core;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.List;
 
 import org.springframework.aop.support.AopUtils;
@@ -23,16 +27,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 // @Component
 @RequiredArgsConstructor
 @Slf4j
-@Profile({
-	"psql_compose_db",
-	"h2_db" })
+@Profile({ "psql_compose_db", "h2_db" })
 @Order(100)
 class DataInitializerInvoker implements ApplicationRunner {
 
@@ -44,6 +42,7 @@ class DataInitializerInvoker implements ApplicationRunner {
 	 */
 	@Override
 	public void run(@Nullable ApplicationArguments args) throws Exception {
-		initializers.stream().peek(it -> log.info("Data initialization for " + AopUtils.getTargetClass(it))).forEach(DataInitializer::initialize);
+		initializers.stream().peek(it -> log.info("Data initialization for " + AopUtils.getTargetClass(it)))
+				.forEach(DataInitializer::initialize);
 	}
 }

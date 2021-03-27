@@ -1,10 +1,20 @@
 package de.healthIMIS.iris.dummy_app;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.commons.codec.binary.Base64.decodeBase64;
-import static org.apache.commons.codec.binary.Base64.encodeBase64String;
-import static org.apache.commons.codec.digest.DigestUtils.md5;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static java.nio.charset.StandardCharsets.*;
+import static org.apache.commons.codec.binary.Base64.*;
+import static org.apache.commons.codec.digest.DigestUtils.*;
+import static org.springframework.http.MediaType.*;
+
+import ch.qos.logback.classic.Level;
+import de.healthIMIS.iris.dummy_app.submissions.ContactPerson;
+import de.healthIMIS.iris.dummy_app.submissions.ContactPersonList;
+import de.healthIMIS.iris.dummy_app.submissions.ContactsAndEvents;
+import de.healthIMIS.iris.dummy_app.submissions.DataSubmissionDto;
+import de.healthIMIS.iris.dummy_app.submissions.Event;
+import de.healthIMIS.iris.dummy_app.submissions.EventList;
+import de.healthIMIS.iris.dummy_app.submissions.Guest;
+import de.healthIMIS.iris.dummy_app.submissions.GuestList;
+import lombok.RequiredArgsConstructor;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -59,17 +69,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ch.qos.logback.classic.Level;
-import de.healthIMIS.iris.dummy_app.submissions.ContactPerson;
-import de.healthIMIS.iris.dummy_app.submissions.ContactPersonList;
-import de.healthIMIS.iris.dummy_app.submissions.ContactsAndEvents;
-import de.healthIMIS.iris.dummy_app.submissions.DataSubmissionDto;
-import de.healthIMIS.iris.dummy_app.submissions.Event;
-import de.healthIMIS.iris.dummy_app.submissions.EventList;
-import de.healthIMIS.iris.dummy_app.submissions.Guest;
-import de.healthIMIS.iris.dummy_app.submissions.GuestList;
-import lombok.RequiredArgsConstructor;
-
 @RequiredArgsConstructor
 public class IrisDummyApp {
 
@@ -121,22 +120,23 @@ public class IrisDummyApp {
 	 * @throws KeyManagementException
 	 * @throws IOException
 	 */
-	public static void main(String[] args) throws ParseException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+	public static void main(String[] args)
+			throws ParseException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
 
 		var options = new Options();
 		options.addOption(new Option("h", "help", false, "print this message"));
-		options.addOption(Option.builder("a").longOpt("address").desc("the address of the API (default = http://localhost:18443)").hasArg().build());
-		options.addOption(Option.builder("n").longOpt("name").desc("name of the user (default = Max Muster)").hasArg().build());
-		options.addOption(Option.builder("b").longOpt("birth").desc("date of birth of the user (default = 1990-01-01)").hasArg().build());
+		options.addOption(Option.builder("a").longOpt("address")
+				.desc("the address of the API (default = http://localhost:18443)").hasArg().build());
 		options.addOption(
-			Option.builder("r")
-				.longOpt("random")
-				.desc("random checkcode - can be fixed for development in the client (default = ABCDEFGHKL)")
-				.hasArg()
-				.build());
+				Option.builder("n").longOpt("name").desc("name of the user (default = Max Muster)").hasArg().build());
+		options.addOption(
+				Option.builder("b").longOpt("birth").desc("date of birth of the user (default = 1990-01-01)").hasArg().build());
+		options.addOption(Option.builder("r").longOpt("random")
+				.desc("random checkcode - can be fixed for development in the client (default = ABCDEFGHKL)").hasArg().build());
 		options.addOption(Option.builder("d").longOpt("debug").desc("enable debug output").build());
 		options.addOption(Option.builder("t").longOpt("telecode").desc("uses a teleCode instead of a code").build());
-		options.addOption(Option.builder("f").longOpt("inputfile").desc("properties file with data for automatic input").hasArg().build());
+		options.addOption(Option.builder("f").longOpt("inputfile").desc("properties file with data for automatic input")
+				.hasArg().build());
 
 		var parser = new DefaultParser();
 		var cmd = parser.parse(options, args);
@@ -152,8 +152,8 @@ public class IrisDummyApp {
 		// debug
 		var debug = cmd.hasOption('d');
 		if (debug) {
-			ch.qos.logback.classic.Logger root =
-				(ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
+			ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
+					.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
 			root.setLevel(Level.DEBUG);
 		}
 
@@ -186,8 +186,9 @@ public class IrisDummyApp {
 	 */
 	private void run() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 
-		var sslContext = new SSLContextBuilder().loadTrustMaterial((chain, authType) -> true) // trust all server certificates
-			.build();
+		var sslContext = new SSLContextBuilder().loadTrustMaterial((chain, authType) -> true) // trust all server
+																																													// certificates
+				.build();
 
 		var socketFactory = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
 		var httpClient = HttpClientBuilder.create().setSSLSocketFactory(socketFactory).build();
@@ -197,7 +198,8 @@ public class IrisDummyApp {
 		traverson = new Traverson(URI.create(address), MediaTypes.HAL_JSON);
 		traverson.setRestOperations(rest);
 
-		textIO.getTextTerminal().printf("\nAPI-Address: %s; User name: %s; Date of Birth: %s\n\n", address, name, dateOfBirth);
+		textIO.getTextTerminal().printf("\nAPI-Address: %s; User name: %s; Date of Birth: %s\n\n", address, name,
+				dateOfBirth);
 
 		while (true) {
 			cycle();
@@ -205,8 +207,8 @@ public class IrisDummyApp {
 	}
 
 	/**
-	 * Performs a cycle from entering the code, fetching the data request, entering the requested data and submitting the data submission to
-	 * the server.
+	 * Performs a cycle from entering the code, fetching the data request, entering the requested data and submitting the
+	 * data submission to the server.
 	 */
 	private void cycle() {
 
@@ -214,14 +216,10 @@ public class IrisDummyApp {
 
 		var dataRequest = traverson.follow(hop).toObject(DataRequestDto.class);
 
-		textIO.getTextTerminal()
-			.printf(
-				"\nData request from healt department %s for the period %s to %s\n\n",
-				dataRequest.getHealthDepartment(),
-				dataRequest.getStart(),
-				dataRequest.getEnd());
+		textIO.getTextTerminal().printf("\nData request from healt department %s for the period %s to %s\n\n",
+				dataRequest.getHealthDepartment(), dataRequest.getStart(), dataRequest.getEnd());
 
-		// determines the existing links for the next POST operation 
+		// determines the existing links for the next POST operation
 		var response = traverson.follow(hop).toObject(String.class);
 
 		var postContactsEvents = discoverer.findLinkWithRel(CONTACTS_EVENTS_REL, response);
@@ -230,7 +228,7 @@ public class IrisDummyApp {
 		var links = Stream.of(postContactsEvents, postGuests).flatMap(Optional<Link>::stream).collect(Collectors.toList());
 
 		if (links.isEmpty()) {
-			// exit the method if there is no link 
+			// exit the method if there is no link
 			return;
 		}
 
@@ -288,10 +286,8 @@ public class IrisDummyApp {
 	private Hop getHopByCode() {
 
 		// read the code
-		var code = textIO.newStringInputReader()
-			.withDefaultValue("790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80")
-			.withPattern("[a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8}")
-			.read("Code");
+		var code = textIO.newStringInputReader().withDefaultValue("790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80")
+				.withPattern("[a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8}").read("Code");
 
 		// get data request object
 		return Hop.rel("GetDataRequestByCode").withParameter("code", code);
@@ -310,7 +306,8 @@ public class IrisDummyApp {
 		if (properties == null) {
 
 			ContactsEvents selection;
-			while ((selection = textIO.newEnumInputReader(ContactsEvents.class).withAllValuesNumbered().read("Select …")) != ContactsEvents.Stop) {
+			while ((selection = textIO.newEnumInputReader(ContactsEvents.class).withAllValuesNumbered()
+					.read("Select …")) != ContactsEvents.Stop) {
 
 				if (selection == ContactsEvents.Contacts) {
 					contactList.addContactPersonsItem(createContact());
@@ -399,8 +396,7 @@ public class IrisDummyApp {
 				guest.lastName(textIO.newStringInputReader().read("Last name"));
 
 				list.addGuestsItem(guest);
-			}
-			while (textIO.newBooleanInputReader().withDefaultValue(Boolean.TRUE).read("More guests?"));
+			} while (textIO.newBooleanInputReader().withDefaultValue(Boolean.TRUE).read("More guests?"));
 
 		} else {
 
@@ -420,8 +416,8 @@ public class IrisDummyApp {
 	 * Encrypts the content with the given key from data request.
 	 */
 	private String encryptContent(String content, SecretKey secretKey)
-		throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, IllegalBlockSizeException,
-		BadPaddingException {
+			throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException,
+			IllegalBlockSizeException, BadPaddingException {
 
 		var encryptedArray = encryptText(content, secretKey);
 
@@ -443,8 +439,8 @@ public class IrisDummyApp {
 		return generator.generateKey();
 	}
 
-	byte[] encryptText(String textToEncrypt, SecretKey secretKey)
-		throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
+	byte[] encryptText(String textToEncrypt, SecretKey secretKey) throws IllegalBlockSizeException, BadPaddingException,
+			InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
 
 		var cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
 		cipher.init(Cipher.ENCRYPT_MODE, secretKey);
@@ -452,8 +448,8 @@ public class IrisDummyApp {
 		return cipher.doFinal(textToEncrypt.getBytes(UTF_8));
 	}
 
-	byte[] encryptSecretKey(SecretKey secretKey, PublicKey publicKey)
-		throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
+	byte[] encryptSecretKey(SecretKey secretKey, PublicKey publicKey) throws IllegalBlockSizeException,
+			BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
 
 		var cipher = Cipher.getInstance(TRANSFORMATION);
 		cipher.init(Cipher.PUBLIC_KEY, publicKey);
@@ -466,10 +462,11 @@ public class IrisDummyApp {
 	 */
 	private void postSubmission(Link link, String content, String encryptedSecretKey, String keyReferenz) {
 
-		var submission =
-			new DataSubmissionDto().checkCode(determineCheckcode()).keyReferenz(keyReferenz).secret(encryptedSecretKey).encryptedData(content);
+		var submission = new DataSubmissionDto().checkCode(determineCheckcode()).keyReferenz(keyReferenz)
+				.secret(encryptedSecretKey).encryptedData(content);
 
-		textIO.getTextTerminal().printf("\nData submission is sent to healt department with key referenz '%s'", keyReferenz);
+		textIO.getTextTerminal().printf("\nData submission is sent to healt department with key referenz '%s'",
+				keyReferenz);
 		if (debug) {
 			textIO.getTextTerminal().printf("\nContent of the data submission unencrypted:\n %s", content);
 		}
@@ -529,18 +526,14 @@ public class IrisDummyApp {
 	private Link determineNextPostOperation(List<Link> options) {
 
 		if (options.size() > 1) {
-			return textIO.<Link> newGenericInputReader(null)
-				.withNumberedPossibleValues(options)
-				.withValueFormatter(Link::getTitle)
-				.read("What will you push?");
+			return textIO.<Link> newGenericInputReader(null).withNumberedPossibleValues(options)
+					.withValueFormatter(Link::getTitle).read("What will you push?");
 		}
 
 		return options.get(0);
 	}
 
 	public enum ContactsEvents {
-		Contacts,
-		Events,
-		Stop
+		Contacts, Events, Stop
 	}
 }

@@ -230,16 +230,84 @@ keyToTransport = base64Encode(keyEncrypted);
 == Development 
 === Java parts
 
-We use *Java 11* and the code style of the SORMAS developers: https://github.com/hzi-braunschweig/SORMAS-Project/blob/development/DEVELOPMENT_ENVIRONMENT.md[SORMAS Development Environment]
+We use *Java 11* and the following code style. 
 
 ==== Eclipse
-https://github.com/hzi-braunschweig/SORMAS-Project/blob/development/sormas-base/java-formatter-profile.xml[sormas-base/java-formatter-profile.xml] +
-https://github.com/hzi-braunschweig/SORMAS-Project/blob/development/sormas-base/java-importorder-profile.importorder[sormas-base/java-importorder-profile.importorder]
-[quote, relevant part of SORMAS Development Environment from 24.04.2021]
-____
-Configure automatic code formatting ("Window -> Preferences"):
+https://github.com/iris-gateway/IRIS/tree/main/infrastructure/eclipse-code-formatter.xml[infrastructure/eclipse-code-formatter.xml] +
+https://github.com/iris-gateway/IRIS/tree/main/infrastructure/eclipse.importorder[infrastructure/eclipse.importorder]
 
-    - Go to "Java -> Code Style -> Formatter", import sormas-base/java-formatter-profile.xml and apply.
-    - Go to "Java -> Code Style -> Organize Imports", import sormas-base/java-importorder-profile.importorder, "Number of imports needed for ." = 99, "Number of static imports needed for ." = 99, "Do not create import for types starting with a lowercase letter" = checked and apply.
-    - Go to "Java -> Editor -> Save Actions", activate "Perform the selected actions on save", "Format source code" with "Format all lines", "Organize imports" and apply.
-____
+==== Import order
+
+* static imports, wild card used from the first declaration
+* `+*+` - all unmatched imports
+* `java.…`
+* `javax.–`
+* `org.…`
+* `com.…`
+
+For non-static imports we switch to `+*+` imports after the 10th import.
+For static ones we always use `+*+` ones.
+
+==== Blank lines
+
+Use blank lines to group pieces of code logically: variable initializations go together, followed by the method invocations that use those variables.
+There's no hard rule here.
+It's just nice to be able to identify different steps in the execution order.
+
+For blocks (if clauses, methods) we start with a blank line if the subsequent code is longer than a single line:
+
+[source, java]
+----
+void someLongMethod() {
+
+  // First statement
+  // Second statement
+}
+
+VS.
+
+void someOneLineMethod() {
+  // Single-line statement
+}
+----
+
+Symmetric blocks usually also use a blank line on the end to clearly separate the blocks' content from the outer instruction.
+Again, the single line rule applies, here, too.
+
+[source, java]
+----
+if (…) {
+  // Single line instruction
+} else {
+  // Single line instruction
+}
+
+but
+
+if (…) {
+
+  // Multi-line instruction
+  // Multi-line instruction
+
+} else {
+
+  // Multi-line instruction
+  // Multi-line instruction
+}
+----
+
+The intermediate lines surrounding the `…} else {…` make it easier to see where the block flips.
+
+In general, for if-else-clauses, prefer the ternary expression (`condition ? if-true : if-false`) over an if block.
+That creates incentives to rather extract the statements to be executed in either and make the overall expression readable.
+If the overall expression gets so long it would line break, it's nice to read if the three parts are each brought onto a single line:
+
+[source, java]
+----
+Object someMethod(…) {
+
+  return condition
+    ? if-true-do-this
+    : else-do-that;
+}
+----

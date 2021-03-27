@@ -14,9 +14,9 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.department;
 
-import org.springframework.data.repository.CrudRepository;
-
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
+
+import org.springframework.data.repository.CrudRepository;
 
 /**
  * @author Jens Kutzsche
