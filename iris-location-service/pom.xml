@@ -15,6 +15,7 @@
 	<description>Location search provider for IRIS</description>
 	<properties>
 		<java.version>11</java.version>
+		<springfox-version>3.0.0</springfox-version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -31,6 +32,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-oas</artifactId>
+			<version>${springfox-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>${springfox-version}</version>
 		</dependency>
 	</dependencies>
 
