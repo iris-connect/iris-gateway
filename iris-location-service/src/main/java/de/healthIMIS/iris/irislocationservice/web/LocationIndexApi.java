@@ -1,4 +1,4 @@
-package de.healthIMIS.iris.irislocationservice;
+package de.healthIMIS.iris.irislocationservice.web;
 
 import de.healthIMIS.iris.irislocationservice.dto.LocationList;
 import io.swagger.v3.oas.annotations.Operation;

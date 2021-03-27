@@ -1,4 +1,4 @@
-package de.healthIMIS.iris.irislocationservice;
+package de.healthIMIS.iris.irislocationservice.web;
 /*
  * Controller of the location index. Handles adding/removing entries from the index as well as search
  *

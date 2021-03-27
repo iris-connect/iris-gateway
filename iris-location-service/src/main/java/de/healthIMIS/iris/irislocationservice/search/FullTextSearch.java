@@ -1,4 +1,4 @@
-package de.healthIMIS.iris.irislocationservice;
+package de.healthIMIS.iris.irislocationservice.search;
 
 import de.healthIMIS.iris.irislocationservice.dto.LocationList;
 
