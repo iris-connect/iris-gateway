@@ -48,7 +48,7 @@ paths:
 
 ## DataRequests and DataSubmission for Contacts and Guest Lists
 
-  /data-requests:
+  /data-requests-client:
     post:
       summary: Submits a new data request
       requestBody:
@@ -72,6 +72,15 @@ paths:
       tags:
         - "IrisSidecarServer"
         - "IrisClientFrontend"
+  /data-requests-client/{code}:
+    get: 
+      tags:
+        - "IrisPublicServer"
+        - "IrisClientFrontend"
+      summary: Detail view for Data Request
+      responses:
+        '200': 
+          $ref: '#/components/responses/DataRequestDetails'
 
   /data-requests/{code}:
     get:
@@ -285,9 +294,15 @@ components:
     DataRequestList:
       description: List of existing data requests.
       content:
-        application/json:
+        application/json:          
           schema:
-            $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
+            $ref: '#/components/schemas/ExistingDataRequestClientWithLocationList'
+    DataRequestDetails:
+      description: Data request details
+      content:
+        application/json:                      
+          schema:                        
+            $ref: '#/components/schemas/DataRequestDetails'
 
 
   parameters:
@@ -314,8 +329,24 @@ components:
       in: header
 
   schemas:
+    ExistingDataRequestClientWithLocationList:
+      type: object
+      properties:
+        dataRequests: 
+          type: array
+          items:
+            $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
+
+    DataRequestDetails:
+      allOf:
+        - $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
+        - $ref: '#/components/schemas/GuestList'
+
     ExistingDataRequestClientWithLocation:
       properties:
+        code: 
+          description: 'Code for DataRequest'
+          type: string
         externalRequestId:
           description: 'External ID outside of IRIS'
           type: string
