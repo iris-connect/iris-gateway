@@ -1,13 +1,9 @@
 package de.healthIMIS.iris.irislocationservice.search;
 
+import de.healthIMIS.iris.irislocationservice.dto.LocationInformation;
+
 import java.util.List;
 
 public interface SearchIndex {
-
-    List<LocationSearchEntry> search(String keyword);
-
-    void put(List<LocationSearchEntry> locations);
-
-    void delete(String providerId, String locationId);
-
+    List<LocationInformation> search(String keyword);
 }

@@ -3,8 +3,10 @@ package de.healthIMIS.iris.irislocationservice.search.db;
 import de.healthIMIS.iris.irislocationservice.dto.LocationAddress;
 import de.healthIMIS.iris.irislocationservice.dto.LocationContact;
 import de.healthIMIS.iris.irislocationservice.dto.LocationInformation;
-import de.healthIMIS.iris.irislocationservice.search.LocationSearchEntry;
+import de.healthIMIS.iris.irislocationservice.search.db.model.Location;
+import de.healthIMIS.iris.irislocationservice.search.db.model.LocationIdentifier;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -18,13 +20,16 @@ class DBSearchIndexTest {
     @Autowired
     private DBSearchIndex searchIndex;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @Test
     public void search() {
         // When
         var location = createLocation();
 
         // then
-        searchIndex.put(Collections.singletonList(location));
+        searchIndex.getRepo().saveAll(Collections.singletonList(location));
 
         // assert
         assertEquals(1, searchIndex.search("Zwoeinz").size());
@@ -35,7 +40,7 @@ class DBSearchIndexTest {
 
     }
 
-    private LocationSearchEntry createLocation() {
+    private Location createLocation() {
         var address = new LocationAddress();
         address.city("Berlin");
         address.setStreet("Quitzowstraße 121");
@@ -52,8 +57,10 @@ class DBSearchIndexTest {
         location.setName("Zwoeinz Bar");
         location.setId("ac04638c-9668-4a62-8194-d20833e6182f");
         location.setContact(contact);
-
-        return new LocationSearchEntry("providerId", location);
+        
+        var location_flat = mapper.map(location, Location.class);
+        location_flat.setId(new LocationIdentifier("provider-id", location.getId()));
+        return location_flat;
     }
 
 
