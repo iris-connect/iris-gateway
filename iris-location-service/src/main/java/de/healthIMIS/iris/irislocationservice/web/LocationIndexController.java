@@ -81,15 +81,6 @@ public class LocationIndexController implements LocationIndexApi {
             // For the search index, we are only interested in a subset of the data structure for location information
             // Can be replaced
             location.setId(new LocationIdentifier(temporary_provider_id, entry.getId()));
-//            location.setName(entry.getName());
-//            location.setContactOfficialName(entry.getContact().getOfficialName());
-//            location.setContactRepresentative(entry.getContact().getRepresentative());
-//            location.setContactAddressStreet(entry.getContact().getAddress().getStreet());
-//            location.setContactAddressCity(entry.getContact().getAddress().getCity());
-//            location.setContactAddressZip(entry.getContact().getAddress().getZip());
-//            location.setContactOwnerEmail(entry.getContact().getOwnerEmail());
-//            location.setContactEmail(entry.getContact().getEmail());
-//            location.setContactPhone(entry.getContact().getPhone());
             return location;
         }).collect(Collectors.toList());
 
