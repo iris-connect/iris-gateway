@@ -103,7 +103,7 @@
                             <addCompileSourceRoot>false</addCompileSourceRoot>
                             <generateModelTests>false</generateModelTests>
                             <generateApiTests>false</generateApiTests>
-                            <apisToGenerate>IrisSidecarServer</apisToGenerate>
+                            <apisToGenerate>IrisSidecarServer,IrisPublicServer,IrisLocationService</apisToGenerate>
                             <modelsToGenerate></modelsToGenerate>
                             <configOptions>
                                 <sourceFolder>src/main/java</sourceFolder>
