@@ -1,5 +1,6 @@
 package de.healthIMIS.iris.irislocationservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -26,6 +27,8 @@ import java.util.Objects;
 public class LocationInformation   {
 
   private String id = null;
+
+  private String provider_id = null;
 
   private String name = null;
 
