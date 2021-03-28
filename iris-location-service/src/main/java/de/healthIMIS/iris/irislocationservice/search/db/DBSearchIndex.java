@@ -22,11 +22,13 @@ public class DBSearchIndex implements SearchIndex {
     @Override
     public List<LocationInformation> search(String keyword) {
 
-        return repo.findByNameContaining(keyword).stream().map(res -> {
-            var location = mapper.map(res, LocationInformation.class);
-            location.setId(res.getId().getLocationId());
-            return location;
-        }).collect(Collectors.toList());
+        return repo.findByNameContaining(keyword).stream()
+                .limit(20)
+                .map(res -> {
+                    var location = mapper.map(res, LocationInformation.class);
+                    location.setId(res.getId().getLocationId());
+                    return location;
+                }).collect(Collectors.toList());
 
     }
 }
