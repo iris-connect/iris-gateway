@@ -34,7 +34,6 @@ public class SearchIndexClient {
 
     public void updateLocations(List<LocationDto> locationsDto) {
         var headers = new HttpHeaders();
-        log.debug("Jere");
         headers.setContentType(new MediaType(APPLICATION_JSON, UTF_8));
         HttpEntity<List<LocationDto>> requestUpdate = new HttpEntity<>(locationsDto, headers);
         restTemplate.exchange(apihost + LOCATIONS_PATH, HttpMethod.PUT, requestUpdate, Void.class);
