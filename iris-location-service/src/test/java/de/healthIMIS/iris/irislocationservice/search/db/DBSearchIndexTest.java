@@ -1,5 +1,7 @@
 package de.healthIMIS.iris.irislocationservice.search.db;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.healthIMIS.iris.irislocationservice.dto.LocationAddress;
 import de.healthIMIS.iris.irislocationservice.dto.LocationContact;
 import de.healthIMIS.iris.irislocationservice.dto.LocationInformation;
@@ -25,6 +27,10 @@ class DBSearchIndexTest {
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    private ObjectMapper oMapper;
+
+
     @Test
     public void search() {
         // When
@@ -38,7 +44,7 @@ class DBSearchIndexTest {
     }
 
     @Test
-    public void map() {
+    public void map() throws JsonProcessingException {
         var in = "{\n" +
                 "  \"locations\": [\n" +
                 "    {\n" +
@@ -66,7 +72,7 @@ class DBSearchIndexTest {
                 "    }\n" +
                 "  ]\n" +
                 "}";
-        var ll = mapper.map(in, LocationList.class);
+        var ll = oMapper.readValue(in, LocationList.class);
         assertNotNull(ll.getLocations());
     }
 
