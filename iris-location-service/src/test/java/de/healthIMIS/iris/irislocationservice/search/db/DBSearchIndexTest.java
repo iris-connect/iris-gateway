@@ -83,9 +83,9 @@ class DBSearchIndexTest {
 
     private Location createLocation() {
         var address = new LocationAddress();
-        address.city("Berlin");
+        address.setCity("Berlin");
         address.setStreet("Quitzowstraße 121");
-        address.zip("15434");
+        address.setZip("15434");
 
         var contact = new LocationContact();
         contact.setOwnerEmail("test@mail.com");

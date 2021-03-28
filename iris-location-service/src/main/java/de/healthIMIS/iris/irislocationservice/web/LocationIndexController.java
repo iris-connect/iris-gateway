@@ -6,22 +6,13 @@ package de.healthIMIS.iris.irislocationservice.web;
  */
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import de.healthIMIS.iris.irislocationservice.dto.LocationList;
 import de.healthIMIS.iris.irislocationservice.search.db.DBSearchIndex;
 import de.healthIMIS.iris.irislocationservice.search.db.LocationRepository;
-import de.healthIMIS.iris.irislocationservice.dto.LocationInformation;
-import de.healthIMIS.iris.irislocationservice.dto.LocationList;
 import de.healthIMIS.iris.irislocationservice.search.db.model.Location;
 import de.healthIMIS.iris.irislocationservice.search.db.model.LocationIdentifier;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +40,7 @@ public class LocationIndexController {
 
     @DeleteMapping("/search-index/locations/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<Void> deleteLocationFromSearchIndex(@Parameter(in = ParameterIn.PATH, description = "The unique ID of a location in the context of the provider.", required = true, schema = @Schema()) @PathVariable("id") String id) {
+    public ResponseEntity<Void> deleteLocationFromSearchIndex(@PathVariable("id") String id) {
         // TODO: Authenticate API Access
 
         // Construct a new ID to match the (provider, id) pair key
@@ -65,7 +56,7 @@ public class LocationIndexController {
 
     @PutMapping("/search-index/locations")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> postLocationsToSearchIndex(@RequestBody LocationList body) {
+    public ResponseEntity<Void> postLocationsToSearchIndex(@Valid @RequestBody LocationList body) {
         // TODO: Authenticate API Access
 
         // TODO: Define sensible limits for this API

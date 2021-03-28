@@ -31,8 +31,7 @@ class LocationIndexControllerTest {
         // when, then, assert
         postLocations();
     }
-
-
+    
     @Test
     public void testSearch() throws Exception {
         postLocations();
