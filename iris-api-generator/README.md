@@ -9,10 +9,10 @@ Code is currently generated for the following components:
 
 		- `iris-api-location-service`: IRIS Location Service
 		- `iris-api-public-server`: IRIS Public Server
-		- `iris-api-sidecar-server`: IRIS Client SORMAS Sidecar as client against IRIS Location Service and IRIS Public Server
-		- `iris-api-sidecar-client`: IRIS Client SORMAS Sidecar as server for the IRIS Client Frontend
+		- `iris-api-sidecar-server`: IRIS Client SORMAS Sidecar as server for the IRIS Client Frontend
+		- `iris-api-sidecar-client`: IRIS Client SORMAS Sidecar as client against IRIS Location Service and IRIS Public Server
 		- `iris-api-client-frontend`: IRIS Client Frontend
-		- `iris-api-app-client`: the client implementation to be integrated in external apps (currently Java only)
+		- `iris-api-app-client`: the client implementation to be integrated into external apps (currently Java only)
 		
 To make an operation specified in the OpenAPI definition available in generated server or client code, annotate it by
 the respective tag:
@@ -40,7 +40,7 @@ Available tags are:
   - `IrisClientFrontend`
   - `IrisAppClient`
 
-** Note: ** for server implementations, the OpenAPI generator ignores all tags but the first. For annotated operations,
+**Note:** for server implementations, the OpenAPI generator ignores all tags but the first. For annotated operations,
 the server implementation must therefore be given by the first tag. All following tags can only specify targeted client APIs.
 For servers acting as proxy, such as the IRIS Client SORMAS Sidecar server, the proxied servers' specification are
 combined (in this case code for all operations annotated by `IrisSidecarServer`, `IrisPublicServer` or `IrisLocationService`
