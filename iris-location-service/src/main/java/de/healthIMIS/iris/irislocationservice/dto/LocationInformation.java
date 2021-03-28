@@ -24,20 +24,15 @@ import java.util.Objects;
 @Getter
 @Setter
 public class LocationInformation   {
-  @JsonProperty("id")
+
   private String id = null;
 
-  @JsonProperty("name")
   private String name = null;
 
-  @JsonProperty("publicKey")
   private String publicKey = null;
 
-  @JsonProperty("contact")
   private LocationContact contact = null;
 
-  @JsonProperty("contexts")
-  @Valid
   private List<LocationContext> contexts = null;
 
 }
