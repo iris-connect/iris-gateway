@@ -75,17 +75,21 @@ public class LocationIndexController implements LocationIndexApi {
         // TODO: Authenticate API Access
 
         // TODO: Define sensible limits for this API
+        
+        var locations = body.getLocations();
+        if (locations != null) {
+            var data = body.getLocations().stream().map(entry -> {
+                var location = mapper.map(entry, Location.class);
+                // For the search index, we are only interested in a subset of the data structure for location information
+                // Can be replaced
+                location.setId(new LocationIdentifier(temporary_provider_id, entry.getId()));
+                return location;
+            }).collect(Collectors.toList());
 
-        var data = body.getLocations().stream().map(entry -> {
-            var location = mapper.map(entry, Location.class);
-            // For the search index, we are only interested in a subset of the data structure for location information
-            // Can be replaced
-            location.setId(new LocationIdentifier(temporary_provider_id, entry.getId()));
-            return location;
-        }).collect(Collectors.toList());
-
-        locationRepository.saveAll(data);
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+            locationRepository.saveAll(data);
+            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     public ResponseEntity<LocationList> searchSearchKeywordGet(@DecimalMin("4")@Parameter(in = ParameterIn.PATH, description = "The search keyword", required=true, schema=@Schema()) @PathVariable("search_keyword") String searchKeyword) {
