@@ -73,7 +73,10 @@ class DBSearchIndexTest {
                 "  ]\n" +
                 "}";
         var ll = oMapper.readValue(in, LocationList.class);
-        assertNotNull(ll.getLocations());
+        assertEquals(1, ll.getLocations().size());
+
+        var location = ll.getLocations().get(0);
+        assertEquals("covid@restaurant.de", location.getContact().getOwnerEmail());
     }
 
     @Test
