@@ -1,0 +1,23 @@
+{
+  "id": "7dd80f34-f9cd-456a-9b60-357d0a3485c7",
+  "name": "Da Michele",
+  "publicKey": "Da Michele",
+  "contact": {
+    "officialName": "SmartMeeting GmbH",
+    "representative": "Tim Lusa",
+    "address": {
+      "street": "Europaplatz 5",
+      "city": "Darmstadt",
+      "zip": 64293
+    },
+    "ownerEmail": "tim@smartmeeting.online",
+    "email": "tim@smartmeeting.online",
+    "phone": "0151 47110815"
+  },
+  "contexts": [
+    {
+      "id": "862b483c-35b8-4de7-a6af-61a30f355b9b",
+      "name": "Tisch 1"
+    }
+  ]
+}
