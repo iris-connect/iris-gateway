@@ -632,7 +632,7 @@ components:
         phone:
           type: string
           format: phone
-        mobilPhone:
+        mobilePhone:
           type: string
           format: phone
         address:
