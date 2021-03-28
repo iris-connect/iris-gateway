@@ -57,17 +57,15 @@ public class DataRequestHdController {
 	DataRequestInternalInputDto putDataRequest(@PathVariable("id") DataRequestIdentifier id,
 			@Valid @RequestBody DataRequestInternalInputDto payload, Errors errors) {
 
-		var dataRequest = new DataRequest(id, DepartmentIdentifier.of(payload.departmentId), payload.getRkiCode(),
-				payload.getTeleCode(), payload.checkCodeName, payload.checkCodeDayOfBirth, payload.checkCodeRandom,
-				payload.requestStart, payload.requestEnd, payload.getRequestDetails(), payload.features, payload.status);
+		var dataRequest = new DataRequest(id, DepartmentIdentifier.of(payload.departmentId), payload.requestStart,
+				payload.requestEnd, payload.getRequestDetails(), payload.features, payload.status);
 
 		try {
 			requests.deleteById(dataRequest.getId());
 		} catch (EmptyResultDataAccessException e) {}
 		requests.save(dataRequest);
 
-		log.debug("Request - PUT from hd server + saved: {} (Checkcodes: {}, {} and {})", dataRequest.getId().toString(),
-				dataRequest.getCheckCodeName(), dataRequest.getCheckCodeDayOfBirth(), dataRequest.getCheckCodeRandom());
+		log.debug("Request - PUT from hd server + saved: {}", dataRequest.getId().toString());
 
 		return payload;
 	}
@@ -76,13 +74,6 @@ public class DataRequestHdController {
 	static class DataRequestInternalInputDto {
 
 		private UUID departmentId;
-		private String rkiCode;
-
-		private String teleCode;
-
-		private String checkCodeName;
-		private String checkCodeDayOfBirth;
-		private String checkCodeRandom;
 
 		private Instant requestStart;
 		private Instant requestEnd;

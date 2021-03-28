@@ -28,8 +28,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -86,7 +84,7 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 	private Optional<DataRequest> createAndSaveDataSubmission(DataRequestIdentifier code, @NotNull DataSubmissionDto body,
 			String encryptedData, Feature feature) {
 
-		return requests.findById(code).filter(it -> matchesOnCheckCode(body.getCheckCode(), it))
+		return requests.findById(code)
 				.filter(it -> matchesFeature(feature, it)).map(it -> {
 
 					var submission = new DataSubmission(it.getId(), it.getDepartmentId(), body.getSecret(), body.getKeyReferenz(),
@@ -99,22 +97,6 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 
 					return it;
 				});
-	}
-
-	private boolean matchesOnCheckCode(@NotNull List<String> checkCodes, DataRequest dataRequest) {
-
-		var requestCodes = new HashSet<String>(3);
-		if (dataRequest.getCheckCodeName() != null) {
-			requestCodes.add(dataRequest.getCheckCodeName());
-		}
-		if (dataRequest.getCheckCodeDayOfBirth() != null) {
-			requestCodes.add(dataRequest.getCheckCodeDayOfBirth());
-		}
-		if (dataRequest.getCheckCodeRandom() != null) {
-			requestCodes.add(dataRequest.getCheckCodeRandom());
-		}
-
-		return checkCodes.stream().anyMatch(requestCodes::contains);
 	}
 
 	private boolean matchesFeature(Feature feature, DataRequest dataRequest) {
