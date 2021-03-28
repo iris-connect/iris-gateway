@@ -36,7 +36,16 @@ paths:
           description: Created
       tags:
         - "IrisClientFrontend"
-        - "IrisPublicServer"            
+        - "IrisPublicServer"              
+    get:
+      summary: Fetches data requests
+      responses:
+        '200':
+          $ref: '#/components/responses/DataRequestList'
+          
+      tags:
+        - "IrisClientFrontend"
+        - "IrisSidecarServer"
 
   /data-requests/{code}:
     get:
@@ -177,7 +186,7 @@ paths:
         - "IrisLocationService"
         - "IrisSidecarClient"
         - "IrisSidecarServer"
-        - "IrisClientFrontend"
+
         - "IrisAppClient"
       parameters:
         - $ref: '#/components/parameters/LocationId'
@@ -223,6 +232,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/LocationList'
+    DataRequestList:
+      description: List of existing data requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
+
 
   parameters:
     Code:
@@ -248,6 +264,25 @@ components:
       in: header
 
   schemas:
+    ExistingDataRequestClientWithLocation:
+      properties:
+        externalRequestId:
+          description: 'External ID outside of IRIS'
+          type: string
+        start:
+          description: 'The start time for which data should be submitted with this request.'
+          type: string
+          format: date-time
+        end:
+          description: 'The end time for which data should be submitted with this request.'
+          type: string
+          format: date-time
+        requestDetails:
+          description: 'Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table and environment, seat, rank, ...).'
+          type: string        
+        locationInformation:
+          $ref: '#/components/schemas/LocationInformation'      
+        
     DataRequestClient:
       description: 'The data request that will be sent by the FE.'
       type: object
