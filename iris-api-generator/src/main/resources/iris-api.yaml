@@ -22,8 +22,6 @@ paths:
 
 ## DataRequests and DataSubmission for Contacts and Guest Lists
 
-<<<<<<< Updated upstream
-=======
   /data-requests:
     post:
       summary: Submits a new data request
@@ -32,7 +30,7 @@ paths:
         content:          
           application/json; charset=UTF-8:
             schema:
-              $ref: '#/components/schemas/DataRequestCient'
+              $ref: '#/components/schemas/DataRequestClient'
       responses:
         '201':
           description: Created
@@ -40,7 +38,6 @@ paths:
         - "IrisClientFrontend"
         - "IrisPublicServer"            
 
->>>>>>> Stashed changes
   /data-requests/{code}:
     get:
       tags:
@@ -225,12 +222,7 @@ components:
       content:
         application/json:
           schema:
-<<<<<<< Updated upstream
             $ref: '#/components/schemas/LocationList'
-=======
-            allOf:
-            - $ref: '#/components/schemas/LocationList'
->>>>>>> Stashed changes
 
   parameters:
     Code:
@@ -256,9 +248,7 @@ components:
       in: header
 
   schemas:
-<<<<<<< Updated upstream
-=======
-    DataRequestCient:
+    DataRequestClient:
       description: 'The data request that will be sent by the FE.'
       type: object
       required:
@@ -289,7 +279,6 @@ components:
         requestDetails:
           description: 'Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table and environment, seat, rank, ...).'
           type: string  
->>>>>>> Stashed changes
     DataRequest:
       description: 'A data request with all parameters relevant for the data submission.'
       type: object
@@ -598,41 +587,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LocationInformation'
-<<<<<<< Updated upstream
-=======
-    ProviderInformation:
-      type: object
-      required:
-        - "providerId"
-      properties:
-        providerId:
-          type: string
-          description: 'ID des App providers'
-          example: ''
-      
->>>>>>> Stashed changes
     LocationInformation:
       type: object
       required:
         - "id"
         - "name"
         - "contact"
-<<<<<<< Updated upstream
-=======
         - "providerId"
->>>>>>> Stashed changes
       properties:
         id:
           type: string
           description: 'Interne ID (beim Provider)'
           example: '5eddd61036d39a0ff8b11fdb'
-<<<<<<< Updated upstream
-=======
         providerId:
           type: string
           description: 'ID des App providers'
           example: '5eddd61036d39a0ff8b11fdb'
->>>>>>> Stashed changes
         name:
           type: string
           description: 'Name des Standorts'
