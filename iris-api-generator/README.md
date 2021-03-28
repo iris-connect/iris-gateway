@@ -45,3 +45,20 @@ the server implementation must therefore be given by the first tag. All followin
 For servers acting as proxy, such as the IRIS Client SORMAS Sidecar server, the proxied servers' specification are
 combined (in this case code for all operations annotated by `IrisSidecarServer`, `IrisPublicServer` or `IrisLocationService`
 are generated).
+
+:warning: The generated code is removed by running `mvn clean` on this module (iris-api-generator) and overwritten whenever
+generated. Do not edit manually, but include as dependency:
+```
+<dependency>
+      <groupId>de.healthIMIS</groupId>
+      <artifactId>iris-api-<client or server api></artifactId>
+      <version>${project.version}</version>
+</dependency>
+```
+
+Further configuration for code generation is available, see:
+- maven plugin: https://github.com/OpenAPITools/openapi-generator/tree/master/modules/openapi-generator-maven-plugin
+- spring generator: https://openapi-generator.tech/docs/generators/spring/
+- java generator: https://openapi-generator.tech/docs/generators/java/
+- all generators: https://openapi-generator.tech/docs/generators
+
