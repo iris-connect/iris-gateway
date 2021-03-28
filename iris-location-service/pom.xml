@@ -16,6 +16,7 @@
     <properties>
         <java.version>11</java.version>
         <springfox-version>3.0.0</springfox-version>
+        <docker.image.prefix>inoeg</docker.image.prefix>
     </properties>
     <dependencies>
         <dependency>
@@ -75,6 +76,25 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <profiles>
+                        <profile>${spring.profiles.active}</profile>
+                    </profiles>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                    <image>
+                        <name>${docker.image.prefix}/${project.artifactId}:${project.version}</name>
+                        <env>
+                            <!-- embeds environment variables into an image: https://github.com/paketo-buildpacks/environment-variables -->
+                            <BPE_SPRING_PROFILES_ACTIVE>docker</BPE_SPRING_PROFILES_ACTIVE>
+                            <!-- with GraalVM <BP_BOOT_NATIVE_IMAGE>true</BP_BOOT_NATIVE_IMAGE> -->
+                        </env>
+                    </image>
+                </configuration>
             </plugin>
         </plugins>
     </build>
