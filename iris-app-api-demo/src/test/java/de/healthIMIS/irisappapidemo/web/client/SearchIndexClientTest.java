@@ -1,10 +1,7 @@
 package de.healthIMIS.irisappapidemo.web.client;
 
 import de.healthIMIS.irisappapidemo.searchindex.bootstrap.LocationsLoader;
-import de.healthIMIS.irisappapidemo.searchindex.model.AddressDto;
-import de.healthIMIS.irisappapidemo.searchindex.model.ContactDto;
-import de.healthIMIS.irisappapidemo.searchindex.model.ContextDto;
-import de.healthIMIS.irisappapidemo.searchindex.model.LocationDto;
+import de.healthIMIS.irisappapidemo.searchindex.model.*;
 import de.healthIMIS.irisappapidemo.searchindex.web.client.SearchIndexClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +23,7 @@ class SearchIndexClientTest {
     @Test
     void testUpdateLocations() {
 
-        List<LocationDto> locations = locationsLoader.getDemoLocations();
+        LocationsDto locations = locationsLoader.getDemoLocations();
 
         client.updateLocations(locations);
 
@@ -35,9 +32,9 @@ class SearchIndexClientTest {
     @Test
     void testDeleteLocation() {
 
-        List<LocationDto> locations = locationsLoader.getDemoLocations();
+        LocationsDto locations = locationsLoader.getDemoLocations();
 
-        client.deleteLocation(locations.get(1));
+        client.deleteLocation(locations.getLocations().get(1));
 
     }
 }

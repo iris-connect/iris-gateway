@@ -1,5 +1,6 @@
 package de.healthIMIS.irisappapidemo.searchindex.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,19 +8,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LocationDto {
+public class LocationsDto {
 
-    UUID id;
-    String name;
-    String publicKey;
-    ContactDto contact;
-    List<ContextDto> contexts;
+    private List<LocationDto> locations;
 
+    @JsonIgnore
+    public Integer getCount() {
+        return locations.size();
+    }
+
+    public LocationDto getLocationByIndex(Integer index) {
+        return locations.get(index);
+    }
 }

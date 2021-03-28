@@ -13,6 +13,6 @@ public class AddressDto {
 
     String street;
     String city;
-    Integer zip;
+    String zip;
 
 }

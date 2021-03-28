@@ -2,10 +2,12 @@ package de.healthIMIS.irisappapidemo.searchindex.bootstrap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.healthIMIS.irisappapidemo.searchindex.model.LocationDto;
+import de.healthIMIS.irisappapidemo.searchindex.model.LocationsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
+import javax.xml.stream.Location;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
 public class LocationsLoader {
 
     @SneakyThrows
-    public List<LocationDto> getDemoLocations() {
+    public LocationsDto getDemoLocations() {
 
         List<LocationDto> locations = new ArrayList<>();
 
@@ -31,7 +33,7 @@ public class LocationsLoader {
             }
         }
 
-        return locations;
+        return LocationsDto.builder().locations(locations).build();
     }
 
 }
