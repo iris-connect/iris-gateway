@@ -14,6 +14,32 @@ tags:
 info:
   title: 'IRIS-Gateway API'
   version: 0.2.0
+  description: >
+    ### Encryption of the data to be transmitted (contact data)
+
+    In order to be not limited in the amount of data, a hybrid encryption with symmetric encryption of the data and asymmetric encryption of the symmetric key is used for the encryption of the contact data.
+
+      1. The apps and applications get the public key of the health department as a 4096-bit RSA key from the IRIS+ server. This key is base64-encoded in the Private Enhanced Mail (PEM) format.
+      2. The app generates a 256-bit AES key.
+      3. With this key the data is encrypted (algorithm: AES).
+      4. The AES key must be encrypted with the public RSA key of the health department. (algorithm: RSA with Optimal Asymmetric Encryption Padding (OAEP))
+      5. The encrypted AES key and the encrypted content must be transmitted base64 encoded.
+
+      #### Schematic sequence
+
+      ```
+      pubKeyEncryption = publicKeyFromPem(givenPublicKey);
+      contentKey = generateAESKey();
+
+      encrypted = contentKey.encrypt(content);
+      keyEncrypted = pubKeyEncryption.encrypt(contentKey, "RSA/NONE/OAEPWithSHA3-256AndMGF1Padding");
+
+      dataToTransport = base64Encode(encrypted);
+      keyToTransport = base64Encode(keyEncrypted);
+      ```
+  contact:
+    name: Jens Kutzsche (IMIS)
+    email: jens.kutzsche@gebea.de
   license:
     name: GNU AGPL v3
     url: https://www.gnu.org/licenses/agpl-3.0
@@ -193,6 +219,34 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /{data_request_endpoint}:
+    post:
+      tags:
+      ## TODO: @Jens Welche Komponenten kommunizieren hier? Bitte Tags entsprechend anpassen.
+        - "Location Data Requests"
+        - "Implemented by the apps"
+      ## TODO: Beschreibung anpassen:
+      description: 'Recives request from IRIS for provide contact data.'
+      parameters:
+        - in: path
+          name: data_request_endpoint
+          required: true
+          description: 'Endpoint as configured by provider'
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/LocationDataRequest'
+      responses:
+        '202':
+          description: 'Request accepted'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 security:
   - ApiKeyAuth: []
 
@@ -527,9 +581,14 @@ components:
       allOf:
         - $ref: '#/components/schemas/Person'
         - type: object
+          required:
+            - attendanceInformation
           properties:
             attendanceInformation:
               type: object
+              required:
+                - attendFrom
+                - attendTo
               properties:
                 descriptionOfParticipation:
                   description: 'Description of the type of participation.'
