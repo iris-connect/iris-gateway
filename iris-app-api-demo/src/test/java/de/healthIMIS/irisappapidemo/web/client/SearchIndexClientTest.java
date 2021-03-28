@@ -31,4 +31,13 @@ class SearchIndexClientTest {
         client.updateLocations(locations);
 
     }
+
+    @Test
+    void testDeleteLocation() {
+
+        List<LocationDto> locations = locationsLoader.getDemoLocations();
+
+        client.deleteLocation(locations.get(1));
+
+    }
 }
