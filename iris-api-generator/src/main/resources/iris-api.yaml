@@ -35,8 +35,8 @@ paths:
         '201':
           description: Created
       tags:
+        - "IrisPublicServer"
         - "IrisClientFrontend"
-        - "IrisPublicServer"              
     get:
       summary: Fetches data requests
       responses:
@@ -44,15 +44,14 @@ paths:
           $ref: '#/components/responses/DataRequestList'
           
       tags:
-        - "IrisClientFrontend"
         - "IrisSidecarServer"
+        - "IrisClientFrontend"
 
   /data-requests/{code}:
     get:
       tags:
         - "IrisPublicServer"
         - "IrisSidecarClient"
-        - "IrisSidecarServer"
         - "IrisAppClient"
       summary: 'get DataRequest by Code from IRIS Public Server'
       operationId: getDataRequestByCode
@@ -143,7 +142,6 @@ paths:
       tags:
         - "IrisLocationService"
         - "IrisSidecarClient"
-        - "IrisSidecarServer"
         - "IrisClientFrontend"
       parameters:
         - in: path
@@ -185,8 +183,6 @@ paths:
       tags:
         - "IrisLocationService"
         - "IrisSidecarClient"
-        - "IrisSidecarServer"
-
         - "IrisAppClient"
       parameters:
         - $ref: '#/components/parameters/LocationId'
