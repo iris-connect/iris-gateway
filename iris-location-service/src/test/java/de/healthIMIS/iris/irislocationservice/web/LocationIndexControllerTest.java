@@ -36,7 +36,7 @@ class LocationIndexControllerTest {
     @Test
     public void testSearch() throws Exception {
         postLocations();
-        var res = mockMvc.perform(MockMvcRequestBuilders.get("/search/Darmstadt")
+        var res = mockMvc.perform(MockMvcRequestBuilders.get("/search/Restaurant")
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         var json = om.readValue(res.getResponse().getContentAsString(), LocationList.class);
