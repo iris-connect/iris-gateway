@@ -4,11 +4,11 @@
   "publicKey": "FC Darmstadt",
   "contact": {
     "officialName": "Fussballclub Darmstadt",
-    "representative": "Hans Müller",
+    "representative": "Hans Mueller",
     "address": {
       "street": "Testallee 42",
       "city": "Hintertupfingen",
-      "zip": 12345
+      "zip": "12345"
     },
     "ownerEmail": "tim@smartmeeting.online",
     "email": "tim@smartmeeting.online",
@@ -17,7 +17,7 @@
   "contexts": [
     {
       "id": "702830d0-7665-400e-821e-1cef4df4c792",
-      "name": "Außenbereich"
+      "name": "Ausssenbereich"
     },
     {
       "id": "b220f816-d850-4260-b988-ef0ae171a498",

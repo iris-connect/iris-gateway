@@ -1,6 +1,7 @@
 package de.healthIMIS.irisappapidemo.searchindex.web.client;
 
 import de.healthIMIS.irisappapidemo.searchindex.model.LocationDto;
+import de.healthIMIS.irisappapidemo.searchindex.model.LocationsDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -32,15 +34,25 @@ public class SearchIndexClient {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public void updateLocations(List<LocationDto> locationsDto) {
+    public void updateLocations(LocationsDto locationsDto) {
         var headers = new HttpHeaders();
-        headers.setContentType(new MediaType(APPLICATION_JSON, UTF_8));
-        HttpEntity<List<LocationDto>> requestUpdate = new HttpEntity<>(locationsDto, headers);
-        restTemplate.exchange(apihost + LOCATIONS_PATH, HttpMethod.PUT, requestUpdate, Void.class);
+        //headers.setContentType(new MediaType(APPLICATION_JSON));
+        //HttpEntity<LocationsDto> requestUpdate = new HttpEntity<LocationsDto>(locationsDto, headers);
+        try {
+            restTemplate.put(apihost + LOCATIONS_PATH, locationsDto);
+        } catch (HttpClientErrorException e) {
+            log.error("Request failed. Status code: " + e.getStatusCode().toString());
+            log.error("Response: "+e.getResponseBodyAsString());
+        }
+
     }
 
     public void deleteLocation(LocationDto locationDto) {
-        restTemplate.delete(apihost + LOCATIONS_PATH + '/' + locationDto.getId());
+        try {
+            restTemplate.delete(apihost + LOCATIONS_PATH + '/' + locationDto.getId());
+        } catch (HttpClientErrorException e) {
+            log.error("Request failed. Status code: " + e.getStatusCode().toString());
+        }
     }
 
     public void setApihost(String apihost) {
