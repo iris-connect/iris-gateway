@@ -31,7 +31,7 @@ class LocationIndexControllerTest {
         // when, then, assert
         postLocations();
     }
-    
+
     @Test
     public void testSearch() throws Exception {
         postLocations();
@@ -47,7 +47,7 @@ class LocationIndexControllerTest {
     public void testDelete() throws Exception {
         postLocations();
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/search-index/5eddd61036d39a0ff8b11fdb"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/search-index/locations/5eddd61036d39a0ff8b11fdb"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
     }
