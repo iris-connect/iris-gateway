@@ -5,14 +5,13 @@ import static org.apache.commons.codec.binary.Base64.*;
 import static org.springframework.http.MediaType.*;
 
 import ch.qos.logback.classic.Level;
-import de.healthIMIS.iris.dummy_app.submissions.ContactPerson;
-import de.healthIMIS.iris.dummy_app.submissions.ContactPersonList;
-import de.healthIMIS.iris.dummy_app.submissions.ContactsAndEvents;
-import de.healthIMIS.iris.dummy_app.submissions.DataSubmissionDto;
-import de.healthIMIS.iris.dummy_app.submissions.Event;
-import de.healthIMIS.iris.dummy_app.submissions.EventList;
-import de.healthIMIS.iris.dummy_app.submissions.Guest;
-import de.healthIMIS.iris.dummy_app.submissions.GuestList;
+import de.healthIMIS.iris.api.appclient.model.ContactPerson;
+import de.healthIMIS.iris.api.appclient.model.ContactPersonList;
+import de.healthIMIS.iris.api.appclient.model.ContactsAndEvents;
+import de.healthIMIS.iris.api.appclient.model.Event;
+import de.healthIMIS.iris.api.appclient.model.EventList;
+import de.healthIMIS.iris.api.appclient.model.Guest;
+import de.healthIMIS.iris.api.appclient.model.GuestList;
 import lombok.RequiredArgsConstructor;
 
 import java.io.BufferedInputStream;
