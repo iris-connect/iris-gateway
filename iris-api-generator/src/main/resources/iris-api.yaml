@@ -152,13 +152,22 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
-  /iris/data-request:
+  /{data_request_endpoint}:
     post:
       tags:
-        - "IrisPublicServer"
-        - "IrisAppClient"
-      ### ??? Was heißt das ???
-      description: 'Recives request from IRIS for provide contact data.'
+      ## TODO: @Jens Welche Komponenten kommunizieren hier? Bitte Tags entsprechend anpassen.
+      ## Die Komponenten gibt es noch nicht.
+        - "IrisAppServer"
+        - "IrisPublicClient"
+        - "Implemented by the apps"
+      description: 'This endpoint is implemented by the provider. Recives request from IRIS for provide guests data.'
+      parameters:
+        - in: path
+          name: data_request_endpoint
+          required: true
+          description: 'Endpoint as configured by provider'
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -231,35 +240,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  /{data_request_endpoint}:
-    post:
-      tags:
-      ## TODO: @Jens Welche Komponenten kommunizieren hier? Bitte Tags entsprechend anpassen.
-      ## Die Komponenten gibt es noch nicht.
-        - "IrisAppServer"
-        - "IrisPublicClient"
-        - "Implemented by the apps"
-      description: 'This endpoint is implemented by the provider. Recives request from IRIS for provide guests data.'
-      parameters:
-        - in: path
-          name: data_request_endpoint
-          required: true
-          description: 'Endpoint as configured by provider'
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json; charset=UTF-8:
-            schema:
-              $ref: '#/components/schemas/LocationDataRequest'
-      responses:
-        '202':
-          description: 'Request accepted'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
 security:
   - ApiKeyAuth: []
 
