@@ -78,6 +78,8 @@ paths:
         - "IrisPublicServer"
         - "IrisClientFrontend"
       summary: Detail view for Data Request
+      parameters:
+        - $ref: '#/components/parameters/Code'
       responses:
         '200': 
           $ref: '#/components/responses/DataRequestDetails'
@@ -88,6 +90,8 @@ paths:
         - "IrisPublicServer"
         - "IrisClientFrontend"
       summary: Guests data for data requests
+      parameters:
+        - $ref: '#/components/parameters/Code'
       responses:
         '200': 
           $ref: '#/components/responses/DataSubmissionsDetails'
