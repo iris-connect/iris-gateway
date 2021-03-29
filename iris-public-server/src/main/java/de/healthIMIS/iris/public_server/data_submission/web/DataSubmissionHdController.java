@@ -114,7 +114,7 @@ public class DataSubmissionHdController {
 
 		static DataSubmissionInternalOutputDto of(DataSubmission submission) {
 			return new DataSubmissionInternalOutputDto(submission.getId().toString(), submission.getRequestId().toString(),
-					submission.getDepartmentId().toString(), submission.getSecret(), submission.getKeyReferenz(),
+					submission.getDepartmentId().toString(), submission.getSecret(), submission.getKeyReference(),
 					submission.getEncryptedData(), submission.getFeature());
 		}
 
@@ -126,7 +126,7 @@ public class DataSubmissionHdController {
 
 		private final String secret;
 
-		private final String keyReferenz;
+		private final String keyReference;
 
 		private final String encryptedData;
 

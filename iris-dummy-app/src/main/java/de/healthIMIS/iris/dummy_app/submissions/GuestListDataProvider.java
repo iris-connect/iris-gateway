@@ -2,19 +2,21 @@ package de.healthIMIS.iris.dummy_app.submissions;
 
 import java.util.Objects;
 
+import org.springframework.validation.annotation.Validated;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * GuestListDataProvider
  */
+@Validated
 
 public class GuestListDataProvider {
-
 	@JsonProperty("name")
 	private String name = null;
 
 	@JsonProperty("address")
-	private Address address = null;
+	private AllOfGuestListDataProviderAddress address = null;
 
 	public GuestListDataProvider name(String name) {
 		this.name = name;
@@ -34,7 +36,7 @@ public class GuestListDataProvider {
 		this.name = name;
 	}
 
-	public GuestListDataProvider address(Address address) {
+	public GuestListDataProvider address(AllOfGuestListDataProviderAddress address) {
 		this.address = address;
 		return this;
 	}
@@ -44,11 +46,11 @@ public class GuestListDataProvider {
 	 * 
 	 * @return address
 	 **/
-	public Address getAddress() {
+	public AllOfGuestListDataProviderAddress getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(AllOfGuestListDataProviderAddress address) {
 		this.address = address;
 	}
 
@@ -61,8 +63,8 @@ public class GuestListDataProvider {
 			return false;
 		}
 		GuestListDataProvider guestListDataProvider = (GuestListDataProvider) o;
-		return Objects.equals(this.name, guestListDataProvider.name)
-				&& Objects.equals(this.address, guestListDataProvider.address);
+		return Objects.equals(this.name, guestListDataProvider.name) &&
+				Objects.equals(this.address, guestListDataProvider.address);
 	}
 
 	@Override

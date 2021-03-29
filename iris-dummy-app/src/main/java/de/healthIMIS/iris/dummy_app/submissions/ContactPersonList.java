@@ -17,9 +17,6 @@ public class ContactPersonList {
 	@JsonProperty("contactPersons")
 	private List<ContactPerson> contactPersons = new ArrayList<ContactPerson>();
 
-	@JsonProperty("dataProvider")
-	private ContactPersonListDataProvider dataProvider = null;
-
 	@JsonProperty("startDate")
 	private LocalDate startDate = null;
 
@@ -47,25 +44,6 @@ public class ContactPersonList {
 
 	public void setContactPersons(List<ContactPerson> contactPersons) {
 		this.contactPersons = contactPersons;
-	}
-
-	public ContactPersonList dataProvider(ContactPersonListDataProvider dataProvider) {
-		this.dataProvider = dataProvider;
-		return this;
-	}
-
-	/**
-	 * Get dataProvider
-	 * 
-	 * @return dataProvider
-	 **/
-
-	public ContactPersonListDataProvider getDataProvider() {
-		return dataProvider;
-	}
-
-	public void setDataProvider(ContactPersonListDataProvider dataProvider) {
-		this.dataProvider = dataProvider;
 	}
 
 	public ContactPersonList startDate(LocalDate startDate) {
@@ -114,14 +92,13 @@ public class ContactPersonList {
 		}
 		ContactPersonList contactPersonList = (ContactPersonList) o;
 		return Objects.equals(this.contactPersons, contactPersonList.contactPersons)
-				&& Objects.equals(this.dataProvider, contactPersonList.dataProvider)
 				&& Objects.equals(this.startDate, contactPersonList.startDate)
 				&& Objects.equals(this.endDate, contactPersonList.endDate);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(contactPersons, dataProvider, startDate, endDate);
+		return Objects.hash(contactPersons, startDate, endDate);
 	}
 
 	@Override
@@ -130,7 +107,6 @@ public class ContactPersonList {
 		sb.append("class ContactPersonList {\n");
 
 		sb.append("    contactPersons: ").append(toIndentedString(contactPersons)).append("\n");
-		sb.append("    dataProvider: ").append(toIndentedString(dataProvider)).append("\n");
 		sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
 		sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
 		sb.append("}");

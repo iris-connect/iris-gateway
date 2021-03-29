@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.springframework.validation.annotation.Validated;
@@ -47,7 +48,8 @@ public class ContactsEventsSubmissionDto extends DataSubmissionDto {
 	 * 
 	 * @return encryptedData
 	 **/
-	@Schema(description = "")
+	@Schema(required = true, description = "")
+	@NotNull
 
 	@Valid
 	@Pattern(regexp = "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$")

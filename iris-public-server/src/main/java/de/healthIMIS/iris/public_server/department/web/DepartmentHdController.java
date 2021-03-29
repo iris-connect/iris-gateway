@@ -50,7 +50,7 @@ public class DepartmentHdController {
 	DepartmentDto putDataRequest(@PathVariable("id") DepartmentIdentifier id, @Valid @RequestBody DepartmentDto payload,
 			Errors errors) {
 
-		var department = new Department(id, payload.getName(), payload.getKeyReferenz(), payload.key);
+		var department = new Department(id, payload.getName(), payload.getKeyReference(), payload.key);
 
 		try {
 			departments.deleteById(department.getId());
@@ -58,7 +58,7 @@ public class DepartmentHdController {
 		departments.save(department);
 
 		log.debug("Department - PUT from hd + saved: {} (Name: {}; Key-Referenz: {})", department.getId().toString(),
-				department.getName(), department.getKeyReferenz());
+				department.getName(), department.getKeyReference());
 
 		return payload;
 	}
@@ -67,7 +67,7 @@ public class DepartmentHdController {
 	static class DepartmentDto {
 
 		private String name;
-		private String keyReferenz;
+		private String keyReference;
 		private String key;
 	}
 }

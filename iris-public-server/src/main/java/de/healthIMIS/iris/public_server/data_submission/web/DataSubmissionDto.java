@@ -38,8 +38,8 @@ public class DataSubmissionDto {
 	@JsonProperty("secret")
 	private String secret = null;
 
-	@JsonProperty("keyReferenz")
-	private String keyReferenz = null;
+	@JsonProperty("keyReference")
+	private String keyReference = null;
 
 	public DataSubmissionDto secret(String secret) {
 		this.secret = secret;
@@ -59,25 +59,25 @@ public class DataSubmissionDto {
 		this.secret = secret;
 	}
 
-	public DataSubmissionDto keyReferenz(String keyReferenz) {
-		this.keyReferenz = keyReferenz;
+	public DataSubmissionDto keyReference(String keyReference) {
+		this.keyReference = keyReference;
 		return this;
 	}
 
 	/**
 	 * Reference to the used key.
 	 * 
-	 * @return keyReferenz
+	 * @return keyReference
 	 **/
 	@Schema(required = true, description = "Reference to the used key.")
 	@NotNull
 
-	public String getKeyReferenz() {
-		return keyReferenz;
+	public String getKeyReference() {
+		return keyReference;
 	}
 
-	public void setKeyReferenz(String keyReferenz) {
-		this.keyReferenz = keyReferenz;
+	public void setKeyReference(String keyReference) {
+		this.keyReference = keyReference;
 	}
 
 	@Override
@@ -90,12 +90,12 @@ public class DataSubmissionDto {
 		}
 		DataSubmissionDto dataSubmission = (DataSubmissionDto) o;
 		return Objects.equals(this.secret, dataSubmission.secret)
-				&& Objects.equals(this.keyReferenz, dataSubmission.keyReferenz);
+				&& Objects.equals(this.keyReference, dataSubmission.keyReference);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(secret, keyReferenz);
+		return Objects.hash(secret, keyReference);
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class DataSubmissionDto {
 		sb.append("class DataSubmission {\n");
 
 		sb.append("    secret: ").append(toIndentedString(secret)).append("\n");
-		sb.append("    keyReferenz: ").append(toIndentedString(keyReferenz)).append("\n");
+		sb.append("    keyReference: ").append(toIndentedString(keyReference)).append("\n");
 		sb.append("}");
 		return sb.toString();
 	}

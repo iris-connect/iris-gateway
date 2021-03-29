@@ -5,7 +5,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * ContactsAndEvents
+ * This data must be encrypted with the key of health department from DataRequest.keyOfHealthDepartment and must be
+ * encoded with Base64!(&#x60;dataToTransport&#x60; in the general description of the API.)
  */
 public class ContactsAndEvents {
 
@@ -14,6 +15,9 @@ public class ContactsAndEvents {
 
 	@JsonProperty("events")
 	private EventList events = null;
+
+	@JsonProperty("dataProvider")
+	private ContactsAndEventsDataProvider dataProvider = null;
 
 	public ContactsAndEvents contacts(ContactPersonList contacts) {
 		this.contacts = contacts;
@@ -51,6 +55,24 @@ public class ContactsAndEvents {
 		this.events = events;
 	}
 
+	public ContactsAndEvents dataProvider(ContactsAndEventsDataProvider dataProvider) {
+		this.dataProvider = dataProvider;
+		return this;
+	}
+
+	/**
+	 * Get dataProvider
+	 * 
+	 * @return dataProvider
+	 **/
+	public ContactsAndEventsDataProvider getDataProvider() {
+		return dataProvider;
+	}
+
+	public void setDataProvider(ContactsAndEventsDataProvider dataProvider) {
+		this.dataProvider = dataProvider;
+	}
+
 	@Override
 	public boolean equals(java.lang.Object o) {
 		if (this == o) {
@@ -60,13 +82,14 @@ public class ContactsAndEvents {
 			return false;
 		}
 		ContactsAndEvents contactsAndEvents = (ContactsAndEvents) o;
-		return Objects.equals(this.contacts, contactsAndEvents.contacts)
-				&& Objects.equals(this.events, contactsAndEvents.events);
+		return Objects.equals(this.contacts, contactsAndEvents.contacts) &&
+				Objects.equals(this.events, contactsAndEvents.events) &&
+				Objects.equals(this.dataProvider, contactsAndEvents.dataProvider);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(contacts, events);
+		return Objects.hash(contacts, events, dataProvider);
 	}
 
 	@Override
@@ -76,6 +99,7 @@ public class ContactsAndEvents {
 
 		sb.append("    contacts: ").append(toIndentedString(contacts)).append("\n");
 		sb.append("    events: ").append(toIndentedString(events)).append("\n");
+		sb.append("    dataProvider: ").append(toIndentedString(dataProvider)).append("\n");
 		sb.append("}");
 		return sb.toString();
 	}

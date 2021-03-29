@@ -6,13 +6,15 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Additional informations about the last contact with the queried person.
+ * Additional informations about the contact(s) with the queried person.
  */
 
 public class ContactPersonContactInformation {
+	@JsonProperty("firstContactDate")
+	private LocalDate firstContactDate = null;
 
-	@JsonProperty("date")
-	private LocalDate date = null;
+	@JsonProperty("lastContactDate")
+	private LocalDate lastContactDate = null;
 
 	@JsonProperty("contactCategory")
 	private ContactCategory contactCategory = null;
@@ -20,22 +22,40 @@ public class ContactPersonContactInformation {
 	@JsonProperty("basicConditions")
 	private String basicConditions = null;
 
-	public ContactPersonContactInformation date(LocalDate date) {
-		this.date = date;
+	public ContactPersonContactInformation firstContactDate(LocalDate firstContactDate) {
+		this.firstContactDate = firstContactDate;
 		return this;
 	}
 
 	/**
-	 * Get date
+	 * Get firstContactDate
 	 * 
-	 * @return date
+	 * @return firstContactDate
 	 **/
-	public LocalDate getDate() {
-		return date;
+	public LocalDate getFirstContactDate() {
+		return firstContactDate;
 	}
 
-	public void setDate(LocalDate date) {
-		this.date = date;
+	public void setFirstContactDate(LocalDate firstContactDate) {
+		this.firstContactDate = firstContactDate;
+	}
+
+	public ContactPersonContactInformation lastContactDate(LocalDate lastContactDate) {
+		this.lastContactDate = lastContactDate;
+		return this;
+	}
+
+	/**
+	 * Get lastContactDate
+	 * 
+	 * @return lastContactDate
+	 **/
+	public LocalDate getLastContactDate() {
+		return lastContactDate;
+	}
+
+	public void setLastContactDate(LocalDate lastContactDate) {
+		this.lastContactDate = lastContactDate;
 	}
 
 	public ContactPersonContactInformation contactCategory(ContactCategory contactCategory) {
@@ -85,14 +105,15 @@ public class ContactPersonContactInformation {
 			return false;
 		}
 		ContactPersonContactInformation contactPersonContactInformation = (ContactPersonContactInformation) o;
-		return Objects.equals(this.date, contactPersonContactInformation.date)
-				&& Objects.equals(this.contactCategory, contactPersonContactInformation.contactCategory)
-				&& Objects.equals(this.basicConditions, contactPersonContactInformation.basicConditions);
+		return Objects.equals(this.firstContactDate, contactPersonContactInformation.firstContactDate) &&
+				Objects.equals(this.lastContactDate, contactPersonContactInformation.lastContactDate) &&
+				Objects.equals(this.contactCategory, contactPersonContactInformation.contactCategory) &&
+				Objects.equals(this.basicConditions, contactPersonContactInformation.basicConditions);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(date, contactCategory, basicConditions);
+		return Objects.hash(firstContactDate, lastContactDate, contactCategory, basicConditions);
 	}
 
 	@Override
@@ -100,7 +121,8 @@ public class ContactPersonContactInformation {
 		StringBuilder sb = new StringBuilder();
 		sb.append("class ContactPersonContactInformation {\n");
 
-		sb.append("    date: ").append(toIndentedString(date)).append("\n");
+		sb.append("    firstContactDate: ").append(toIndentedString(firstContactDate)).append("\n");
+		sb.append("    lastContactDate: ").append(toIndentedString(lastContactDate)).append("\n");
 		sb.append("    contactCategory: ").append(toIndentedString(contactCategory)).append("\n");
 		sb.append("    basicConditions: ").append(toIndentedString(basicConditions)).append("\n");
 		sb.append("}");

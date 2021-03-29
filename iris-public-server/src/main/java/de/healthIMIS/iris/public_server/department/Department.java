@@ -42,16 +42,16 @@ import javax.persistence.Table;
 public class Department extends Aggregate<Department, Department.DepartmentIdentifier> {
 
 	private final String name;
-	private String keyReferenz;
+	private String keyReference;
 	private final @Lob String publicKey;
 
-	public Department(DepartmentIdentifier id, String name, String keyReferenz, String publicKey) {
+	public Department(DepartmentIdentifier id, String name, String keyReference, String publicKey) {
 
 		super();
 
 		this.id = id;
 		this.name = name;
-		this.keyReferenz = keyReferenz;
+		this.keyReference = keyReference;
 		this.publicKey = publicKey;
 	}
 
