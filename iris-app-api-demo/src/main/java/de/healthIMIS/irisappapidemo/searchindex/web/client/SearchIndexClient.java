@@ -18,9 +18,6 @@ import java.util.List;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-/**
- * Created by lucky-lusa on 2021-03-27.
- */
 @ConfigurationProperties(prefix = "iris.public-api", ignoreUnknownFields = false)
 @Component
 @Slf4j

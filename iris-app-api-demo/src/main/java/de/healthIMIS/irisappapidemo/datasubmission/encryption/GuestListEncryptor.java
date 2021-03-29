@@ -3,10 +3,14 @@ package de.healthIMIS.irisappapidemo.datasubmission.encryption;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.GuestListDto;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.crypto.util.PublicKeyFactory;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.*;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.RSAPublicKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 @Builder
@@ -29,6 +33,21 @@ public class GuestListEncryptor implements Encryptor {
         byte[] iv = new byte[16];
         new SecureRandom().nextBytes(iv);
         return iv;
+    }
+
+    public static PublicKey getPublicKey(String givenPublicKey) {
+        try {
+            log.info(givenPublicKey);
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+
+            X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(Base64.getDecoder().decode(givenPublicKey.replaceAll("\\n", "")));
+
+            return (RSAPublicKey) kf.generatePublic(keySpecX509);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     @Override
@@ -56,7 +75,17 @@ public class GuestListEncryptor implements Encryptor {
     }
 
     public String getSecretKeyBase64() {
-        return Base64.getEncoder().encodeToString(secretKey.getEncoded());
+
+        try {
+            PublicKey key = getPublicKey(givenPublicKey);
+            Cipher encoder = Cipher.getInstance("RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING");
+            encoder.init(Cipher.ENCRYPT_MODE, key);
+            byte[] cipherText = encoder.doFinal(secretKey.getEncoded());
+            return Base64.getEncoder().encodeToString(cipherText);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private byte[] combineIVAndData(byte[] iv, byte[] encryptedData) {
