@@ -51,7 +51,7 @@ public class DataRequestRepresentations {
 
 			request = request.healthDepartment(department.getName());
 			request = request.keyOfHealthDepartment(department.getPublicKey());
-			request = request.keyReferenz(department.getKeyReferenz());
+			request = request.keyReference(department.getKeyReference());
 		}
 
 		var model = EntityModel.of(request);

@@ -39,14 +39,11 @@ public class DataRequestDto {
 	@JsonProperty("healthDepartment")
 	private String healthDepartment = null;
 
-	@JsonProperty("createdAt")
-	private Instant createdAt = null;
-
 	@JsonProperty("keyOfHealthDepartment")
 	private String keyOfHealthDepartment = null;
 
-	@JsonProperty("keyReferenz")
-	private String keyReferenz = null;
+	@JsonProperty("keyReference")
+	private String keyReference = null;
 
 	@JsonProperty("start")
 	private Instant start = null;
@@ -78,27 +75,6 @@ public class DataRequestDto {
 		this.healthDepartment = healthDepartment;
 	}
 
-	public DataRequestDto createdAt(Instant createdAt) {
-		this.createdAt = createdAt;
-		return this;
-	}
-
-	/**
-	 * Creation time of the data request.
-	 * 
-	 * @return createdAt
-	 **/
-	@Schema(description = "Creation time of the data request.")
-
-	@Valid
-	public Instant getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Instant createdAt) {
-		this.createdAt = createdAt;
-	}
-
 	public DataRequestDto keyOfHealthDepartment(String keyOfHealthDepartment) {
 		this.keyOfHealthDepartment = keyOfHealthDepartment;
 		return this;
@@ -109,7 +85,9 @@ public class DataRequestDto {
 	 * 
 	 * @return keyOfHealthDepartment
 	 **/
-	@Schema(description = "The key of the requesting health department that must be used for encryption.")
+	@Schema(required = true,
+			description = "The key of the requesting health department that must be used for encryption.")
+	@NotNull
 
 	public String getKeyOfHealthDepartment() {
 		return keyOfHealthDepartment;
@@ -119,24 +97,26 @@ public class DataRequestDto {
 		this.keyOfHealthDepartment = keyOfHealthDepartment;
 	}
 
-	public DataRequestDto keyReferenz(String keyReferenz) {
-		this.keyReferenz = keyReferenz;
+	public DataRequestDto keyReference(String keyReference) {
+		this.keyReference = keyReference;
 		return this;
 	}
 
 	/**
 	 * The key of the requesting health department that must be used for encryption.
 	 * 
-	 * @return keyReferenz
+	 * @return keyReference
 	 **/
-	@Schema(description = "The key of the requesting health department that must be used for encryption.")
+	@Schema(required = true,
+			description = "The key of the requesting health department that must be used for encryption.")
+	@NotNull
 
-	public String getKeyReferenz() {
-		return keyReferenz;
+	public String getKeyReference() {
+		return keyReference;
 	}
 
-	public void setKeyReferenz(String keyReferenz) {
-		this.keyReferenz = keyReferenz;
+	public void setKeyReference(String keyReference) {
+		this.keyReference = keyReference;
 	}
 
 	public DataRequestDto start(Instant start) {
@@ -215,14 +195,13 @@ public class DataRequestDto {
 		}
 		DataRequestDto dataRequest = (DataRequestDto) o;
 		return Objects.equals(this.healthDepartment, dataRequest.healthDepartment)
-				&& Objects.equals(this.createdAt, dataRequest.createdAt)
 				&& Objects.equals(this.keyOfHealthDepartment, dataRequest.keyOfHealthDepartment)
 				&& Objects.equals(this.start, dataRequest.start) && Objects.equals(this.end, dataRequest.end);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(healthDepartment, createdAt, keyOfHealthDepartment, start, end);
+		return Objects.hash(healthDepartment, keyOfHealthDepartment, start, end);
 	}
 
 	@Override
@@ -231,7 +210,6 @@ public class DataRequestDto {
 		sb.append("class DataRequest {\n");
 
 		sb.append("    healthDepartment: ").append(toIndentedString(healthDepartment)).append("\n");
-		sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
 		sb.append("    keyOfHealthDepartment: ").append(toIndentedString(keyOfHealthDepartment)).append("\n");
 		sb.append("    start: ").append(toIndentedString(start)).append("\n");
 		sb.append("    end: ").append(toIndentedString(end)).append("\n");

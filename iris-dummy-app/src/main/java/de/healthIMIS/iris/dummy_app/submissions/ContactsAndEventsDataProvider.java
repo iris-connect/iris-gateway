@@ -3,14 +3,16 @@ package de.healthIMIS.iris.dummy_app.submissions;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import org.springframework.validation.annotation.Validated;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * ContactPersonListDataProvider
+ * ContactsAndEventsDataProvider
  */
+@Validated
 
-public class ContactPersonListDataProvider {
-
+public class ContactsAndEventsDataProvider {
 	@JsonProperty("firstName")
 	private String firstName = null;
 
@@ -20,7 +22,7 @@ public class ContactPersonListDataProvider {
 	@JsonProperty("dateOfBirth")
 	private LocalDate dateOfBirth = null;
 
-	public ContactPersonListDataProvider firstName(String firstName) {
+	public ContactsAndEventsDataProvider firstName(String firstName) {
 		this.firstName = firstName;
 		return this;
 	}
@@ -38,7 +40,7 @@ public class ContactPersonListDataProvider {
 		this.firstName = firstName;
 	}
 
-	public ContactPersonListDataProvider lastName(String lastName) {
+	public ContactsAndEventsDataProvider lastName(String lastName) {
 		this.lastName = lastName;
 		return this;
 	}
@@ -56,7 +58,7 @@ public class ContactPersonListDataProvider {
 		this.lastName = lastName;
 	}
 
-	public ContactPersonListDataProvider dateOfBirth(LocalDate dateOfBirth) {
+	public ContactsAndEventsDataProvider dateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 		return this;
 	}
@@ -82,10 +84,10 @@ public class ContactPersonListDataProvider {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		ContactPersonListDataProvider contactPersonListDataProvider = (ContactPersonListDataProvider) o;
-		return Objects.equals(this.firstName, contactPersonListDataProvider.firstName)
-				&& Objects.equals(this.lastName, contactPersonListDataProvider.lastName)
-				&& Objects.equals(this.dateOfBirth, contactPersonListDataProvider.dateOfBirth);
+		ContactsAndEventsDataProvider contactsAndEventsDataProvider = (ContactsAndEventsDataProvider) o;
+		return Objects.equals(this.firstName, contactsAndEventsDataProvider.firstName) &&
+				Objects.equals(this.lastName, contactsAndEventsDataProvider.lastName) &&
+				Objects.equals(this.dateOfBirth, contactsAndEventsDataProvider.dateOfBirth);
 	}
 
 	@Override
@@ -96,7 +98,7 @@ public class ContactPersonListDataProvider {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("class ContactPersonListDataProvider {\n");
+		sb.append("class ContactsAndEventsDataProvider {\n");
 
 		sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
 		sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");

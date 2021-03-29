@@ -53,14 +53,14 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 	private DepartmentIdentifier departmentId;
 
 	private String secret;
-	private String keyReferenz;
+	private String keyReference;
 	private @Lob String encryptedData;
 
 	@Enumerated(EnumType.STRING) @Column(nullable = false)
 	private Feature feature;
 
 	public DataSubmission(DataRequestIdentifier requestId, DepartmentIdentifier departmentId, String secret,
-			String keyReferenz, String encryptedData, Feature feature) {
+			String keyReference, String encryptedData, Feature feature) {
 
 		super();
 
@@ -68,7 +68,7 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 		this.requestId = requestId;
 		this.departmentId = departmentId;
 		this.secret = secret;
-		this.keyReferenz = keyReferenz;
+		this.keyReference = keyReference;
 		this.encryptedData = encryptedData;
 		this.feature = feature;
 	}

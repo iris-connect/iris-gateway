@@ -25,7 +25,7 @@ CREATE TABLE data_submission (
 	request_id uuid NOT NULL,
 	department_id uuid NOT NULL,
 	secret varchar(1000) NULL,
-	key_referenz varchar(50) NOT NULL,
+	key_reference varchar(50) NOT NULL,
 	feature varchar(50) NOT NULL,
 	encrypted_data text NULL,
 	created timestamp NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE department (
 	department_id uuid NOT NULL,
 	name varchar(50) NULL,
 	public_key text NOT NULL,
-	key_referenz varchar(50) NOT NULL,
+	key_reference varchar(50) NOT NULL,
 	created timestamp NOT NULL,
 	last_modified timestamp NOT NULL,
 	CONSTRAINT department_pkey PRIMARY KEY (department_id)
