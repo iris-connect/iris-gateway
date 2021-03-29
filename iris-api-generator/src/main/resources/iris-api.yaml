@@ -77,25 +77,13 @@ paths:
       tags:
         - "IrisPublicServer"
         - "IrisClientFrontend"
-      summary: Detail view for Data Request
+      summary: Detail view for Data Request with the data submissions already received
+      operationId: getLocationDetails
       parameters:
         - $ref: '#/components/parameters/Code'
       responses:
         '200': 
           $ref: '#/components/responses/DataRequestDetails'
-
-  /data-requests-client/locations/{code}/submissions:
-    get: 
-      tags:
-        - "IrisPublicServer"
-        - "IrisClientFrontend"
-      summary: Guests data for data requests
-      parameters:
-        - $ref: '#/components/parameters/Code'
-      responses:
-        '200': 
-          $ref: '#/components/responses/DataSubmissionsDetails'
-
 
   /data-requests/{code}:
     get:
@@ -319,12 +307,6 @@ components:
         application/json:                      
           schema:                        
             $ref: '#/components/schemas/DataRequestDetails'
-    DataSubmissionsDetails:
-      description: Data requests data submissions.
-      content:
-        application/json:                      
-          schema:                        
-            $ref: '#/components/schemas/GuestList'
 
   parameters:
     Code:
@@ -361,10 +343,14 @@ components:
     DataRequestDetails:
       allOf:
         - $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
-
-    DataSubmissionsDetails:
-      allOf:
-        - $ref: '#/components/schemas/GuestList'
+        - type: object
+          required:
+            - submissions
+          properties:
+            submissions:
+              type: array
+              items:
+                $ref: '#/components/schemas/GuestList'
 
     ExistingDataRequestClientWithLocation:
       properties:
