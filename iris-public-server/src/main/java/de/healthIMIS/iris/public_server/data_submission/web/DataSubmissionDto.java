@@ -16,11 +16,8 @@ package de.healthIMIS.iris.public_server.data_submission.web;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.validation.annotation.Validated;
@@ -38,42 +35,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DataSubmissionDto {
 
-	@JsonProperty("checkCode") @Valid
-	private List<String> checkCode = new ArrayList<String>();
-
 	@JsonProperty("secret")
 	private String secret = null;
 
 	@JsonProperty("keyReferenz")
 	private String keyReferenz = null;
-
-	public DataSubmissionDto checkCode(List<String> checkCode) {
-		this.checkCode = checkCode;
-		return this;
-	}
-
-	public DataSubmissionDto addCheckCodeItem(String checkCodeItem) {
-		this.checkCode.add(checkCodeItem);
-		return this;
-	}
-
-	/**
-	 * An array of up to three check codes, one of them must be correct for the data to be accepted. For details, please
-	 * refer to section \"Prüfcode\" in concept at https://github.com/healthIMIS/IRIS-Concept/releases/latest
-	 * 
-	 * @return checkCode
-	 **/
-	@Schema(required = true,
-			description = "An array of up to three check codes, one of them must be correct for the data to be accepted. For details, please refer to section \"Prüfcode\" in concept at https://github.com/healthIMIS/IRIS-Concept/releases/latest")
-	@NotNull
-
-	public List<String> getCheckCode() {
-		return checkCode;
-	}
-
-	public void setCheckCode(List<String> checkCode) {
-		this.checkCode = checkCode;
-	}
 
 	public DataSubmissionDto secret(String secret) {
 		this.secret = secret;
@@ -123,14 +89,13 @@ public class DataSubmissionDto {
 			return false;
 		}
 		DataSubmissionDto dataSubmission = (DataSubmissionDto) o;
-		return Objects.equals(this.checkCode, dataSubmission.checkCode)
-				&& Objects.equals(this.secret, dataSubmission.secret)
+		return Objects.equals(this.secret, dataSubmission.secret)
 				&& Objects.equals(this.keyReferenz, dataSubmission.keyReferenz);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(checkCode, secret, keyReferenz);
+		return Objects.hash(secret, keyReferenz);
 	}
 
 	@Override
@@ -138,7 +103,6 @@ public class DataSubmissionDto {
 		StringBuilder sb = new StringBuilder();
 		sb.append("class DataSubmission {\n");
 
-		sb.append("    checkCode: ").append(toIndentedString(checkCode)).append("\n");
 		sb.append("    secret: ").append(toIndentedString(secret)).append("\n");
 		sb.append("    keyReferenz: ").append(toIndentedString(keyReferenz)).append("\n");
 		sb.append("}");

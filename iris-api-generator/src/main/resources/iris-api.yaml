@@ -243,10 +243,11 @@ paths:
     post:
       tags:
       ## TODO: @Jens Welche Komponenten kommunizieren hier? Bitte Tags entsprechend anpassen.
-        - "Location Data Requests"
+      ## Die Komponenten gibt es noch nicht.
+        - "IrisAppServer"
+        - "IrisPublicClient"
         - "Implemented by the apps"
-      ## TODO: Beschreibung anpassen:
-      description: 'Recives request from IRIS for provide contact data.'
+      description: 'This endpoint is implemented by the provider. Recives request from IRIS for provide guests data.'
       parameters:
         - in: path
           name: data_request_endpoint
@@ -694,7 +695,7 @@ components:
         phone:
           type: string
           format: phone
-        mobilPhone:
+        mobilePhone:
           type: string
           format: phone
         address:
