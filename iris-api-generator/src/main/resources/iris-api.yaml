@@ -61,8 +61,8 @@ paths:
         '201':
           $ref: '#/components/responses/DataRequestDetails'
       tags:
-        - "IrisPublicServer"
         - "IrisClientFrontend"
+        - "IrisSidecarServer"
     get:
       summary: Fetches data requests
       responses:
@@ -75,7 +75,7 @@ paths:
   /data-requests-client/locations/{code}:
     get: 
       tags:
-        - "IrisPublicServer"
+        - "IrisSidecarServer"
         - "IrisClientFrontend"
       summary: Detail view for Data Request with the data submissions already received
       operationId: getLocationDetails
