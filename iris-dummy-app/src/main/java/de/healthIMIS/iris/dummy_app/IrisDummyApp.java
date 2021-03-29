@@ -2,7 +2,6 @@ package de.healthIMIS.iris.dummy_app;
 
 import static java.nio.charset.StandardCharsets.*;
 import static org.apache.commons.codec.binary.Base64.*;
-import static org.apache.commons.codec.digest.DigestUtils.*;
 import static org.springframework.http.MediaType.*;
 
 import ch.qos.logback.classic.Level;
@@ -29,7 +28,6 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -96,11 +94,6 @@ public class IrisDummyApp {
 	 * Date of birth of the user - is used for check code
 	 */
 	private final LocalDate dateOfBirth;
-	/**
-	 * Random Checkcode - is used as fallback
-	 */
-	private final String randomCode;
-	private final boolean useTeleCode;
 	private final Properties properties;
 
 	private final LinkDiscoverer discoverer = new HalLinkDiscoverer();
@@ -131,10 +124,7 @@ public class IrisDummyApp {
 				Option.builder("n").longOpt("name").desc("name of the user (default = Max Muster)").hasArg().build());
 		options.addOption(
 				Option.builder("b").longOpt("birth").desc("date of birth of the user (default = 1990-01-01)").hasArg().build());
-		options.addOption(Option.builder("r").longOpt("random")
-				.desc("random checkcode - can be fixed for development in the client (default = ABCDEFGHKL)").hasArg().build());
 		options.addOption(Option.builder("d").longOpt("debug").desc("enable debug output").build());
-		options.addOption(Option.builder("t").longOpt("telecode").desc("uses a teleCode instead of a code").build());
 		options.addOption(Option.builder("f").longOpt("inputfile").desc("properties file with data for automatic input")
 				.hasArg().build());
 
@@ -161,8 +151,6 @@ public class IrisDummyApp {
 		var address = cmd.getOptionValue("a", "https://localhost:18443");
 		var name = cmd.getOptionValue("n", "Max Muster");
 		var dateOfBirth = LocalDate.parse(cmd.getOptionValue("b", "1990-01-01"));
-		var randomCode = cmd.getOptionValue("r", "ABCDEFGHKL");
-		var useTeleCode = cmd.hasOption('t');
 
 		var file = cmd.getOptionValue('f');
 
@@ -174,7 +162,7 @@ public class IrisDummyApp {
 			}
 		}
 
-		new IrisDummyApp(debug, address, name, dateOfBirth, randomCode, useTeleCode, properties).run();
+		new IrisDummyApp(debug, address, name, dateOfBirth, properties).run();
 	}
 
 	/**
@@ -212,7 +200,7 @@ public class IrisDummyApp {
 	 */
 	private void cycle() {
 
-		var hop = useTeleCode ? getHopByTeleCode() : getHopByCode();
+		var hop = getHopByCode();
 
 		var dataRequest = traverson.follow(hop).toObject(DataRequestDto.class);
 
@@ -263,21 +251,6 @@ public class IrisDummyApp {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * @return
-	 */
-	private Hop getHopByTeleCode() {
-
-		// read the teleCode
-		var teleCode = textIO.newStringInputReader().withPattern("[A-HKMNP-Z1-9]{9}[A-F1-9]").read("TeleCode");
-
-		// read the ZIP
-		var zip = textIO.newStringInputReader().withPattern("[0-9]{5}").read("ZIP");
-
-		// get data request object
-		return Hop.rel("GetDataRequestByTeleCode").withParameter("teleCode", teleCode).withParameter("zip", zip);
 	}
 
 	/**
@@ -462,8 +435,7 @@ public class IrisDummyApp {
 	 */
 	private void postSubmission(Link link, String content, String encryptedSecretKey, String keyReferenz) {
 
-		var submission = new DataSubmissionDto().checkCode(determineCheckcode()).keyReferenz(keyReferenz)
-				.secret(encryptedSecretKey).encryptedData(content);
+		var submission = new DataSubmissionDto().keyReferenz(keyReferenz).secret(encryptedSecretKey).encryptedData(content);
 
 		textIO.getTextTerminal().printf("\nData submission is sent to healt department with key referenz '%s'",
 				keyReferenz);
@@ -476,44 +448,6 @@ public class IrisDummyApp {
 		headers.setContentType(new MediaType(APPLICATION_JSON, UTF_8));
 
 		rest.postForObject(link.getHref(), new HttpEntity<>(submission, headers), DataRequestDto.class);
-	}
-
-	/**
-	 * Determines the check codes from the user data name and date of birth.
-	 * 
-	 * @return
-	 */
-	private List<String> determineCheckcode() {
-
-		var ret = new ArrayList<String>();
-
-		if (name != null) {
-
-			var nameMod = name.toLowerCase().replaceAll("[^\\pL\\pN]", "");
-			var nameHash = encodeBase64String(md5(nameMod));
-			ret.add(nameHash);
-
-			if (debug) {
-				textIO.getTextTerminal().printf("\nCheck code for name is MD5 of '%s' = '%s'\n\n", nameMod, nameHash);
-			}
-		}
-
-		if (dateOfBirth != null) {
-
-			var date = dateOfBirth.getYear() * 10000 + dateOfBirth.getMonthValue() * 100 + dateOfBirth.getDayOfMonth();
-			var dateHash = encodeBase64String(md5(Integer.toString(date)));
-			ret.add(dateHash);
-
-			if (debug) {
-				textIO.getTextTerminal().printf("\nCheck code for date of birth is MD5 of '%s' = '%s'\n\n", date, dateHash);
-			}
-		}
-
-		if (randomCode != null) {
-			ret.add(randomCode);
-		}
-
-		return ret;
 	}
 
 	/**

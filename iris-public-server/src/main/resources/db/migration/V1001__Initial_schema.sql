@@ -1,11 +1,6 @@
 CREATE TABLE data_request (
 	request_id uuid NOT NULL,
 	department_id uuid NOT NULL,
-	rki_code varchar(20) NOT NULL,
-	tele_code varchar(10) NOT NULL,
-	check_code_name varchar(50) NULL,
-	check_code_day_of_birth varchar(50) NULL,
-	check_code_random varchar(50) NULL,
 	request_start timestamp NULL,
 	request_end timestamp NULL,
 	request_details text NULL,

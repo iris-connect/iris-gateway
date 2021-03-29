@@ -45,13 +45,6 @@ import javax.persistence.*;
 public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestIdentifier> {
 
 	private DepartmentIdentifier departmentId;
-	private String rkiCode;
-
-	private String teleCode;
-
-	private String checkCodeName;
-	private String checkCodeDayOfBirth;
-	private String checkCodeRandom;
 
 	private Instant requestStart;
 	private Instant requestEnd;
@@ -66,19 +59,13 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 	@Enumerated(EnumType.STRING) @Column(nullable = false)
 	private Status status = Status.Open;
 
-	public DataRequest(DataRequestIdentifier id, DepartmentIdentifier departmentId, String rkiCode, String teleCode,
-			String checkCodeName, String checkCodeDayOfBirth, String checkCodeRandom, Instant requestStart,
+	public DataRequest(DataRequestIdentifier id, DepartmentIdentifier departmentId, Instant requestStart,
 			Instant requestEnd, String requestDetails, Set<Feature> features, Status status) {
 
 		super();
 
 		this.id = id;
 		this.departmentId = departmentId;
-		this.rkiCode = rkiCode;
-		this.teleCode = teleCode;
-		this.checkCodeName = checkCodeName;
-		this.checkCodeDayOfBirth = checkCodeDayOfBirth;
-		this.checkCodeRandom = checkCodeRandom;
 		this.requestStart = requestStart;
 		this.requestEnd = requestEnd;
 		this.requestDetails = requestDetails;
