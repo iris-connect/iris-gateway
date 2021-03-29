@@ -3,15 +3,10 @@ package de.healthIMIS.irisappapidemo.datasubmission.encryption;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.GuestListDto;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
 @Builder
@@ -22,7 +17,6 @@ public class GuestListEncryptor implements Encryptor {
 
     private final String givenPublicKey;
 
-    @Setter(value = AccessLevel.PRIVATE)
     private SecretKey secretKey;
 
     public static SecretKey getAESKey() throws NoSuchAlgorithmException {
