@@ -181,7 +181,7 @@ paths:
         '200':
           $ref: '#/components/responses/SearchResponse'
 
-  /search/locations:
+  /search-index/locations:
     put:
       summary: 'Recives contact information about locations that can be used to search for a specific location that was visited by a potentially infected person.'
       description: 'Locations are identifed by an ID that is owned by the provider. If an ID already exists, the information is overidden. The IDs are handled separately for each provider based on their authentication, so there is no overlap of ID between providers.'
@@ -202,7 +202,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
-  /search/locations/{id}:
+  /search-index/locations/{id}:
     delete:
       summary: 'Deletes contact information about a specific location identified by the provider owned ID.'
       operationId: deleteLocationFromSearchIndex
