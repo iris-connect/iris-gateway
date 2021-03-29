@@ -1,0 +1,24 @@
+[
+  {
+    "firstName": "Tim",
+    "lastName": "Lusa",
+    "dateOfBirth": "2021-03-28",
+    "sex": "UNKNOWN",
+    "email": "user@example.com",
+    "phone": "string",
+    "mobilePhone": "string",
+    "address": {
+      "street": "string",
+      "houseNumber": "string",
+      "zipCode": "string",
+      "city": "string"
+    },
+    "attendanceInformation": {
+      "descriptionOfParticipation": "Guest or Staff",
+      "attendFrom": "2021-03-28T19:21:28.071Z",
+      "attendTo": "2021-03-28T19:21:28.071Z",
+      "additionalInformation": "Table: 3; Floor: 2"
+    },
+    "identityChecked": true
+  }
+]
