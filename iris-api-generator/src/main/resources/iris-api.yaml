@@ -343,14 +343,16 @@ components:
     DataRequestDetails:
       allOf:
         - $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
-        - type: object
-          required:
-            - submissions
-          properties:
-            submissions:
-              type: array
-              items:
-                $ref: '#/components/schemas/GuestList'
+# for the MVP only a single submission
+        - $ref: '#/components/schemas/GuestList'
+#        - type: object
+#          required:
+#            - submissions
+#          properties:
+#            submissions:
+#              type: array
+#              items:
+#                $ref: '#/components/schemas/GuestList'
 
     ExistingDataRequestClientWithLocation:
       properties:
