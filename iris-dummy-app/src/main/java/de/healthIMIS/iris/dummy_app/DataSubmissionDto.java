@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package de.healthIMIS.iris.dummy_app.submissions;
+package de.healthIMIS.iris.dummy_app;
 
 import java.util.Objects;
 
