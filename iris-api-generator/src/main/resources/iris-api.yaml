@@ -59,7 +59,7 @@ paths:
               $ref: '#/components/schemas/DataRequestClient'
       responses:
         '201':
-          description: Created
+          $ref: '#/components/responses/DataRequestDetails'
       tags:
         - "IrisPublicServer"
         - "IrisClientFrontend"
@@ -68,7 +68,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/DataRequestList'
-          
+
       tags:
         - "IrisSidecarServer"
         - "IrisClientFrontend"
@@ -298,7 +298,7 @@ components:
     DataRequestList:
       description: List of existing data requests.
       content:
-        application/json:          
+        application/json:
           schema:
             $ref: '#/components/schemas/ExistingDataRequestClientWithLocationList'
     DataRequestDetails:
