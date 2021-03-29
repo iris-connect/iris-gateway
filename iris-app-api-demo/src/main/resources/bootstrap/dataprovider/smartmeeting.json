@@ -1,0 +1,9 @@
+{
+  "name": "SmartMeeting",
+  "address": {
+    "street": "Europaplatz",
+    "houseNumber": "5",
+    "zipCode": "64293",
+    "city": "Darmstadt"
+  }
+}

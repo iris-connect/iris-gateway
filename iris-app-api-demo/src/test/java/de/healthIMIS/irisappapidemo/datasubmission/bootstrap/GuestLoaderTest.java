@@ -25,6 +25,9 @@ class GuestLoaderTest {
     @Autowired
     private GuestLoader guestLoader;
 
+    @Autowired
+    private DataProviderLoader dataProviderLoader;
+
     @Test
     List<GuestDto> getGuests() {
         List<GuestDto> guests = guestLoader.getGuests();
@@ -42,8 +45,7 @@ class GuestLoaderTest {
     @Test
     void encryptGuestList() {
         List<GuestDto> guests = getGuests();
-        AddressDto dataProviderAddress = AddressDto.builder().street("Europaplatz 5").city("Darmstadt").houseNumber("5").zipCode("64293").build();
-        DataProviderDto dataProvider = DataProviderDto.builder().name("SmartMeeting").address(dataProviderAddress).build();
+        DataProviderDto dataProvider = dataProviderLoader.getDataProvider();
         GuestListDto guestList = GuestListDto.builder().guests(guests).additionalInformation("").startDate(LocalDateTime.now()).endDate(LocalDateTime.now().plusHours(6)).dataProvider(dataProvider).build();
         GuestListEncryptor encryptor = GuestListEncryptor.builder().guestList(guestList).givenPublicKey("DemoKey").build();
         log.info(encryptor.encrypt());
