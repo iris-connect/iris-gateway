@@ -48,7 +48,7 @@ paths:
 
 ## DataRequests and DataSubmission for Contacts and Guest Lists
 
-  /data-requests:
+  /data-requests-client/locations:
     post:
       summary: Submits a new data request
       requestBody:
@@ -59,7 +59,7 @@ paths:
               $ref: '#/components/schemas/DataRequestClient'
       responses:
         '201':
-          description: Created
+          $ref: '#/components/responses/DataRequestDetails'
       tags:
         - "IrisPublicServer"
         - "IrisClientFrontend"
@@ -68,10 +68,22 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/DataRequestList'
-          
+
       tags:
         - "IrisSidecarServer"
         - "IrisClientFrontend"
+  /data-requests-client/locations/{code}:
+    get: 
+      tags:
+        - "IrisPublicServer"
+        - "IrisClientFrontend"
+      summary: Detail view for Data Request with the data submissions already received
+      operationId: getLocationDetails
+      parameters:
+        - $ref: '#/components/parameters/Code'
+      responses:
+        '200': 
+          $ref: '#/components/responses/DataRequestDetails'
 
   /data-requests/{code}:
     get:
@@ -288,8 +300,13 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
-
+            $ref: '#/components/schemas/ExistingDataRequestClientWithLocationList'
+    DataRequestDetails:
+      description: Data request details
+      content:
+        application/json:                      
+          schema:                        
+            $ref: '#/components/schemas/DataRequestDetails'
 
   parameters:
     Code:
@@ -315,8 +332,40 @@ components:
       in: header
 
   schemas:
+    ExistingDataRequestClientWithLocationList:
+      type: object
+      properties:
+        dataRequests: 
+          type: array
+          items:
+            $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
+
+    DataRequestDetails:
+      allOf:
+        - $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
+        - type: object
+          required:
+            - submissions
+          properties:
+            submissions:
+              type: array
+              items:
+                $ref: '#/components/schemas/GuestList'
+
     ExistingDataRequestClientWithLocation:
       properties:
+        status:
+          type: string
+          enum:
+            - DATA_REQUESTED
+            - DATA_RECEIVED
+            - CLOSED
+        code: 
+          description: 'Code for DataRequest'
+          type: string
+        name:
+          description: 'Friendly name of the request to be identified easily by GA'
+          type: string
         externalRequestId:
           description: 'External ID outside of IRIS'
           type: string
@@ -340,6 +389,7 @@ components:
       required:
         - locationId
         - providerId
+        - name
         - externalRequestId
         - start
         - end
@@ -350,6 +400,9 @@ components:
           type: string
         providerId:
           description: 'ID of the App provider serving the location.'
+          type: string          
+        name:
+          description: 'Friendly name of the request to be identified easily by GA'
           type: string
         externalRequestId:
           description: 'External ID outside of IRIS'
