@@ -56,16 +56,13 @@ public class DataRequestDataInitializer implements DataInitializer {
 
 		var list = new ArrayList<DataRequest>();
 
-		list.add(new DataRequest(REQ_ID_1, DepartmentDataInitializer.DEPARTMENT_ID_1, "1.14.6.27.01.", "ABCDEFGHKM",
-				"e7fcc353b0b13024d48f74a718d8d721", "c82c1cd77fbd144003b1e476718f66ce", "ABCDEFGHKL",
-				Instant.now().minus(2, DAYS), null, null, EnumSet.of(Feature.Contacts_Events), Status.Open));
+		list.add(new DataRequest(REQ_ID_1, DepartmentDataInitializer.DEPARTMENT_ID_1, Instant.now().minus(2, DAYS), null,
+				null, EnumSet.of(Feature.Contacts_Events), Status.Open));
 
-		list.add(new DataRequest(REQ_ID_2, DepartmentDataInitializer.DEPARTMENT_ID_1, "1.14.6.27.01.", "ABCDEFGHKN",
-				"cd0087e4707045b33c144bf09305c2a5", null, "9876543XYZ", Instant.now().minus(4, DAYS),
+		list.add(new DataRequest(REQ_ID_2, DepartmentDataInitializer.DEPARTMENT_ID_1, Instant.now().minus(4, DAYS),
 				Instant.now().minus(2, DAYS), null, EnumSet.of(Feature.Contacts_Events), Status.Open));
 
-		list.add(new DataRequest(REQ_ID_3, DepartmentDataInitializer.DEPARTMENT_ID_2, "1.14.6.27.01.", "ABCDEFGHKO",
-				"bce7a55a7b8a8a89c33c4879fc545cc9", null, "23456789AB", Instant.now().minus(4, DAYS),
+		list.add(new DataRequest(REQ_ID_3, DepartmentDataInitializer.DEPARTMENT_ID_2, Instant.now().minus(4, DAYS),
 				Instant.now().minus(2, DAYS), null, EnumSet.of(Feature.Contacts_Events), Status.Open));
 
 		requests.saveAll(list);

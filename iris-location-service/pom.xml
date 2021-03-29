@@ -91,9 +91,17 @@
                             <!-- with GraalVM <BP_BOOT_NATIVE_IMAGE>true</BP_BOOT_NATIVE_IMAGE> -->
                         </env>
                     </image>
+					<docker>
+						<publishRegistry>
+							<username>${env.DOCKER_HUB_USER}</username>
+							<password>${env.DOCKER_HUB_PW}</password>
+							<!-- <token></token>
+							<url>https://docker.example.com/v1/</url>
+							<email>user@example.com</email>-->
+						</publishRegistry>
+					</docker>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 </project>
