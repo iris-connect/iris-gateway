@@ -202,6 +202,27 @@ paths:
         '200':
           $ref: '#/components/responses/SearchResponse'
 
+  /search/{providerId}/{locationId}}:
+    get:
+      tags:
+        - "IrisSidecarClient"
+      parameters:
+        - in: path
+          required: true
+          name: providerId
+          schema:
+            type: string
+        - in: path
+          required: true
+          name: locationId
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/SearchResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
   /search-index/locations:
     put:
       summary: 'Recives contact information about locations that can be used to search for a specific location that was visited by a potentially infected person.'
@@ -275,6 +296,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/LocationList'
+    LocationResponse:
+      description: The response for fetch of one location
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
     DataRequestList:
       description: List of existing data requests.
       content:
