@@ -386,12 +386,21 @@ components:
           description: 'The end time for which data should be submitted with this request.'
           type: string
           format: date-time
+        requestedAt: 
+          description: Timestamp when the data request was created.
+          type: string
+          format: date-time
+        lastUpdatedAt: 
+          description: Timestamp when the data request was last updated.
+          type: string
+          format: date-time
+
         requestDetails:
           description: 'Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table and environment, seat, rank, ...).'
           type: string        
         locationInformation:
           $ref: '#/components/schemas/LocationInformation'      
-        
+
     DataRequestClient:
       description: 'The data request that will be sent by the FE.'
       type: object
