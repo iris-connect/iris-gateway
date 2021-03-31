@@ -202,7 +202,7 @@ paths:
         '200':
           $ref: '#/components/responses/SearchResponse'
 
-  /search/{providerId}/{locationId}}:
+  /search/{providerId}/{locationId}:
     get:
       tags:
         - "IrisSidecarClient"
