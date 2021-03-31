@@ -13,6 +13,7 @@
 
     <properties>
         <path.swagger>${basedir}/src/main/resources/iris-api.yaml</path.swagger>
+        <path.swagger.config>${basedir}/src/main/resources/config.json</path.swagger.config>
         <path.locationService>${basedir}/../iris-api-location-service</path.locationService>
         <path.publicServer>${basedir}/../iris-api-public-server</path.publicServer>
         <path.sidecarServer>${basedir}/../iris-api-sidecar-server</path.sidecarServer>
@@ -49,6 +50,9 @@
                             <generateApiTests>false</generateApiTests>
                             <apisToGenerate>IrisLocationService</apisToGenerate>
                             <modelsToGenerate>LocationList,LocationInformation,LocationContact,LocationContext,LocationAddress</modelsToGenerate>
+                            <configurationFile>${path.swagger.config}</configurationFile>
+                            <!-- <typeMappings>OffsetDateTime=Instant</typeMappings>
+                            <importMappings>java.time.OffsetDateTime=java.time.Instant</importMappings> -->
                             <configOptions>
                                 <sourceFolder>src/main/java</sourceFolder>
                                 <parentArtifactId>parent</parentArtifactId>
@@ -77,6 +81,9 @@
                             <generateApiTests>false</generateApiTests>
                             <apisToGenerate>IrisPublicServer</apisToGenerate>
                             <modelsToGenerate></modelsToGenerate>
+                            <configurationFile>${path.swagger.config}</configurationFile>
+                            <!-- <typeMappings>OffsetDateTime=Instant</typeMappings>
+                            <importMappings>java.time.OffsetDateTime=java.time.Instant</importMappings> -->
                             <configOptions>
                                 <sourceFolder>src/main/java</sourceFolder>
                                 <parentArtifactId>parent</parentArtifactId>
@@ -105,6 +112,9 @@
                             <generateApiTests>false</generateApiTests>
                             <apisToGenerate>IrisSidecarServer,IrisPublicServer,IrisLocationService</apisToGenerate>
                             <modelsToGenerate></modelsToGenerate>
+                            <configurationFile>${path.swagger.config}</configurationFile>
+                            <!-- <typeMappings>OffsetDateTime=Instant</typeMappings>
+                            <importMappings>java.time.OffsetDateTime=java.time.Instant</importMappings> -->
                             <configOptions>
                                 <sourceFolder>src/main/java</sourceFolder>
                                 <parentArtifactId>parent</parentArtifactId>
@@ -133,6 +143,9 @@
                             <generateApiTests>false</generateApiTests>
                             <apisToGenerate>IrisSidecarClient</apisToGenerate>
                             <modelsToGenerate></modelsToGenerate>
+                            <configurationFile>${path.swagger.config}</configurationFile>
+                            <!-- <typeMappings>OffsetDateTime=Instant</typeMappings>
+                            <importMappings>java.time.OffsetDateTime=java.time.Instant</importMappings> -->
                             <configOptions>
                                 <sourceFolder>src/main/java</sourceFolder>
                                 <parentArtifactId>parent</parentArtifactId>
@@ -161,6 +174,9 @@
                             <generateApiTests>false</generateApiTests>
                             <apisToGenerate>IrisClientFrontend</apisToGenerate>
                             <modelsToGenerate></modelsToGenerate>
+                            <configurationFile>${path.swagger.config}</configurationFile>
+                            <!-- <typeMappings>OffsetDateTime=Instant</typeMappings>
+                            <importMappings>java.time.OffsetDateTime=java.time.Instant</importMappings> -->
                             <configOptions>
                                 <sourceFolder>src/main/java</sourceFolder>
                                 <parentArtifactId>parent</parentArtifactId>
@@ -189,6 +205,9 @@
                             <generateApiTests>false</generateApiTests>
                             <apisToGenerate>IrisAppClient</apisToGenerate>
                             <modelsToGenerate></modelsToGenerate>
+                            <configurationFile>${path.swagger.config}</configurationFile>
+                            <!-- <typeMappings>OffsetDateTime=Instant</typeMappings>
+                            <importMappings>java.time.OffsetDateTime=java.time.Instant</importMappings> -->
                             <configOptions>
                                 <sourceFolder>src/main/java</sourceFolder>
                                 <parentArtifactId>parent</parentArtifactId>
