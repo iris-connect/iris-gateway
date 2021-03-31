@@ -71,7 +71,7 @@ public class LocationIndexController {
 
         var data = body.getLocations().stream().map(entry -> {
 
-            entry.setProvider_id(""); // Reset possibly sent provider id. We need to ensure this comes from the
+            entry.setProviderId(""); // Reset possibly sent provider id. We need to ensure this comes from the
             // authentication system and isn't user-provided!
             var location = mapper.map(entry, Location.class);
             // For the search index, we are only interested in a subset of the data structure for location information
@@ -112,7 +112,7 @@ public class LocationIndexController {
 		var location = mapper.map(it, LocationInformation.class);
 
 		location.setId(it.getId().getLocationId());
-		location.setProvider_id(it.getId().getProviderId());
+		location.setProviderId(it.getId().getProviderId());
 
 		return location;
 	}
