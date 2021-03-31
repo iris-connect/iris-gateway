@@ -38,7 +38,7 @@ public class LocationIndexController {
 	TODO: This placeholder is for information we will get from authenticating the API requests-
 	i.e. which provider sent the request. Mocked to be constant 0 for now.
 	 */
-	private final static String temporary_provider_id = "00000-00000-00000-00000";
+	private final static String TEMPORARY_PROVIDER_ID = "00000-00000-00000-00000";
 
 	private ModelMapper mapper;
 
@@ -52,7 +52,7 @@ public class LocationIndexController {
 		// TODO: Authenticate API Access
 
 		// Construct a new ID to match the (provider, id) pair key
-		LocationIdentifier ident = new LocationIdentifier(temporary_provider_id, id);
+		LocationIdentifier ident = new LocationIdentifier(TEMPORARY_PROVIDER_ID, id);
 
 		Optional<Location> match = locationRepository.findById(ident);
 		if (match.isPresent()) {
@@ -69,22 +69,19 @@ public class LocationIndexController {
 
 		// TODO: Define sensible limits for this API
 
-		var locations = body.getLocations();
-		if (locations != null) {
-			var data = body.getLocations().stream().map(entry -> {
-				entry.setProvider_id(""); // Reset possibly sent provider id. We need to ensure this comes from the
-				// authentication system and isn't user-provided!
-				var location = mapper.map(entry, Location.class);
-				// For the search index, we are only interested in a subset of the data structure for location information
-				// Can be replaced
-				location.setId(new LocationIdentifier(temporary_provider_id, entry.getId()));
-				return location;
-			}).collect(Collectors.toList());
+        var data = body.getLocations().stream().map(entry -> {
 
-			locationRepository.saveAll(data);
-			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
+            entry.setProvider_id(""); // Reset possibly sent provider id. We need to ensure this comes from the
+            // authentication system and isn't user-provided!
+            var location = mapper.map(entry, Location.class);
+            // For the search index, we are only interested in a subset of the data structure for location information
+            // Can be replaced
+            location.setId(new LocationIdentifier(TEMPORARY_PROVIDER_ID, entry.getId()));
+            return location;
+        }).collect(Collectors.toList());
+
+        locationRepository.saveAll(data);
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 
 	@GetMapping("/search/{search_keyword}")
