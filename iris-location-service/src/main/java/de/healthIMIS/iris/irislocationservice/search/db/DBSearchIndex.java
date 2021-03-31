@@ -27,7 +27,7 @@ public class DBSearchIndex implements SearchIndex {
                 .map(res -> {
                     var location = mapper.map(res, LocationInformation.class);
                     location.setId(res.getId().getLocationId());
-                    location.setProvider_id(res.getId().getProviderId());
+                    location.setProviderId(res.getId().getProviderId());
                     return location;
                 }).collect(Collectors.toList());
 

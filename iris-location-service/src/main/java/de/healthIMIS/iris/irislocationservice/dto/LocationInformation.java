@@ -28,7 +28,7 @@ public class LocationInformation   {
 
   private String id = null;
 
-  private String provider_id = null;
+  private String providerId = null;
 
   private String name = null;
 
