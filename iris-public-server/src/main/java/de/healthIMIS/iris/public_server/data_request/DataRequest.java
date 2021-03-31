@@ -14,6 +14,8 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import de.healthIMIS.iris.public_server.core.Aggregate;
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.core.Id;
@@ -57,7 +59,7 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 	private Set<Feature> features;
 
 	@Enumerated(EnumType.STRING) @Column(nullable = false)
-	private Status status = Status.Open;
+	private Status status = Status.DATA_REQUESTED;
 
 	public DataRequest(DataRequestIdentifier id, DepartmentIdentifier departmentId, Instant requestStart,
 			Instant requestEnd, String requestDetails, Set<Feature> features, Status status) {
@@ -97,6 +99,36 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 	}
 
 	public enum Status {
-		Open
+		DATA_REQUESTED("DATA_REQUESTED"),
+
+		DATA_RECEIVED("DATA_RECEIVED"),
+
+		CLOSED("CLOSED");
+
+		private String value;
+
+		Status(String value) {
+			this.value = value;
+		}
+
+		@JsonValue
+		public String getValue() {
+			return value;
+		}
+
+		@Override
+		public String toString() {
+			return String.valueOf(value);
+		}
+
+		@JsonCreator
+		public static DataRequest.Status fromValue(String value) {
+			for (DataRequest.Status b : DataRequest.Status.values()) {
+				if (b.value.equals(value)) {
+					return b;
+				}
+			}
+			throw new IllegalArgumentException("Unexpected value '" + value + "'");
+		}
 	}
 }

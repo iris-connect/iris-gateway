@@ -147,7 +147,6 @@ public class DataRequestHdController {
     String locationId;
   }
 
-  // TODO use generated class
   @Data
   static class DataRequestInternalInputDto {
 
@@ -161,8 +160,7 @@ public class DataRequestHdController {
 
     private String requestDetails;
 
-    // these two seem to not be used
     private Set<Feature> features;
-    private Status status; // TODO need more status?
+    private Status status; // TODO check probably not required
   }
 }
