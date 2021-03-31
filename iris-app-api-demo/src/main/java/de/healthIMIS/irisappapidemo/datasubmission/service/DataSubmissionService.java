@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Slf4j
@@ -39,8 +40,8 @@ public class DataSubmissionService {
         GuestListDto guestList = GuestListDto.builder().
                 guests(guests).
                 additionalInformation("").
-                startDate(LocalDateTime.now()).
-                endDate(LocalDateTime.now().plusHours(6)).
+                startDate(ZonedDateTime.now()).
+                endDate(ZonedDateTime.now().plusHours(6)).
                 dataProvider(dataProvider).
                 build();
         GuestListEncryptor encryptor = GuestListEncryptor.builder().

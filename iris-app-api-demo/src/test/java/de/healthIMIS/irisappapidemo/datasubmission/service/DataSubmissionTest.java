@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @SpringBootTest
@@ -129,8 +130,8 @@ class DataSubmissionTest {
         GuestListDto guestList = GuestListDto.builder().
                 guests(guests).
                 additionalInformation("").
-                startDate(LocalDateTime.now()).
-                endDate(LocalDateTime.now().plusHours(6)).
+                startDate(ZonedDateTime.now()).
+                endDate(ZonedDateTime.now().plusHours(6)).
                 dataProvider(dataProvider).
                 build();
         GuestListEncryptor encryptor = GuestListEncryptor.builder().
@@ -142,7 +143,8 @@ class DataSubmissionTest {
 
         GuestListDecryptor decryptor = new GuestListDecryptor(encryptor.getSecretKeyBase64(), privateKey, encryptedData);
 
-        assertEquals(guestList.toString(), decryptor.decrypt());
+        log.info("json: "+guestList.asJson());
+        assertEquals(guestList.asJson(), decryptor.decrypt());
 
     }
 

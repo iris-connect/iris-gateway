@@ -3,13 +3,11 @@ package de.healthIMIS.irisappapidemo.datasubmission.encryption;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.GuestListDto;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.crypto.util.PublicKeyFactory;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.*;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
@@ -62,7 +60,7 @@ public class GuestListEncryptor implements Encryptor {
             IvParameterSpec ivSpec = new IvParameterSpec(iv);
 
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
-            byte[] cipherText = cipher.doFinal(guestList.toString().getBytes());
+            byte[] cipherText = cipher.doFinal(guestList.asJson().getBytes());
 
             return Base64.getEncoder()
                     .encodeToString(combineIVAndData(iv, cipherText));
