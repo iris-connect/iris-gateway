@@ -23,21 +23,20 @@ public class GuestListEncryptor implements Encryptor {
 
     private SecretKey secretKey;
 
-    public static SecretKey getAESKey() throws NoSuchAlgorithmException {
+    private SecretKey getAESKey() throws NoSuchAlgorithmException {
         KeyGenerator keyGen = KeyGenerator.getInstance("AES");
         keyGen.init(256, SecureRandom.getInstanceStrong());
         return keyGen.generateKey();
     }
 
-    public static byte[] generateIv() {
+    private byte[] generateIv() {
         byte[] iv = new byte[16];
         new SecureRandom().nextBytes(iv);
         return iv;
     }
 
-    public static PublicKey getPublicKey(String givenPublicKey) {
+    private PublicKey getPublicKey(String givenPublicKey) {
         try {
-            log.info(givenPublicKey);
             KeyFactory kf = KeyFactory.getInstance("RSA");
 
             X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(Base64.getDecoder().decode(givenPublicKey.replaceAll("\\n", "")));
