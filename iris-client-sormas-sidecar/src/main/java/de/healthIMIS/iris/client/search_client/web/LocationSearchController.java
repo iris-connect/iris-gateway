@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class LocationSearch {
+public class LocationSearchController {
 
   private SearchClient searchClient;
 
-  public LocationSearch(SearchClient searchClient) {
+  public LocationSearchController(SearchClient searchClient) {
     this.searchClient = searchClient;
   }
 
