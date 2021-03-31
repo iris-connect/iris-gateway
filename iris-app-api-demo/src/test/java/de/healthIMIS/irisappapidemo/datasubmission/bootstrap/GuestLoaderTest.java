@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 
@@ -46,7 +45,7 @@ class GuestLoaderTest {
     void encryptGuestList() {
         List<GuestDto> guests = getGuests();
         DataProviderDto dataProvider = dataProviderLoader.getDataProvider();
-        GuestListDto guestList = GuestListDto.builder().guests(guests).additionalInformation("").startDate(LocalDateTime.now()).endDate(LocalDateTime.now().plusHours(6)).dataProvider(dataProvider).build();
+        GuestListDto guestList = GuestListDto.builder().guests(guests).additionalInformation("").startDate(ZonedDateTime.now()).endDate(ZonedDateTime.now().plusHours(6)).dataProvider(dataProvider).build();
         GuestListEncryptor encryptor = GuestListEncryptor.builder().guestList(guestList).givenPublicKey("MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtcEUFlnEZfDkPO/mxXwC\n" +
                 "NmNTjwlndnp4fk521W+lPqhQ5f8lipp6A2tnIhPeLtvwVN6q68hzASaWxbhAypp2\n" +
                 "Bv77YRjoDacqx4gaq2eLGepb01CHNudGGvQGwhTYbfa8k13d2+z9+uN0/SrmofGc\n" +
@@ -59,7 +58,5 @@ class GuestLoaderTest {
                 "zyTCQxyJM66FLGu7vmGyt1sGiUBXFQCVYbSFNT3opke70f9/rYyzZoVA4ZBbAK7F\n" +
                 "azMTNzUZzt9EICWupkdrDEcyuFQ3Q/9a8Bp14zAciIAujpWNMaeO9zi57W9V0Vd4\n" +
                 "LyPpQIplL03J5EtG6FLHRWECAwEAAQ==").build();
-        log.info(encryptor.encrypt());
-        log.info(encryptor.getSecretKeyBase64());
     }
 }

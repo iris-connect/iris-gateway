@@ -28,7 +28,7 @@ public class DataSubmissionClient {
         try {
             HttpEntity<GuestSubmissionDto> request =
                     new HttpEntity<GuestSubmissionDto>(guestSubmission, headers);
-            log.info(request.getBody().toString());
+
             String personResultAsJsonStr =
                     restTemplate.postForObject(submissionUrl, request, String.class);
         } catch (HttpClientErrorException e) {
