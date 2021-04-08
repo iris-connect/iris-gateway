@@ -17,7 +17,6 @@ package de.healthIMIS.iris.public_server.data_request.web;
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
 import de.healthIMIS.iris.public_server.data_request.DataRequestRepository;
-import de.healthIMIS.iris.public_server.rki.HealthDepartments;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,7 +42,6 @@ public class DataRequestApiController implements DataRequestApi {
 
 	private final @NonNull DataRequestRepository requests;
 	private final @NonNull DataRequestRepresentations representation;
-	private final @NonNull HealthDepartments rkiDepartments;
 
 	@Override
 	public ResponseEntity<?> getDataRequestByCode(
