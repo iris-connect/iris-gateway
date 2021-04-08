@@ -48,6 +48,65 @@ info:
 
 paths:
 
+
+  ## Index Case Functions
+
+  /index-case-client/case:
+    post:
+      summary: Creates a new tracing case for index case data
+      requestBody:
+        required: true
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/IndexCaseClient'
+      responses:
+        '201':
+          $ref: '#/components/responses/IndexCaseDetails'
+      tags:
+        - "IrisClientFrontend"
+        - "IrisSidecarServer"
+
+  /index-case-client/case/{caseId}:
+    get:
+      summary: Get data for index case
+      parameters:
+        - $ref: '#/components/parameters/CaseId'
+      responses:
+        '200':
+          $ref: '#/components/responses/IndexCaseData'
+      tags:
+        - "IrisClientFrontend"
+        - "IrisSidecarServer"
+
+  /index-case-client/case/{caseId}/email:
+    post:
+      summary: Sends TAN/Nonce for case to specified e-mail address
+      parameters:
+        - $ref: '#/components/parameters/CaseId'
+      requestBody:
+        required: true
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/IndexCaseEmail'
+      responses:
+        '204':
+          description: Email sent to recipient
+      tags:
+        - "IrisClientFrontend"
+        - "IrisSidecarServer"
+
+  /index-case-client/cases:
+    get:
+      summary: Gets a list of all index cases
+      responses:
+        '200':
+          $ref: '#/components/responses/IndexCaseDetailsList'
+      tags:
+        - "IrisClientFrontend"
+        - "IrisSidecarServer"
+
   ## DataRequests and DataSubmission for Contacts and Guest Lists
 
 
@@ -346,6 +405,24 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/DataRequestDetails'
+    IndexCaseDetails:
+      description: Index case request details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IndexCaseDetails'
+    IndexCaseDetailsList:
+      description: List of index case request details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IndexCaseDetailsList'
+    IndexCaseData:
+      description: Data from app provider for index case
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ContactsAndEvents'
 
   parameters:
     Code:
@@ -363,6 +440,13 @@ components:
       description: 'The unique ID of a location in the context of the provider.'
       schema:
         type: string
+    CaseId:
+      name: caseId
+      in: path
+      required: true
+      description: 'The internal unique CaseId of a index case in format.'
+      schema:
+        type: string
 
   securitySchemes:
     ApiKeyAuth:
@@ -373,7 +457,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT  
-
 
   schemas:
     ExistingDataRequestClientWithLocationList:
@@ -444,6 +527,62 @@ components:
           type: string
         locationInformation:
           $ref: '#/components/schemas/LocationInformation'
+
+    IndexCaseClient:
+      description: 'Creates a new index case data request from FE - persistent data has to be refined. Starting with contact persons name.'
+      type: object
+      required:
+        - externalCaseId
+      properties:
+        externalCaseId:
+          description: 'External case identifier. E.g. CaseID in Sormas.'
+          type: string
+        externalCreationDate:
+          description: 'Date of case creation in external system.'
+          type: string
+          format: date-time
+        contactPerson:
+          description: 'Friendly name of the contact person'
+          type: string
+
+    IndexCaseDetailsList:
+      description: 'List of index cases'
+      type: array
+      items:
+        $ref: '#/components/schemas/IndexCaseDetails'
+
+    IndexCaseDetails:
+      description: 'Details for index case'
+      type: object
+      properties:
+        caseId:
+          description: 'Internal case identifier. Used in listings etc.'
+          type: string
+        status:
+          type: string
+          enum:
+            - DATA_REQUESTED
+            - DATA_RECEIVED
+            - CLOSED
+        externalCaseId:
+          description: 'External case identifier. E.g. CaseID in Sormas.'
+          type: string
+        externalCreationDate:
+          description: 'Date of case creation in external system.'
+          type: string
+          format: date-time
+        contactPerson:
+          description: 'Friendly name of the contact person'
+          type: string
+
+    IndexCaseEmail:
+      description: 'E-Mail address for sending tan/nonce'
+      type: object
+      properties:
+        email:
+          description: 'E-Mail address'
+          type: string
+          example: 'test@test.com'
 
     DataRequestClient:
       description: 'The data request that will be sent by the FE.'
