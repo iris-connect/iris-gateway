@@ -410,7 +410,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/IndexCaseDetails'
+            $ref: '#/components/schemas/IndexCaseExtendedDetails'
     IndexCaseDetailsList:
       description: List of index case request details
       content:
@@ -551,9 +551,18 @@ components:
       items:
         $ref: '#/components/schemas/IndexCaseDetails'
 
-    IndexCaseDetails:
+    IndexCaseExtendedDetails:
       description: 'Details for index case'
       type: object
+      allOf:
+        - $ref: '#/components/schemas/IndexCaseDetails'
+      properties:
+        nonce:
+          description: 'Nonce used in provider app to authorize data upload'
+          type: string
+
+    IndexCaseDetails:
+      description: 'Details for index case'
       properties:
         caseId:
           description: 'Internal case identifier. Used in listings etc.'
