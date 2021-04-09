@@ -12,19 +12,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package de.healthIMIS.iris.public_server.core;
+package de.healthIMIS.iris.public_server;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
 
-/**
- * For data initialization on application startup.
- *
- * @author Jens Kutzsche
- */
-@Component
-public interface DataInitializer {
+import java.util.UUID;
 
-	@Transactional
-	void initialize();
+public class DepartmentDataInitializer {
+
+	public static final DepartmentIdentifier DEPARTMENT_ID_1 = DepartmentIdentifier
+			.of(UUID.fromString("a04d2e43-3d1a-464e-9926-e190ccf2dd03"));
+	public static final DepartmentIdentifier DEPARTMENT_ID_2 = DepartmentIdentifier
+			.of(UUID.fromString("6afbbe9b-938c-46d7-93e4-7c9e1f737273"));
 }
