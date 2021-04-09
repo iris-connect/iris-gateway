@@ -14,10 +14,10 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_submission;
 
-import de.healthIMIS.iris.public_server.core.DataInitializer;
+import de.healthIMIS.iris.public_server.DataInitializer;
+import de.healthIMIS.iris.public_server.DepartmentDataInitializer;
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequestDataInitializer;
-import de.healthIMIS.iris.public_server.department.DepartmentDataInitializer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,11 +43,21 @@ class DataSubmissionDataInitializer implements DataInitializer {
 
 		var list = new ArrayList<DataSubmission>();
 
-		list.add(new DataSubmission(DataRequestDataInitializer.REQ_ID_1, DepartmentDataInitializer.DEPARTMENT_ID_1, "salt",
-				"key", "DATA OF CONTACTS", Feature.Contacts_Events));
+		list.add(
+				new DataSubmission(DataRequestDataInitializer.REQ_ID_1, DepartmentDataInitializer.DEPARTMENT_ID_1, "secret",
+						"keyReference", "DATA", Feature.Contacts_Events));
 
-		list.add(new DataSubmission(DataRequestDataInitializer.REQ_ID_1, DepartmentDataInitializer.DEPARTMENT_ID_1, "salt",
-				"key", "DATA OF EVENTS", Feature.Contacts_Events));
+		list.add(
+				new DataSubmission(DataRequestDataInitializer.REQ_ID_1, DepartmentDataInitializer.DEPARTMENT_ID_1, "secret",
+						"keyReference", "DATA", Feature.Contacts_Events));
+
+		list.add(
+				new DataSubmission(DataRequestDataInitializer.REQ_ID_2, DepartmentDataInitializer.DEPARTMENT_ID_1, "secret",
+						"keyReference", "DATA", Feature.Contacts_Events));
+
+		list.add(
+				new DataSubmission(DataRequestDataInitializer.REQ_ID_3, DepartmentDataInitializer.DEPARTMENT_ID_2, "secret",
+						"keyReference", "DATA", Feature.Contacts_Events));
 
 		submissions.saveAll(list);
 	}

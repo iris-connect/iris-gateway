@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package de.healthIMIS.iris.public_server.core;
+package de.healthIMIS.iris.public_server;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +26,9 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
-// @Component
+@Component
 @RequiredArgsConstructor
 @Slf4j
 @Profile({ "psql_compose_db", "h2_db" })
