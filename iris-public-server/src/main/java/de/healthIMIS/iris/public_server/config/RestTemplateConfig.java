@@ -26,5 +26,4 @@ public class RestTemplateConfig{
     var httpClient = HttpClientBuilder.create().setSSLSocketFactory(socketFactory).build();
     return new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
   }
-
 }

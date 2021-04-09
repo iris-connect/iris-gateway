@@ -50,7 +50,6 @@ public class IrisWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapt
 			}
 		});
 
-		// httpSecurity.antMatcher("/**").authorizeRequests().anyRequest().authenticated();
 		httpSecurity.antMatcher("/hd/**").csrf().disable().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().addFilter(filter).authorizeRequests().anyRequest()
 				.authenticated();
