@@ -178,7 +178,7 @@ $ cp sormas.env.example sormas.env <3>
 $ nano sormas.env <3>
 
 $ cd .. <3>
-$ ./mvnw spring-boot:build-image <4>
+$ ./mvnw spring-boot:build-image -pl '!iris-sormas-api-client' <4>
 $ docker-compose -f infrastructure/docker-compose_with-servers.yml up -d <5>
 ----
 <1> Switch to the SORMAS REST client.
