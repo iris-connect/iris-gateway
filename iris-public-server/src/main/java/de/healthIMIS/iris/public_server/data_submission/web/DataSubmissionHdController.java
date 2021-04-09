@@ -47,26 +47,6 @@ public class DataSubmissionHdController {
 
 	private final @NonNull DataSubmissionRepository submissions;
 
-	// @GetMapping("/hd/data-submissions")
-	// HttpEntity<List<DataSubmissionInternalOutputDto>> getDataSubmissions(@RequestParam("from") String fromStr) {
-	//
-	// var from = LocalDateTime.parse(fromStr);
-	//
-	// // Shall prevent that within one millisecond (accuracy of the Last-Modified header) after
-	// // loading additional records are added and thus records are transmitted twice or are forgotten.
-	// var to = LocalDateTime.now().withNano(0);
-	//
-	// var dataSubmissions = submissions.findAllByMetadataLastModifiedIsBetweenOrderByMetadataLastModified(from, to);
-	//
-	// var dtos = dataSubmissions.map(DataSubmissionInternalOutputDto::of).toList();
-	//
-	// log.debug(
-	// "Submission - GET from hd server: {}",
-	// dtos.stream().map(DataSubmissionInternalOutputDto::getRequestId).collect(Collectors.joining(", ")));
-	//
-	// return ResponseEntity.ok().lastModified(to.atZone(ZoneId.systemDefault())).body(dtos);
-	// }
-
 	@GetMapping("/hd/data-submissions")
 	HttpEntity<List<DataSubmissionInternalOutputDto>> getDataSubmissions(
 			@RequestParam("departmentId") DepartmentIdentifier departmentId, @RequestParam("from") String fromStr) {
@@ -87,16 +67,6 @@ public class DataSubmissionHdController {
 
 		return ResponseEntity.ok().lastModified(to.atZone(ZoneId.systemDefault())).body(dtos);
 	}
-
-	// @DeleteMapping("/hd/data-submissions")
-	// void deleteDataSubmissions(@RequestParam("from") String fromStr) {
-	//
-	// var from = LocalDateTime.parse(fromStr);
-	//
-	// var deleteCount = submissions.deleteAllByMetadataLastModifiedIsBefore(from);
-	//
-	// log.debug("Submission - {} submissions deleted", deleteCount);
-	// }
 
 	@DeleteMapping("/hd/data-submissions")
 	void deleteDataSubmissions(@RequestParam("departmentId") DepartmentIdentifier departmentId,

@@ -23,9 +23,6 @@ public interface IrisLinkRelations {
 
 	LinkRelation REQUEST_BY_CODE = LinkRelation.of("GetDataRequestByCode");
 
-	LinkRelation LOCATIONS_TO_SEARCH_INDEX = LinkRelation.of("PutLocationsToSearchIndex");
-	LinkRelation DELETE_LOCATIONS = LinkRelation.of("DeleteLocationsFromSearchIndex");
-
 	LinkRelation CONTACTS_EVENTS_SUBMISSION = LinkRelation.of("PostContactsEventsSubmission");
 	LinkRelation GUESTS_SUBMISSION = LinkRelation.of("PostGuestsSubmission");
 }

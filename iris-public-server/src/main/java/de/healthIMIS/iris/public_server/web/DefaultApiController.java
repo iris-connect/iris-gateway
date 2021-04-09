@@ -21,7 +21,6 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 import de.healthIMIS.iris.public_server.data_request.web.DataRequestApi;
 
 import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
@@ -42,9 +41,7 @@ public class DefaultApiController implements DefaultApi {
 	public RepresentationModel<?> rootGet() {
 
 		Links links = Links.of(MvcLink.of(on(DefaultApi.class).rootGet(), IanaLinkRelations.SELF))
-				.and(linkTo(methodOn(DataRequestApi.class).getDataRequestByCode(null)).withRel(REQUEST_BY_CODE))
-				.and(Link.of("/search-index/locations").withRel(LOCATIONS_TO_SEARCH_INDEX))
-				.and(Link.of("/search-index/locations/{id}").withRel(DELETE_LOCATIONS));
+				.and(linkTo(methodOn(DataRequestApi.class).getDataRequestByCode(null)).withRel(REQUEST_BY_CODE));
 
 		return HalModelBuilder.emptyHalModel().links(links).build();
 	}
