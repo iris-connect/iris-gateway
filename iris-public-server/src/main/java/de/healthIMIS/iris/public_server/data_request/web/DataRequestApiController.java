@@ -48,8 +48,11 @@ public class DataRequestApiController implements DataRequestApi {
 			@Parameter(in = ParameterIn.PATH, description = "The code of a data request sent by the health department.",
 					required = true, schema = @Schema()) @PathVariable("code") DataRequestIdentifier code) {
 
-		return requests.findById(code).map(this::log).map(representation::toRepresentation).map(ResponseEntity::ok)
-				.orElseGet(() -> ResponseEntity.notFound().build());
+		return requests.findById(code)
+				.map(this::log)
+				.map(representation::toRepresentation)
+				.map(ResponseEntity::ok)
+				.orElseGet(ResponseEntity.notFound()::build);
 	}
 
 	private DataRequest log(DataRequest request) {

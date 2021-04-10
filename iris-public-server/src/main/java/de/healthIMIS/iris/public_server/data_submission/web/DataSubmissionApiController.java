@@ -74,32 +74,42 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 		return handleRequest(code, body, body.getEncryptedData(), Feature.Guests);
 	}
 
-	private ResponseEntity<?> handleRequest(DataRequestIdentifier code, DataSubmissionDto body, String encryptedData,
+	private ResponseEntity<?> handleRequest(DataRequestIdentifier code, DataSubmissionDto dto, String encryptedData,
 			Feature feature) {
 
-		return createAndSaveDataSubmission(code, body, encryptedData, feature).map(representation::toRepresentation)
-				.map(it -> ResponseEntity.accepted().build()).orElseGet(ResponseEntity.notFound()::build);
+		return createAndSaveDataSubmission(code, dto, encryptedData, feature)
+				.map(it -> ResponseEntity.accepted().build())
+				.orElseGet(ResponseEntity.notFound()::build);
 	}
 
-	private Optional<DataRequest> createAndSaveDataSubmission(DataRequestIdentifier code, @NotNull DataSubmissionDto body,
+	private Optional<DataSubmission> createAndSaveDataSubmission(DataRequestIdentifier code,
+			@NotNull DataSubmissionDto dto,
 			String encryptedData, Feature feature) {
 
 		return requests.findById(code)
-				.filter(it -> matchesFeature(feature, it)).map(it -> {
-
-					var submission = new DataSubmission(it.getId(), it.getDepartmentId(), body.getSecret(), body.getKeyReference(),
-							encryptedData, feature);
-					submission = submissions.save(submission);
-
-					log.debug("Submission - POST from public + saved: {} (Type: {}; Department: {})",
-							submission.getRequestId().toString(), submission.getClass().getSimpleName(),
-							submission.getDepartmentId());
-
-					return it;
-				});
+				.filter(it -> requestMatchesFeature(it, feature))
+				.map(it -> createSubmission(it, dto, encryptedData, feature))
+				.map(submissions::save)
+				.map(this::log);
 	}
 
-	private boolean matchesFeature(Feature feature, DataRequest dataRequest) {
+	private boolean requestMatchesFeature(DataRequest dataRequest, Feature feature) {
 		return dataRequest.getFeatures().contains(feature);
+	}
+
+	private DataSubmission createSubmission(DataRequest it, DataSubmissionDto dto, String encryptedData,
+			Feature feature) {
+
+		return new DataSubmission(it.getId(), it.getDepartmentId(), dto.getSecret(),
+				dto.getKeyReference(), encryptedData, feature);
+	}
+
+	private DataSubmission log(DataSubmission submission) {
+
+		log.debug("Submission - POST from public + saved: {} (Type: {}; Department: {})",
+				submission.getRequestId().toString(), submission.getClass().getSimpleName(),
+				submission.getDepartmentId());
+
+		return submission;
 	}
 }
