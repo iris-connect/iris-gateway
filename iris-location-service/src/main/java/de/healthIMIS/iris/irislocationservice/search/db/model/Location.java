@@ -1,13 +1,10 @@
 package de.healthIMIS.iris.irislocationservice.search.db.model;
 
-import de.healthIMIS.iris.irislocationservice.dto.LocationContact;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
