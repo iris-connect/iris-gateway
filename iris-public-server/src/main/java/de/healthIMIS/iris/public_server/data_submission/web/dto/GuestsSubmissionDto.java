@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package de.healthIMIS.iris.public_server.data_submission.web;
+package de.healthIMIS.iris.public_server.data_submission.web.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -27,18 +27,18 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * ContactsSubmission
+ * GuestsSubmission
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen",
 		date = "2021-02-18T08:11:24.698Z[GMT]")
 
-public class ContactsEventsSubmissionDto extends DataSubmissionDto {
+public class GuestsSubmissionDto extends DataSubmissionDto {
 
 	@JsonProperty("encryptedData")
 	private String encryptedData = null;
 
-	public ContactsEventsSubmissionDto encryptedData(String encryptedData) {
+	public GuestsSubmissionDto encryptedData(String encryptedData) {
 		this.encryptedData = encryptedData;
 		return this;
 	}
@@ -69,8 +69,8 @@ public class ContactsEventsSubmissionDto extends DataSubmissionDto {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		ContactsEventsSubmissionDto contactsSubmission = (ContactsEventsSubmissionDto) o;
-		return Objects.equals(this.encryptedData, contactsSubmission.encryptedData) && super.equals(o);
+		GuestsSubmissionDto guestsSubmission = (GuestsSubmissionDto) o;
+		return Objects.equals(this.encryptedData, guestsSubmission.encryptedData) && super.equals(o);
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class ContactsEventsSubmissionDto extends DataSubmissionDto {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("class ContactsSubmission {\n");
+		sb.append("class GuestsSubmission {\n");
 		sb.append("    ").append(toIndentedString(super.toString())).append("\n");
 		sb.append("    encryptedData: ").append(toIndentedString(encryptedData)).append("\n");
 		sb.append("}");

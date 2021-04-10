@@ -50,8 +50,44 @@ class DataSubmissionHdControllerIntegrationTests {
 		assertThat(document.read("$..requestId", String[].class)).hasSize(1);
 
 		mvc.perform(
-				delete("/hd/data-submissions?departmentId={depId}&from={from}",
-						departmentId, LocalDateTime.now()))
+				delete("/hd/data-submissions/"+document.read("$[0].id")))
+				.andExpect(status().isOk());
+
+		response = getSubmissions(DepartmentDataInitializer.DEPARTMENT_ID_2, from);
+		document = JsonPath.parse(response);
+		assertThat(document.read("$..requestId", String[].class)).isEmpty();
+	}
+
+	@Test
+	void getAndDeleteNonDeletedSubmissions() throws Exception {
+
+		var departmentId = DepartmentDataInitializer.DEPARTMENT_ID_1;
+		var from = LocalDateTime.now().minusDays(1);
+
+		var response = getSubmissions(departmentId, from);
+		var document = JsonPath.parse(response);
+		assertThat(document.read("$..requestId", String[].class)).hasSize(3);
+
+		// Wait till suggestions will be recognized as requested but not deleted
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {}
+
+		mvc.perform(
+				delete("/hd/data-submissions/"+document.read("$[2].id")))
+				.andExpect(status().isOk());
+
+		response = getSubmissions(departmentId, from);
+		document = JsonPath.parse(response);
+		assertThat(document.read("$..requestId", String[].class)).hasSize(2);
+
+		// Wait till suggestions will be recognized as requested but not deleted
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {}
+
+		mvc.perform(
+				delete("/hd/data-submissions/"+document.read("$[1].id")))
 				.andExpect(status().isOk());
 
 		response = getSubmissions(departmentId, from);

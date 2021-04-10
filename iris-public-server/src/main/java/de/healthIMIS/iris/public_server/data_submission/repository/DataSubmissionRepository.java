@@ -12,12 +12,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package de.healthIMIS.iris.public_server.data_submission;
+package de.healthIMIS.iris.public_server.data_submission.repository;
 
-import de.healthIMIS.iris.public_server.data_submission.DataSubmission.DataSubmissionIdentifier;
+import de.healthIMIS.iris.public_server.data_submission.model.DataSubmission;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -27,19 +28,26 @@ import org.springframework.data.util.Streamable;
 /**
  * @author Jens Kutzsche
  */
-public interface DataSubmissionRepository extends CrudRepository<DataSubmission, DataSubmissionIdentifier> {
+public interface DataSubmissionRepository extends CrudRepository<DataSubmission, UUID> {
 
-	@Transactional
-	Streamable<DataSubmission> findAllByMetadataLastModifiedIsBetweenOrderByMetadataLastModified(LocalDateTime from,
-			LocalDateTime to);
+    @Transactional
+    Streamable<DataSubmission> findAllByLastModifiedDateIsBetweenOrderByLastModifiedDate(LocalDateTime from,
+                                                                                         LocalDateTime to);
 
-	@Transactional
-	int deleteAllByMetadataLastModifiedIsBefore(LocalDateTime lastSync);
+    @Transactional
+    int deleteAllByLastModifiedDateIsBefore(LocalDateTime lastSync);
 
-	@Transactional
-	Streamable<DataSubmission> findAllByDepartmentIdAndMetadataLastModifiedIsBetweenOrderByMetadataLastModified(
-			DepartmentIdentifier id, LocalDateTime from, LocalDateTime to);
+    @Transactional
+    Streamable<DataSubmission> findAllByDepartmentIdAndLastModifiedDateIsBetweenOrderByLastModifiedDate(
+            DepartmentIdentifier id, LocalDateTime from, LocalDateTime to);
 
-	@Transactional
-	int deleteAllByDepartmentIdAndMetadataLastModifiedIsBefore(DepartmentIdentifier id, LocalDateTime lastSync);
+    @Transactional
+    int deleteAllByDepartmentIdAndLastModifiedDateIsBefore(DepartmentIdentifier id, LocalDateTime lastSync);
+
+    @Transactional
+    Streamable<DataSubmission> findAllByDepartmentIdAndRequestedIsBeforeAndIdNot(
+            DepartmentIdentifier departmentIdentifier,
+            LocalDateTime searchDate,
+            UUID toDelete);
+
 }

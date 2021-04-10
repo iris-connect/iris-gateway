@@ -3,9 +3,11 @@
  * https://github.com/swagger-api/swagger-codegen
  * Do not edit the class manually.
  */
-package de.healthIMIS.iris.public_server.data_submission.web;
+package de.healthIMIS.iris.public_server.data_submission.web.controller;
 
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
+import de.healthIMIS.iris.public_server.data_submission.web.dto.ContactsEventsSubmissionDto;
+import de.healthIMIS.iris.public_server.data_submission.web.dto.GuestsSubmissionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;

@@ -18,6 +18,8 @@ import de.healthIMIS.iris.public_server.DataInitializer;
 import de.healthIMIS.iris.public_server.DepartmentDataInitializer;
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequestDataInitializer;
+import de.healthIMIS.iris.public_server.data_submission.model.DataSubmission;
+import de.healthIMIS.iris.public_server.data_submission.repository.DataSubmissionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

@@ -12,11 +12,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package de.healthIMIS.iris.public_server.data_submission;
+package de.healthIMIS.iris.public_server.data_submission.model;
 
-import de.healthIMIS.iris.public_server.core.Aggregate;
 import de.healthIMIS.iris.public_server.core.Feature;
-import de.healthIMIS.iris.public_server.core.Id;
+import de.healthIMIS.iris.public_server.core.entity.Auditable;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
 import lombok.AccessLevel;
@@ -25,17 +24,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * A data submission from an app of a citizen or event/location operator to the health department.
@@ -47,13 +42,30 @@ import javax.persistence.Table;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @Getter
 @Setter(AccessLevel.PACKAGE)
-public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.DataSubmissionIdentifier> {
+public class DataSubmission extends Auditable {
+
+	@Id
+	@Column(name = "submission_id", columnDefinition = "BINARY(16)")
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(
+			name = "UUID",
+			strategy = "org.hibernate.id.UUIDGenerator",
+			parameters = {
+					@org.hibernate.annotations.Parameter(
+							name = "uuid_gen_strategy_class",
+							value = "org.hibernate.id.uuid.CustomVersionFourStrategy"
+					)
+			}
+	)
+	private UUID id;
 
 	private DataRequestIdentifier requestId;
 	private DepartmentIdentifier departmentId;
 
 	private String secret;
 	private String keyReference;
+	@Setter
+	private LocalDateTime requested;
 	private @Lob String encryptedData;
 
 	@Enumerated(EnumType.STRING) @Column(nullable = false)
@@ -64,7 +76,6 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 
 		super();
 
-		this.id = DataSubmissionIdentifier.random();
 		this.requestId = requestId;
 		this.departmentId = departmentId;
 		this.secret = secret;
@@ -73,23 +84,4 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 		this.feature = feature;
 	}
 
-	@Embeddable
-	@EqualsAndHashCode
-	@RequiredArgsConstructor(staticName = "of")
-	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-	public static class DataSubmissionIdentifier implements Id, Serializable {
-
-		private static final long serialVersionUID = -8254677010830428881L;
-
-		final UUID submissionId;
-
-		static DataSubmissionIdentifier random() {
-			return DataSubmissionIdentifier.of(UUID.randomUUID());
-		}
-
-		@Override
-		public String toString() {
-			return submissionId.toString();
-		}
-	}
 }
