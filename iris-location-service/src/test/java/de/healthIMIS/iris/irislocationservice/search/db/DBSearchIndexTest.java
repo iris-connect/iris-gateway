@@ -1,22 +1,23 @@
 package de.healthIMIS.iris.irislocationservice.search.db;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.junit.jupiter.api.Assertions.*;
+
 import de.healthIMIS.iris.irislocationservice.dto.LocationAddress;
 import de.healthIMIS.iris.irislocationservice.dto.LocationContact;
 import de.healthIMIS.iris.irislocationservice.dto.LocationInformation;
 import de.healthIMIS.iris.irislocationservice.dto.LocationList;
 import de.healthIMIS.iris.irislocationservice.search.db.model.Location;
 import de.healthIMIS.iris.irislocationservice.search.db.model.LocationIdentifier;
+
+import java.util.Collections;
+
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Collections;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 class DBSearchIndexTest {

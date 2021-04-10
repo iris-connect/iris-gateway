@@ -5,8 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Embeddable;
 import java.io.Serializable;
+
+import javax.persistence.Embeddable;
 
 @Embeddable
 @AllArgsConstructor
@@ -15,8 +16,10 @@ import java.io.Serializable;
 @Setter
 public class LocationIdentifier implements Serializable {
 
-    private String providerId;
+	private static final long serialVersionUID = -1165343189152677433L;
 
-    private String locationId;
+	private String providerId;
+
+	private String locationId;
 
 }
