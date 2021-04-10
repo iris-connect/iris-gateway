@@ -83,9 +83,14 @@ public class DataSubmissionHdController {
 	static class DataSubmissionInternalOutputDto {
 
 		static DataSubmissionInternalOutputDto of(DataSubmission submission) {
-			return new DataSubmissionInternalOutputDto(submission.getId().toString(), submission.getRequestId().toString(),
-					submission.getDepartmentId().toString(), submission.getSecret(), submission.getKeyReference(),
-					submission.getEncryptedData(), submission.getFeature());
+			return new DataSubmissionInternalOutputDto(
+					submission.getId().toString(),
+					submission.getRequestId().toString(),
+					submission.getDepartmentId().toString(),
+					submission.getSecret(),
+					submission.getKeyReference(),
+					submission.getEncryptedData(),
+					submission.getFeature());
 		}
 
 		private final String id;
