@@ -59,7 +59,7 @@ class DataSubmissionHdControllerIntegrationTests {
 	}
 
 	@Test
-	void getAndDeleteNonDeletedSubmissions() throws Exception {
+	void getAndDeleteWithOrphanedSubmissions() throws Exception {
 
 		var departmentId = DepartmentDataInitializer.DEPARTMENT_ID_1;
 		var from = LocalDateTime.now().minusDays(1);
