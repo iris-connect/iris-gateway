@@ -51,7 +51,7 @@ paths:
 
   ## Index Case Functions
 
-  /index-case-client/case:
+  /data-request-client/case:
     post:
       summary: Creates a new tracing case for index case data
       requestBody:
@@ -59,50 +59,51 @@ paths:
         content:
           application/json; charset=UTF-8:
             schema:
-              $ref: '#/components/schemas/IndexCaseClient'
+              $ref: '#/components/schemas/DataRequestCaseClient'
       responses:
         '201':
-          $ref: '#/components/responses/IndexCaseDetails'
+          $ref: '#/components/responses/DataRequestCaseDetails'
       tags:
         - "IrisClientFrontend"
         - "IrisSidecarServer"
 
-  /index-case-client/case/{caseId}:
+  /data-request-client/case/{caseId}:
     get:
-      summary: Get data for index case
+      summary: Detail view for index data request with the data submissions already received
       parameters:
         - $ref: '#/components/parameters/CaseId'
       responses:
         '200':
-          $ref: '#/components/responses/IndexCaseData'
+          $ref: '#/components/responses/DataRequestCaseData'
       tags:
         - "IrisClientFrontend"
         - "IrisSidecarServer"
 
-  /index-case-client/case/{caseId}/email:
-    post:
-      summary: Sends TAN/Nonce for case to specified e-mail address
-      parameters:
-        - $ref: '#/components/parameters/CaseId'
-      requestBody:
-        required: true
-        content:
-          application/json; charset=UTF-8:
-            schema:
-              $ref: '#/components/schemas/IndexCaseEmail'
-      responses:
-        '204':
-          description: Email sent to recipient
-      tags:
-        - "IrisClientFrontend"
-        - "IrisSidecarServer"
+  ## When E-Mail service is implemented
+  #/data-request-client/case/{caseId}/email:
+  #  post:
+  #    summary: Sends TAN/Nonce for case to specified e-mail address (to come)
+  #    parameters:
+  #      - $ref: '#/components/parameters/CaseId'
+  #    requestBody:
+  #      required: true
+  #      content:
+  #        application/json; charset=UTF-8:
+  #          schema:
+  #            $ref: '#/components/schemas/IndexCaseEmail'
+  #    responses:
+  #      '204':
+  #        description: Email sent to recipient
+  #    tags:
+  #     - "IrisClientFrontend"
+  #      - "IrisSidecarServer"
 
-  /index-case-client/cases:
+  /data-request-client/cases:
     get:
-      summary: Gets a list of all index cases
+      summary: Fetches index cases
       responses:
         '200':
-          $ref: '#/components/responses/IndexCaseDetailsList'
+          $ref: '#/components/responses/DataRequestCaseDetailsList'
       tags:
         - "IrisClientFrontend"
         - "IrisSidecarServer"
@@ -405,24 +406,24 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/DataRequestDetails'
-    IndexCaseDetails:
+    DataRequestCaseDetails:
       description: Index case request details
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/IndexCaseExtendedDetails'
-    IndexCaseDetailsList:
+            $ref: '#/components/schemas/DataRequestCaseExtendedDetails'
+    DataRequestCaseDetailsList:
       description: List of index case request details
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/IndexCaseDetailsList'
-    IndexCaseData:
+    DataRequestCaseData:
       description: Data from app provider for index case
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ContactsAndEvents'
+            $ref: '#/components/schemas/DataRequestCaseData'
 
   parameters:
     Code:
@@ -471,7 +472,9 @@ components:
       allOf:
         - $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
         # for the MVP only a single submission
-        - $ref: '#/components/schemas/GuestList'
+      properties:
+        submissionData:
+          $ref: '#/components/schemas/GuestList'
     #        - type: object
     #          required:
     #            - submissions
@@ -528,7 +531,7 @@ components:
         locationInformation:
           $ref: '#/components/schemas/LocationInformation'
 
-    IndexCaseClient:
+    DataRequestCaseClient:
       description: 'Creates a new index case data request from FE - persistent data has to be refined. Starting with contact persons name.'
       type: object
       required:
@@ -537,32 +540,39 @@ components:
         externalCaseId:
           description: 'External case identifier. E.g. CaseID in Sormas.'
           type: string
-        externalCreationDate:
-          description: 'Date of case creation in external system.'
+        name:
+          description: 'Friendly name for given case'
+          type: string
+        comment:
+          description: 'Comments on given case'
+          type: string
+        start:
           type: string
           format: date-time
-        contactPerson:
-          description: 'Friendly name of the contact person'
+        end:
           type: string
+          format: date-time
 
     IndexCaseDetailsList:
       description: 'List of index cases'
       type: array
       items:
-        $ref: '#/components/schemas/IndexCaseDetails'
+        $ref: '#/components/schemas/DataRequestCaseDetails'
 
-    IndexCaseExtendedDetails:
+    DataRequestCaseExtendedDetails:
       description: 'Details for index case'
       type: object
       allOf:
-        - $ref: '#/components/schemas/IndexCaseDetails'
+        - $ref: '#/components/schemas/DataRequestCaseDetails'
       properties:
         nonce:
           description: 'Nonce used in provider app to authorize data upload'
           type: string
 
-    IndexCaseDetails:
+    DataRequestCaseDetails:
       description: 'Details for index case'
+      allOf:
+        - $ref: '#/components/schemas/DataRequestCaseClient'
       properties:
         caseId:
           description: 'Internal case identifier. Used in listings etc.'
@@ -573,25 +583,24 @@ components:
             - DATA_REQUESTED
             - DATA_RECEIVED
             - CLOSED
-        externalCaseId:
-          description: 'External case identifier. E.g. CaseID in Sormas.'
-          type: string
-        externalCreationDate:
-          description: 'Date of case creation in external system.'
-          type: string
-          format: date-time
-        contactPerson:
-          description: 'Friendly name of the contact person'
-          type: string
 
-    IndexCaseEmail:
-      description: 'E-Mail address for sending tan/nonce'
-      type: object
+    DataRequestCaseData:
+      allOf:
+        - $ref: '#/components/schemas/DataRequestCaseDetails'
       properties:
-        email:
-          description: 'E-Mail address'
-          type: string
-          example: 'test@test.com'
+        submissionData:
+          $ref: '#/components/schemas/ContactsAndEvents'
+
+
+    ## When email service is available
+    #DataRequestCaseEmail:
+    #  description: 'E-Mail address for sending tan/nonce'
+    #  type: object
+    #  properties:
+    #    email:
+    #      description: 'E-Mail address'
+    #      type: string
+    #      example: 'test@test.com'
 
     DataRequestClient:
       description: 'The data request that will be sent by the FE.'
