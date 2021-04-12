@@ -14,6 +14,7 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_submission.model;
 
+import de.healthIMIS.iris.public_server.core.Aggregate;
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.core.entity.Auditable;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
@@ -42,22 +43,7 @@ import javax.persistence.*;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @Getter
 @Setter(AccessLevel.PACKAGE)
-public class DataSubmission extends Auditable {
-
-	@Id
-	@Column(name = "submission_id", columnDefinition = "BINARY(16)")
-	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(
-			name = "UUID",
-			strategy = "org.hibernate.id.UUIDGenerator",
-			parameters = {
-					@org.hibernate.annotations.Parameter(
-							name = "uuid_gen_strategy_class",
-							value = "org.hibernate.id.uuid.CustomVersionFourStrategy"
-					)
-			}
-	)
-	private UUID id;
+public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.DataSubmissionIdentifier> {
 
 	private DataRequestIdentifier requestId;
 	private DepartmentIdentifier departmentId;
@@ -76,6 +62,7 @@ public class DataSubmission extends Auditable {
 
 		super();
 
+		this.id = DataSubmissionIdentifier.random();
 		this.requestId = requestId;
 		this.departmentId = departmentId;
 		this.secret = secret;
@@ -84,4 +71,26 @@ public class DataSubmission extends Auditable {
 		this.feature = feature;
 	}
 
+	@Embeddable
+	@EqualsAndHashCode
+	@RequiredArgsConstructor(staticName = "of")
+	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+	public static class DataSubmissionIdentifier implements de.healthIMIS.iris.public_server.core.Id, Serializable {
+
+		private static final long serialVersionUID = -8254677010830428881L;
+
+		final UUID submissionId;
+
+		static DataSubmissionIdentifier random() {
+			return DataSubmissionIdentifier.of(UUID.randomUUID());
+		}
+
+		@Override
+		public String toString() {
+			return submissionId.toString();
+		}
+	}
+
 }
+
+

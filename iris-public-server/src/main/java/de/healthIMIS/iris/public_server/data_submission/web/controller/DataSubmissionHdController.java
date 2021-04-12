@@ -24,7 +24,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -60,11 +59,7 @@ public class DataSubmissionHdController {
         var to = LocalDateTime.now().withNano(0);
 
         var dataSubmissions = submissions
-                .findAllByDepartmentIdAndLastModifiedDateIsBetweenOrderByLastModifiedDate(departmentId, from, to);
-
-        dataSubmissions.forEach(submission -> submission.setRequested(LocalDateTime.now()));
-
-        submissions.saveAll(dataSubmissions);
+                .findAllByDepartmentIdAndMetadataLastModifiedIsBetweenOrderByMetadataLastModified(departmentId, from, to);
 
         var dtos = dataSubmissions.map(DataSubmissionInternalOutputDto::of).toList();
 
@@ -77,7 +72,7 @@ public class DataSubmissionHdController {
     @DeleteMapping("/hd/data-submissions/{dataSubmissionId}")
     void deleteDataSubmissions(@PathVariable("dataSubmissionId") UUID dataSubmissionId) {
 
-        var deleteCount = dataSubmissionService.deleteDataSubmissionById(dataSubmissionId);
+        var deleteCount = dataSubmissionService.deleteDataSubmissionById(DataSubmission.DataSubmissionIdentifier.of(dataSubmissionId));
 
         log.debug("Submission - {} submissions deleted", deleteCount);
     }

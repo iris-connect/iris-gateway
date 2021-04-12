@@ -28,26 +28,25 @@ import org.springframework.data.util.Streamable;
 /**
  * @author Jens Kutzsche
  */
-public interface DataSubmissionRepository extends CrudRepository<DataSubmission, UUID> {
+public interface DataSubmissionRepository extends CrudRepository<DataSubmission, DataSubmission.DataSubmissionIdentifier> {
 
     @Transactional
-    Streamable<DataSubmission> findAllByLastModifiedDateIsBetweenOrderByLastModifiedDate(LocalDateTime from,
-                                                                                         LocalDateTime to);
+    Streamable<DataSubmission> findAllByMetadataLastModifiedIsBetweenOrderByMetadataLastModified(LocalDateTime from,
+                                                                                                 LocalDateTime to);
 
     @Transactional
-    int deleteAllByLastModifiedDateIsBefore(LocalDateTime lastSync);
+    int deleteAllByMetadataLastModifiedIsBefore(LocalDateTime lastSync);
 
     @Transactional
-    Streamable<DataSubmission> findAllByDepartmentIdAndLastModifiedDateIsBetweenOrderByLastModifiedDate(
+    Streamable<DataSubmission> findAllByDepartmentIdAndMetadataLastModifiedIsBetweenOrderByMetadataLastModified(
             DepartmentIdentifier id, LocalDateTime from, LocalDateTime to);
 
     @Transactional
-    int deleteAllByDepartmentIdAndLastModifiedDateIsBefore(DepartmentIdentifier id, LocalDateTime lastSync);
+    int deleteAllByDepartmentIdAndMetadataLastModifiedIsBefore(DepartmentIdentifier id, LocalDateTime lastSync);
 
     @Transactional
-    Streamable<DataSubmission> findAllByDepartmentIdAndRequestedIsBeforeAndIdNot(
+    Streamable<DataSubmission> findAllByDepartmentIdAndRequestedIsBefore(
             DepartmentIdentifier departmentIdentifier,
-            LocalDateTime searchDate,
-            UUID toDelete);
+            LocalDateTime searchDate);
 
 }
