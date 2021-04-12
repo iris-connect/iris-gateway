@@ -14,14 +14,29 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server;
 
+import de.healthIMIS.iris.public_server.department.Department;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
+import de.healthIMIS.iris.public_server.department.DepartmentRepository;
+import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
 
-public class DepartmentDataInitializer {
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class DepartmentDataInitializer implements DataInitializer {
 
 	public static final DepartmentIdentifier DEPARTMENT_ID_1 = DepartmentIdentifier
 			.of(UUID.fromString("a04d2e43-3d1a-464e-9926-e190ccf2dd03"));
 	public static final DepartmentIdentifier DEPARTMENT_ID_2 = DepartmentIdentifier
 			.of(UUID.fromString("6afbbe9b-938c-46d7-93e4-7c9e1f737273"));
+
+	private final DepartmentRepository departments;
+
+	@Override
+	public void initialize() {
+
+		departments.save(new Department(DEPARTMENT_ID_1, "Gesundheitsamt Meißen", "keyRef-XYZ", "key of HD"));
+	}
 }

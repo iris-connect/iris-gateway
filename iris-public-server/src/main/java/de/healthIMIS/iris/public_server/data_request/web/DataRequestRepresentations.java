@@ -20,7 +20,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
 import de.healthIMIS.iris.public_server.data_submission.web.DataSubmissionApi;
-import de.healthIMIS.iris.public_server.department.Department;
 import de.healthIMIS.iris.public_server.department.DepartmentRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -42,12 +41,15 @@ public class DataRequestRepresentations {
 
 	public EntityModel<DataRequestDto> toRepresentation(DataRequest dataRequest) {
 
-		var request = new DataRequestDto().start(dataRequest.getRequestStart()).end(dataRequest.getRequestEnd());
+		var request = new DataRequestDto()
+				.start(dataRequest.getRequestStart())
+				.end(dataRequest.getRequestEnd())
+				.requestDetails(dataRequest.getRequestDetails());
 
 		var departmentOpt = departments.findById(dataRequest.getDepartmentId());
 		if (departmentOpt.isPresent()) {
 
-			Department department = departmentOpt.get();
+			var department = departmentOpt.get();
 
 			request = request.healthDepartment(department.getName());
 			request = request.keyOfHealthDepartment(department.getPublicKey());
@@ -56,7 +58,7 @@ public class DataRequestRepresentations {
 
 		var model = EntityModel.of(request);
 
-		Links links = Links
+		var links = Links
 				.of(linkTo(methodOn(DataRequestApiController.class).getDataRequestByCode(dataRequest.getId())).withSelfRel())
 				.andIf(dataRequest.getFeatures().contains(Feature.Contacts_Events),
 						linkTo(methodOn(DataSubmissionApi.class).postContactsEventsSubmission(dataRequest.getId(), null))
