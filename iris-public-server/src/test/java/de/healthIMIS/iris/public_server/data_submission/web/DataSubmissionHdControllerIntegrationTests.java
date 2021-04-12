@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import de.healthIMIS.iris.public_server.DataInitializer;
 import de.healthIMIS.iris.public_server.DepartmentDataInitializer;
 import de.healthIMIS.iris.public_server.IrisWebIntegrationTest;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
@@ -11,12 +12,16 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.jayway.jsonpath.JsonPath;
@@ -26,6 +31,10 @@ import com.jayway.jsonpath.JsonPath;
 class DataSubmissionHdControllerIntegrationTests {
 
 	private final MockMvc mvc;
+
+	@Autowired
+	@Qualifier("DataSubmissionDataInitializer")
+	private DataInitializer dataInitializer;
 
 	/**
 	 * Prevents the tests from running too quickly after the data is created and thus ignoring the data.
@@ -62,6 +71,9 @@ class DataSubmissionHdControllerIntegrationTests {
 
 	@Test
 	void getAndDeleteWithOrphanedSubmissions() throws Exception {
+
+		dataInitializer.initialize();
+		waitASec();
 
 		var departmentId = DepartmentDataInitializer.DEPARTMENT_ID_1;
 		var from = LocalDateTime.now().minusDays(1);

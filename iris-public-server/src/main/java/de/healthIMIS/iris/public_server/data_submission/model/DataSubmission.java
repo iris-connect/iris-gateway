@@ -16,7 +16,7 @@ package de.healthIMIS.iris.public_server.data_submission.model;
 
 import de.healthIMIS.iris.public_server.core.Aggregate;
 import de.healthIMIS.iris.public_server.core.Feature;
-import de.healthIMIS.iris.public_server.core.entity.Auditable;
+import de.healthIMIS.iris.public_server.core.Id;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
 import lombok.AccessLevel;
@@ -25,17 +25,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 
 /**
  * A data submission from an app of a citizen or event/location operator to the health department.
- * 
+ *
  * @author Jens Kutzsche
  */
 @Entity
@@ -50,15 +56,16 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 
 	private String secret;
 	private String keyReference;
-	@Setter
-	private LocalDateTime requested;
 	private @Lob String encryptedData;
+
+	@Setter
+	private LocalDateTime requestedAt;
 
 	@Enumerated(EnumType.STRING) @Column(nullable = false)
 	private Feature feature;
 
 	public DataSubmission(DataRequestIdentifier requestId, DepartmentIdentifier departmentId, String secret,
-			String keyReference, String encryptedData, Feature feature) {
+						  String keyReference, String encryptedData, Feature feature) {
 
 		super();
 
@@ -75,7 +82,7 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 	@EqualsAndHashCode
 	@RequiredArgsConstructor(staticName = "of")
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-	public static class DataSubmissionIdentifier implements de.healthIMIS.iris.public_server.core.Id, Serializable {
+	public static class DataSubmissionIdentifier implements Id, Serializable {
 
 		private static final long serialVersionUID = -8254677010830428881L;
 
@@ -90,7 +97,4 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 			return submissionId.toString();
 		}
 	}
-
 }
-
-

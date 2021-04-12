@@ -51,15 +51,10 @@ public class DataSubmissionHdController {
     @GetMapping("/hd/data-submissions")
     HttpEntity<List<DataSubmissionInternalOutputDto>> getDataSubmissions(
             @RequestParam("departmentId") DepartmentIdentifier departmentId, @RequestParam("from") String fromStr) {
-
+        var to = LocalDateTime.now().withNano(0);
         var from = LocalDateTime.parse(fromStr);
 
-        // Shall prevent that within one millisecond (accuracy of the Last-Modified header) after
-        // loading additional records are added and thus records are transmitted twice or are forgotten.
-        var to = LocalDateTime.now().withNano(0);
-
-        var dataSubmissions = submissions
-                .findAllByDepartmentIdAndMetadataLastModifiedIsBetweenOrderByMetadataLastModified(departmentId, from, to);
+        var dataSubmissions = dataSubmissionService.getSubmissionsForDepartmentFrom(departmentId, from);
 
         var dtos = dataSubmissions.map(DataSubmissionInternalOutputDto::of).toList();
 

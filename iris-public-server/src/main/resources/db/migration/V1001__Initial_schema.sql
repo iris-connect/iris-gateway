@@ -30,7 +30,7 @@ CREATE TABLE data_submission (
 	encrypted_data text NULL,
 	created timestamp NOT NULL,
 	last_modified timestamp NOT NULL,
-	requested timestamp NULL,
+	requested_at timestamp NULL,
 	CONSTRAINT submission_pkey PRIMARY KEY (submission_id)
 );
 
