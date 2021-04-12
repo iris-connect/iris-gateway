@@ -60,7 +60,7 @@ public class DataRequestDataInitializer implements DataInitializer {
 				null, EnumSet.of(Feature.Contacts_Events), Status.DATA_REQUESTED));
 
 		list.add(new DataRequest(REQ_ID_2, DepartmentDataInitializer.DEPARTMENT_ID_1, Instant.now().minus(4, DAYS),
-				Instant.now().minus(2, DAYS), null, EnumSet.of(Feature.Contacts_Events), Status.DATA_REQUESTED));
+				Instant.now().minus(2, DAYS), null, EnumSet.of(Feature.Guests), Status.DATA_REQUESTED));
 
 		list.add(new DataRequest(REQ_ID_3, DepartmentDataInitializer.DEPARTMENT_ID_2, Instant.now().minus(4, DAYS),
 				Instant.now().minus(2, DAYS), null, EnumSet.of(Feature.Contacts_Events), Status.DATA_REQUESTED));

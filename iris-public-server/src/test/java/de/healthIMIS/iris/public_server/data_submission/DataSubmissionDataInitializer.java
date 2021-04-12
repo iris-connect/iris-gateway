@@ -53,7 +53,7 @@ class DataSubmissionDataInitializer implements DataInitializer {
 
 		list.add(
 				new DataSubmission(DataRequestDataInitializer.REQ_ID_2, DepartmentDataInitializer.DEPARTMENT_ID_1, "secret",
-						"keyReference", "DATA", Feature.Contacts_Events));
+						"keyReference", "DATA", Feature.Guests));
 
 		list.add(
 				new DataSubmission(DataRequestDataInitializer.REQ_ID_3, DepartmentDataInitializer.DEPARTMENT_ID_2, "secret",

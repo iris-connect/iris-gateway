@@ -96,10 +96,10 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 		return dataRequest.getFeatures().contains(feature);
 	}
 
-	private DataSubmission createSubmission(DataRequest it, DataSubmissionDto dto, String encryptedData,
+	private DataSubmission createSubmission(DataRequest request, DataSubmissionDto dto, String encryptedData,
 			Feature feature) {
 
-		return new DataSubmission(it.getId(), it.getDepartmentId(), dto.getSecret(),
+		return new DataSubmission(request.getId(), request.getDepartmentId(), dto.getSecret(),
 				dto.getKeyReference(), encryptedData, feature);
 	}
 
