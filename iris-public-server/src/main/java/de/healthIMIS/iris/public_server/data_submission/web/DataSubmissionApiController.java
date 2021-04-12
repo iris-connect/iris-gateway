@@ -24,11 +24,10 @@ import de.healthIMIS.iris.public_server.data_submission.DataSubmissionRepository
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.vavr.control.Option;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -79,15 +78,15 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 
 		return createAndSaveDataSubmission(code, dto, encryptedData, feature)
 				.map(it -> ResponseEntity.accepted().build())
-				.orElseGet(ResponseEntity.notFound()::build);
+				.getOrElse(ResponseEntity.notFound()::build);
 	}
 
-	private Optional<DataSubmission> createAndSaveDataSubmission(DataRequestIdentifier code,
-			@NotNull DataSubmissionDto dto,
+	private Option<DataSubmission> createAndSaveDataSubmission(DataRequestIdentifier code, @NotNull DataSubmissionDto dto,
 			String encryptedData, Feature feature) {
 
-		return requests.findById(code)
+		return Option.ofOptional(requests.findById(code))
 				.filter(it -> requestMatchesFeature(it, feature))
+				.onEmpty(() -> logMissingRequest(code, feature))
 				.map(it -> createSubmission(it, dto, encryptedData, feature))
 				.map(submissions::save)
 				.map(this::log);
@@ -107,9 +106,12 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 	private DataSubmission log(DataSubmission submission) {
 
 		log.debug("Submission - POST from public + saved: {} (Type: {}; Department: {})",
-				submission.getRequestId().toString(), submission.getClass().getSimpleName(),
-				submission.getDepartmentId());
+				submission.getRequestId().toString(), submission.getFeature().name(), submission.getDepartmentId());
 
 		return submission;
+	}
+
+	private void logMissingRequest(DataRequestIdentifier code, Feature feature) {
+		log.warn("Submission - POST from public not valid: {} (Type: {}", code, feature.name());
 	}
 }
