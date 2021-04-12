@@ -39,9 +39,9 @@ public interface DataSubmissionApi {
 
 			@ApiResponse(responseCode = "422",
 					description = "The transferred entity is not expected for the data request.") })
-	@RequestMapping(value = "/data-submissions/{code}/contacts_events", produces = { "application/hal+json" },
-			consumes = { "application/json; charset=UTF-8" }, method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(value = "/data-submissions/{code}/contacts_events", consumes = { "application/json; charset=UTF-8" },
+			method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	ResponseEntity<?> postContactsEventsSubmission(
 			@Parameter(in = ParameterIn.PATH, description = "The code of a data request sent by the health department.",
 					required = true, schema = @Schema()) @PathVariable("code") DataRequestIdentifier code,
@@ -60,9 +60,9 @@ public interface DataSubmissionApi {
 
 			@ApiResponse(responseCode = "422",
 					description = "The transferred entity is not expected for the data request.") })
-	@RequestMapping(value = "/data-submissions/{code}/guests", produces = { "application/hal+json" },
-			consumes = { "application/json; charset=UTF-8" }, method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(value = "/data-submissions/{code}/guests", consumes = { "application/json; charset=UTF-8" },
+			method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	ResponseEntity<?> postGuestsSubmission(
 			@Parameter(in = ParameterIn.PATH, description = "The code of a data request sent by the health department.",
 					required = true, schema = @Schema()) @PathVariable("code") DataRequestIdentifier code,

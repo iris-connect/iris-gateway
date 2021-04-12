@@ -60,7 +60,7 @@ class DataSubmissionHdControllerIntegrationTests {
 	}
 
 	@Test
-	void getSubmissionsNoneForNewerThenNow() throws Exception {
+	void getSubmissions_noneForNewerThenNow() throws Exception {
 
 		var response = getSubmissions(DepartmentDataInitializer.DEPARTMENT_ID_1, LocalDateTime.now());
 
@@ -70,7 +70,7 @@ class DataSubmissionHdControllerIntegrationTests {
 	}
 
 	@Test
-	void getSubmissionsNoneForUnknownDepartment() throws Exception {
+	void getSubmissions_noneForUnknownDepartment() throws Exception {
 
 		var response = getSubmissions(DepartmentIdentifier.of(UUID.randomUUID()), LocalDateTime.now().minusDays(1));
 
