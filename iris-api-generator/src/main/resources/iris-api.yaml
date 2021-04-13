@@ -536,6 +536,7 @@ components:
       type: object
       required:
         - externalCaseId
+        - start
       properties:
         externalCaseId:
           description: 'External case identifier. E.g. CaseID in Sormas.'
@@ -586,7 +587,7 @@ components:
 
     DataRequestCaseData:
       allOf:
-        - $ref: '#/components/schemas/DataRequestCaseDetails'
+        - $ref: '#/components/schemas/DataRequestCaseExtendedDetails'
       properties:
         submissionData:
           $ref: '#/components/schemas/ContactsAndEvents'
