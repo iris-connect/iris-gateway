@@ -14,15 +14,12 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_submission.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.util.Objects;
-
-import javax.validation.constraints.NotNull;
-
 import org.springframework.validation.annotation.Validated;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 /**
  * Basic data type of a data submission which contains the unencrypted metadata needed for processing.

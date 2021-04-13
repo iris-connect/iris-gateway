@@ -23,16 +23,15 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller of the internal end-points for health department site to exchange data submissions.
@@ -51,8 +50,8 @@ public class DataSubmissionHdController {
     @GetMapping("/hd/data-submissions")
     HttpEntity<List<DataSubmissionInternalOutputDto>> getDataSubmissions(
             @RequestParam("departmentId") DepartmentIdentifier departmentId, @RequestParam("from") String fromStr) {
-        var to = LocalDateTime.now().withNano(0);
-        var from = LocalDateTime.parse(fromStr);
+        var to = Instant.now();
+        var from = Instant.parse(fromStr);
 
         var dataSubmissions = dataSubmissionService.getSubmissionsForDepartmentFrom(departmentId, from);
 

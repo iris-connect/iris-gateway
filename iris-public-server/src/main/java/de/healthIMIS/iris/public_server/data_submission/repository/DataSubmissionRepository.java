@@ -17,19 +17,12 @@ package de.healthIMIS.iris.public_server.data_submission.repository;
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
 import de.healthIMIS.iris.public_server.data_submission.model.DataSubmission;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.UUID;
-
-import javax.transaction.Transactional;
-import javax.xml.crypto.Data;
-
-import org.apache.tomcat.jni.Local;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.util.Streamable;
+
+import javax.transaction.Transactional;
+import java.time.Instant;
+import java.time.ZonedDateTime;
 
 /**
  * @author Jens Kutzsche
@@ -40,11 +33,11 @@ public interface DataSubmissionRepository extends CrudRepository<DataSubmission,
     Streamable<DataSubmission> findAllByMetadataLastModifiedIsBetweenOrderByMetadataLastModified(ZonedDateTime from,
                                                                                                  ZonedDateTime to);
     @Transactional
-    int deleteAllByMetadataLastModifiedIsBefore(LocalDateTime lastSync);
+    int deleteAllByMetadataLastModifiedIsBefore(Instant lastSync);
 
     @Transactional
     Streamable<DataSubmission> findAllByDepartmentIdAndMetadataLastModifiedIsAfter(
-            DepartmentIdentifier id, LocalDateTime from);
+            DepartmentIdentifier id, Instant from);
 
     @Transactional
     int deleteAllByDepartmentIdAndMetadataLastModifiedIsBefore(DepartmentIdentifier id, ZonedDateTime lastSync);
@@ -52,10 +45,10 @@ public interface DataSubmissionRepository extends CrudRepository<DataSubmission,
     @Transactional
     Streamable<DataSubmission> findAllByDepartmentIdAndRequestedAtIsBefore(
             DepartmentIdentifier departmentIdentifier,
-            LocalDateTime searchDate);
+            Instant searchDate);
 
     @Transactional
-    Streamable<DataSubmission> findAllByRequestedAtBefore(LocalDateTime time);
+    Streamable<DataSubmission> findAllByRequestedAtBefore(Instant time);
 
     @Transactional
     Streamable<DataSubmission> findAllByDepartmentIdAndRequestId(DepartmentIdentifier departmentId1, DataRequest.DataRequestIdentifier reqId1);

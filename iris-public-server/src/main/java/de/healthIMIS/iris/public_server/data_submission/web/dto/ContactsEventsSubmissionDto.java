@@ -14,17 +14,14 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_submission.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.util.Objects;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-import org.springframework.validation.annotation.Validated;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 
 /**
  * ContactsSubmission
