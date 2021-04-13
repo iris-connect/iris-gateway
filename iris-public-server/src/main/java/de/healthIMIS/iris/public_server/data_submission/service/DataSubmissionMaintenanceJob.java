@@ -16,7 +16,7 @@ public class DataSubmissionMaintenanceJob {
     @Autowired
     DataSubmissionService dataSubmissionService;
 
-    @Scheduled(fixedDelay = 15000)
+    @Scheduled(fixedDelayString = "${iris.maintenance-job.interval}")
     void run() {
 
         log.info("Maintenance Job running...");
