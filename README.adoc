@@ -169,24 +169,22 @@ You can build Docker images for the services and run this with Docker.
 
 [source, bash]
 ----
-$ cd iris/iris-sormas-api-client <1>
-$ ./mvnw install <2>
-$ cd ../infrastructure
-$ cp sormas.env.example sormas.env <3>
-$ nano sormas.env <3>
+$ # preparation
+$ cd iris/infrastructure <1>
+$ cp iris-sormas.env.example iris-sormas.env <2>
+$ nano iris-sormas.env <2>
 
 $ cd .. <3>
-$ ./mvnw spring-boot:build-image <4>
-$ docker-compose -f infrastructure/docker-compose_with-servers.yml up -d <5>
+$ ./mvnw package spring-boot:build-image -DskipTests <4>
+$ docker-compose -f infrastructure/docker-compose-servers.yml up -d <5>
 ----
-<1> Switch to the SORMAS REST client.
-<2> Build this library and put it into the maven repository. This does not have to be done over and over again, but only initially once and for the rare changes to the library.
-<3> Copy the example of the sormas.env and edit this. Insert the username and password of the IRIS user in your SORMAS test instance.
-<4> Switch back to the root directory of the IRIS project.
-<5> Build the images for both services.
-<6> Run the Postgres db, the pgAdmin, the public server and the client service with Docker-Compose.
-    * Postgres DB and pgAdmin <<postgres,as above>>
-    * Public server uses port *8843* by default
+<1> Switch to the infrastructure directory of the iris workspace.
+<2> Copy the example of the iris-sormas.env and edit this. Insert the username and password of the IRIS user in your SORMAS test instance.
+<3> Switch back to the root directory of the IRIS workspace.
+<4> Build the libraries and the images of all services.
+<5> Run the Postgres db, the pgAdmin, the public server and the client service with Docker-Compose.
+    * Postgres DB <<postgres,as above>>
+    * Public server uses port *8443* by default
 
 === Libraries
 
