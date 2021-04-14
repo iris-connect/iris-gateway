@@ -31,6 +31,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 
 @IrisWebIntegrationTest
 @RequiredArgsConstructor
@@ -89,11 +90,21 @@ class DataSubmissionApiControllerIntegrationTests {
 	@Test
 	void postSubmission_wrongFeature() throws Exception {
 
-		performPostSubmission(createContactSubmission(), "/data-submissions/{code}/contacts_events",
-				REQ_ID_2, status().isNotFound());
+		var result = performPostSubmission(createContactSubmission(), "/data-submissions/{code}/contacts_events",
+				REQ_ID_2, status().isBadRequest());
 
-		performPostSubmission(createGuestSubmission(), "/data-submissions/{code}/guests",
-				REQ_ID_3, status().isNotFound());
+		var response = result.andReturn().getResponse().getContentAsString();
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$", String.class)).isNotNull();
+
+		result = performPostSubmission(createGuestSubmission(), "/data-submissions/{code}/guests",
+				REQ_ID_3, status().isBadRequest());
+
+		response = result.andReturn().getResponse().getContentAsString();
+		document = JsonPath.parse(response);
+
+		assertThat(document.read("$", String.class)).isNotNull();
 	}
 
 	@Test
@@ -110,6 +121,18 @@ class DataSubmissionApiControllerIntegrationTests {
 		fillDto(dto);
 		performPostSubmission(dto, "/data-submissions/{code}/guests",
 				REQ_ID_2, status().isBadRequest());
+	}
+
+	@Test
+	void postSubmission_closedReq() throws Exception {
+
+		var result = performPostSubmission(createContactSubmission(), "/data-submissions/{code}/contacts_events",
+				REQ_ID_4, status().isBadRequest());
+
+		var response = result.andReturn().getResponse().getContentAsString();
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$", String.class)).isNotNull();
 	}
 
 	private ContactsEventsSubmissionDto createContactSubmission() {

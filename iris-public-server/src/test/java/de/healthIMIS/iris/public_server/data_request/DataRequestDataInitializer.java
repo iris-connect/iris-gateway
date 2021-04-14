@@ -42,6 +42,8 @@ public class DataRequestDataInitializer implements DataInitializer {
 			.of(UUID.fromString("2707fd28-9b4f-4140-b80e-d56d9aad831f"));
 	public static final DataRequestIdentifier REQ_ID_3 = DataRequestIdentifier
 			.of(UUID.fromString("3907e730-af89-4944-8e75-fbe6ba60c904"));
+	public static final DataRequestIdentifier REQ_ID_4 = DataRequestIdentifier
+			.of(UUID.fromString("c3f042a6-1da0-468e-b607-ffabfaa2dc2e"));
 
 	private final DataRequestRepository requests;
 
@@ -64,6 +66,9 @@ public class DataRequestDataInitializer implements DataInitializer {
 
 		list.add(new DataRequest(REQ_ID_3, DepartmentDataInitializer.DEPARTMENT_ID_2, Instant.now().minus(4, DAYS),
 				Instant.now().minus(2, DAYS), null, EnumSet.of(Feature.Contacts_Events), Status.DATA_REQUESTED));
+
+		list.add(new DataRequest(REQ_ID_4, DepartmentDataInitializer.DEPARTMENT_ID_2, Instant.now().minus(4, DAYS),
+				Instant.now().minus(2, DAYS), null, EnumSet.of(Feature.Contacts_Events), Status.CLOSED));
 
 		requests.saveAll(list);
 	}

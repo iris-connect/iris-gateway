@@ -160,6 +160,6 @@ public class DataRequestHdController {
 		private String requestDetails;
 
 		private Set<Feature> features;
-		private Status status; // TODO check probably not required
+		private Status status;
 	}
 }
