@@ -14,12 +14,15 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_request.web;
 
+import static java.util.function.Predicate.*;
+
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
 import de.healthIMIS.iris.public_server.data_request.DataRequestRepository;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.vavr.control.Option;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,11 +51,14 @@ public class DataRequestApiController implements DataRequestApi {
 			@Parameter(in = ParameterIn.PATH, description = "The code of a data request sent by the health department.",
 					required = true, schema = @Schema()) @PathVariable("code") DataRequestIdentifier code) {
 
-		return requests.findById(code)
+		return Option.ofOptional(requests.findById(code))
+				.toEither(ResponseEntity.notFound()::build)
+				.filterOrElse(not(DataRequest::isClosed),
+						it -> ResponseEntity.badRequest()
+								.body("Request has already been closed, please contact your health department."))
 				.map(this::log)
 				.map(representation::toRepresentation)
-				.map(ResponseEntity::ok)
-				.orElseGet(ResponseEntity.notFound()::build);
+				.fold(it -> it, ResponseEntity::ok);
 	}
 
 	private DataRequest log(DataRequest request) {

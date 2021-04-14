@@ -14,6 +14,8 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_submission.web;
 
+import static java.util.function.Predicate.*;
+
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
@@ -76,20 +78,25 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 	private ResponseEntity<?> handleRequest(DataRequestIdentifier code, DataSubmissionDto dto, String encryptedData,
 			Feature feature) {
 
-		return createAndSaveDataSubmission(code, dto, encryptedData, feature)
-				.map(it -> ResponseEntity.accepted().build())
-				.getOrElse(ResponseEntity.notFound()::build);
+		return Option.ofOptional(requests.findById(code))
+				.toEither(ResponseEntity.notFound()::<Object> build)
+				.filterOrElse(not(DataRequest::isClosed),
+						it -> ResponseEntity.badRequest()
+								.body("Request has already been closed, please contact your health department."))
+				.filterOrElse(it -> requestMatchesFeature(it, feature),
+						it -> ResponseEntity.badRequest()
+								.body("Your app is not providing the requested data. Please contact your health department."))
+				.map(it -> createAndSaveDataSubmission(it, dto, encryptedData, feature))
+				.peekLeft(it -> logWrongRequest(code, feature))
+				.peek(this::log)
+				.fold(it -> it, it -> ResponseEntity.accepted().build());
 	}
 
-	private Option<DataSubmission> createAndSaveDataSubmission(DataRequestIdentifier code, @NotNull DataSubmissionDto dto,
+	private DataSubmission createAndSaveDataSubmission(DataRequest dataRequest, @NotNull DataSubmissionDto dto,
 			String encryptedData, Feature feature) {
 
-		return Option.ofOptional(requests.findById(code))
-				.filter(it -> requestMatchesFeature(it, feature))
-				.onEmpty(() -> logMissingRequest(code, feature))
-				.map(it -> createSubmission(it, dto, encryptedData, feature))
-				.map(submissions::save)
-				.map(this::log);
+		var submission = createSubmission(dataRequest, dto, encryptedData, feature);
+		return submissions.save(submission);
 	}
 
 	private boolean requestMatchesFeature(DataRequest dataRequest, Feature feature) {
@@ -111,7 +118,7 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 		return submission;
 	}
 
-	private void logMissingRequest(DataRequestIdentifier code, Feature feature) {
+	private void logWrongRequest(DataRequestIdentifier code, Feature feature) {
 		log.warn("Submission - POST from public not valid: {} (Type: {}", code, feature.name());
 	}
 }

@@ -60,6 +60,16 @@ class DataRequestApiControllerIntegrationTests {
 		performeGet(DataRequestIdentifier.of(UUID.randomUUID()), status().isNotFound());
 	}
 
+	@Test
+	void getDataRequestByCode_closedReq() throws Exception {
+
+		var response = performeGet(REQ_ID_4, status().isBadRequest());
+
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$", String.class)).isNotNull();
+	}
+
 	private String performeGet(DataRequestIdentifier id, ResultMatcher resultMatcher) throws Exception {
 		return mvc.perform(
 				get("/data-requests/{code}", id.toString()))

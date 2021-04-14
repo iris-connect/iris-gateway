@@ -73,6 +73,10 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 		this.status = status;
 	}
 
+	public boolean isClosed() {
+		return getStatus() == Status.CLOSED;
+	}
+
 	@Embeddable
 	@EqualsAndHashCode
 	@RequiredArgsConstructor(staticName = "of")
