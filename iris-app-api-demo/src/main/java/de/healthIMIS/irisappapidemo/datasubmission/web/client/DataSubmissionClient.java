@@ -24,7 +24,7 @@ public class DataSubmissionClient {
 
     public void postDataSubmissionGuests(GuestSubmissionDto guestSubmission, String submissionUrl) throws Exception {
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         try {
             HttpEntity<GuestSubmissionDto> request =
                     new HttpEntity<GuestSubmissionDto>(guestSubmission, headers);

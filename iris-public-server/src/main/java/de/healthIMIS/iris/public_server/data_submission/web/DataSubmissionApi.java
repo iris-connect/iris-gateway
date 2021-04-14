@@ -39,7 +39,7 @@ public interface DataSubmissionApi {
 
 			@ApiResponse(responseCode = "422",
 					description = "The transferred entity is not expected for the data request.") })
-	@RequestMapping(value = "/data-submissions/{code}/contacts_events", consumes = { "application/json; charset=UTF-8" },
+	@RequestMapping(value = "/data-submissions/{code}/contacts_events", consumes = { "application/json" },
 			method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	ResponseEntity<?> postContactsEventsSubmission(
@@ -60,7 +60,7 @@ public interface DataSubmissionApi {
 
 			@ApiResponse(responseCode = "422",
 					description = "The transferred entity is not expected for the data request.") })
-	@RequestMapping(value = "/data-submissions/{code}/guests", consumes = { "application/json; charset=UTF-8" },
+	@RequestMapping(value = "/data-submissions/{code}/guests", consumes = { "application/json" },
 			method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	ResponseEntity<?> postGuestsSubmission(
