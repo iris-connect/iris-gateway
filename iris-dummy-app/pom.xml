@@ -97,6 +97,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>${project.artifactId}-${project.version}_${env.GIT_TAG}</finalName>
 		<pluginManagement><!-- lock down plugins versions to avoid using Maven 
 				defaults (may be moved to parent pom) -->
 			<plugins>
