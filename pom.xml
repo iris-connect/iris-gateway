@@ -55,11 +55,11 @@
 		<module>iris-api-sidecar-server</module>
 		<module>iris-api-sidecar-client</module>
 		<module>iris-api-app-client</module>
+		<module>iris-sormas-api-client</module>
 		<module>iris-public-server</module>
-		<!--  <module>iris-hd-server</module> -->
 		<module>iris-location-service</module>
 		<module>iris-client-sormas-sidecar</module>
-		<module>iris-sormas-api-client</module>
+		<module>iris-app-api-demo</module>
 		<module>iris-dummy-app</module>
 	</modules>
 
