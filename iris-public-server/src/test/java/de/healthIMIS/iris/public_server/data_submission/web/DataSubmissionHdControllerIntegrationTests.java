@@ -71,13 +71,13 @@ class DataSubmissionHdControllerIntegrationTests {
 		assertThat(document.read("$..requestId", String[].class)).isEmpty();
 
 		// Wait for Maintenance Job
-		try {
-			Thread.sleep(15000);
-		} catch (InterruptedException e) {}
-
-		response = getSubmissions(departmentId, from);
-		document = JsonPath.parse(response);
-		assertThat(document.read("$..requestId", String[].class)).isEmpty();
+//		try {
+//			Thread.sleep(15000);
+//		} catch (InterruptedException e) {}
+//
+//		response = getSubmissions(departmentId, from);
+//		document = JsonPath.parse(response);
+//		assertThat(document.read("$..requestId", String[].class)).isEmpty();
 
 	}
 

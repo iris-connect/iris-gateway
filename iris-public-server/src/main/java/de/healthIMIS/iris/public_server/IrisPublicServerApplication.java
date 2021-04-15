@@ -28,7 +28,6 @@ import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType
 @ConfigurationPropertiesScan
 @EnableJpaAuditing(dateTimeProviderRef = "irisDateTimeProvider")
 @EnableOpenApi
-@EnableScheduling
 @EnableHypermediaSupport(type = HypermediaType.HAL)
 public class IrisPublicServerApplication {
 
