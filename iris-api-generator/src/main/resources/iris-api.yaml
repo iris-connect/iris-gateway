@@ -48,14 +48,15 @@ info:
 
 paths:
 
-## DataRequests and DataSubmission for Contacts and Guest Lists
+  ## DataRequests and DataSubmission for Contacts and Guest Lists
+
 
   /data-requests-client/locations:
     post:
       summary: Submits a new data request
       requestBody:
         required: true
-        content:          
+        content:
           application/json:
             schema:
               $ref: '#/components/schemas/DataRequestClient'
@@ -75,7 +76,7 @@ paths:
         - "IrisSidecarServer"
         - "IrisClientFrontend"
   /data-requests-client/locations/{code}:
-    get: 
+    get:
       tags:
         - "IrisSidecarServer"
         - "IrisClientFrontend"
@@ -84,7 +85,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Code'
       responses:
-        '200': 
+        '200':
           $ref: '#/components/responses/DataRequestDetails'
 
   /data-requests/{code}:
@@ -155,8 +156,8 @@ paths:
   /{data_request_endpoint}:
     post:
       tags:
-      ## TODO: @Jens Welche Komponenten kommunizieren hier? Bitte Tags entsprechend anpassen.
-      ## Die Komponenten gibt es noch nicht.
+        ## TODO: @Jens Welche Komponenten kommunizieren hier? Bitte Tags entsprechend anpassen.
+        ## Die Komponenten gibt es noch nicht.
         - "IrisAppServer"
         - "IrisPublicClient"
         - "Implemented by the apps"
@@ -182,7 +183,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-## IRIS Location Service
+  ## IRIS Location Service
 
   /search/{search_keyword}:
     get:
@@ -261,6 +262,27 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+
+  # Login und auth
+  /login:
+    post:
+      summary: Authenticates a user against IRIS client
+      operationId: login
+      tags:
+        - "IrisSidecarClient"
+        - "IrisClientFrontend"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          $ref: '#/components/responses/Authenticated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
 security:
   - ApiKeyAuth: []
 
@@ -270,6 +292,13 @@ components:
       description: 'The specified resource was not found.'
     Unauthorized:
       description: 'The client is unauthorized to access this API.'
+    Authenticated:
+      description: 'Authenticated'
+      headers:
+        Authorization:
+          schema:
+            type: string
+          description: Authenticated Bearer Token in form of 'Bearer eyJ0eXAiO[...]'
     UnprocessableEntity:
       description: 'The transferred entity is not expected for the data request.'
     DataRequest:
@@ -310,8 +339,8 @@ components:
     DataRequestDetails:
       description: Data request details
       content:
-        application/json:                      
-          schema:                        
+        application/json:
+          schema:
             $ref: '#/components/schemas/DataRequestDetails'
 
   parameters:
@@ -341,7 +370,7 @@ components:
     ExistingDataRequestClientWithLocationList:
       type: object
       properties:
-        dataRequests: 
+        dataRequests:
           type: array
           items:
             $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
@@ -349,16 +378,23 @@ components:
     DataRequestDetails:
       allOf:
         - $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
-# for the MVP only a single submission
+        # for the MVP only a single submission
         - $ref: '#/components/schemas/GuestList'
-#        - type: object
-#          required:
-#            - submissions
-#          properties:
-#            submissions:
-#              type: array
-#              items:
-#                $ref: '#/components/schemas/GuestList'
+    #        - type: object
+    #          required:
+    #            - submissions
+    #          properties:
+    #            submissions:
+    #              type: array
+    #              items:
+    #                $ref: '#/components/schemas/GuestList'
+
+    Credentials:
+      properties:
+        userName:
+          type: string
+        password:
+          type: string
 
     ExistingDataRequestClientWithLocation:
       properties:
@@ -368,7 +404,7 @@ components:
             - DATA_REQUESTED
             - DATA_RECEIVED
             - CLOSED
-        code: 
+        code:
           description: 'Code for DataRequest'
           type: string
         name:
@@ -385,20 +421,20 @@ components:
           description: 'The end time for which data should be submitted with this request.'
           type: string
           format: date-time
-        requestedAt: 
+        requestedAt:
           description: Timestamp when the data request was created.
           type: string
           format: date-time
-        lastUpdatedAt: 
+        lastUpdatedAt:
           description: Timestamp when the data request was last updated.
           type: string
           format: date-time
 
         requestDetails:
           description: 'Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table and environment, seat, rank, ...).'
-          type: string        
+          type: string
         locationInformation:
-          $ref: '#/components/schemas/LocationInformation'      
+          $ref: '#/components/schemas/LocationInformation'
 
     DataRequestClient:
       description: 'The data request that will be sent by the FE.'
@@ -416,7 +452,7 @@ components:
           type: string
         providerId:
           description: 'ID of the App provider serving the location.'
-          type: string          
+          type: string
         name:
           description: 'Friendly name of the request to be identified easily by GA'
           type: string
@@ -433,7 +469,7 @@ components:
           format: date-time
         requestDetails:
           description: 'Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table and environment, seat, rank, ...).'
-          type: string  
+          type: string
     DataRequest:
       description: 'A data request with all parameters relevant for the data submission.'
       type: object
