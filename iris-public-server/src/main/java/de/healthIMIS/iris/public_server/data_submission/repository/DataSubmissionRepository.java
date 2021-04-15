@@ -14,7 +14,6 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server.data_submission.repository;
 
-import de.healthIMIS.iris.public_server.data_request.DataRequest;
 import de.healthIMIS.iris.public_server.data_submission.model.DataSubmission;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
 import org.springframework.data.repository.CrudRepository;
@@ -22,7 +21,6 @@ import org.springframework.data.util.Streamable;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
-import java.time.ZonedDateTime;
 
 /**
  * @author Jens Kutzsche

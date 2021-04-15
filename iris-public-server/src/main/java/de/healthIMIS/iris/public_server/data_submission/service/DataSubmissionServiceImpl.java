@@ -1,21 +1,26 @@
 package de.healthIMIS.iris.public_server.data_submission.service;
 
+import de.healthIMIS.iris.public_server.config.DataSubmissionConfig;
 import de.healthIMIS.iris.public_server.data_submission.model.DataSubmission;
 import de.healthIMIS.iris.public_server.data_submission.repository.DataSubmissionRepository;
 import de.healthIMIS.iris.public_server.department.Department;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Service
 @Slf4j
+@AllArgsConstructor
+@ConfigurationProperties(prefix = "iris.public-api", ignoreUnknownFields = false)
 public class DataSubmissionServiceImpl implements DataSubmissionService {
 
-    @Autowired
-    private DataSubmissionRepository submissions;
+    private final @NotNull DataSubmissionRepository submissions;
+    private final @NotNull DataSubmissionConfig dataSubmissionConfig;
 
     @Override
     public void deleteDataSubmissionById(DataSubmission.DataSubmissionIdentifier submissionId) {
@@ -46,9 +51,10 @@ public class DataSubmissionServiceImpl implements DataSubmissionService {
     public void deleteSubmissionsAfterGraceTime() {
 
         Streamable<DataSubmission> orphanedSubmissions = submissions.findAllByRequestedAtBefore(
-                Instant.now().minusSeconds(3));
+                Instant.now().minusSeconds(dataSubmissionConfig.getGraceTimeSeconds()));
 
-        orphanedSubmissions.forEach(dataSubmission -> log.info("Delete submission after grace time "+dataSubmission.getId()));
+        orphanedSubmissions.forEach(dataSubmission ->
+                log.info("Delete submission "+dataSubmission.getId()+" after "+dataSubmissionConfig.getGraceTimeSeconds()+"s grace time"));
 
         submissions.deleteAll(orphanedSubmissions.toList());
 
