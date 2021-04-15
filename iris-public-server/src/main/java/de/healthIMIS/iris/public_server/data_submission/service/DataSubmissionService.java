@@ -8,7 +8,7 @@ import java.time.Instant;
 
 public interface DataSubmissionService {
 
-    int deleteDataSubmissionById(DataSubmission.DataSubmissionIdentifier id);
+    void deleteDataSubmissionById(DataSubmission.DataSubmissionIdentifier id);
 
     Streamable<DataSubmission> getSubmissionsForDepartmentFrom(Department.DepartmentIdentifier departmentId, Instant fromString);
 

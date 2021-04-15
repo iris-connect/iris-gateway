@@ -16,6 +16,7 @@ package de.healthIMIS.iris.public_server.data_submission.web.controller;
 
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_submission.model.DataSubmission;
+import de.healthIMIS.iris.public_server.data_submission.model.DataSubmission.DataSubmissionIdentifier;
 import de.healthIMIS.iris.public_server.data_submission.repository.DataSubmissionRepository;
 import de.healthIMIS.iris.public_server.data_submission.service.DataSubmissionService;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
@@ -64,11 +65,9 @@ public class DataSubmissionHdController {
     }
 
     @DeleteMapping("/hd/data-submissions/{dataSubmissionId}")
-    void deleteDataSubmissions(@PathVariable("dataSubmissionId") UUID dataSubmissionId) {
+    void deleteDataSubmissions(@PathVariable("dataSubmissionId") DataSubmissionIdentifier dataSubmissionId) {
 
-        var deleteCount = dataSubmissionService.deleteDataSubmissionById(DataSubmission.DataSubmissionIdentifier.of(dataSubmissionId));
-
-        log.debug("Submission - {} submissions deleted", deleteCount);
+        dataSubmissionService.deleteDataSubmissionById(dataSubmissionId);
     }
 
     @Data

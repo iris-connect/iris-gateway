@@ -30,17 +30,8 @@ import java.time.ZonedDateTime;
 public interface DataSubmissionRepository extends CrudRepository<DataSubmission, DataSubmission.DataSubmissionIdentifier> {
 
     @Transactional
-    Streamable<DataSubmission> findAllByMetadataLastModifiedIsBetweenOrderByMetadataLastModified(ZonedDateTime from,
-                                                                                                 ZonedDateTime to);
-    @Transactional
-    int deleteAllByMetadataLastModifiedIsBefore(Instant lastSync);
-
-    @Transactional
     Streamable<DataSubmission> findAllByDepartmentIdAndMetadataLastModifiedIsAfter(
             DepartmentIdentifier id, Instant from);
-
-    @Transactional
-    int deleteAllByDepartmentIdAndMetadataLastModifiedIsBefore(DepartmentIdentifier id, ZonedDateTime lastSync);
 
     @Transactional
     Streamable<DataSubmission> findAllByDepartmentIdAndRequestedAtIsBefore(
@@ -49,7 +40,4 @@ public interface DataSubmissionRepository extends CrudRepository<DataSubmission,
 
     @Transactional
     Streamable<DataSubmission> findAllByRequestedAtBefore(Instant time);
-
-    @Transactional
-    Streamable<DataSubmission> findAllByDepartmentIdAndRequestId(DepartmentIdentifier departmentId1, DataRequest.DataRequestIdentifier reqId1);
 }

@@ -18,18 +18,16 @@ public class DataSubmissionServiceImpl implements DataSubmissionService {
     private DataSubmissionRepository submissions;
 
     @Override
-    public int deleteDataSubmissionById(DataSubmission.DataSubmissionIdentifier submissionId) {
+    public void deleteDataSubmissionById(DataSubmission.DataSubmissionIdentifier submissionId) {
 
-        log.info("Deleting submission " + submissionId);
+        log.debug("Deleting submission " + submissionId);
 
         DataSubmission submissionToDelete = submissions.findById(submissionId).orElse(null);
-        if (submissionToDelete == null) return 0;
+        if (submissionToDelete == null)
+        	return;
 
         submissions.delete(submissionToDelete);
         log.info("Deleted submission " + submissionToDelete.getId());
-
-        return 1;
-
     }
 
     @Override

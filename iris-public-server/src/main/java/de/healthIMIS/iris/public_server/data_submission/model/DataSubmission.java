@@ -19,12 +19,24 @@ import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.core.Id;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 
 /**
  * A data submission from an app of a citizen or event/location operator to the health department.
@@ -52,7 +64,7 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 	private Feature feature;
 
 	public DataSubmission(DataRequestIdentifier requestId, DepartmentIdentifier departmentId, String secret,
-						  String keyReference, String encryptedData, Feature feature) {
+			String keyReference, String encryptedData, Feature feature) {
 
 		super();
 
@@ -75,8 +87,15 @@ public class DataSubmission extends Aggregate<DataSubmission, DataSubmission.Dat
 
 		final UUID submissionId;
 
+		/**
+		 * for JSON deserialization
+		 */
+		public static DataSubmissionIdentifier of(String uuid) {
+			return of(UUID.fromString(uuid));
+		}
+
 		static DataSubmissionIdentifier random() {
-			return DataSubmissionIdentifier.of(UUID.randomUUID());
+			return of(UUID.randomUUID());
 		}
 
 		@Override

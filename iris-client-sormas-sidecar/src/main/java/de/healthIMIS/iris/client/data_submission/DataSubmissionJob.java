@@ -27,9 +27,7 @@ import java.security.KeyStore;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.Arrays;
-import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -96,7 +94,7 @@ class DataSubmissionJob {
 			log.trace("Submission job - GET to server is sent");
 			var response = rest.getForEntity("https://{address}:{port}/hd/data-submissions?departmentId={depId}&from={from}",
 					DataSubmissionDto[].class, properties.getServerAddress().getHostName(), properties.getServerPort(),
-					clientProperties.getClientId(), lastSync.atZone(ZoneId.of("Europe/Berlin")).withZoneSameInstant(ZoneId.of("UTC")).toInstant());
+					clientProperties.getClientId(), lastSync.atZone(ZoneId.of("Europe/Berlin")).toInstant());
 
 			handleDtos(response.getBody());
 
