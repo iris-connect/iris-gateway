@@ -81,6 +81,12 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+
+        <!-- Third party libs -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
