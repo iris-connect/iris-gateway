@@ -34,10 +34,6 @@ class DataSubmissionHdControllerIntegrationTests {
 
 	private final MockMvc mvc;
 
-	@Autowired
-	@Qualifier("DataSubmissionDataInitializer")
-	private DataInitializer dataInitializer;
-
 	/**
 	 * Prevents the tests from running too quickly after the data is created and thus ignoring the data.
 	 */
