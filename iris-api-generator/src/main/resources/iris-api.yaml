@@ -74,11 +74,13 @@ paths:
 
       tags:
         - "IrisSidecarServer"
+        - "IrisSidecarClient"
         - "IrisClientFrontend"
   /data-requests-client/locations/{code}:
     get:
       tags:
         - "IrisSidecarServer"
+        - "IrisSidecarClient"
         - "IrisClientFrontend"
       summary: Detail view for Data Request with the data submissions already received
       operationId: getLocationDetails
@@ -92,7 +94,6 @@ paths:
     get:
       tags:
         - "IrisPublicServer"
-        - "IrisSidecarClient"
         - "IrisAppClient"
       summary: 'get DataRequest by Code from IRIS Public Server'
       operationId: getDataRequestByCode
@@ -251,7 +252,6 @@ paths:
       operationId: deleteLocationFromSearchIndex
       tags:
         - "IrisLocationService"
-        - "IrisSidecarClient"
         - "IrisAppClient"
       parameters:
         - $ref: '#/components/parameters/LocationId'
@@ -285,6 +285,9 @@ paths:
 
 security:
   - ApiKeyAuth: []
+  - BearerAuth:
+      type: http
+      scheme: bearer
 
 components:
   responses:
