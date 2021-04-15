@@ -34,6 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,6 +56,7 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 	private final @NonNull DataRequestRepository requests;
 	private final @NonNull DataSubmissionRepository submissions;
 	private final @NonNull DataRequestRepresentations representation;
+	private final @NonNull MessageSourceAccessor messages;
 
 	@Override
 	public ResponseEntity<?> postContactsEventsSubmission(
@@ -79,13 +82,14 @@ public class DataSubmissionApiController implements DataSubmissionApi {
 			Feature feature) {
 
 		return Option.ofOptional(requests.findById(code))
-				.toEither(ResponseEntity.notFound()::<Object> build)
+				.toEither(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(messages.getMessage("dataRequest.notFound")))
 				.filterOrElse(not(DataRequest::isClosed),
 						it -> ResponseEntity.badRequest()
-								.body("Request has already been closed, please contact your health department."))
+								.body(messages.getMessage("dataRequest.isClosed")))
 				.filterOrElse(it -> requestMatchesFeature(it, feature),
 						it -> ResponseEntity.badRequest()
-								.body("Your app is not providing the requested data. Please contact your health department."))
+								.body(messages.getMessage("dataSubmission.wrong.feature")))
 				.map(it -> createAndSaveDataSubmission(it, dto, encryptedData, feature))
 				.peekLeft(it -> logWrongRequest(code, feature))
 				.peek(this::log)
