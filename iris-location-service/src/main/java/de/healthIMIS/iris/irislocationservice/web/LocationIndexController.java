@@ -14,21 +14,17 @@ import de.healthIMIS.iris.irislocationservice.search.db.model.LocationIdentifier
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -38,7 +34,6 @@ public class LocationIndexController {
 	TODO: This placeholder is for information we will get from authenticating the API requests-
 	i.e. which provider sent the request. Mocked to be constant 0 for now.
 	 */
-	private final static String TEMPORARY_PROVIDER_ID = "00000-00000-00000-00000";
 
 	private ModelMapper mapper;
 
@@ -48,11 +43,11 @@ public class LocationIndexController {
 
 	@DeleteMapping("/search-index/locations/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public ResponseEntity<Void> deleteLocationFromSearchIndex(@PathVariable("id") String id) {
+	public ResponseEntity<Void> deleteLocationFromSearchIndex(@RequestHeader(value = "x-provider-id", required = true) UUID providerId, @PathVariable("id") String id) {
 		// TODO: Authenticate API Access
 
 		// Construct a new ID to match the (provider, id) pair key
-		LocationIdentifier ident = new LocationIdentifier(TEMPORARY_PROVIDER_ID, id);
+		LocationIdentifier ident = new LocationIdentifier(providerId.toString(), id);
 
 		Optional<Location> match = locationRepository.findById(ident);
 		if (match.isPresent()) {
@@ -64,19 +59,19 @@ public class LocationIndexController {
 
 	@PutMapping("/search-index/locations")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public ResponseEntity<Void> postLocationsToSearchIndex(@Valid @RequestBody LocationList body) {
+	public ResponseEntity<Void> postLocationsToSearchIndex(@RequestHeader(value = "x-provider-id", required = true) UUID providerId, @Valid @RequestBody LocationList body) {
 		// TODO: Authenticate API Access
 
 		// TODO: Define sensible limits for this API
 
         var data = body.getLocations().stream().map(entry -> {
 
-            entry.setProviderId(""); // Reset possibly sent provider id. We need to ensure this comes from the
+            entry.setProviderId(providerId.toString()); // Reset possibly sent provider id. We need to ensure this comes from the
             // authentication system and isn't user-provided!
             var location = mapper.map(entry, Location.class);
             // For the search index, we are only interested in a subset of the data structure for location information
             // Can be replaced
-            location.setId(new LocationIdentifier(TEMPORARY_PROVIDER_ID, entry.getId()));
+            location.setId(new LocationIdentifier(providerId.toString(), entry.getId()));
             return location;
         }).collect(Collectors.toList());
 

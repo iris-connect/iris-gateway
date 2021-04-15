@@ -23,6 +23,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @Slf4j
 public class SearchIndexClient {
 
+    private final static String TEMPORARY_PROVIDER_ID = "f002f370-bd54-4325-ad91-1aff3bf730a5";
+
     public final String LOCATIONS_PATH = "/search-index/locations";
     private final RestTemplate restTemplate;
     private String apihost;
@@ -33,10 +35,10 @@ public class SearchIndexClient {
 
     public void updateLocations(LocationsDto locationsDto) {
         var headers = new HttpHeaders();
-        //headers.setContentType(new MediaType(APPLICATION_JSON));
-        //HttpEntity<LocationsDto> requestUpdate = new HttpEntity<LocationsDto>(locationsDto, headers);
+        headers.add("x-provider-id", TEMPORARY_PROVIDER_ID);
+        HttpEntity<LocationsDto> requestUpdate = new HttpEntity<LocationsDto>(locationsDto, headers);
         try {
-            restTemplate.put(apihost + LOCATIONS_PATH, locationsDto);
+            restTemplate.exchange(apihost + LOCATIONS_PATH, HttpMethod.PUT, requestUpdate, String.class);
         } catch (HttpClientErrorException e) {
             log.error("Request failed. Status code: " + e.getStatusCode().toString());
             log.error("Response: "+e.getResponseBodyAsString());
@@ -45,8 +47,11 @@ public class SearchIndexClient {
     }
 
     public void deleteLocation(LocationDto locationDto) {
+        var headers = new HttpHeaders();
+        headers.add("x-provider-id", TEMPORARY_PROVIDER_ID);
+        HttpEntity<?> requestDelete = new HttpEntity<LocationsDto>(null, headers);
         try {
-            restTemplate.delete(apihost + LOCATIONS_PATH + '/' + locationDto.getId());
+            restTemplate.exchange(apihost + LOCATIONS_PATH + '/' + locationDto.getId(), HttpMethod.DELETE, requestDelete, String.class);
         } catch (HttpClientErrorException e) {
             log.error("Request failed. Status code: " + e.getStatusCode().toString());
         }
