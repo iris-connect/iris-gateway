@@ -1,6 +1,7 @@
 package de.healthIMIS.iris.client.auth.db.model;
 
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Entity;
