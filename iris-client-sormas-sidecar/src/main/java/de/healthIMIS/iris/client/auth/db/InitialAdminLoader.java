@@ -4,6 +4,7 @@ import de.healthIMIS.iris.client.auth.db.model.UserAccount;
 import de.healthIMIS.iris.client.auth.db.model.UserAccountsRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,10 @@ import javax.annotation.PostConstruct;
 @Component
 @AllArgsConstructor
 @Slf4j
+@ConditionalOnProperty(
+        value="security.auth",
+        havingValue = "db"
+)
 public class InitialAdminLoader {
 
     private DbAuthConfiguration conf;

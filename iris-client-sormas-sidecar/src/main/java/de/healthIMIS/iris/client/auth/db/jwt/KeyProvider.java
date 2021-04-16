@@ -2,6 +2,7 @@ package de.healthIMIS.iris.client.auth.db.jwt;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,10 @@ import java.security.interfaces.RSAPublicKey;
 
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(
+        value="security.auth",
+        havingValue = "db"
+)
 public class KeyProvider {
 
   @NonNull
