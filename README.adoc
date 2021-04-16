@@ -36,8 +36,6 @@ Further components are:
 
 === Quickstart
 
-To work with SORMAS you should clone it from https://github.com/hzi-braunschweig/SORMAS-Project and look at https://github.com/hzi-braunschweig/SORMAS-Project/blob/development/sormas-cargoserver/README.md
-
 Run the services.
 
 [source, bash]
@@ -69,35 +67,8 @@ $ ./mvnw spring-boot:run -PlocalDev -am -pl iris-client-sormas-sidecar <6>
     * App demo uses port *8091* by default
 <6> Run the client backend with an in-memory database.
     * Client backend uses port *8092* by default
-    
-////
-// are currently not generated
-[[sample_data]]
-==== Sample data
 
-If the servers are started with the <<profiles,Spring profile>> `psql_compose_db` or `h2_db`, then the following sample data is inserted into the database at each startup. The H2 db is in-memory and therefore not persistent. The Postgres db is cleaned with the profile `psql_compose_db` at startup before the data is imported.
-
-===== Data requests
-
-[width="100%",options="header"]
-|====================
-| Request-ID / Code | Department-ID | Check code - Name | Check code - Day of Birth | Check code - Random | From | To | Feature
-//-------------------
-| 790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80 | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | e7fcc353b0b13024d48f74a718d8d721 ⇒ MD5 of maxmuster | c82c1cd77fbd144003b1e476718f66ce ⇒ MD5 of 19900101 | ABCDEFGHIJ | now - 2 Days | | Contact
-| 2707fd28-9b4f-4140-b80e-d56d9aad831f | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | cd0087e4707045b33c144bf09305c2a5 ⇒ MD5 of thomasmüller | | 9876543XYZ | now - 4 Days  | now - 2 Days | Contact + Events
-| 3907e730-af89-4944-8e75-fbe6ba60c904 | 6afbbe9b-938c-46d7-93e4-7c9e1f737273 | bce7a55a7b8a8a89c33c4879fc545cc9 ⇒ MD5 of heikebaum | | 23456789AB | now - 4 Days  | now - 2 Days | Contact
-|====================
-
-===== Data submissions
-
-[width="100%",options="header"]
-|====================
-| Request-ID / Code | Department-ID | Salt | Key Referenz | Encrypte Data | Feature
-//-------------------
-| 790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80 | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | salt | key | DATA OF CONTACTS | Contact
-| 790b9a69-17f8-4ba7-a8ae-2f7bf34e0b80 | a04d2e43-3d1a-464e-9926-e190ccf2dd03 | salt | key | DATA OF EVENTS | Events
-|====================
-////
+NOTE: Some of the projects in the Quickstart guide also build dependencies. This is good for a quick start, but is not necessary for every build run.
 
 ==== Dummy App
 
@@ -112,6 +83,10 @@ $ java -jar target/iris-dummy-app-0.0.1-SNAPSHOT-jar-with-dependencies.jar <3>
 <1> Switch to the dummy app project.
 <2> Build the app as Jar with all dependencies.
 <3> Run the application in a command line. With the parameter `-h` you get a help output.
+
+==== SORMAS
+
+To work with SORMAS you should clone it from https://github.com/hzi-braunschweig/SORMAS-Project and look at https://github.com/hzi-braunschweig/SORMAS-Project/blob/development/sormas-cargoserver/README.md
 
 === Maven profiles
 
