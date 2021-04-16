@@ -18,10 +18,11 @@ There is a concept written in German which describes the IRIS system: https://gi
 
 == IRIS System
 
-There are two services in the IRIS system:
+There are three services in the IRIS system:
 
-- One server (`public-server`) for the public Internet, which provides a REST API for the citizen apps and receives the apps' data.
-- A service on the health department's side (`client-sormas-sidecar`), which feeds the data into the department's Sormas and generally takes care of the communication with Sormas.
+- One zentral server (`public-server`) which provides a REST API for the citizen apps and receives the apps' data.
+- One zentral service (`location-service`) which provides a REST API for the location apps and which builds and maintains an index of connected locations.
+- A service on the health department's side (`client-sormas-sidecar`),which retrieves the data from the public server, decrypts it and makes it available for the front end of the health department. If SORMAS is available, this also feeds the data into the department's SORMAS and generally takes care of communication with SORMAS.
 
 The services are Spring Boot based applications exposing RESTful APIs and running without a user interface.
 
@@ -29,6 +30,7 @@ These are standard Maven projects and just be imported in any IDE. For convenien
 
 Further components are:
 
+- A simple service as demo of a location app, which registrate locations and answers to data request for one of this locations.
 - A simple CLI application for tests and demonstration (`dummy-app`).
 - The client library for SORMAS' REST-API (`sormas-api-client`).
 
@@ -42,25 +44,32 @@ Run the services.
 ----
 $ git clone git@github.com:healthIMIS/IRIS.git iris <1>
 
-$ cd iris/iris-public-server <2>
-$ ./mvnw spring-boot:run -PlocalDev <3>
+$ cd iris <2>
+$ ./mvnw spring-boot:run -PlocalDev -am -pl iris-public-server <3>
 
 # in a secound console
-$ cd iris/iris-sormas-api-client <4>
-$ ./mvnw install <5>
+$ cd iris <2>
+$ ./mvnw spring-boot:run -PlocalDev -am -pl iris-location-service <4>
 
-$ cd iris/iris-client-sormas-sidecar <6>
-$ ./mvnw spring-boot:run -PlocalDev <7>
+# in a third console
+$ cd iris <2>
+$ ./mvnw spring-boot:run -PlocalDev -am -pl iris-app-api-demo <5>
+
+# in a fourth console
+$ cd iris <2>
+$ ./mvnw spring-boot:run -PlocalDev -am -pl iris-client-sormas-sidecar <6>
 ----
 <1> Clone the repository.
-<2> Switch to the public server.
+<2> Switch to the root directory.
 <3> Run the server with an in-memory database.
-    * Public server uses port *8090* by default
-<4> Switch to the SORMAS REST client.
-<5> Build this library and put it into the maven repository. This does not have to be done over and over again, but only initially once and for the rare changes to the library.
-<6> Switch to the health department client.
-<7> Run the service with an in-memory database.
-
+    * Public server uses port *8443* by default
+<4> Run the location service with an in-memory database.
+    * Location service uses port *8080* by default
+<5> Run the app demo.
+    * App demo uses port *8091* by default
+<6> Run the client backend with an in-memory database.
+    * Client backend uses port *8092* by default
+    
 ////
 // are currently not generated
 [[sample_data]]
