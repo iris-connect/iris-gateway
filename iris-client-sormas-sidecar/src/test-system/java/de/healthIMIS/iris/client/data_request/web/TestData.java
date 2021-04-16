@@ -11,4 +11,8 @@ public class TestData {
             "            \"requestDetails\":\"string\"\n" +
             "}";
 
+    public static final String LOGIN = "{" +
+            "\"userName\":\"admin\"," +
+            "\"password\":\"admin\"" +
+            "}";
 }

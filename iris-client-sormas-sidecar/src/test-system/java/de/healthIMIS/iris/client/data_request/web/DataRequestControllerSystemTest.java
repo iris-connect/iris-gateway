@@ -42,8 +42,17 @@ class DataRequestControllerSystemTest {
     private DataRequestManagement dataRequestManagement;
 
     @Test
-    public void getDataRequests() throws Exception {
+    public void endpointShouldBeProtected() throws Exception {
         var res = mockMvc.perform(MockMvcRequestBuilders.get("/data-requests-client/locations")
+        ).andExpect(MockMvcResultMatchers.status().isForbidden()).andReturn();
+    }
+
+    @Test
+    public void getDataRequests() throws Exception {
+        var res = mockMvc.perform(
+                MockMvcRequestBuilders
+                        .get("/data-requests-client/locations")
+                        .header("Authorization", login())
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         var dataRequests = om.readValue(res.getResponse().getContentAsString(), ExistingDataRequestClientWithLocationList.class);
@@ -56,7 +65,10 @@ class DataRequestControllerSystemTest {
     public void getDataRequestByCode() throws Exception {
         postNewDataRequest();
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/data-requests-client/locations/123")
+        mockMvc.perform(
+                MockMvcRequestBuilders
+                        .get("/data-requests-client/locations/123")
+                        .header("Authorization", login())
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
     }
 
@@ -85,7 +97,17 @@ class DataRequestControllerSystemTest {
                 MockMvcRequestBuilders.post("/data-requests-client/locations")
                         .content(TestData.DATA_REQUEST)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", login())
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+    }
+
+    private String login() throws Exception {
+        var res = mockMvc.perform(
+                MockMvcRequestBuilders.post("/login")
+                        .content(TestData.LOGIN)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+        return res.getResponse().getHeader("Authorization");
     }
 
 }
