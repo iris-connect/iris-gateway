@@ -27,6 +27,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +47,7 @@ public class DataRequestApiController implements DataRequestApi {
 
 	private final @NonNull DataRequestRepository requests;
 	private final @NonNull DataRequestRepresentations representation;
+	private final @NonNull MessageSourceAccessor messages;
 
 	@Override
 	public ResponseEntity<?> getDataRequestByCode(
@@ -52,10 +55,11 @@ public class DataRequestApiController implements DataRequestApi {
 					required = true, schema = @Schema()) @PathVariable("code") DataRequestIdentifier code) {
 
 		return Option.ofOptional(requests.findById(code))
-				.toEither(ResponseEntity.notFound()::build)
+				.toEither(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(messages.getMessage("dataRequest.notFound")))
 				.filterOrElse(not(DataRequest::isClosed),
 						it -> ResponseEntity.badRequest()
-								.body("Request has already been closed, please contact your health department."))
+								.body(messages.getMessage("dataRequest.isClosed")))
 				.map(this::log)
 				.map(representation::toRepresentation)
 				.fold(it -> it, ResponseEntity::ok);
