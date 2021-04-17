@@ -31,7 +31,6 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import java.net.URI;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -102,9 +101,19 @@ public class DataRequestHdController {
 		appServerRequestPayload.setStart(dataRequest.getRequestStart().atOffset(ZoneOffset.UTC));
 		appServerRequestPayload.setEnd(dataRequest.getRequestEnd().atOffset(ZoneOffset.UTC));
 
-		URI uri = linkTo(methodOn(DataSubmissionApi.class).postGuestsSubmission(dataRequest.getId(), null))
-				.toUri();
-		appServerRequestPayload.setSubmissionUri(uri.toString());
+		var uriBuilder = linkTo(methodOn(DataSubmissionApi.class).postGuestsSubmission(dataRequest.getId(), null))
+				.toUriComponentsBuilder();
+
+		var host = appProviders.getHostForSubmission();
+		if (host != null) {
+			uriBuilder = uriBuilder.host(host);
+		}
+		var port = appProviders.getPortForSubmission();
+		if (port >= 0) {
+			uriBuilder = uriBuilder.port(port);
+		}
+
+		appServerRequestPayload.setSubmissionUri(uriBuilder.toUriString());
 
 		var department = departments.findById(dataRequest.getDepartmentId());
 		if (department.isEmpty()) {
