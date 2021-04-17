@@ -140,9 +140,7 @@ public class DataRequestHdController {
 		String healthDepartment;
 		String keyOfHealthDepartment;
 		String keyReference;
-		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "UTC")
 		OffsetDateTime start;
-		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "UTC")
 		OffsetDateTime end;
 		String requestDetails;
 		String submissionUri;
