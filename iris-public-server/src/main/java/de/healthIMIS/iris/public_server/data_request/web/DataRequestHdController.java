@@ -17,6 +17,7 @@ package de.healthIMIS.iris.public_server.data_request.web;
 import static org.apache.commons.lang3.StringUtils.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import de.healthIMIS.iris.public_server.config.AppProviderProperties;
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
@@ -139,7 +140,9 @@ public class DataRequestHdController {
 		String healthDepartment;
 		String keyOfHealthDepartment;
 		String keyReference;
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "UTC")
 		OffsetDateTime start;
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "UTC")
 		OffsetDateTime end;
 		String requestDetails;
 		String submissionUri;
