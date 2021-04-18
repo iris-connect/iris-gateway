@@ -33,7 +33,7 @@
 			<id>localDev</id>
 			<activation>
 				<file>
-					<exists>src/main/resources/application-dev_auth.properties</exists>
+					<exists>src/main/resources/application-local.properties</exists>
 				</file>
 			</activation>
 

@@ -28,7 +28,6 @@ public class InitialAdminLoader {
     @PostConstruct
     protected void initializeAdmin() {
         if (conf.getAdminUserName() != null && conf.getAdminUserPassword() != null) {
-            log.info("Create admin user [{}]", conf.getAdminUserName());
             createAdminUserIfNotExists();
         } else {
             log.info("No admin user configured. Skip creating admin user.");

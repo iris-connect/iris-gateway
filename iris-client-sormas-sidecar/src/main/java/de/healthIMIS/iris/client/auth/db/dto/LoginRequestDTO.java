@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 public class LoginRequestDTO {
 
   @NotNull
-  @Email
   private String userName;
 
   @NotNull
