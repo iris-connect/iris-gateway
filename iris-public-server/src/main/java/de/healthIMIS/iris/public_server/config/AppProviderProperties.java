@@ -17,7 +17,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 public class AppProviderProperties {
 
 	private final @Getter String hostForSubmission;
-	private @Getter int portForSubmission = -1;
+	private final @Getter Integer portForSubmission;
 	private final List<Provider> providers;
 
 	public Provider findByProviderId(String providerId) {
