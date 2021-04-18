@@ -51,6 +51,8 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 	private Instant requestStart;
 	private Instant requestEnd;
 
+	private String createdUser;
+
 	private @Lob String requestDetails;
 
 	@Enumerated(EnumType.STRING) @ElementCollection(fetch = FetchType.EAGER) @CollectionTable(
@@ -63,9 +65,22 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 
 	public DataRequest(String refId, String name, Instant requestStart, Instant requestEnd, String requestDetails,
 			String hdUserId, Location location, Set<Feature> features) {
+		super();
+		ConstructDataRequest(refId, name, requestStart, requestEnd, requestDetails,
+			hdUserId, location, features, "unknown");
+	}
+	public DataRequest(String refId, String name, Instant requestStart, Instant requestEnd, String requestDetails,
+			String hdUserId, Location location, Set<Feature> features, String createdUser) {
 
 		super();
 
+		ConstructDataRequest(refId, name, requestStart, requestEnd, requestDetails,
+			hdUserId, location, features, createdUser);
+
+	}
+
+	private void ConstructDataRequest(String refId, String name, Instant requestStart, Instant requestEnd, String requestDetails,
+	String hdUserId, Location location, Set<Feature> features, String createdUser) {
 		this.id = DataRequestIdentifier.of(UUID.randomUUID());
 		this.refId = refId;
 		this.name = name;
@@ -75,6 +90,7 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 		this.hdUserId = hdUserId;
 		this.location = location;
 		this.features = features;
+		this.createdUser = createdUser;
 	}
 
 	public LocalDateTime getLastModifiedAt() {

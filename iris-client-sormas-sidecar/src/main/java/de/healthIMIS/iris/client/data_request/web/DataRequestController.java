@@ -14,6 +14,7 @@ import de.healthIMIS.iris.client.data_submission.entities.DataSubmission;
 import io.vavr.control.Option;
 import lombok.AllArgsConstructor;
 
+import java.security.Principal;
 import java.time.ZoneId;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,8 +43,7 @@ public class DataRequestController {
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping(value = "/data-requests-client/locations", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<DataRequestDetails> createDataRequest(@Valid @RequestBody DataRequestClient request) {
-
+	public ResponseEntity<DataRequestDetails> createDataRequest(@Valid @RequestBody DataRequestClient request, Principal principal) {
 		var result = dataRequestManagement.createLocationRequest(
 				request.getExternalRequestId(),
 				request.getName(),
@@ -51,7 +51,9 @@ public class DataRequestController {
 				request.getEnd().toInstant(),
 				Option.of(request.getRequestDetails()),
 				request.getLocationId(),
-				request.getProviderId());
+				request.getProviderId(),
+				principal.getName()
+			);
 
 		return ResponseEntity.ok(map(result));
 	}

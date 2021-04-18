@@ -19,10 +19,11 @@ CREATE TABLE data_request (
 	request_id uuid NOT NULL,
 	ref_id varchar(100) NOT NULL,
 	name varchar(500) NULL,
-	hd_user_id varchar(100) NULL,
+	hd_user_id varchar(100) NULL, 
 	location_id uuid NULL,
 	request_start timestamp NOT NULL,
 	request_end timestamp NULL,
+	created_user varchar(50) NOT NULL, /* The username of the User that has created this data request. */
 	request_details text NULL,
 	status varchar(50) NOT NULL,
 	created timestamp NOT NULL,

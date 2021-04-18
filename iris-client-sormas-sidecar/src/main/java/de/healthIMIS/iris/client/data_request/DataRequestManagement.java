@@ -89,12 +89,15 @@ public class DataRequestManagement {
 		return createDataRequest(refId, name, startDate, endDate, none(), Option.of(hdUserId), none(), none(),
 				Set.of(Feature.Contacts_Events));
 	}
-
+	public DataRequest createLocationRequest(String refId, String name, Instant startDate, Instant endDate,
+			Option<String> requestDetails, String locationId, String providerId, String createdUser) {
+		return createDataRequest(refId, name, startDate, Option.of(endDate), requestDetails, none(),
+				Option.of(locationId), Option.of(providerId), Set.of(Feature.Guests), createdUser);
+	}
 	public DataRequest createLocationRequest(String refId, String name, Instant startDate, Instant endDate,
 			Option<String> requestDetails, String locationId, String providerId) {
-
-		return createDataRequest(refId, name, startDate, Option.of(endDate), requestDetails, none(),
-				Option.of(locationId), Option.of(providerId), Set.of(Feature.Guests));
+		return createLocationRequest(refId, name, startDate, endDate,
+		requestDetails, locationId, providerId, "unknown"); /* TODO: Replace UNKNOWN with something that makes more sence */
 	}
 
 	public DataRequest createLocationRequest(String refId, String name, Instant startDate, Option<Instant> endDate,
@@ -103,15 +106,24 @@ public class DataRequestManagement {
 		return createDataRequest(refId, name, startDate, endDate, requestDetails, hdUserId,
 				none(), none(), Set.of(Feature.Guests));
 	}
-
+	
 	DataRequest createDataRequest(String refId, String name, Instant startDate, Option<Instant> endDate,
 			Option<String> requestDetails, Option<String> hdUserId, Option<String> locationId,
 			Option<String> providerId, Set<Feature> feature) {
+				
+		return createDataRequest(refId, name, startDate, endDate,
+		requestDetails, hdUserId, locationId,
+		providerId, feature, "UNKNOWN");
+	}
 
+	DataRequest createDataRequest(String refId, String name, Instant startDate, Option<Instant> endDate,
+			Option<String> requestDetails, Option<String> hdUserId, Option<String> locationId,
+			Option<String> providerId, Set<Feature> feature, String createdUser) {
+				
 		var location = fetchLocation(locationId, providerId);
-
+		
 		var dataRequest = new DataRequest(refId, name, startDate, endDate.getOrNull(), requestDetails.getOrNull(),
-				hdUserId.getOrNull(), location, feature);
+				hdUserId.getOrNull(), location, feature, createdUser);
 
 		log.trace("Request job - PUT to server is sent: {}", dataRequest.getId().toString());
 
