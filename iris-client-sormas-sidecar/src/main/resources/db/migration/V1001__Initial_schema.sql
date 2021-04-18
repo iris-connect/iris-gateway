@@ -95,3 +95,5 @@ CREATE TABLE user_accounts (
     PRIMARY KEY (user_id),
     CONSTRAINT user_name_unique UNIQUE(user_name)
 );
+
+CREATE INDEX user_accounts_user_name ON user_accounts (user_name);
