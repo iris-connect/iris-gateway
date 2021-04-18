@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5b2340b4-5387-48c3-9b6e-511ffa5a52fc",
+		"_postman_id": "f4a848a7-0122-49fc-96df-1d4ee550eb1c",
 		"name": "IRIS Client Sormas Sidecar",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -77,6 +77,43 @@
 					"path": [
 						"data-requests-client",
 						"locations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{bearer}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8092/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8092",
+					"path": [
+						"users"
 					]
 				}
 			},
