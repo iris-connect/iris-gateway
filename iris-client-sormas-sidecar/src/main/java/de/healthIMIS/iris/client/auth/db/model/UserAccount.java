@@ -21,4 +21,8 @@ public class UserAccount {
 
     private String password;
 
+    private String firstName;
+
+    private String lastName;
+
 }
