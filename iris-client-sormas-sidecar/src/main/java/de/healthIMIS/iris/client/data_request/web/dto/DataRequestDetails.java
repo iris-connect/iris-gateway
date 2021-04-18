@@ -86,5 +86,7 @@ public class DataRequestDetails   {
 
   private ZonedDateTime endDate;
 
+  private String createdUser;
+
 }
 

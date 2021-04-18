@@ -465,7 +465,9 @@ components:
           description: Timestamp when the data request was last updated.
           type: string
           format: date-time
-
+        createdUser:
+          description: The username of the user who has created this DataRequest
+          type: string
         requestDetails:
           description: 'Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table and environment, seat, rank, ...).'
           type: string
