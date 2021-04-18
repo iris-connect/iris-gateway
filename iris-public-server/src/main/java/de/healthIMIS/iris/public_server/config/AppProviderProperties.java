@@ -1,7 +1,8 @@
 package de.healthIMIS.iris.public_server.config;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,10 +12,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
-@RequiredArgsConstructor
+@AllArgsConstructor
 @ConfigurationProperties(prefix = "providers")
 public class AppProviderProperties {
 
+	private final @Getter String hostForSubmission;
+	private @Getter int portForSubmission = -1;
 	private final List<Provider> providers;
 
 	public Provider findByProviderId(String providerId) {
