@@ -282,6 +282,18 @@ paths:
           $ref: '#/components/responses/Authenticated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+  /users:
+    get:
+      summary: Lists all registerd users
+      operationId: getUsers
+      tags:
+        - "IrisSidecarClient"
+        - "IrisClientFrontend"
+      responses:
+        '200':
+          $ref: '#/components/responses/UsersList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 
 security:
   - ApiKeyAuth: []
@@ -302,6 +314,12 @@ components:
           schema:
             type: string
           description: Authenticated Bearer Token in form of 'Bearer eyJ0eXAiO[...]'
+    UsersList:
+     description: 'UsersList'
+     content:
+        application/hal+json:
+          schema:
+            $ref: '#/components/schemas/UsersList'
     UnprocessableEntity:
       description: 'The transferred entity is not expected for the data request.'
     DataRequest:
@@ -377,7 +395,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
-
+    UsersList:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    User:
+      type: object
+      properties:
+        userName:
+          type: string
+        firstName:
+          type: string 
+        lastName:
+          type: string 
     DataRequestDetails:
       allOf:
         - $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
