@@ -1,5 +1,6 @@
 package de.healthIMIS.iris.client.auth.web;
 
+import java.security.Principal;
 import java.util.ArrayList;
 
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,8 @@ public class UsersController {
     private UserAccountsRepository repo;
   @GetMapping("/users")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<UsersListDTO> getUsersList() {
+  public ResponseEntity<UsersListDTO> getUsersList(Principal principal) {
+      System.out.println(principal.getName());
       var users = new ArrayList<UserDTO>();
       repo.findAll().forEach(u->{
           var dto = new UserDTO();
