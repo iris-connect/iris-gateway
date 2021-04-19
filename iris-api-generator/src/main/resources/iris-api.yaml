@@ -89,6 +89,56 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/DataRequestDetails'
+    patch:
+      tags:
+        - "IrisSidecarServer"
+        - "IrisSidecarClient"
+        - "IrisClientFrontend"
+      summary: Update Data Request Details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataRequestClientPatchable'
+      operationId: patchLocationDetails
+      parameters:
+        - $ref: '#/components/parameters/Code'
+      responses:
+        '204':
+          description: successfully changed
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /data-requests-client/locations/{code}/self-assign:
+    post:
+      tags:
+        - "IrisSidecarServer"
+        - "IrisSidecarClient"
+        - "IrisClientFrontend"
+      summary: Self-assign the current user
+      operationId: selfAssignToLocationRequest
+      parameters:
+        - $ref: '#/components/parameters/Code'
+        #- in: query
+        #  name: enforce
+        #  schema:
+        #    type: boolean
+      responses:
+        '202':
+          description: 'assigned sucessfully'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: An other user is already assigned. (use enforce)
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 
   /data-requests/{code}:
     get:
@@ -412,6 +462,9 @@ components:
         lastName:
           type: string 
     DataRequestDetails:
+      properties:
+        comment:
+          $ref: '#/components/schemas/DataRequestComment'
       allOf:
         - $ref: '#/components/schemas/ExistingDataRequestClientWithLocation'
         # for the MVP only a single submission
@@ -471,11 +524,21 @@ components:
         requestDetails:
           description: 'Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table and environment, seat, rank, ...).'
           type: string
+        assignedUser:
+          $ref: '#/components/schemas/assignedUser'
         locationInformation:
           $ref: '#/components/schemas/LocationInformation'
+        
 
     DataRequestClient:
       description: 'The data request that will be sent by the FE.'
+      type: object
+      readOnly: true
+      allOf:
+        - $ref: '#/components/schemas/DataRequestClientFix'
+        - $ref: '#/components/schemas/DataRequestClientPatchable'
+    DataRequestClientFix:
+      description: The fields a locationRequest that NO changes can be made to afterwards
       type: object
       required:
         - locationId
@@ -508,6 +571,21 @@ components:
         requestDetails:
           description: 'Details of the data request, specifying it in more detail and narrowing down the data to be provided (e.g. table and environment, seat, rank, ...).'
           type: string
+    DataRequestClientPatchable:
+      description: The fields a locationRequest that changes can be made to afterwards
+      type: object
+      readOnly: true
+      properties:
+        comment:
+          $ref: '#/components/schemas/DataRequestComment'
+        assignedUser:
+          $ref: '#/components/schemas/assignedUser'
+    assignedUser:
+      description: The user this task is assigned to.
+      type: string
+    DataRequestComment:
+      description: A textarea for comments.
+      type: string
     DataRequest:
       description: 'A data request with all parameters relevant for the data submission.'
       type: object
