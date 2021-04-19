@@ -52,7 +52,9 @@ public class DataRequestController {
 				Option.of(request.getRequestDetails()),
 				request.getLocationId(),
 				request.getProviderId(),
-				principal.getName()
+				principal.getName(),
+				Option.of(request.getAssignedUser()),
+				Option.of(request.getComment())
 			);
 
 		return ResponseEntity.ok(map(result));

@@ -25,6 +25,8 @@ CREATE TABLE data_request (
 	request_end timestamp NULL,
 	created_user varchar(50) NOT NULL, /* The username of the User that has created this data request. */
 	request_details text NULL,
+	assigned_user varchar(50) NULL,
+	comment text NULL,
 	status varchar(50) NOT NULL,
 	created timestamp NOT NULL,
 	last_modified timestamp NOT NULL,

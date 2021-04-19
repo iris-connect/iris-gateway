@@ -88,5 +88,9 @@ public class DataRequestDetails   {
 
   private String createdUser;
 
+  private String comment;
+
+  private String assignedUser;
+
 }
 

@@ -42,5 +42,9 @@ public class DataRequestClient   {
 
   private String requestDetails;
 
+  private String comment;
+
+  private String assignedUser;
+
 }
 

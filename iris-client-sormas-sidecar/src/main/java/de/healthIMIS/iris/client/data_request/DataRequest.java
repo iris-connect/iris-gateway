@@ -55,6 +55,10 @@ public class DataRequest extends Aggregate<DataRequest, DataRequest.DataRequestI
 
 	private @Lob String requestDetails;
 
+	private String assignedUser;
+	
+	private @Lob String comment;
+
 	@Enumerated(EnumType.STRING) @ElementCollection(fetch = FetchType.EAGER) @CollectionTable(
 			name = "data_request_feature",
 			joinColumns = @JoinColumn(name = "request_id")) @Column(name = "feature", nullable = false)
