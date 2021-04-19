@@ -89,7 +89,7 @@ public class DataRequestHdController {
 			}
 		}
 
-		log.debug("Request - PUT from hd server + saved: {}", dataRequest.getId().toString());
+		log.debug("Request - PUT from hd client + saved: {}", dataRequest.getId().toString());
 	}
 
 	private AppProviderDataRequestDTO getAppProviderPayloadForDataRequest(
@@ -109,7 +109,7 @@ public class DataRequestHdController {
 			uriBuilder = uriBuilder.host(host);
 		}
 		var port = appProviders.getPortForSubmission();
-		if (port >= 0) {
+		if (port != null) {
 			uriBuilder = uriBuilder.port(port);
 		}
 

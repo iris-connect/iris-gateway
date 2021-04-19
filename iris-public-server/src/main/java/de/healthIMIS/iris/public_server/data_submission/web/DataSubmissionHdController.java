@@ -62,7 +62,7 @@ public class DataSubmissionHdController {
 
 		var dtos = dataSubmissions.map(DataSubmissionInternalOutputDto::of).toList();
 
-		log.debug("Submission - GET from hd server: {}",
+		log.debug("Submission - GET from hd client: {}",
 				dtos.stream().map(DataSubmissionInternalOutputDto::getRequestId).collect(Collectors.joining(", ")));
 
 		return ResponseEntity.ok().lastModified(to.atZone(ZoneId.systemDefault())).body(dtos);

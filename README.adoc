@@ -55,7 +55,7 @@ $ ./mvnw spring-boot:run -PlocalDev -am -pl iris-app-api-demo <5>
 
 # in a fourth console
 $ cd iris <2>
-$ ./mvnw spring-boot:run -PlocalDev -am -pl iris-client-sormas-sidecar <6>
+$ ./mvnw spring-boot:run -PlocalDev -am -pl iris-api-generator,iris-client-sormas-sidecar <6>
 ----
 <1> Clone the repository.
 <2> Switch to the root directory.
