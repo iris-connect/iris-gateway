@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -43,16 +44,16 @@ class DataRequestControllerSystemTest {
 
     @Test
     public void endpointShouldBeProtected() throws Exception {
-        var res = mockMvc.perform(MockMvcRequestBuilders.get("/data-requests-client/locations")
+        mockMvc.perform(MockMvcRequestBuilders.get("/data-requests-client/locations")
         ).andExpect(MockMvcResultMatchers.status().isForbidden()).andReturn();
     }
 
     @Test
+    @WithMockUser("admin")
     public void getDataRequests() throws Exception {
         var res = mockMvc.perform(
                 MockMvcRequestBuilders
                         .get("/data-requests-client/locations")
-                        .header("Authorization", login())
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         var dataRequests = om.readValue(res.getResponse().getContentAsString(), ExistingDataRequestClientWithLocationList.class);
@@ -62,17 +63,18 @@ class DataRequestControllerSystemTest {
     }
 
     @Test
+    @WithMockUser("admin")
     public void getDataRequestByCode() throws Exception {
         postNewDataRequest();
 
         mockMvc.perform(
                 MockMvcRequestBuilders
                         .get("/data-requests-client/locations/123")
-                        .header("Authorization", login())
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
     }
 
     @Test
+    @WithMockUser("admin")
     public void createDataRequest() throws Exception {
         postNewDataRequest();
     }
@@ -97,17 +99,6 @@ class DataRequestControllerSystemTest {
                 MockMvcRequestBuilders.post("/data-requests-client/locations")
                         .content(TestData.DATA_REQUEST)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", login())
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
     }
-
-    private String login() throws Exception {
-        var res = mockMvc.perform(
-                MockMvcRequestBuilders.post("/login")
-                        .content(TestData.LOGIN)
-                        .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-        return res.getResponse().getHeader("Authorization");
-    }
-
 }

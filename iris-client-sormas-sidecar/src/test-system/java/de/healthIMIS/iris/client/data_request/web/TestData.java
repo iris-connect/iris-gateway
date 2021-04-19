@@ -10,9 +10,4 @@ public class TestData {
             "            \"end\":\"2021-03-29T23:00:34.113Z\",\n" +
             "            \"requestDetails\":\"string\"\n" +
             "}";
-
-    public static final String LOGIN = "{" +
-            "\"userName\":\"admin\"," +
-            "\"password\":\"admin\"" +
-            "}";
 }
