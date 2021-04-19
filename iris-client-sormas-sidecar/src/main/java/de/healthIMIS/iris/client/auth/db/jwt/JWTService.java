@@ -19,17 +19,20 @@ import java.security.interfaces.RSAPublicKey;
 )
 public class JWTService implements JWTVerifier, JWTSigner {
 
-  private RSAPrivateKey privateKey;
-
-  private RSAPublicKey publicKey;
+  private JwtProperties jwtProperties;
 
   @Override
   public String sign(Builder builder) {
-    return builder.sign(Algorithm.RSA256(publicKey, privateKey));
+    return builder.sign(getAlgorithm());
   }
 
   @Override
   public DecodedJWT verify(String jwt) {
-    return JWT.require(Algorithm.RSA256(publicKey, privateKey)).build().verify(jwt);
+    return JWT.require(getAlgorithm()).build().verify(jwt);
   }
+
+  private Algorithm getAlgorithm() {
+    return Algorithm.HMAC512(jwtProperties.getJwtSharedSecret());
+  }
+
 }
