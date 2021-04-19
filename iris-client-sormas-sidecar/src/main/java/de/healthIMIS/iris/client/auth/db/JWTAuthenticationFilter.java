@@ -20,8 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static de.healthIMIS.iris.client.auth.db.SecurityConstants.EXPIRATION_TIME;
-import static de.healthIMIS.iris.client.auth.db.SecurityConstants.TOKEN_PREFIX;
+import static de.healthIMIS.iris.client.auth.db.SecurityConstants.*;
 
 
 @AllArgsConstructor
@@ -63,8 +62,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         .withSubject(user.getUsername())
         .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME)));
 
-    res.addHeader(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + token);
-    res.addHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.AUTHORIZATION);
+    res.addHeader(AUTHENTICATION_INFO, BEARER_TOKEN_PREFIX + token);
+    res.addHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, AUTHENTICATION_INFO);
 
   }
 

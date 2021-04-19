@@ -2,6 +2,7 @@ package de.healthIMIS.iris.client.auth.db;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import de.healthIMIS.iris.client.auth.db.jwt.JWTVerifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,8 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
-import static de.healthIMIS.iris.client.auth.db.SecurityConstants.HEADER_STRING;
-import static de.healthIMIS.iris.client.auth.db.SecurityConstants.TOKEN_PREFIX;
+import static de.healthIMIS.iris.client.auth.db.SecurityConstants.BEARER_TOKEN_PREFIX;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
@@ -32,14 +32,14 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
                                     FilterChain chain) throws IOException, ServletException {
-        String header = req.getHeader(HEADER_STRING);
+        String header = req.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (header == null || !header.startsWith(TOKEN_PREFIX)) {
+        if (header == null || !header.startsWith(BEARER_TOKEN_PREFIX)) {
             chain.doFilter(req, res);
             return;
         }
 
-        var token = header.replace(TOKEN_PREFIX, "");
+        var token = header.replace(BEARER_TOKEN_PREFIX, "");
 
         var authentication = authenticate(token);
 

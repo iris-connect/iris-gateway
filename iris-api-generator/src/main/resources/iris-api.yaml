@@ -280,8 +280,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/Authenticated'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/LoginFailed'
 
 security:
   - ApiKeyAuth: []
@@ -294,10 +294,12 @@ components:
       description: 'The specified resource was not found.'
     Unauthorized:
       description: 'The client is unauthorized to access this API.'
+    LoginFailed:
+      description: 'The login attempt failed.'
     Authenticated:
       description: 'Authenticated'
       headers:
-        Authorization:
+        Authentication-Info:
           schema:
             type: string
           description: Authenticated Bearer Token in form of 'Bearer eyJ0eXAiO[...]'
