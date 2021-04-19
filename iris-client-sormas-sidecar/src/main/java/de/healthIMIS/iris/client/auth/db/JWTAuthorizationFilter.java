@@ -52,8 +52,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
         String user = jwt.getSubject();
 
-        String companyAccountId = jwt.getClaim("companyAccountId").asString();
-
         GrantedAuthority role = new SimpleGrantedAuthority("USER");
 
         if (user != null) {
