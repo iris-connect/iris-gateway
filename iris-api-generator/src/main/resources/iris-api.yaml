@@ -285,9 +285,8 @@ paths:
 
 security:
   - ApiKeyAuth: []
-  - BearerAuth:
-      type: http
-      scheme: bearer
+  - BearerAuth: []
+
 
 components:
   responses:
@@ -368,6 +367,11 @@ components:
       type: apiKey
       name: X-IRIS-API-KEY
       in: header
+    BearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+
 
   schemas:
     ExistingDataRequestClientWithLocationList:
