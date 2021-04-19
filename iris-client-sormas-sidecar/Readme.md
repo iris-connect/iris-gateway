@@ -4,17 +4,7 @@
 
 ## Authentication
 
-At the moment you have the choice between no authentication and DB authentication. 
-
-### No authentication
-
-You need to set the following property in Spring configuration. 
-
-```
-security.auth=none
-```
-
-Using this setting, the authentication is deactivated. Please only use for ***testing*** purposes.
+At the moment you can configure DB authentication. 
 
 ### DB Authentication
 
