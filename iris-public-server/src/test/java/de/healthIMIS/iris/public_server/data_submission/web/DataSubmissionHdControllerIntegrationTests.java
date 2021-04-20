@@ -4,17 +4,26 @@ import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import de.healthIMIS.iris.public_server.DataInitializer;
 import de.healthIMIS.iris.public_server.DepartmentDataInitializer;
 import de.healthIMIS.iris.public_server.IrisWebIntegrationTest;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
 import lombok.RequiredArgsConstructor;
 
 import java.io.UnsupportedEncodingException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.jayway.jsonpath.JsonPath;
@@ -39,7 +48,7 @@ class DataSubmissionHdControllerIntegrationTests {
 	void getAndDeleteSubmissions() throws Exception {
 
 		var departmentId = DepartmentDataInitializer.DEPARTMENT_ID_1;
-		var from = LocalDateTime.now().minusDays(1);
+		var from = Instant.now().minus(1, ChronoUnit.DAYS);
 
 		var response = getSubmissions(departmentId, from);
 		var document = JsonPath.parse(response);
@@ -50,19 +59,28 @@ class DataSubmissionHdControllerIntegrationTests {
 		assertThat(document.read("$..requestId", String[].class)).hasSize(1);
 
 		mvc.perform(
-				delete("/hd/data-submissions?departmentId={depId}&from={from}",
-						departmentId, LocalDateTime.now()))
+				delete("/hd/data-submissions/"+document.read("$[0].id")))
 				.andExpect(status().isOk());
+
+		response = getSubmissions(DepartmentDataInitializer.DEPARTMENT_ID_2, from);
+		document = JsonPath.parse(response);
+		assertThat(document.read("$..requestId", String[].class)).isEmpty();
+
+		// Wait for Maintenance Job
+		try {
+			Thread.sleep(15000);
+		} catch (InterruptedException e) {}
 
 		response = getSubmissions(departmentId, from);
 		document = JsonPath.parse(response);
 		assertThat(document.read("$..requestId", String[].class)).isEmpty();
+
 	}
 
 	@Test
 	void getSubmissions_noneForNewerThenNow() throws Exception {
 
-		var response = getSubmissions(DepartmentDataInitializer.DEPARTMENT_ID_1, LocalDateTime.now());
+		var response = getSubmissions(DepartmentDataInitializer.DEPARTMENT_ID_1, Instant.now());
 
 		var document = JsonPath.parse(response);
 
@@ -72,19 +90,21 @@ class DataSubmissionHdControllerIntegrationTests {
 	@Test
 	void getSubmissions_noneForUnknownDepartment() throws Exception {
 
-		var response = getSubmissions(DepartmentIdentifier.of(UUID.randomUUID()), LocalDateTime.now().minusDays(1));
+		var from = Instant.now().minus(1, ChronoUnit.DAYS);
+
+		var response = getSubmissions(DepartmentIdentifier.of(UUID.randomUUID()), from);
 
 		var document = JsonPath.parse(response);
 
 		assertThat(document.read("$..requestId", String[].class)).isEmpty();
 	}
 
-	private String getSubmissions(DepartmentIdentifier departmentId, LocalDateTime from)
+	private String getSubmissions(DepartmentIdentifier departmentId, Instant from)
 			throws UnsupportedEncodingException, Exception {
 
 		return mvc.perform(
 				get("/hd/data-submissions?departmentId={depId}&from={from}",
-						departmentId, from))
+						departmentId, from.toString()))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 	}

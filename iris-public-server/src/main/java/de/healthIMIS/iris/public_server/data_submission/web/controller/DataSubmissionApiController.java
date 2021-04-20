@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package de.healthIMIS.iris.public_server.data_submission.web;
+package de.healthIMIS.iris.public_server.data_submission.web.controller;
 
 import static java.util.function.Predicate.*;
 
@@ -21,8 +21,11 @@ import de.healthIMIS.iris.public_server.data_request.DataRequest;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
 import de.healthIMIS.iris.public_server.data_request.DataRequestRepository;
 import de.healthIMIS.iris.public_server.data_request.web.DataRequestRepresentations;
-import de.healthIMIS.iris.public_server.data_submission.DataSubmission;
-import de.healthIMIS.iris.public_server.data_submission.DataSubmissionRepository;
+import de.healthIMIS.iris.public_server.data_submission.model.DataSubmission;
+import de.healthIMIS.iris.public_server.data_submission.repository.DataSubmissionRepository;
+import de.healthIMIS.iris.public_server.data_submission.web.dto.ContactsEventsSubmissionDto;
+import de.healthIMIS.iris.public_server.data_submission.web.dto.DataSubmissionDto;
+import de.healthIMIS.iris.public_server.data_submission.web.dto.GuestsSubmissionDto;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,7 +46,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller of the public end-points for apps to exchange data submissions.
- * 
+ *
  * @author Jens Kutzsche
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen",

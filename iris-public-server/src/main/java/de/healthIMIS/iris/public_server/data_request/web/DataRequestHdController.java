@@ -23,7 +23,7 @@ import de.healthIMIS.iris.public_server.data_request.DataRequest;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.Status;
 import de.healthIMIS.iris.public_server.data_request.DataRequestRepository;
-import de.healthIMIS.iris.public_server.data_submission.web.DataSubmissionApi;
+import de.healthIMIS.iris.public_server.data_submission.web.controller.DataSubmissionApi;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
 import de.healthIMIS.iris.public_server.department.DepartmentRepository;
 import lombok.AllArgsConstructor;

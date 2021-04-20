@@ -12,8 +12,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import de.healthIMIS.iris.public_server.IrisWebIntegrationTest;
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
-import de.healthIMIS.iris.public_server.data_submission.DataSubmission;
-import de.healthIMIS.iris.public_server.data_submission.DataSubmissionRepository;
+import de.healthIMIS.iris.public_server.data_submission.model.DataSubmission;
+import de.healthIMIS.iris.public_server.data_submission.repository.DataSubmissionRepository;
+import de.healthIMIS.iris.public_server.data_submission.web.dto.ContactsEventsSubmissionDto;
+import de.healthIMIS.iris.public_server.data_submission.web.dto.DataSubmissionDto;
+import de.healthIMIS.iris.public_server.data_submission.web.dto.GuestsSubmissionDto;
 import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;

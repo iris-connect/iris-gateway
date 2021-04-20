@@ -12,34 +12,30 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package de.healthIMIS.iris.public_server.data_submission;
+package de.healthIMIS.iris.public_server.data_submission.repository;
 
-import de.healthIMIS.iris.public_server.data_submission.DataSubmission.DataSubmissionIdentifier;
+import de.healthIMIS.iris.public_server.data_submission.model.DataSubmission;
 import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
-
-import java.time.LocalDateTime;
-
-import javax.transaction.Transactional;
-
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.util.Streamable;
+
+import javax.transaction.Transactional;
+import java.time.Instant;
 
 /**
  * @author Jens Kutzsche
  */
-public interface DataSubmissionRepository extends CrudRepository<DataSubmission, DataSubmissionIdentifier> {
+public interface DataSubmissionRepository extends CrudRepository<DataSubmission, DataSubmission.DataSubmissionIdentifier> {
 
-	@Transactional
-	Streamable<DataSubmission> findAllByMetadataLastModifiedIsBetweenOrderByMetadataLastModified(LocalDateTime from,
-			LocalDateTime to);
+    @Transactional
+    Streamable<DataSubmission> findAllByDepartmentIdAndMetadataLastModifiedIsAfter(
+            DepartmentIdentifier id, Instant from);
 
-	@Transactional
-	int deleteAllByMetadataLastModifiedIsBefore(LocalDateTime lastSync);
+    @Transactional
+    Streamable<DataSubmission> findAllByDepartmentIdAndRequestedAtIsBefore(
+            DepartmentIdentifier departmentIdentifier,
+            Instant searchDate);
 
-	@Transactional
-	Streamable<DataSubmission> findAllByDepartmentIdAndMetadataLastModifiedIsBetweenOrderByMetadataLastModified(
-			DepartmentIdentifier id, LocalDateTime from, LocalDateTime to);
-
-	@Transactional
-	int deleteAllByDepartmentIdAndMetadataLastModifiedIsBefore(DepartmentIdentifier id, LocalDateTime lastSync);
+    @Transactional
+    Streamable<DataSubmission> findAllByRequestedAtBefore(Instant time);
 }

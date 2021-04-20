@@ -12,53 +12,69 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package de.healthIMIS.iris.public_server.data_submission.web;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.util.Objects;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
-import org.springframework.validation.annotation.Validated;
+package de.healthIMIS.iris.public_server.data_submission.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 /**
- * GuestsSubmission
+ * Basic data type of a data submission which contains the unencrypted metadata needed for processing.
  */
+@Schema(
+		description = "Basic data type of a data submission which contains the unencrypted metadata needed for processing.")
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen",
 		date = "2021-02-18T08:11:24.698Z[GMT]")
 
-public class GuestsSubmissionDto extends DataSubmissionDto {
+public class DataSubmissionDto {
 
-	@JsonProperty("encryptedData")
-	private String encryptedData = null;
+	@JsonProperty("secret")
+	private String secret = null;
 
-	public GuestsSubmissionDto encryptedData(String encryptedData) {
-		this.encryptedData = encryptedData;
+	@JsonProperty("keyReference")
+	private String keyReference = null;
+
+	public DataSubmissionDto secret(String secret) {
+		this.secret = secret;
 		return this;
 	}
 
 	/**
-	 * Get encryptedData
+	 * The encrypted secret key for encryption.
 	 * 
-	 * @return encryptedData
+	 * @return secret
 	 **/
-	@Schema(required = true, description = "")
-	@NotNull
-
-	@Valid
-	@Pattern(regexp = "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$")
-	public String getEncryptedData() {
-		return encryptedData;
+	public String getSecret() {
+		return secret;
 	}
 
-	public void setEncryptedData(String encryptedData) {
-		this.encryptedData = encryptedData;
+	public void setSecret(String secret) {
+		this.secret = secret;
+	}
+
+	public DataSubmissionDto keyReference(String keyReference) {
+		this.keyReference = keyReference;
+		return this;
+	}
+
+	/**
+	 * Reference to the used key.
+	 * 
+	 * @return keyReference
+	 **/
+	@Schema(required = true, description = "Reference to the used key.")
+	@NotNull
+
+	public String getKeyReference() {
+		return keyReference;
+	}
+
+	public void setKeyReference(String keyReference) {
+		this.keyReference = keyReference;
 	}
 
 	@Override
@@ -69,21 +85,23 @@ public class GuestsSubmissionDto extends DataSubmissionDto {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		GuestsSubmissionDto guestsSubmission = (GuestsSubmissionDto) o;
-		return Objects.equals(this.encryptedData, guestsSubmission.encryptedData) && super.equals(o);
+		DataSubmissionDto dataSubmission = (DataSubmissionDto) o;
+		return Objects.equals(this.secret, dataSubmission.secret)
+				&& Objects.equals(this.keyReference, dataSubmission.keyReference);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(encryptedData, super.hashCode());
+		return Objects.hash(secret, keyReference);
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("class GuestsSubmission {\n");
-		sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-		sb.append("    encryptedData: ").append(toIndentedString(encryptedData)).append("\n");
+		sb.append("class DataSubmission {\n");
+
+		sb.append("    secret: ").append(toIndentedString(secret)).append("\n");
+		sb.append("    keyReference: ").append(toIndentedString(keyReference)).append("\n");
 		sb.append("}");
 		return sb.toString();
 	}
