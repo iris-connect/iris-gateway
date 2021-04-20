@@ -3,15 +3,17 @@ package de.healthIMIS.iris.public_server.data_submission.service;
 import de.healthIMIS.iris.public_server.config.DataSubmissionProperties;
 import de.healthIMIS.iris.public_server.data_submission.model.DataSubmission;
 import de.healthIMIS.iris.public_server.data_submission.repository.DataSubmissionRepository;
-import de.healthIMIS.iris.public_server.department.Department;
+import de.healthIMIS.iris.public_server.department.Department.DepartmentIdentifier;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.time.Instant;
+
+import javax.validation.constraints.NotNull;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
-
-import javax.validation.constraints.NotNull;
-import java.time.Instant;
 
 @Service
 @Slf4j
@@ -36,7 +38,7 @@ public class DataSubmissionServiceImpl implements DataSubmissionService {
     }
 
     @Override
-    public Streamable<DataSubmission> getSubmissionsForDepartmentFrom(Department.DepartmentIdentifier departmentId, Instant from) {
+    public Streamable<DataSubmission> getSubmissionsForDepartmentFrom(DepartmentIdentifier departmentId, Instant from) {
 
         Streamable<DataSubmission> dataSubmissions = submissions
                 .findAllByDepartmentIdAndMetadataLastModifiedIsAfter(departmentId, from);
@@ -68,19 +70,6 @@ public class DataSubmissionServiceImpl implements DataSubmissionService {
         });
 
         submissions.saveAll(dataSubmissions.toList());
-
-    }
-
-    private int deleteOrphanedSubmissions(Department.DepartmentIdentifier departmentIdentifier) {
-
-        Streamable<DataSubmission> orphanedSubmissions = submissions.findAllByDepartmentIdAndRequestedAtIsBefore(
-                departmentIdentifier,
-                Instant.now().minusSeconds(3));
-
-        return (int) orphanedSubmissions.stream().peek(submission -> {
-            submissions.delete(submission);
-            log.info("Deleted orphaned submission " + submission.getId());
-        }).count();
 
     }
 }
