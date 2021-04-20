@@ -1,6 +1,6 @@
 package de.healthIMIS.iris.public_server.data_submission.service;
 
-import de.healthIMIS.iris.public_server.config.DataSubmissionConfig;
+import de.healthIMIS.iris.public_server.config.DataSubmissionProperties;
 import de.healthIMIS.iris.public_server.data_submission.model.DataSubmission;
 import de.healthIMIS.iris.public_server.data_submission.repository.DataSubmissionRepository;
 import de.healthIMIS.iris.public_server.department.Department;
@@ -20,7 +20,7 @@ import java.time.Instant;
 public class DataSubmissionServiceImpl implements DataSubmissionService {
 
     private final @NotNull DataSubmissionRepository submissions;
-    private final @NotNull DataSubmissionConfig dataSubmissionConfig;
+    private final @NotNull DataSubmissionProperties dataSubmissionProperties;
 
     @Override
     public void deleteDataSubmissionById(DataSubmission.DataSubmissionIdentifier submissionId) {
@@ -51,10 +51,10 @@ public class DataSubmissionServiceImpl implements DataSubmissionService {
     public void deleteSubmissionsAfterGraceTime() {
 
         Streamable<DataSubmission> orphanedSubmissions = submissions.findAllByRequestedAtBefore(
-                Instant.now().minusSeconds(dataSubmissionConfig.getGraceTimeSeconds()));
+                Instant.now().minusSeconds(dataSubmissionProperties.getGraceTimeSeconds()));
 
         orphanedSubmissions.forEach(dataSubmission ->
-                log.info("Delete submission "+dataSubmission.getId()+" after "+dataSubmissionConfig.getGraceTimeSeconds()+"s grace time"));
+                log.info("Delete submission "+dataSubmission.getId()+" after "+dataSubmissionProperties.getGraceTimeSeconds()+"s grace time"));
 
         submissions.deleteAll(orphanedSubmissions.toList());
 

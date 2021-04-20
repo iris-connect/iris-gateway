@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @AllArgsConstructor
 @Getter
 @ConfigurationProperties("iris.data-submission")
-public class DataSubmissionConfig {
+public class DataSubmissionProperties {
 
     private int graceTimeSeconds;
 
