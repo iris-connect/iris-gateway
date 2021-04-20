@@ -49,7 +49,7 @@ class DataRequestControllerSystemTest {
     }
 
     @Test
-    @WithMockUser("admin")
+    @WithMockUser()
     public void getDataRequests() throws Exception {
         var res = mockMvc.perform(
                 MockMvcRequestBuilders
@@ -63,7 +63,7 @@ class DataRequestControllerSystemTest {
     }
 
     @Test
-    @WithMockUser("admin")
+    @WithMockUser()
     public void getDataRequestByCode() throws Exception {
         postNewDataRequest();
 
@@ -74,7 +74,7 @@ class DataRequestControllerSystemTest {
     }
 
     @Test
-    @WithMockUser("admin")
+    @WithMockUser()
     public void createDataRequest() throws Exception {
         postNewDataRequest();
     }
