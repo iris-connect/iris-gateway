@@ -18,16 +18,20 @@ import de.healthIMIS.iris.public_server.DataInitializer;
 import de.healthIMIS.iris.public_server.DepartmentDataInitializer;
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequestDataInitializer;
+import de.healthIMIS.iris.public_server.data_submission.model.DataSubmission;
+import de.healthIMIS.iris.public_server.data_submission.repository.DataSubmissionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Qualifier("DataSubmissionDataInitializer")
 class DataSubmissionDataInitializer implements DataInitializer {
 
 	private final DataSubmissionRepository submissions;
@@ -41,8 +45,9 @@ class DataSubmissionDataInitializer implements DataInitializer {
 
 		log.debug("Test data: creating data submissions …");
 
-		var list = new ArrayList<DataSubmission>();
+		submissions.deleteAll();
 
+		var list = new ArrayList<DataSubmission>();
 		list.add(
 				new DataSubmission(DataRequestDataInitializer.REQ_ID_1, DepartmentDataInitializer.DEPARTMENT_ID_1, "secret",
 						"keyReference", "DATA", Feature.Contacts_Events));

@@ -3,25 +3,22 @@
  * https://github.com/swagger-api/swagger-codegen
  * Do not edit the class manually.
  */
-package de.healthIMIS.iris.public_server.data_submission.web;
+package de.healthIMIS.iris.public_server.data_submission.web.controller;
 
 import de.healthIMIS.iris.public_server.data_request.DataRequest.DataRequestIdentifier;
+import de.healthIMIS.iris.public_server.data_submission.web.dto.ContactsEventsSubmissionDto;
+import de.healthIMIS.iris.public_server.data_submission.web.dto.GuestsSubmissionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
-import javax.validation.Valid;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen",
 		date = "2021-02-18T08:11:24.698Z[GMT]")

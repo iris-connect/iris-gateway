@@ -19,7 +19,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import de.healthIMIS.iris.public_server.core.Feature;
 import de.healthIMIS.iris.public_server.data_request.DataRequest;
-import de.healthIMIS.iris.public_server.data_submission.web.DataSubmissionApi;
+import de.healthIMIS.iris.public_server.data_submission.web.controller.DataSubmissionApi;
 import de.healthIMIS.iris.public_server.department.DepartmentRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
