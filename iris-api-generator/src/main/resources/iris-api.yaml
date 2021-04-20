@@ -51,7 +51,7 @@ paths:
 
   ## Index Case Functions
 
-  /data-request-client/case:
+  /data-request-client/cases:
     post:
       summary: Creates a new tracing case for index case data
       requestBody:
@@ -66,8 +66,16 @@ paths:
       tags:
         - "IrisClientFrontend"
         - "IrisSidecarServer"
+    get:
+      summary: Fetches index cases
+      responses:
+        '200':
+          $ref: '#/components/responses/DataRequestCaseDetailsList'
+      tags:
+        - "IrisClientFrontend"
+        - "IrisSidecarServer"
 
-  /data-request-client/case/{caseId}:
+  /data-request-client/cases/{caseId}:
     get:
       summary: Detail view for index data request with the data submissions already received
       parameters:
@@ -98,15 +106,6 @@ paths:
   #     - "IrisClientFrontend"
   #      - "IrisSidecarServer"
 
-  /data-request-client/cases:
-    get:
-      summary: Fetches index cases
-      responses:
-        '200':
-          $ref: '#/components/responses/DataRequestCaseDetailsList'
-      tags:
-        - "IrisClientFrontend"
-        - "IrisSidecarServer"
 
   ## DataRequests and DataSubmission for Contacts and Guest Lists
 
