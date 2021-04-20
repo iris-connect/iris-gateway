@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
@@ -36,7 +36,7 @@ class X509AuthenticationIntegrationTests {
 
 		var response = createRestTemplate(true).getForEntity(
 				"https://localhost:{port}/hd/data-submissions?departmentId={depId}&from={from}",
-				String.class, port, UUID.randomUUID().toString(), LocalDateTime.now());
+				String.class, port, UUID.randomUUID().toString(), Instant.now());
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
@@ -48,7 +48,7 @@ class X509AuthenticationIntegrationTests {
 				.isThrownBy(
 						() -> createRestTemplate(false).getForEntity(
 								"https://localhost:{port}/hd/data-submissions?departmentId={depId}&from={from}",
-								String.class, port, UUID.randomUUID().toString(), LocalDateTime.now()));
+								String.class, port, UUID.randomUUID().toString(), Instant.now()));
 	}
 
 	RestTemplate createRestTemplate(boolean withKeystore) throws Exception {
