@@ -1,0 +1,12 @@
+= Deployment
+
+== Staging Environment
+
+https://iris.staging.iris-gateway.de/
+
+```bash
+sudo su - iris
+cd ./infrastructure
+docker-compose -f docker-compose.staging.yml pull
+docker-compose -f docker-compose.staging.yml up -d
+```

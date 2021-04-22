@@ -291,3 +291,8 @@ Object someMethod(…) {
     : else-do-that;
 }
 ----
+
+== Deployment
+
+See file:
+infrastructure/DEPLOYMENT.adoc
