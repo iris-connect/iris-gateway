@@ -456,7 +456,7 @@ components:
     BearerAuth:            # arbitrary name for the security scheme
       type: http
       scheme: bearer
-      bearerFormat: JWT  
+      bearerFormat: JWT
 
   schemas:
     ExistingDataRequestClientWithLocationList:
@@ -564,32 +564,35 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/DataRequestCaseDetails'
-      properties:
-        nonce:
-          description: 'Nonce used in provider app to authorize data upload'
-          type: string
+        - type: object
+          properties:
+            nonce:
+              description: 'Nonce used in provider app to authorize data upload'
+              type: string
 
     DataRequestCaseDetails:
       description: 'Details for index case'
       allOf:
         - $ref: '#/components/schemas/DataRequestCaseClient'
-      properties:
-        caseId:
-          description: 'Internal case identifier. Used in listings etc.'
-          type: string
-        status:
-          type: string
-          enum:
-            - DATA_REQUESTED
-            - DATA_RECEIVED
-            - CLOSED
+        - type: object
+          properties:
+            caseId:
+              description: 'Internal case identifier. Used in listings etc.'
+              type: string
+            status:
+              type: string
+              enum:
+                - DATA_REQUESTED
+                - DATA_RECEIVED
+                - CLOSED
 
     DataRequestCaseData:
       allOf:
         - $ref: '#/components/schemas/DataRequestCaseExtendedDetails'
-      properties:
-        submissionData:
-          $ref: '#/components/schemas/ContactsAndEvents'
+        - type: object
+          properties:
+            submissionData:
+              $ref: '#/components/schemas/ContactsAndEvents'
 
 
     ## When email service is available
@@ -1045,16 +1048,17 @@ components:
       description: 'All information needed to create a new TracingTicket'
       allOf:
         - $ref: '#/components/schemas/DataRequest'
-      required:
-        - "submissionUri"
-        - "locationId"
-        - "end"
-      properties:
-        submissionUri:
-          type: string
-          description: 'The URI that can be used to submit contact data for this tracing code.'
-          example: 'https://iris.inoeg.de/api/data-submissions/{code}/guests'
-        locationId:
-          type: string
-          description: 'The id of the location.'
-          example: '35b7df90-8670-409a-9375-15a56fd995c1'
+        - type: object
+          required:
+            - "submissionUri"
+            - "locationId"
+            - "end"
+          properties:
+            submissionUri:
+              type: string
+              description: 'The URI that can be used to submit contact data for this tracing code.'
+              example: 'https://iris.inoeg.de/api/data-submissions/{code}/guests'
+            locationId:
+              type: string
+              description: 'The id of the location.'
+              example: '35b7df90-8670-409a-9375-15a56fd995c1'
