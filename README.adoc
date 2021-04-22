@@ -213,8 +213,8 @@ keyToTransport = base64Encode(keyEncrypted);
 We use *Java 11* and the following code style. 
 
 ==== Eclipse
-https://github.com/iris-gateway/IRIS/tree/main/infrastructure/eclipse-code-formatter.xml[infrastructure/eclipse-code-formatter.xml] +
-https://github.com/iris-gateway/IRIS/tree/main/infrastructure/eclipse.importorder[infrastructure/eclipse.importorder]
+link:infrastructure/eclipse-code-formatter.xml[] +
+link:infrastructure/eclipse.importorder[]
 
 ==== Import order
 
@@ -291,3 +291,8 @@ Object someMethod(…) {
     : else-do-that;
 }
 ----
+
+== Deployment
+
+See file:
+link:infrastructure/DEPLOYMENT.adoc[]
