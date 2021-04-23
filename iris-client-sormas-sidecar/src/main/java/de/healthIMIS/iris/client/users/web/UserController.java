@@ -44,12 +44,14 @@ public class UserController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public UserDTO createUser(@RequestBody UserUpsertDTO userUpsert) {
+		// TODO validation
 		return map(userService.upsert(userUpsert));
 	}
 
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public UserDTO updateUser(@PathVariable String id, @RequestBody UserUpsertDTO userUpsertDTO) {
+		// TODO validation
 		// TODO keep id? username in userUpserDTO seems sufficient
 		System.out.println("id = " + id);
 		return map(userService.upsert(userUpsertDTO));
