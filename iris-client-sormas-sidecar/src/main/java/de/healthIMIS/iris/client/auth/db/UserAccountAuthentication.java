@@ -1,5 +1,6 @@
 package de.healthIMIS.iris.client.auth.db;
 
+import de.healthIMIS.iris.client.auth.db.model.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,6 +53,12 @@ public class UserAccountAuthentication implements Authentication {
   @Override
   public String getName() {
     return userName;
+  }
+
+  public boolean isAdmin() {
+    return this.getAuthorities()
+				.stream()
+				.anyMatch(auth -> auth.getAuthority().equals(UserRole.ADMIN.getValue()));
   }
 
 }

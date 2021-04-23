@@ -92,6 +92,9 @@ CREATE TABLE user_accounts (
     user_id uuid NOT NULL,
     user_name varchar(50) NOT NULL,
     password varchar(200) NOT NULL,
+    first_name varchar(200) NOT NULL,
+    last_name varchar(200) NOT NULL,
+    role integer NOT NULL,
     PRIMARY KEY (user_id),
     CONSTRAINT user_name_unique UNIQUE(user_name)
 );

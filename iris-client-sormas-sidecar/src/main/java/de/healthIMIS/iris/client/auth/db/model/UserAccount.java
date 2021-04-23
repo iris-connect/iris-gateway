@@ -1,7 +1,6 @@
 package de.healthIMIS.iris.client.auth.db.model;
 
 
-import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -21,4 +20,9 @@ public class UserAccount {
 
     private String password;
 
+    private String firstName;
+
+    private String lastName;
+
+    private UserRole role;
 }

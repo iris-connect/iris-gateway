@@ -26,6 +26,8 @@ import static de.healthIMIS.iris.client.auth.db.SecurityConstants.*;
 @AllArgsConstructor
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+  public static final String USER_ROLE_CLAIM = "role";
+
   private AuthenticationManager authenticationManager;
 
   private JWTSigner jwtSigner;
@@ -50,6 +52,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
   }
 
+  /**
+   * This Method is called after successfull authentication.
+   * It is responsible for placing the user role in the jwt token.
+   *
+   * @param auth Contains user principle with user information
+   */
   @Override
   protected void successfulAuthentication(HttpServletRequest req,
       HttpServletResponse res,
@@ -58,8 +66,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     User user = (User) auth.getPrincipal();
 
-    String token = jwtSigner.sign(JWT.create()
+    // By convention we expect that there exists only one authority and it represents the role
+    var role = user.getAuthorities().stream().findFirst().get().getAuthority();
+
+		String token = jwtSigner.sign(JWT.create()
         .withSubject(user.getUsername())
+        .withClaim(USER_ROLE_CLAIM, role)
         .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME)));
 
     res.addHeader(AUTHENTICATION_INFO, BEARER_TOKEN_PREFIX + token);
