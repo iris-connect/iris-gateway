@@ -344,6 +344,18 @@ paths:
 
   # user management
 
+  /user-profile:
+    get:
+      summary: Get authenticated IRIS user
+      tags:
+        - "IrisSidecarServer"
+        - "IrisClientFrontend"
+      responses:
+        '200':
+          $ref: '#/components/responses/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
   /users:
     get:
       summary: Get all IRIS users
@@ -495,6 +507,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UserList'
+    User:
+      description: A single IRIS user
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+        
 
   parameters:
     Code:
