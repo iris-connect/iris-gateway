@@ -14,20 +14,17 @@
  *******************************************************************************/
 package de.healthIMIS.iris.public_server;
 
-import org.springframework.scheduling.annotation.EnableScheduling;
-import springfox.documentation.oas.annotations.EnableOpenApi;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
 @EnableJpaAuditing(dateTimeProviderRef = "irisDateTimeProvider")
-@EnableOpenApi
 @EnableScheduling
 @EnableHypermediaSupport(type = HypermediaType.HAL)
 public class IrisPublicServerApplication {

@@ -25,7 +25,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>11</java.version>
 		<docker.image.prefix>inoeg</docker.image.prefix>
-		<springfox-version>3.0.0</springfox-version>
 		<vavr-version>0.10.3</vavr-version>
 		<xmlprojector-version>1.4.18</xmlprojector-version>
 	</properties>
@@ -139,16 +138,11 @@
 			<artifactId>httpclient</artifactId>
 		</dependency>
 
-		<!--SpringFox dependencies -->
+		<!--Spring Docs -->
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-oas</artifactId>
-			<version>${springfox-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>${springfox-version}</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.5.7</version>
 		</dependency>
 	</dependencies>
 
@@ -181,9 +175,7 @@
 						<publishRegistry>
 							<username>${env.DOCKER_HUB_USER}</username>
 							<password>${env.DOCKER_HUB_PW}</password>
-							<!-- <token></token>
-							<url>https://docker.example.com/v1/</url>
-							<email>user@example.com</email>-->
+							<!-- <token></token> <url>https://docker.example.com/v1/</url> <email>user@example.com</email> -->
 						</publishRegistry>
 					</docker>
 				</configuration>
