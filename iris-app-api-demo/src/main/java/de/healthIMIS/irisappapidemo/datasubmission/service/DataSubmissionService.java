@@ -10,14 +10,14 @@ import de.healthIMIS.irisappapidemo.datasubmission.model.dto.GuestListDto;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.GuestSubmissionDto;
 import de.healthIMIS.irisappapidemo.datasubmission.web.client.DataSubmissionClient;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpException;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -40,8 +40,8 @@ public class DataSubmissionService {
         GuestListDto guestList = GuestListDto.builder().
                 guests(guests).
                 additionalInformation("").
-                startDate(ZonedDateTime.now()).
-                endDate(ZonedDateTime.now().plusHours(6)).
+                startDate(Instant.now()).
+                endDate(Instant.now().plus(6, ChronoUnit.HOURS)).
                 dataProvider(dataProvider).
                 build();
         GuestListEncryptor encryptor = GuestListEncryptor.builder().

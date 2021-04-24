@@ -1,20 +1,22 @@
 package de.healthIMIS.irisappapidemo.datasubmission.bootstrap;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import de.healthIMIS.irisappapidemo.datasubmission.model.dto.AddressDto;
+import de.healthIMIS.irisappapidemo.datasubmission.encryption.GuestListEncryptor;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.DataProviderDto;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.GuestDto;
-import de.healthIMIS.irisappapidemo.datasubmission.encryption.GuestListEncryptor;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.GuestListDto;
 import lombok.extern.slf4j.Slf4j;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.ZonedDateTime;
-import java.util.List;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 
 @SpringBootTest
@@ -45,7 +47,7 @@ class GuestLoaderTest {
     void encryptGuestList() {
         List<GuestDto> guests = getGuests();
         DataProviderDto dataProvider = dataProviderLoader.getDataProvider();
-        GuestListDto guestList = GuestListDto.builder().guests(guests).additionalInformation("").startDate(ZonedDateTime.now()).endDate(ZonedDateTime.now().plusHours(6)).dataProvider(dataProvider).build();
+        GuestListDto guestList = GuestListDto.builder().guests(guests).additionalInformation("").startDate(Instant.now()).endDate(Instant.now().plus(6,ChronoUnit.HOURS)).dataProvider(dataProvider).build();
         GuestListEncryptor encryptor = GuestListEncryptor.builder().guestList(guestList).givenPublicKey("MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtcEUFlnEZfDkPO/mxXwC\n" +
                 "NmNTjwlndnp4fk521W+lPqhQ5f8lipp6A2tnIhPeLtvwVN6q68hzASaWxbhAypp2\n" +
                 "Bv77YRjoDacqx4gaq2eLGepb01CHNudGGvQGwhTYbfa8k13d2+z9+uN0/SrmofGc\n" +

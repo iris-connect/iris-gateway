@@ -1,6 +1,8 @@
 package de.healthIMIS.irisappapidemo.datasubmission.service;
 
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import de.healthIMIS.irisappapidemo.datarequest.model.dto.LocationDataRequestDto;
 import de.healthIMIS.irisappapidemo.datasubmission.bootstrap.DataProviderLoader;
 import de.healthIMIS.irisappapidemo.datasubmission.bootstrap.GuestLoader;
@@ -10,15 +12,14 @@ import de.healthIMIS.irisappapidemo.datasubmission.model.dto.DataProviderDto;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.GuestDto;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.GuestListDto;
 import lombok.extern.slf4j.Slf4j;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.List;
 
 @SpringBootTest
 @Slf4j
@@ -130,8 +131,8 @@ class DataSubmissionTest {
         GuestListDto guestList = GuestListDto.builder().
                 guests(guests).
                 additionalInformation("").
-                startDate(ZonedDateTime.now()).
-                endDate(ZonedDateTime.now().plusHours(6)).
+                startDate(Instant.now()).
+                endDate(Instant.now().plus(6,ChronoUnit.HOURS)).
                 dataProvider(dataProvider).
                 build();
         GuestListEncryptor encryptor = GuestListEncryptor.builder().
