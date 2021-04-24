@@ -1,28 +1,35 @@
 package de.healthIMIS.iris.client.auth.db.model;
 
-
 import lombok.Data;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.UUID;
 
 @Entity
 @Data
 @Table(name = "user_accounts")
 public class UserAccount {
 
-    @Id
-    private UUID user_id = UUID.randomUUID();
+	@Id
+	private UUID user_id = UUID.randomUUID();
 
-    private String userName;
+	@Column(nullable = false)
+	private String userName;
 
-    private String password;
+	@Column(nullable = false)
+	private String password;
 
-    private String firstName;
+	private String firstName;
 
-    private String lastName;
+	private String lastName;
 
-    private UserRole role;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private UserRole role;
 }

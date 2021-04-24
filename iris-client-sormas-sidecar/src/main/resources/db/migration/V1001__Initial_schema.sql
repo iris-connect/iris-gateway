@@ -94,7 +94,7 @@ CREATE TABLE user_accounts (
     password varchar(200) NOT NULL,
     first_name varchar(200) NOT NULL,
     last_name varchar(200) NOT NULL,
-    role integer NOT NULL,
+    role varchar(50) NOT NULL,
     PRIMARY KEY (user_id),
     CONSTRAINT user_name_unique UNIQUE(user_name)
 );

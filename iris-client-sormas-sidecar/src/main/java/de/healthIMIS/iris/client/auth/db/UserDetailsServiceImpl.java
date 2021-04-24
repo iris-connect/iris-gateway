@@ -4,12 +4,14 @@ import de.healthIMIS.iris.client.auth.db.model.UserAccount;
 import de.healthIMIS.iris.client.auth.db.model.UserAccountsRepository;
 import de.healthIMIS.iris.client.auth.db.model.UserRole;
 import de.healthIMIS.iris.client.users.web.dto.UserUpsertDTO;
+import lombok.AllArgsConstructor;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import lombok.AllArgsConstructor;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,8 +19,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import static java.util.Collections.emptyList;
 
 @AllArgsConstructor
 @Service
@@ -34,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				.orElseThrow(() -> new UsernameNotFoundException(username));
 
 		// By convention we expect that there exists only one authority and it represents the role
-		var role = userAccount.getRole().getValue();
+		var role = userAccount.getRole().name();
 		var authorities = List.of(new SimpleGrantedAuthority(role));
 
 		return new User(userAccount.getUserName(), userAccount.getPassword(), authorities);
@@ -61,7 +61,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private UserAccount map(UserUpsertDTO userDTO) {
 		var user = new UserAccount();
-		user.setRole(UserRole.fromValue(userDTO.getRole().getValue()));
+		user.setRole(UserRole.valueOf(userDTO.getRole().name()));
 		user.setUserName(userDTO.getUserName());
 		user.setLastName(userDTO.getLastName());
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));

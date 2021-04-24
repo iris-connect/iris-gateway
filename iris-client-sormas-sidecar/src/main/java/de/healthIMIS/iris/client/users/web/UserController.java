@@ -3,13 +3,13 @@ package de.healthIMIS.iris.client.users.web;
 import static de.healthIMIS.iris.client.users.web.UserMappers.map;
 
 import de.healthIMIS.iris.client.auth.db.UserDetailsServiceImpl;
-import de.healthIMIS.iris.client.auth.db.model.UserAccount;
 import de.healthIMIS.iris.client.users.web.dto.UserDTO;
 import de.healthIMIS.iris.client.users.web.dto.UserListDTO;
-import de.healthIMIS.iris.client.users.web.dto.UserRoleDTO;
 import de.healthIMIS.iris.client.users.web.dto.UserUpsertDTO;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController()
 @AllArgsConstructor
