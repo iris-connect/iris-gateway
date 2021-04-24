@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 @Data
 @NoArgsConstructor
@@ -21,10 +21,10 @@ public class LocationDataRequestDto {
     private String keyOfHealthDepartment;
 
     @NotNull
-    private OffsetDateTime start;
+    private Instant start;
 
     @NotNull
-    private OffsetDateTime end;
+    private Instant end;
 
     private String requestDetails;
 

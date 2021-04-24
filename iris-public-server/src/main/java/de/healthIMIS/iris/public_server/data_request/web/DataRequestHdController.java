@@ -32,8 +32,6 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.Set;
 import java.util.UUID;
 
@@ -98,8 +96,8 @@ public class DataRequestHdController {
 		appServerRequestPayload.setHealthDepartment(dataRequest.getDepartmentId().toString());
 		appServerRequestPayload.setRequestDetails(dataRequest.getRequestDetails());
 		appServerRequestPayload.setLocationId(locationId);
-		appServerRequestPayload.setStart(dataRequest.getRequestStart().atOffset(ZoneOffset.UTC));
-		appServerRequestPayload.setEnd(dataRequest.getRequestEnd().atOffset(ZoneOffset.UTC));
+		appServerRequestPayload.setStart(dataRequest.getRequestStart());
+		appServerRequestPayload.setEnd(dataRequest.getRequestEnd());
 
 		var uriBuilder = linkTo(methodOn(DataSubmissionApi.class).postGuestsSubmission(dataRequest.getId(), null))
 				.toUriComponentsBuilder();
@@ -148,8 +146,8 @@ public class DataRequestHdController {
 		String healthDepartment;
 		String keyOfHealthDepartment;
 		String keyReference;
-		OffsetDateTime start;
-		OffsetDateTime end;
+		Instant start;
+		Instant end;
 		String requestDetails;
 		String submissionUri;
 		String locationId;
