@@ -25,13 +25,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@Qualifier("DataSubmissionDataInitializer")
 class DataSubmissionDataInitializer implements DataInitializer {
 
 	private final DataSubmissionRepository submissions;
