@@ -3,6 +3,7 @@ package de.healthIMIS.irisappapidemo.datasubmission.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import de.healthIMIS.irisappapidemo.WireMockContextInitializer;
 import de.healthIMIS.irisappapidemo.datarequest.model.dto.LocationDataRequestDto;
 import de.healthIMIS.irisappapidemo.datasubmission.bootstrap.DataProviderLoader;
 import de.healthIMIS.irisappapidemo.datasubmission.bootstrap.GuestLoader;
@@ -17,11 +18,19 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
-@SpringBootTest
+import com.github.tomakehurst.wiremock.WireMockServer;
+
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(initializers = {WireMockContextInitializer.class})
+@ActiveProfiles("test")
 @Slf4j
 class DataSubmissionTest {
 
@@ -34,6 +43,14 @@ class DataSubmissionTest {
     @Autowired
     private DataProviderLoader dataProviderLoader;
 
+    @Autowired
+	WireMockServer wireMockServer;
+	
+    @AfterEach
+    void shutDown() {	
+		this.wireMockServer.resetAll();
+    }
+    
     final String publicKey = "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtcEUFlnEZfDkPO/mxXwC\n" +
             "NmNTjwlndnp4fk521W+lPqhQ5f8lipp6A2tnIhPeLtvwVN6q68hzASaWxbhAypp2\n" +
             "Bv77YRjoDacqx4gaq2eLGepb01CHNudGGvQGwhTYbfa8k13d2+z9+uN0/SrmofGc\n" +
@@ -148,7 +165,4 @@ class DataSubmissionTest {
         assertEquals(guestList.asJson(), decryptor.decrypt());
 
     }
-
-
-
 }
