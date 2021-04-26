@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,37 +25,50 @@ import org.springframework.stereotype.Service;
 @Component
 public class DataSubmissionService {
 
-    @Autowired
-    private GuestLoader guestLoader;
+	@Autowired
+	private GuestLoader guestLoader;
 
-    @Autowired
-    private DataProviderLoader dataProviderLoader;
+	@Autowired
+	private DataProviderLoader dataProviderLoader;
 
-    @Autowired
-    private DataSubmissionClient dataSubmissionClient;
+	@Autowired
+	private DataSubmissionClient dataSubmissionClient;
 
-    public void sendDataForRequest(LocationDataRequestDto locationDataRequest) throws Exception {
+	private Random random = new Random();
 
-        List<GuestDto> guests = guestLoader.getGuests();
-        DataProviderDto dataProvider = dataProviderLoader.getDataProvider();
-        GuestListDto guestList = GuestListDto.builder().
-                guests(guests).
-                additionalInformation("").
-                startDate(Instant.now()).
-                endDate(Instant.now().plus(6, ChronoUnit.HOURS)).
-                dataProvider(dataProvider).
-                build();
-        GuestListEncryptor encryptor = GuestListEncryptor.builder().
-                guestList(guestList).
-                givenPublicKey(locationDataRequest.getKeyOfHealthDepartment()).
-                build();
+	public void sendDataForRequest(LocationDataRequestDto locationDataRequest) throws Exception {
 
-        GuestSubmissionDto guestSubmission = GuestSubmissionDto.builder().
-                encryptedData(encryptor.encrypt()).
-                keyReference(locationDataRequest.getKeyReference()).
-                secret(encryptor.getSecretKeyBase64()).
-                build();
+		List<GuestDto> guests = guestLoader.getGuests();
 
-        dataSubmissionClient.postDataSubmissionGuests(guestSubmission, locationDataRequest.getSubmissionUri());
-    }
+		var start = locationDataRequest.getStart();
+		var end = locationDataRequest.getEnd();
+		// 2 of 3 should have plausible values
+		for (int i = 0; i < 2; i++) {
+
+			var guest = guests.get(i);
+			guest.getAttendanceInformation().setAttendFrom(start.minus(random.nextInt(100), ChronoUnit.MINUTES));
+			guest.getAttendanceInformation().setAttendTo(end.plus(random.nextInt(100), ChronoUnit.MINUTES));
+		}
+
+		DataProviderDto dataProvider = dataProviderLoader.getDataProvider();
+    GuestListDto guestList = GuestListDto.builder().
+            guests(guests).
+            additionalInformation("").
+            startDate(Instant.now()).
+            endDate(Instant.now().plus(6, ChronoUnit.HOURS)).
+            dataProvider(dataProvider).
+            build();
+    GuestListEncryptor encryptor = GuestListEncryptor.builder().
+            guestList(guestList).
+            givenPublicKey(locationDataRequest.getKeyOfHealthDepartment()).
+            build();
+
+    GuestSubmissionDto guestSubmission = GuestSubmissionDto.builder().
+            encryptedData(encryptor.encrypt()).
+            keyReference(locationDataRequest.getKeyReference()).
+            secret(encryptor.getSecretKeyBase64()).
+            build();
+
+    dataSubmissionClient.postDataSubmissionGuests(guestSubmission, locationDataRequest.getSubmissionUri());
+	}
 }
