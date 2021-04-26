@@ -38,7 +38,7 @@ public class IrisWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapt
 
 		var filter = new X509AuthenticationFilter();
 		var extractor = new SubjectDnX509PrincipalExtractor();
-		extractor.setSubjectDnRegex("OU=(.*?)(?:,|$)");
+		extractor.setSubjectDnRegex("(?:OU|CN)=(.*?)(?:,|$)");
 		filter.setPrincipalExtractor(extractor);
 
 		filter.setAuthenticationManager(authentication -> {
