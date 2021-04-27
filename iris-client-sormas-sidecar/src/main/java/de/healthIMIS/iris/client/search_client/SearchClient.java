@@ -30,6 +30,8 @@ public class SearchClient {
 		location.setId(new Location.LocationIdentifier());
 		location.setLocationId(locationDto.getId());
 		// Todo: Why is it null
+		// 1. rest.getForObject liefert null
+		// 2. mapper.map liefert null für getId
 		location.setProviderId(providerId);
 		return location;
 	}
