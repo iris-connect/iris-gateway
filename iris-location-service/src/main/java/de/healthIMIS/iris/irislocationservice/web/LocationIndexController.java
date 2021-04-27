@@ -19,14 +19,17 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Size;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Validated
 @AllArgsConstructor
 public class LocationIndexController {
 
@@ -82,7 +85,7 @@ public class LocationIndexController {
 	@GetMapping("/search/{search_keyword}")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<LocationList> searchSearchKeywordGet(
-			@DecimalMin("4") @PathVariable("search_keyword") String searchKeyword) {
+			@Size(min = 4) @PathVariable("search_keyword") String searchKeyword) {
 		// TODO: Authenticate API Access
 
 		return new ResponseEntity<LocationList>(new LocationList(index.search(searchKeyword)), HttpStatus.OK);
