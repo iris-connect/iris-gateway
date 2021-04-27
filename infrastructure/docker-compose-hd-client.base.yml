@@ -8,8 +8,10 @@ services:
     image: inoeg/iris-client-sormas-sidecar:${IRIS_VERSION}
     expose:
       - 8092
+    environment: 
+      SPRING_PROFILES_ACTIVE: docker
     env_file:
-      - iris-client-frontend.env
+      - iris-client.env
 #    mem_limit: ${IRIS_CLIENT_MEM}
 #    mem_reservation: ${IRIS_CLIENT_MEM_RESERVED}
     restart: unless-stopped
@@ -19,5 +21,5 @@ services:
     expose:
       - 28080
     env_file:
-      - iris-client-frontend.env
+      - iris-client.env
     restart: unless-stopped
