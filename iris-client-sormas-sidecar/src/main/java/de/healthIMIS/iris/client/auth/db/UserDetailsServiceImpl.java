@@ -4,6 +4,7 @@ import de.healthIMIS.iris.client.auth.db.model.UserAccount;
 import de.healthIMIS.iris.client.auth.db.model.UserAccountsRepository;
 import de.healthIMIS.iris.client.auth.db.model.UserRole;
 import de.healthIMIS.iris.client.users.web.dto.UserUpsertDTO;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -57,6 +58,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				.ifPresentOrElse(upsertable::set, () -> upsertable.set(map(userUpsert)));
 
 		return userAccountsRepository.save(upsertable.get());
+	}
+
+	public void deleteUserById(String id) {
+		userAccountsRepository.deleteById(UUID.fromString(id));;
 	}
 
 	private UserAccount map(UserUpsertDTO userDTO) {
