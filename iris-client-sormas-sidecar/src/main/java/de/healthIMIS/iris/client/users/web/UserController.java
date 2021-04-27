@@ -4,11 +4,13 @@ import static de.healthIMIS.iris.client.users.web.UserMappers.map;
 
 import de.healthIMIS.iris.client.users.UserDetailsServiceImpl;
 import de.healthIMIS.iris.client.users.web.dto.UserDTO;
+import de.healthIMIS.iris.client.users.web.dto.UserInsertDTO;
 import de.healthIMIS.iris.client.users.web.dto.UserListDTO;
-import de.healthIMIS.iris.client.users.web.dto.UserUpsertDTO;
+import de.healthIMIS.iris.client.users.web.dto.UserUpdateDTO;
+import java.util.UUID;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 
-import java.security.Principal;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -25,15 +27,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
 @AllArgsConstructor
-@RequestMapping(UserController.USER_API_PATH)
+@RequestMapping("/users")
 public class UserController {
-
-	public static final String USER_API_PATH = "/users";
 
 	private final UserDetailsServiceImpl userService;
 
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public UserListDTO getAllUsers() {
 		return new UserListDTO().users(
 				this.userService
@@ -46,26 +47,21 @@ public class UserController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public UserDTO createUser(Principal p, @RequestBody UserUpsertDTO userUpsert) {
-		System.out.println("p = " + p);
-		// TODO validation
-		return map(userService.upsert(userUpsert));
+	public UserDTO createUser(@RequestBody @Valid UserInsertDTO userInsert) {
+		return map(userService.create(userInsert));
 	}
 
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public UserDTO updateUser(@PathVariable String id, @RequestBody UserUpsertDTO userUpsertDTO) {
-		// TODO validation
-		// TODO keep id? username in userUpserDTO seems sufficient
-		System.out.println("id = " + id);
-		return map(userService.upsert(userUpsertDTO));
+	public UserDTO updateUser(@PathVariable UUID id, @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
+		return map(userService.update(id, userUpdateDTO));
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public void deleteUser(@PathVariable String id) {
-		this.userService.deleteUserById(id);
+	public void deleteUser(@PathVariable UUID id) {
+		this.userService.deleteById(id);
 	}
 }

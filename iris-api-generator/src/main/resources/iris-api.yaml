@@ -375,7 +375,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserUpsert'
+              $ref: '#/components/schemas/UserInsert'
       responses:
         '201':
           $ref: '#/components/responses/UpsertedUser'
@@ -395,7 +395,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserUpsert'
+              $ref: '#/components/schemas/UserUpdate'
       responses:
         '200':
           $ref: '#/components/responses/UpsertedUser'
@@ -513,7 +513,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/User'
-        
+
 
   parameters:
     Code:
@@ -595,6 +595,10 @@ components:
         - USER
 
     User:
+      required:
+        - userName
+        - password
+        - role
       properties:
         id:
           type: string
@@ -614,7 +618,7 @@ components:
           items:
             $ref: '#/components/schemas/User'
 
-    UserUpsert:
+    UserUpdate:
       properties:
         firstName:
           type: string
@@ -626,6 +630,14 @@ components:
           type: string
         role:
           $ref: '#/components/schemas/UserRole'
+
+    UserInsert:
+      required:
+        - userName
+        - password
+        - role
+      allOf:
+        - $ref: '#/components/schemas/UserUpdate'
 
     ExistingDataRequestClientWithLocation:
       properties:

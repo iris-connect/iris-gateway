@@ -17,20 +17,23 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 
 import com.google.gson.annotations.SerializedName;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * UserInsert
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen",
 		date = "2021-04-27T12:38:06.881282+02:00[Europe/Berlin]")
-public class UserInsert {
+public class UserInsertDTO {
 	public static final String SERIALIZED_NAME_FIRST_NAME = "firstName";
 	@SerializedName(SERIALIZED_NAME_FIRST_NAME)
-	private String firstName;
+	private String firstName = "";
 
 	public static final String SERIALIZED_NAME_LAST_NAME = "lastName";
 	@SerializedName(SERIALIZED_NAME_LAST_NAME)
-	private String lastName;
+	private String lastName = "";
 
 	public static final String SERIALIZED_NAME_USER_NAME = "userName";
 	@SerializedName(SERIALIZED_NAME_USER_NAME)
@@ -44,7 +47,7 @@ public class UserInsert {
 	@SerializedName(SERIALIZED_NAME_ROLE)
 	private UserRoleDTO role;
 
-	public UserInsert firstName(String firstName) {
+	public UserInsertDTO firstName(String firstName) {
 
 		this.firstName = firstName;
 		return this;
@@ -66,7 +69,7 @@ public class UserInsert {
 		this.firstName = firstName;
 	}
 
-	public UserInsert lastName(String lastName) {
+	public UserInsertDTO lastName(String lastName) {
 
 		this.lastName = lastName;
 		return this;
@@ -74,7 +77,7 @@ public class UserInsert {
 
 	/**
 	 * Get lastName
-	 * 
+	 *
 	 * @return lastName
 	 **/
 	@javax.annotation.Nullable
@@ -88,7 +91,7 @@ public class UserInsert {
 		this.lastName = lastName;
 	}
 
-	public UserInsert userName(String userName) {
+	public UserInsertDTO userName(String userName) {
 
 		this.userName = userName;
 		return this;
@@ -96,11 +99,11 @@ public class UserInsert {
 
 	/**
 	 * Get userName
-	 * 
+	 *
 	 * @return userName
 	 **/
+	@NotNull
 	@ApiModelProperty(required = true, value = "")
-
 	public String getUserName() {
 		return userName;
 	}
@@ -109,7 +112,7 @@ public class UserInsert {
 		this.userName = userName;
 	}
 
-	public UserInsert password(String password) {
+	public UserInsertDTO password(String password) {
 
 		this.password = password;
 		return this;
@@ -120,8 +123,9 @@ public class UserInsert {
 	 * 
 	 * @return password
 	 **/
+	@NotNull
+	@Length(min = 8)
 	@ApiModelProperty(required = true, value = "")
-
 	public String getPassword() {
 		return password;
 	}
@@ -130,7 +134,7 @@ public class UserInsert {
 		this.password = password;
 	}
 
-	public UserInsert role(UserRoleDTO role) {
+	public UserInsertDTO role(UserRoleDTO role) {
 
 		this.role = role;
 		return this;
@@ -141,8 +145,8 @@ public class UserInsert {
 	 * 
 	 * @return role
 	 **/
+	@NotNull
 	@ApiModelProperty(required = true, value = "")
-
 	public UserRoleDTO getRole() {
 		return role;
 	}
@@ -159,7 +163,7 @@ public class UserInsert {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		UserInsert userInsert = (UserInsert) o;
+		UserInsertDTO userInsert = (UserInsertDTO) o;
 		return Objects.equals(this.firstName, userInsert.firstName) &&
 				Objects.equals(this.lastName, userInsert.lastName) &&
 				Objects.equals(this.userName, userInsert.userName) &&

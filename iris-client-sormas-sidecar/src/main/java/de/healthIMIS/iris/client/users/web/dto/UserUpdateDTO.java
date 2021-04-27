@@ -17,13 +17,14 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 
 import com.google.gson.annotations.SerializedName;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * UserUpdate
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen",
 		date = "2021-04-27T12:38:06.881282+02:00[Europe/Berlin]")
-public class UserUpdate {
+public class UserUpdateDTO {
 	public static final String SERIALIZED_NAME_FIRST_NAME = "firstName";
 	@SerializedName(SERIALIZED_NAME_FIRST_NAME)
 	private String firstName;
@@ -44,7 +45,7 @@ public class UserUpdate {
 	@SerializedName(SERIALIZED_NAME_ROLE)
 	private UserRoleDTO role;
 
-	public UserUpdate firstName(String firstName) {
+	public UserUpdateDTO firstName(String firstName) {
 
 		this.firstName = firstName;
 		return this;
@@ -66,7 +67,7 @@ public class UserUpdate {
 		this.firstName = firstName;
 	}
 
-	public UserUpdate lastName(String lastName) {
+	public UserUpdateDTO lastName(String lastName) {
 
 		this.lastName = lastName;
 		return this;
@@ -88,7 +89,7 @@ public class UserUpdate {
 		this.lastName = lastName;
 	}
 
-	public UserUpdate userName(String userName) {
+	public UserUpdateDTO userName(String userName) {
 
 		this.userName = userName;
 		return this;
@@ -102,6 +103,7 @@ public class UserUpdate {
 	@javax.annotation.Nullable
 	@ApiModelProperty(value = "")
 
+	@Length(min = 1)
 	public String getUserName() {
 		return userName;
 	}
@@ -110,7 +112,7 @@ public class UserUpdate {
 		this.userName = userName;
 	}
 
-	public UserUpdate password(String password) {
+	public UserUpdateDTO password(String password) {
 
 		this.password = password;
 		return this;
@@ -124,6 +126,7 @@ public class UserUpdate {
 	@javax.annotation.Nullable
 	@ApiModelProperty(value = "")
 
+	@Length(min = 8)
 	public String getPassword() {
 		return password;
 	}
@@ -132,7 +135,7 @@ public class UserUpdate {
 		this.password = password;
 	}
 
-	public UserUpdate role(UserRoleDTO role) {
+	public UserUpdateDTO role(UserRoleDTO role) {
 
 		this.role = role;
 		return this;
@@ -162,7 +165,7 @@ public class UserUpdate {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		UserUpdate userUpdate = (UserUpdate) o;
+		UserUpdateDTO userUpdate = (UserUpdateDTO) o;
 		return Objects.equals(this.firstName, userUpdate.firstName) &&
 				Objects.equals(this.lastName, userUpdate.lastName) &&
 				Objects.equals(this.userName, userUpdate.userName) &&
