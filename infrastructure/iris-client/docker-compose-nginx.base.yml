@@ -1,0 +1,13 @@
+########################################################
+# provides basic configurations for IRIS client backend and frontend
+# this is necessary because extends can't reference to a service with depends_on
+########################################################
+version: '3'
+services:
+  nginx:
+    build:
+      ./docker/nginx
+    ports:
+      - 443:443
+    volumes:
+      - "./localhost:/etc/localhost"

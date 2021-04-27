@@ -11,9 +11,7 @@ services:
     environment: 
       SPRING_PROFILES_ACTIVE: docker
     env_file:
-      - iris-client.env
-#    mem_limit: ${IRIS_CLIENT_MEM}
-#    mem_reservation: ${IRIS_CLIENT_MEM_RESERVED}
+      - .env
     restart: unless-stopped
 
   iris-frontend:
