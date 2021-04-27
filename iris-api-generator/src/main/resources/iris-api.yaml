@@ -409,7 +409,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/UserId'
       responses:
-        '200':
+        '204':
           description: 'User deleted'
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -496,7 +496,7 @@ components:
           schema:
             $ref: '#/components/schemas/DataRequestCaseData'
     UpsertedUser:
-      description: 'A newnly inserted or updated IRIS user'
+      description: 'A newly inserted or updated IRIS user'
       content:
         application/json:
           schema:
