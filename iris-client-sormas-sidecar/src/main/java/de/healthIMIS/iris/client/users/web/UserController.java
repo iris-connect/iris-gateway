@@ -8,9 +8,11 @@ import de.healthIMIS.iris.client.users.web.dto.UserListDTO;
 import de.healthIMIS.iris.client.users.web.dto.UserUpsertDTO;
 import lombok.AllArgsConstructor;
 
+import java.security.Principal;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,13 +45,16 @@ public class UserController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public UserDTO createUser(@RequestBody UserUpsertDTO userUpsert) {
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public UserDTO createUser(Principal p, @RequestBody UserUpsertDTO userUpsert) {
+		System.out.println("p = " + p);
 		// TODO validation
 		return map(userService.upsert(userUpsert));
 	}
 
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public UserDTO updateUser(@PathVariable String id, @RequestBody UserUpsertDTO userUpsertDTO) {
 		// TODO validation
 		// TODO keep id? username in userUpserDTO seems sufficient
@@ -59,6 +64,7 @@ public class UserController {
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public void deleteUser(@PathVariable String id) {
 		this.userService.deleteUserById(id);
 	}

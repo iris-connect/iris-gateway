@@ -2,7 +2,6 @@ package de.healthIMIS.iris.client.auth.db;
 
 import static de.healthIMIS.iris.client.auth.db.SecurityConstants.BEARER_TOKEN_PREFIX;
 import static de.healthIMIS.iris.client.auth.db.SecurityConstants.JWT_CLAIM_USER_ROLE;
-import static de.healthIMIS.iris.client.users.web.UserController.USER_API_PATH;
 
 import de.healthIMIS.iris.client.auth.db.jwt.JWTVerifier;
 
@@ -45,14 +44,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 		var token = header.replace(BEARER_TOKEN_PREFIX, "");
 
 		var authentication = authenticate(token);
-
-		// only admins are allowed to access the user api
-		if (req.getRequestURI().startsWith(USER_API_PATH)) {
-			if (!authentication.isAdmin()) {
-				chain.doFilter(req, res);
-				return;
-			}
-		}
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		chain.doFilter(req, res);
