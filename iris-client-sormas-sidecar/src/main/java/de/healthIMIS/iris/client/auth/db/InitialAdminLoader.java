@@ -1,8 +1,8 @@
 package de.healthIMIS.iris.client.auth.db;
 
-import de.healthIMIS.iris.client.auth.db.model.UserAccount;
-import de.healthIMIS.iris.client.auth.db.model.UserAccountsRepository;
-import de.healthIMIS.iris.client.auth.db.model.UserRole;
+import de.healthIMIS.iris.client.users.entities.UserAccount;
+import de.healthIMIS.iris.client.users.UserAccountsRepository;
+import de.healthIMIS.iris.client.users.entities.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

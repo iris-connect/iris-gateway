@@ -1,7 +1,7 @@
 package de.healthIMIS.iris.client.users.web;
 
-import de.healthIMIS.iris.client.auth.db.UserDetailsServiceImpl;
-import de.healthIMIS.iris.client.auth.db.model.UserAccount;
+import de.healthIMIS.iris.client.users.UserDetailsServiceImpl;
+import de.healthIMIS.iris.client.users.entities.UserAccount;
 import de.healthIMIS.iris.client.users.web.dto.UserDTO;
 import java.security.Principal;
 import java.util.Optional;

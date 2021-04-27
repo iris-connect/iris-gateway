@@ -2,7 +2,7 @@ package de.healthIMIS.iris.client.users.web;
 
 import static de.healthIMIS.iris.client.users.web.UserMappers.map;
 
-import de.healthIMIS.iris.client.auth.db.UserDetailsServiceImpl;
+import de.healthIMIS.iris.client.users.UserDetailsServiceImpl;
 import de.healthIMIS.iris.client.users.web.dto.UserDTO;
 import de.healthIMIS.iris.client.users.web.dto.UserListDTO;
 import de.healthIMIS.iris.client.users.web.dto.UserUpsertDTO;

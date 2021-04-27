@@ -1,6 +1,6 @@
 package de.healthIMIS.iris.client.auth.db;
 
-import de.healthIMIS.iris.client.auth.db.model.UserRole;
+import de.healthIMIS.iris.client.users.entities.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

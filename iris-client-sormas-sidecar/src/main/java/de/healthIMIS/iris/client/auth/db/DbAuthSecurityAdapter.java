@@ -2,8 +2,8 @@ package de.healthIMIS.iris.client.auth.db;
 
 import de.healthIMIS.iris.client.auth.db.jwt.JWTSigner;
 import de.healthIMIS.iris.client.auth.db.jwt.JWTVerifier;
+import de.healthIMIS.iris.client.users.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

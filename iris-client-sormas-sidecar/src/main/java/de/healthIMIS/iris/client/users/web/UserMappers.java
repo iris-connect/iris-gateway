@@ -1,6 +1,6 @@
 package de.healthIMIS.iris.client.users.web;
 
-import de.healthIMIS.iris.client.auth.db.model.UserAccount;
+import de.healthIMIS.iris.client.users.entities.UserAccount;
 import de.healthIMIS.iris.client.users.web.dto.UserDTO;
 import de.healthIMIS.iris.client.users.web.dto.UserRoleDTO;
 

@@ -1,4 +1,4 @@
-package de.healthIMIS.iris.client.auth.db.model;
+package de.healthIMIS.iris.client.users.entities;
 
 /**
  * Gets or Sets UserRole

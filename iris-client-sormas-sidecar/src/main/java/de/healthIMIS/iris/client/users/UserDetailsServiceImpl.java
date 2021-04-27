@@ -1,8 +1,8 @@
-package de.healthIMIS.iris.client.auth.db;
+package de.healthIMIS.iris.client.users;
 
-import de.healthIMIS.iris.client.auth.db.model.UserAccount;
-import de.healthIMIS.iris.client.auth.db.model.UserAccountsRepository;
-import de.healthIMIS.iris.client.auth.db.model.UserRole;
+import de.healthIMIS.iris.client.users.entities.UserAccount;
+import de.healthIMIS.iris.client.users.UserAccountsRepository;
+import de.healthIMIS.iris.client.users.entities.UserRole;
 import de.healthIMIS.iris.client.users.web.dto.UserUpsertDTO;
 import java.util.UUID;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,6 @@
-package de.healthIMIS.iris.client.auth.db.model;
+package de.healthIMIS.iris.client.users;
 
+import de.healthIMIS.iris.client.users.entities.UserAccount;
 import java.util.Optional;
 import java.util.UUID;
 
