@@ -54,11 +54,6 @@ public class RestTemplateConfig {
 		return restTemplate;
 	}
 
-	@Bean(name = "search-rest")
-	RestTemplate getSearchRestTemplate(RestTemplateBuilder builder) {
-		return builder.build();
-	}
-
 	@Bean(name = "sormas-rest")
 	RestTemplate getSormasRestTemplate(RestTemplateBuilder builder) {
 
