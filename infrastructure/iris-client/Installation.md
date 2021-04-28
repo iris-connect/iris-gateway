@@ -57,3 +57,34 @@ Bevor man mit der Installation des IRIS Clients beginnen kann, muss man die Dock
 
 2) Installation von Docker Compose ist [hier beschrieben](https://docs.docker.com/compose/install/#install-compose-on-linux-systems).
 
+### Installation IRIS Client
+
+1) Auspacken des Installations Archives
+
+    ```
+    tar -xvf iris-client.tar 
+    ```
+
+2) IRIS Client mit Docker Compose starten
+
+    ```
+    docker-compose up -d
+    ```
+
+3) Überprüfen ob alle services laufen
+
+    ```
+    docker-compose ps
+    ```
+
+4) Die Logfiles der Services einsehen
+
+    ```
+    docker-compose logs -f
+    ```
+
+5) Überprüfen ob der Webserver eine gültige Antwort liefert
+
+    ```
+    curl -k -v https://localhost
+    ```
