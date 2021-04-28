@@ -2,7 +2,7 @@
 # provides a Postgresql database
 # DB: login = postgres:postgres; hostname = postgres; port = 5432; volume = psqldata_iris
 ########################################################
-version: '2'
+version: '2.1'
 services:
   postgres:
     image: postgres:9.6-alpine

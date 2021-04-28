@@ -5,7 +5,7 @@
 # DB: look at docker-compose-postgres.yml
 # IRIS frontend: port = 28080
 ########################################################
-version: '2'
+version: '2.1'
 services:
   postgres:
     extends:
