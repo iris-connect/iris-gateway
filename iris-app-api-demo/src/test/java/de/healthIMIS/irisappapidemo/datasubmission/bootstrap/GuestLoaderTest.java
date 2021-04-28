@@ -2,12 +2,11 @@ package de.healthIMIS.irisappapidemo.datasubmission.bootstrap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import de.healthIMIS.irisappapidemo.WireMockContextInitializer;
+import de.healthIMIS.irisappapidemo.IrisWebIntegrationTest;
 import de.healthIMIS.irisappapidemo.datasubmission.encryption.GuestListEncryptor;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.DataProviderDto;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.GuestDto;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.GuestListDto;
-import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -15,19 +14,13 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(initializers = {WireMockContextInitializer.class})
-@ActiveProfiles("test")
+@IrisWebIntegrationTest
 class GuestLoaderTest {
 
     @Autowired
@@ -45,8 +38,7 @@ class GuestLoaderTest {
         try {
             objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(guests);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            fail();
+            fail(e);
         }
         return guests;
     }

@@ -1,9 +1,10 @@
 package de.healthIMIS.irisappapidemo.datasubmission.service;
 
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import de.healthIMIS.irisappapidemo.WireMockContextInitializer;
+import de.healthIMIS.irisappapidemo.IrisWireMockTest;
 import de.healthIMIS.irisappapidemo.datarequest.model.dto.LocationDataRequestDto;
 import de.healthIMIS.irisappapidemo.datasubmission.bootstrap.DataProviderLoader;
 import de.healthIMIS.irisappapidemo.datasubmission.bootstrap.GuestLoader;
@@ -18,19 +19,11 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.beans.factory.annotation.Value;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
-
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(initializers = {WireMockContextInitializer.class})
-@ActiveProfiles("test")
+@IrisWireMockTest
 @Slf4j
 class DataSubmissionTest {
 
@@ -42,15 +35,10 @@ class DataSubmissionTest {
 
     @Autowired
     private DataProviderLoader dataProviderLoader;
-
-    @Autowired
-	WireMockServer wireMockServer;
-	
-    @AfterEach
-    void shutDown() {	
-		this.wireMockServer.resetAll();
-    }
     
+    @Value("${wiremock.server.https-port}")
+    private String port;
+
     final String publicKey = "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtcEUFlnEZfDkPO/mxXwC\n" +
             "NmNTjwlndnp4fk521W+lPqhQ5f8lipp6A2tnIhPeLtvwVN6q68hzASaWxbhAypp2\n" +
             "Bv77YRjoDacqx4gaq2eLGepb01CHNudGGvQGwhTYbfa8k13d2+z9+uN0/SrmofGc\n" +
@@ -119,18 +107,25 @@ class DataSubmissionTest {
 
     @Test
     void sendDataForRequest() {
+    	
+    	String path = "/data-submissions/423576f4-9202-11eb-b5b7-00155da17da6/guests";
+			var submissionUri = "https://localhost:" + port + path;
+    	
+    	stubFor(post(urlEqualTo(path)).willReturn(aResponse().withStatus(202)));
+    	
         try {
 
-            LocationDataRequestDto locationDataRequest = LocationDataRequestDto.builder().
+						LocationDataRequestDto locationDataRequest = LocationDataRequestDto.builder().
                     keyOfHealthDepartment(publicKey).
                     keyReference("2470b56c-90b7-11eb-a8b3-0242ac130003").
-                    submissionUri("https://localhost:8443/data-submissions/423576f4-9202-11eb-b5b7-00155da17da6/guests").
+                    submissionUri(submissionUri).
+                    start(Instant.now()).
                     build();
 
             dataSubmissionService.sendDataForRequest(locationDataRequest);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            fail(e);
         }
     }
 
@@ -140,7 +135,7 @@ class DataSubmissionTest {
         LocationDataRequestDto locationDataRequest = LocationDataRequestDto.builder().
                 keyOfHealthDepartment(publicKey).
                 keyReference("2470b56c-90b7-11eb-a8b3-0242ac130003").
-                submissionUri("https://localhost:8443/data-submissions/423576f4-9202-11eb-b5b7-00155da17da6/guests").
+                submissionUri("https://localhost:" + port + "/data-submissions/423576f4-9202-11eb-b5b7-00155da17da6/guests").
                 build();
 
         List<GuestDto> guests = guestLoader.getGuests();
