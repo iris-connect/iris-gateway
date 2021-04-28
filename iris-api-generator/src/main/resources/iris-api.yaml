@@ -342,6 +342,78 @@ paths:
         '403':
           $ref: '#/components/responses/LoginFailed'
 
+  # user management
+
+  /user-profile:
+    get:
+      summary: Get authenticated IRIS user
+      tags:
+        - "IrisSidecarServer"
+        - "IrisClientFrontend"
+      responses:
+        '200':
+          $ref: '#/components/responses/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /users:
+    get:
+      summary: Get all IRIS users
+      tags:
+        - "IrisSidecarServer"
+        - "IrisClientFrontend"
+      responses:
+        '200':
+          $ref: '#/components/responses/UserList'
+    post:
+      summary: Create IRIS user
+      tags:
+        - "IrisSidecarServer"
+        - "IrisClientFrontend"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInsert'
+      responses:
+        '201':
+          $ref: '#/components/responses/UpsertedUser'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /users/{id}:
+    patch:
+      summary: Update IRIS user
+      tags:
+        - "IrisSidecarServer"
+        - "IrisClientFrontend"
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpsertedUser'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      summary: Delete IRIS user
+      tags:
+        - "IrisSidecarServer"
+        - "IrisClientFrontend"
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '204':
+          description: 'User deleted'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
 security:
   - ApiKeyAuth: []
   - BearerAuth: []
@@ -423,6 +495,25 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/DataRequestCaseData'
+    UpsertedUser:
+      description: 'A newly inserted or updated IRIS user'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    UserList:
+      description: 'List of IRIS users'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserList'
+    User:
+      description: A single IRIS user
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+
 
   parameters:
     Code:
@@ -438,6 +529,13 @@ components:
       in: path
       required: true
       description: 'The unique ID of a location in the context of the provider.'
+      schema:
+        type: string
+    UserId:
+      name: id
+      in: path
+      required: true
+      description: 'The ID of an IRIS Client user.'
       schema:
         type: string
     CaseId:
@@ -489,6 +587,57 @@ components:
           type: string
         password:
           type: string
+
+    UserRole:
+      type: string
+      enum:
+        - ADMIN
+        - USER
+
+    User:
+      required:
+        - userName
+        - password
+        - role
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        userName:
+          type: string
+        role:
+          $ref: '#/components/schemas/UserRole'
+
+    UserList:
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+
+    UserUpdate:
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        userName:
+          type: string
+        password:
+          type: string
+        role:
+          $ref: '#/components/schemas/UserRole'
+
+    UserInsert:
+      required:
+        - userName
+        - password
+        - role
+      allOf:
+        - $ref: '#/components/schemas/UserUpdate'
 
     ExistingDataRequestClientWithLocation:
       properties:
