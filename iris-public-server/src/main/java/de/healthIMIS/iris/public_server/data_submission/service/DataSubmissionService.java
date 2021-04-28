@@ -10,7 +10,7 @@ public interface DataSubmissionService {
 
     void deleteDataSubmissionById(DataSubmission.DataSubmissionIdentifier id);
 
-    Streamable<DataSubmission> getSubmissionsForDepartmentFrom(Department.DepartmentIdentifier departmentId, Instant fromString);
+    Streamable<DataSubmission> getSubmissionsForDepartmentFrom(Department.DepartmentIdentifier departmentId);
 
     void deleteSubmissionsAfterGraceTime();
 }

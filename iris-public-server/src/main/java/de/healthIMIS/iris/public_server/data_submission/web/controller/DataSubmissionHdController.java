@@ -49,18 +49,16 @@ public class DataSubmissionHdController {
 
     @GetMapping("/hd/data-submissions")
     HttpEntity<List<DataSubmissionInternalOutputDto>> getDataSubmissions(
-            @RequestParam("departmentId") DepartmentIdentifier departmentId, @RequestParam("from") String fromStr) {
-        var to = Instant.now();
-        var from = Instant.parse(fromStr);
+            @RequestParam("departmentId") DepartmentIdentifier departmentId) {
 
-        var dataSubmissions = dataSubmissionService.getSubmissionsForDepartmentFrom(departmentId, from);
+        var dataSubmissions = dataSubmissionService.getSubmissionsForDepartmentFrom(departmentId);
 
         var dtos = dataSubmissions.map(DataSubmissionInternalOutputDto::of).toList();
 
         log.debug("Submission - GET from hd client: {}",
                 dtos.stream().map(DataSubmissionInternalOutputDto::getRequestId).collect(Collectors.joining(", ")));
 
-        return ResponseEntity.ok().lastModified(to.atZone(ZoneId.systemDefault())).body(dtos);
+        return ResponseEntity.ok().body(dtos);
     }
 
     @DeleteMapping("/hd/data-submissions/{dataSubmissionId}")
