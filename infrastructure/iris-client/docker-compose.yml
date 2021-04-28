@@ -64,11 +64,15 @@ services:
 
   # Reverse Proxy
   nginx:
-    image: inoeg/iris-client-nginx:40-iris-client-docker-installation
+    image: inoeg/iris-client-nginx:v0.0.2
     ports:
       - 443:443
+    environment: 
+      IRIS_CLIENT_DOMAIN:
+      IRIS_CLIENT_DOMAIN_CERT:
+      IRIS_CLIENT_DOMAIN_CERT_KEY:
     volumes:
-      - "./localhost:/etc/iris"
+      - ./conf:/etc/iris
   
 volumes:
   psqldata_iris: 

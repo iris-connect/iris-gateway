@@ -2,8 +2,8 @@ server {
     server_name ${IRIS_CLIENT_DOMAIN};
     listen 443 ssl;
 
-    ssl_certificate ${IRIS_CLIENT_DOMAIN_CERT};
-    ssl_certificate_key ${IRIS_CLIENT_DOMAIN_CERT_KEY};    
+    ssl_certificate /etc/iris/${IRIS_CLIENT_DOMAIN_CERT};
+    ssl_certificate_key /etc/iris/${IRIS_CLIENT_DOMAIN_CERT_KEY};    
 
     # Proxy headers
     proxy_set_header Upgrade           $http_upgrade;
