@@ -2,7 +2,7 @@
 # provides basic configurations for IRIS client backend and frontend
 # this is necessary because extends can't reference to a service with depends_on
 ########################################################
-version: '3'
+version: '2'
 services:
   iris-client:
     image: inoeg/iris-client-sormas-sidecar:0.0.1-SNAPSHOT
