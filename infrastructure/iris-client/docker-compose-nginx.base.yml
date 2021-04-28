@@ -2,7 +2,7 @@
 # provides basic configurations for IRIS client backend and frontend
 # this is necessary because extends can't reference to a service with depends_on
 ########################################################
-version: '2.1'
+version: '2.4'
 services:
   nginx:
     build:
