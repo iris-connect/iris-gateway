@@ -31,7 +31,7 @@ public class DataSubmissionEndpointConnector {
 
 		System.out.println(properties.getServerAddress().getHostName()+":"+properties.getServerPort());
 		var response = rest.getForEntity(
-				"http://{address}:{port}/hd/data-submissions?departmentId={depId}",
+				"https://{address}:{port}/hd/data-submissions?departmentId={depId}",
 				DataSubmissionDto[].class, properties.getServerAddress().getHostName(), properties.getServerPort(),
 				clientProperties.getClientId());
 
