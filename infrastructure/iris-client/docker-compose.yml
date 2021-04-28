@@ -5,38 +5,71 @@
 # DB: look at docker-compose-postgres.yml
 # IRIS frontend: port = 28080
 ########################################################
-version: '2.4'
+version: '3'
 services:
-  postgres:
-    extends:
-      file: docker-compose-postgres.base.yml
-      service: postgres
 
+  # Postgres Database
+  postgres:
+    image: postgres:9.6-alpine
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+    volumes:
+      - psqldata_iris:/var/lib/postgresql/data
+
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "psql", "-U", "${POSTGRES_USER}", "-c", "SELECT 1;", "${POSTGRES_USER}" ]
+      interval: 15s
+      timeout: 3s
+      retries: 4
+      start_period: 30s
+
+  # IRIS Client backend for frontend
   iris-client:
-    extends:
-      file: docker-compose-iris-client.base.yml
-      service: iris-client
+    image: inoeg/iris-client-sormas-sidecar:0.0.1-SNAPSHOT
+    expose:
+      - 8092
+    ports: 
+      - 8092:8092
+    environment: 
+      IRIS_SERVER_ADDRESS:
+      IRIS_SERVER_PORT:
+      SECURITY_JWT_JWT_SHARED_SECRET:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_USER}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_PROFILES_ACTIVE: prod
+    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
 
+  # IRIS Client Frontend
   iris-frontend:
-    extends:
-      file: docker-compose-iris-client.base.yml
-      service: iris-frontend
-    ports:
+    image: inoeg/iris-client-frontend:v0.1.0
+    expose:
+      - 28080
+    environment: 
+      SORMAS_SIDECAR_BASE_URL: https://localhost/api
+    ports: 
       - 28080:28080
+    env_file:
+      - .env
+    restart: unless-stopped
     depends_on:
       - iris-client
 
+  # Reverse Proxy
   nginx:
-    extends: 
-      file: docker-compose-nginx.base.yml
-      service: nginx
+    build:
+      ./docker/nginx
     ports:
       - 443:443
-    depends_on:
-      - iris-frontend
+    volumes:
+      - "./localhost:/etc/localhost"
   
 volumes:
   psqldata_iris: 
