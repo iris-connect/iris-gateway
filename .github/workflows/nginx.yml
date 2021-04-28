@@ -10,6 +10,7 @@ on:
       - 40-iris-client-docker-installation
     paths:
       - infrastructure/iris-client/docker/nginx/**
+      - .github/workflows/nginx.yml
 
 jobs:
   push_to_registry:
