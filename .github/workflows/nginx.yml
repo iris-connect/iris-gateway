@@ -8,7 +8,7 @@ on:
       - main
       - develop
       - 40-iris-client-docker-installation
-  	paths:
+    paths:
       - infrastructure/iris-client/docker/nginx/**
 
 jobs:
