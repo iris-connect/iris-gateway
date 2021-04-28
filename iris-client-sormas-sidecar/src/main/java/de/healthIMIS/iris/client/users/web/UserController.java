@@ -7,19 +7,20 @@ import de.healthIMIS.iris.client.users.web.dto.UserDTO;
 import de.healthIMIS.iris.client.users.web.dto.UserInsertDTO;
 import de.healthIMIS.iris.client.users.web.dto.UserListDTO;
 import de.healthIMIS.iris.client.users.web.dto.UserUpdateDTO;
-import java.util.UUID;
-import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -51,7 +52,7 @@ public class UserController {
 		return map(userService.create(userInsert));
 	}
 
-	@PutMapping("/{id}")
+	@PatchMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public UserDTO updateUser(@PathVariable UUID id, @RequestBody @Valid UserUpdateDTO userUpdateDTO) {

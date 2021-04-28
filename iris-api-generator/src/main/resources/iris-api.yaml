@@ -383,7 +383,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 
   /users/{id}:
-    put:
+    patch:
       summary: Update IRIS user
       tags:
         - "IrisSidecarServer"
