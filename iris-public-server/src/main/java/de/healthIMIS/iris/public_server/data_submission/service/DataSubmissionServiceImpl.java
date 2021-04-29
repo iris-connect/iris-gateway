@@ -38,10 +38,10 @@ public class DataSubmissionServiceImpl implements DataSubmissionService {
     }
 
     @Override
-    public Streamable<DataSubmission> getSubmissionsForDepartmentFrom(DepartmentIdentifier departmentId, Instant from) {
+    public Streamable<DataSubmission> getSubmissionsForDepartmentFrom(DepartmentIdentifier departmentId) {
 
         Streamable<DataSubmission> dataSubmissions = submissions
-                .findAllByDepartmentIdAndMetadataLastModifiedIsAfter(departmentId, from);
+                .findAllByDepartmentId(departmentId);
 
         setRequestedAt(dataSubmissions);
 

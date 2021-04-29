@@ -28,8 +28,7 @@ import java.time.Instant;
 public interface DataSubmissionRepository extends CrudRepository<DataSubmission, DataSubmission.DataSubmissionIdentifier> {
 
     @Transactional
-    Streamable<DataSubmission> findAllByDepartmentIdAndMetadataLastModifiedIsAfter(
-            DepartmentIdentifier id, Instant from);
+    Streamable<DataSubmission> findAllByDepartmentId(DepartmentIdentifier id);
 
     @Transactional
     Streamable<DataSubmission> findAllByDepartmentIdAndRequestedAtIsBefore(
