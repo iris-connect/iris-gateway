@@ -29,7 +29,7 @@ services:
 
   # IRIS Client backend for frontend
   iris-client:
-    image: inoeg/iris-client-sormas-sidecar:0.0.1-SNAPSHOT
+    image: inoeg/iris-client-sormas-sidecar:v0.0.2
     expose:
       - 8092
     ports: 
@@ -53,7 +53,7 @@ services:
     expose:
       - 28080
     environment: 
-      SORMAS_SIDECAR_BASE_URL: https://localhost/api
+      SORMAS_SIDECAR_BASE_URL: /api
     ports: 
       - 28080:28080
     env_file:
@@ -73,6 +73,9 @@ services:
       IRIS_CLIENT_DOMAIN_CERT_KEY:
     volumes:
       - ./conf:/etc/iris
+    depends_on:
+      - iris-client
+      - iris-frontend
   
 volumes:
   psqldata_iris: 
