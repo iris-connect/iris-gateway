@@ -78,16 +78,6 @@ class DataSubmissionHdControllerIntegrationTests {
 	}
 
 	@Test
-	void getSubmissions_noneForNewerThenNow() throws Exception {
-
-		var response = getSubmissions(DepartmentDataInitializer.DEPARTMENT_ID_1, Instant.now());
-
-		var document = JsonPath.parse(response);
-
-		assertThat(document.read("$..requestId", String[].class)).isEmpty();
-	}
-
-	@Test
 	void getSubmissions_noneForUnknownDepartment() throws Exception {
 
 		var from = Instant.now().minus(1, ChronoUnit.DAYS);
