@@ -1,9 +1,8 @@
 ########################################################
-# Intended for local execution by developers and testers 
+# Intended for deployments at the health departments
 # 
-# provides full IRIS environment together with a Postgresql database without SORMAS
-# DB: look at docker-compose-postgres.yml
-# IRIS frontend: port = 28080
+# Provides IRIS client BFF and frontend together with a Postgresql database and NGINX
+# IRIS frontend over NGINX: port = 443
 ########################################################
 version: '3.4'
 services:

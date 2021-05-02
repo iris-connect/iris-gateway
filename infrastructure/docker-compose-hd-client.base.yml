@@ -11,7 +11,7 @@ services:
     environment: 
       SPRING_PROFILES_ACTIVE: docker
     env_file:
-      - .env
+      - iris-client.env
     restart: unless-stopped
 
   iris-frontend:
