@@ -9,6 +9,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -38,7 +39,8 @@ public class SearchIndexClient {
         headers.add("x-provider-id", TEMPORARY_PROVIDER_ID);
         HttpEntity<LocationsDto> requestUpdate = new HttpEntity<LocationsDto>(locationsDto, headers);
         try {
-            restTemplate.exchange(apihost + LOCATIONS_PATH, HttpMethod.PUT, requestUpdate, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(apihost + LOCATIONS_PATH, HttpMethod.PUT, requestUpdate, String.class);
+            log.info(response.toString());
         } catch (HttpClientErrorException e) {
             log.error("Request failed. Status code: " + e.getStatusCode().toString());
             log.error("Response: "+e.getResponseBodyAsString());
@@ -51,7 +53,8 @@ public class SearchIndexClient {
         headers.add("x-provider-id", TEMPORARY_PROVIDER_ID);
         HttpEntity<?> requestDelete = new HttpEntity<LocationsDto>(null, headers);
         try {
-            restTemplate.exchange(apihost + LOCATIONS_PATH + '/' + locationDto.getId(), HttpMethod.DELETE, requestDelete, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(apihost + LOCATIONS_PATH + '/' + locationDto.getId(), HttpMethod.DELETE, requestDelete, String.class);
+            log.info(response.toString());
         } catch (HttpClientErrorException e) {
             log.error("Request failed. Status code: " + e.getStatusCode().toString());
         }
