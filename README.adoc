@@ -70,6 +70,38 @@ $ ./mvnw spring-boot:run -PlocalDev -am -pl iris-api-generator,iris-client-sorma
 
 NOTE: Some of the projects in the Quickstart guide also build dependencies. This is good for a quick start, but is not necessary for every build run.
 
+==== Startup-Script
+
+You may use the following startup-script for Ubuntu Desktop. Be aware, that for other OS you might have to change the 3rd line. Put this script one folder higher then this repository. If you have also cloned the iris-client-frontend, you can start it with the `--fe` parameter. Make shure, that you are using java 11 and that you run `mvn clear` (and `npm install` for FE) after switching branches.
+
+[source, bash]
+----
+#!/bin/bash
+
+tab="gnome-terminal --tab -- bash -c "
+if [[ $* == *--keep* ]]
+then
+  end=";bash" #;bash
+else
+  echo "Tabs will close on ctrl-c. Use --keep to prevent this."
+  end=""
+fi
+
+$tab"cd IRIS/iris-public-server && mvn clean && ./mvnw spring-boot:run -PlocalDev -am$end"
+$tab"cd IRIS/iris-location-service && mvn clean && sleep 5 && ./mvnw spring-boot:run -PlocalDev -am$end"
+$tab"cd IRIS && sleep 10 && ./mvnw spring-boot:run -PlocalDev -am -pl iris-app-api-demo$end"
+
+$tab"cd IRIS && sleep 15 && ./mvnw spring-boot:run -PlocalDev -am -pl iris-client-sormas-sidecar$end"
+if [[ $* == *--fe* ]]
+then
+  $tab"cd iris-client-frontend && sleep 15 && npm run serve$end"
+else
+  echo "Use --fe to also start the frontend."
+fi
+
+exit 0
+----
+
 ==== Dummy App
 
 There is a small Java CLI application as dummy citizen app in the folder `iris-dummy-app` for test and demonstration suppose. This app uses the public API of IRIS, read data requests for a code and put data submissions. For use, the public server must be running!
