@@ -7,7 +7,6 @@ on:
     branches:
       - main
       - develop
-      - 40-iris-client-docker-installation
     paths:
       - infrastructure/iris-client/docker/nginx/**
       - .github/workflows/nginx.yml
