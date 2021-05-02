@@ -1,17 +1,18 @@
 package de.healthIMIS.irisappapidemo.startup;
 
 import de.healthIMIS.irisappapidemo.searchindex.bootstrap.LocationsLoader;
-import de.healthIMIS.irisappapidemo.searchindex.model.LocationDto;
 import de.healthIMIS.irisappapidemo.searchindex.model.LocationsDto;
 import de.healthIMIS.irisappapidemo.searchindex.web.client.SearchIndexClient;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 @Component
+@Profile("!inttest")
 @Slf4j
 public class LocationUpdater {
 
@@ -32,6 +33,4 @@ public class LocationUpdater {
         log.info(String.format("Delete location %s", locations.getLocationByIndex(1).getName()));
         searchIndexClient.deleteLocation(locations.getLocationByIndex(1));
     }
-
-
 }

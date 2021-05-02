@@ -1,13 +1,18 @@
 package de.healthIMIS.irisappapidemo;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
-@SpringBootTest
+import org.junit.jupiter.api.Test;
+
+@IrisWireMockTest
 class IrisAppApiDemoApplicationTests {
+
+	public final String LOCATIONS_PATH = "/search-index/locations";
 
 	@Test
 	void contextLoads() {
-	}
+		stubFor(put(urlEqualTo(LOCATIONS_PATH)).willReturn(aResponse().withStatus(204)));
 
+		stubFor(delete(urlEqualTo(LOCATIONS_PATH)).willReturn(aResponse().withStatus(200)));
+	}
 }

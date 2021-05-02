@@ -191,7 +191,7 @@ $ cp iris-sormas.env.example iris-sormas.env <2>
 $ nano iris-sormas.env <2>
 
 $ cd .. <3>
-$ ./mvnw package spring-boot:build-image -DskipTests <4>
+$ ./mvnw package spring-boot:build-image <4>
 $ docker-compose -f infrastructure/docker-compose-servers.yml up -d <5>
 ----
 <1> Switch to the infrastructure directory of the iris workspace.

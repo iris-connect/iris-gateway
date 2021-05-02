@@ -1,10 +1,12 @@
 package de.healthIMIS.irisappapidemo.datasubmission.bootstrap;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import de.healthIMIS.irisappapidemo.IrisWebIntegrationTest;
 import de.healthIMIS.irisappapidemo.datasubmission.encryption.GuestListEncryptor;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.DataProviderDto;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.GuestDto;
 import de.healthIMIS.irisappapidemo.datasubmission.model.dto.GuestListDto;
-import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -12,15 +14,13 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 
-@SpringBootTest
-@Slf4j
+@IrisWebIntegrationTest
 class GuestLoaderTest {
 
     @Autowired
@@ -31,14 +31,14 @@ class GuestLoaderTest {
 
     @Test
     List<GuestDto> getGuests() {
+    	
         List<GuestDto> guests = guestLoader.getGuests();
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonResult = null;
         try {
-            jsonResult = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(guests);
+            objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(guests);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            fail(e);
         }
         return guests;
     }

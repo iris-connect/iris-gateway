@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +41,16 @@ public class DataSubmissionService {
 
 		List<GuestDto> guests = guestLoader.getGuests();
 
-		var start = locationDataRequest.getStart();
-		var end = locationDataRequest.getEnd();
+		var start = Optional.ofNullable(locationDataRequest.getStart())
+				.map(it -> it.minus(random.nextInt(100), ChronoUnit.MINUTES));
+		var end = Optional.ofNullable(locationDataRequest.getEnd())
+				.map(it->it.plus(random.nextInt(100), ChronoUnit.MINUTES));
 		// 2 of 3 should have plausible values
 		for (int i = 0; i < 2; i++) {
 
 			var guest = guests.get(i);
-			guest.getAttendanceInformation().setAttendFrom(start.minus(random.nextInt(100), ChronoUnit.MINUTES));
-			guest.getAttendanceInformation().setAttendTo(end.plus(random.nextInt(100), ChronoUnit.MINUTES));
+			guest.getAttendanceInformation().setAttendFrom(start.orElse(null));
+			guest.getAttendanceInformation().setAttendTo(end.orElse(null));
 		}
 
 		DataProviderDto dataProvider = dataProviderLoader.getDataProvider();
