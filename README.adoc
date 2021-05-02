@@ -91,7 +91,7 @@ $tab"cd IRIS/iris-public-server && mvn clean && ./mvnw spring-boot:run -PlocalDe
 $tab"cd IRIS/iris-location-service && mvn clean && sleep 5 && ./mvnw spring-boot:run -PlocalDev -am$end"
 $tab"cd IRIS && sleep 10 && ./mvnw spring-boot:run -PlocalDev -am -pl iris-app-api-demo$end"
 
-$tab"cd IRIS/iris-client-sormas-sidecar && mvn clean && sleep 15 && ./mvnw spring-boot:run -PlocalDev -am$end"
+$tab"cd IRIS && sleep 15 && ./mvnw spring-boot:run -PlocalDev -am -pl iris-client-sormas-sidecar$end"
 if [[ $* == *--fe* ]]
 then
   $tab"cd iris-client-frontend && sleep 15 && npm run serve$end"
