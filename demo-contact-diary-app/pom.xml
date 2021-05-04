@@ -6,14 +6,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>de.healthIMIS</groupId>
+		<groupId>iris-gateway</groupId>
 		<artifactId>parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>iris-dummy-app</artifactId>
+	<artifactId>demo-contact-diary-app</artifactId>
 
-	<name>IRIS Dummy App</name>
+	<name>Demo for Contact Diary App</name>
 	<description>A dummy app as example for an app that uses the IRIS system.</description>
 	<licenses>
 		<license>
@@ -30,12 +30,6 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>de.healthIMIS</groupId>
-			<artifactId>iris-api-app-client</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.hateoas</groupId>
 			<artifactId>spring-hateoas</artifactId>
