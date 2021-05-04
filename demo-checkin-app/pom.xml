@@ -9,11 +9,10 @@
 		<version>2.4.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>de.healthIMIS</groupId>
-	<artifactId>iris-app-api-demo</artifactId>
+	<groupId>iris-gateway</groupId>
+	<artifactId>demo-checkin-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>iris-app-api-demo</name>
-	<description>Demo for App connection</description>
+	<name>Demo for Checkin Apps</name>
 	<properties>
 		<java.version>11</java.version>
 		<docker.image.prefix>inoeg</docker.image.prefix>

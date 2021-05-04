@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>de.healthIMIS</groupId>
+	<groupId>iris-gateway</groupId>
 	<artifactId>parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -15,52 +15,13 @@
 	<properties>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
-		<jackson-version>2.12.2</jackson-version>
 	</properties>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-web</artifactId>
-				<version>2.4.4</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.data</groupId>
-				<artifactId>spring-data-commons</artifactId>
-				<version>2.4.6</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.datatype</groupId>
-				<artifactId>jackson-datatype-jsr310</artifactId>
-				<version>${jackson-version}</version>
-			</dependency>
-			<dependency>
-				<groupId>javax.validation</groupId>
-				<artifactId>validation-api</artifactId>
-				<version>2.0.1.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-databind</artifactId>
-				<version>${jackson-version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<modules>
-		<module>iris-api-generator</module>
-		<module>iris-api-location-service</module>
-		<module>iris-api-public-server</module>
-		<module>iris-api-sidecar-server</module>
-		<module>iris-api-sidecar-client</module>
-		<module>iris-api-app-client</module>
-		<module>iris-sormas-api-client</module>
 		<module>iris-public-server</module>
 		<module>iris-location-service</module>
-		<module>iris-client-sormas-sidecar</module>
-		<module>iris-app-api-demo</module>
-		<module>iris-dummy-app</module>
+		<module>demo-checkin-app</module>
+		<module>demo-contact-diary-app</module>
 	</modules>
 
 	<build>
