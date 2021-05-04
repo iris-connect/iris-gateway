@@ -14,7 +14,7 @@
 	<artifactId>demo-contact-diary-app</artifactId>
 
 	<name>Demo for Contact Diary App</name>
-	<description>A dummy app as example for an app that uses the IRIS system.</description>
+	<description>A demo app as example for an app that uses the IRIS system.</description>
 	<licenses>
 		<license>
 			<name>GNU Affero General Public License (AGPL) v3</name>
@@ -149,7 +149,7 @@
 							<archive>
 								<manifest>
 									<mainClass>
-										de.healthIMIS.iris.dummy_app.IrisDummyApp
+										iris.demo.contact_diary_app.IrisDemoContactDiaryApp
 									</mainClass>
 								</manifest>
 							</archive>
