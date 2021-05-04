@@ -5,13 +5,13 @@ import static org.apache.commons.codec.binary.Base64.*;
 import static org.springframework.http.MediaType.*;
 
 import ch.qos.logback.classic.Level;
-import de.healthIMIS.iris.api.appclient.model.ContactPerson;
-import de.healthIMIS.iris.api.appclient.model.ContactPersonList;
-import de.healthIMIS.iris.api.appclient.model.ContactsAndEvents;
-import de.healthIMIS.iris.api.appclient.model.Event;
-import de.healthIMIS.iris.api.appclient.model.EventList;
-import de.healthIMIS.iris.api.appclient.model.Guest;
-import de.healthIMIS.iris.api.appclient.model.GuestList;
+import iris.demo.contact_diary_app.model.ContactPerson;
+import iris.demo.contact_diary_app.model.ContactPersonList;
+import iris.demo.contact_diary_app.model.ContactsAndEvents;
+import iris.demo.contact_diary_app.model.Event;
+import iris.demo.contact_diary_app.model.EventList;
+import iris.demo.contact_diary_app.model.Guest;
+import iris.demo.contact_diary_app.model.GuestList;
 import lombok.RequiredArgsConstructor;
 
 import java.io.BufferedInputStream;
