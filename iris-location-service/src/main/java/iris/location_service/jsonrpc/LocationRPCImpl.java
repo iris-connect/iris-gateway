@@ -1,6 +1,7 @@
 package iris.location_service.jsonrpc;
 
 import iris.location_service.dto.LocationInformation;
+import iris.location_service.dto.LocationList;
 import iris.location_service.dto.LocationOverviewDto;
 import iris.location_service.service.LocationService;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Service;
 
+import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
 
 @AutoJsonRpcServiceImpl
@@ -35,6 +37,23 @@ public class LocationRPCImpl implements LocationRPC {
 	public String deleteLocationFromSearchIndex(UUID providerId, String locationId) {
 		if (locationService.deleteLocation(providerId, locationId))
 			return "OK";
+		return "NOT FOUND";
+	}
+
+	@Override
+	public LocationList searchForLocation(String searchKeyword) {
+		return new LocationList(locationService.search(searchKeyword));
+	}
+
+	@Override
+	public Object getLocationDetails(
+			@JsonRpcParam(value = "providerId") String providerId,
+			@JsonRpcParam(value = "locationId") String locationId) {
+		LocationInformation locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId,
+				locationId);
+		if (locationInformation != null)
+			return locationInformation;
+
 		return "NOT FOUND";
 	}
 

@@ -78,4 +78,24 @@ public class LocationService {
 		return false;
 	}
 
+	public List<LocationInformation> search(String searchKeyword) {
+		return index.search(searchKeyword);
+	}
+
+	public LocationInformation getLocationByProviderIdAndLocationId(String providerId, String locationId) {
+		var ident = new LocationIdentifier(providerId, locationId);
+
+		return locationRepository.findById(ident)
+				.map(this::toDto).orElse(null);
+	}
+
+	private LocationInformation toDto(Location it) {
+
+		var location = mapper.map(it, LocationInformation.class);
+
+		location.setId(it.getId().getLocationId());
+		location.setProviderId(it.getId().getProviderId());
+
+		return location;
+	}
 }
