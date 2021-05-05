@@ -1,6 +1,9 @@
 package iris.location_service;
 
+import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImplExporter;
+import iris.location_service.jsonrpc.LocationRPCImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ResourceBanner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -40,4 +43,16 @@ public class IrisLocationServiceApplication {
 
 		return mapper;
 	}
+
+
+
+	@Bean
+	public static AutoJsonRpcServiceImplExporter autoJsonRpcServiceImplExporter() {
+		AutoJsonRpcServiceImplExporter exp = new AutoJsonRpcServiceImplExporter();
+		return exp;
+	}
+
+	@Autowired
+	public LocationRPCImpl locationRPC;
+
 }
