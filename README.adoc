@@ -1,6 +1,6 @@
 :toc: macro
 
-# image:logo/iris-logo.png[width=100] IRIS System
+# image:logo/iris-logo.png[width=100] IRIS Gateway
 
 IRIS stands for "Integration of Remote systems into Infection control Software" and is intended to be the central point of mediation between the various contact, event and guest tracking apps on the one hand and the infection control software (e.g. SORMAS) in the health departments on the other.
 
@@ -242,95 +242,11 @@ keyToTransport = base64Encode(keyEncrypted);
 == Development 
 === Java parts
 
-We use *Java 11* and the following code style. 
+Since most Java code of IRIS will be developed in the IRIS client BFF, please refer to its documentation for instructions on developing Java code.
 
-==== Eclipse
-link:infrastructure/eclipse-code-formatter.xml[] +
-link:infrastructure/eclipse.importorder[]
+https://github.com/iris-gateway/iris-client#dev
 
-==== IntelliJ
-
-You can use following plugin to consume the eclipse formatting config:
-* https://plugins.jetbrains.com/plugin/6546-eclipse-code-formatter
-* https://github.com/krasa/EclipseCodeFormatter
-
-==== Import order
-
-* static imports, wild card used from the first declaration
-* `+*+` - all unmatched imports
-* `java.…`
-* `javax.–`
-* `org.…`
-* `com.…`
-
-For non-static imports we switch to `+*+` imports after the 10th import.
-For static ones we always use `+*+` ones.
-
-==== Blank lines
-
-Use blank lines to group pieces of code logically: variable initializations go together, followed by the method invocations that use those variables.
-There's no hard rule here.
-It's just nice to be able to identify different steps in the execution order.
-
-For blocks (if clauses, methods) we start with a blank line if the subsequent code is longer than a single line:
-
-[source, java]
-----
-void someLongMethod() {
-
-  // First statement
-  // Second statement
-}
-
-VS.
-
-void someOneLineMethod() {
-  // Single-line statement
-}
-----
-
-Symmetric blocks usually also use a blank line on the end to clearly separate the blocks' content from the outer instruction.
-Again, the single line rule applies, here, too.
-
-[source, java]
-----
-if (…) {
-  // Single line instruction
-} else {
-  // Single line instruction
-}
-
-but
-
-if (…) {
-
-  // Multi-line instruction
-  // Multi-line instruction
-
-} else {
-
-  // Multi-line instruction
-  // Multi-line instruction
-}
-----
-
-The intermediate lines surrounding the `…} else {…` make it easier to see where the block flips.
-
-In general, for if-else-clauses, prefer the ternary expression (`condition ? if-true : if-false`) over an if block.
-That creates incentives to rather extract the statements to be executed in either and make the overall expression readable.
-If the overall expression gets so long it would line break, it's nice to read if the three parts are each brought onto a single line:
-
-[source, java]
-----
-Object someMethod(…) {
-
-  return condition
-    ? if-true-do-this
-    : else-do-that;
-}
-----
-
-== Deployment
+== Deployment as Staging
 
 See file:
 link:infrastructure/DEPLOYMENT.adoc[]
