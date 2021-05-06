@@ -11,6 +11,7 @@ import iris.location_service.search.db.DBSearchIndex;
 import iris.location_service.search.db.LocationRepository;
 import iris.location_service.search.db.model.Location;
 import iris.location_service.search.db.model.LocationIdentifier;
+import iris.location_service.search.lucene.LuceneController;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;
@@ -79,6 +80,12 @@ public class LocationIndexController {
         }).collect(Collectors.toList());
 
         locationRepository.saveAll(data);
+        try {
+			LuceneController lucon = new LuceneController();
+			lucon.indexLocations(data);
+		}catch (Exception e){
+        	e.printStackTrace();
+		}
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 
