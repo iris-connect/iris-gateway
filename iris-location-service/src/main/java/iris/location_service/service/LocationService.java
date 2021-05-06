@@ -82,11 +82,11 @@ public class LocationService {
 		return index.search(searchKeyword);
 	}
 
-	public LocationInformation getLocationByProviderIdAndLocationId(String providerId, String locationId) {
+	public Optional<LocationInformation> getLocationByProviderIdAndLocationId(String providerId, String locationId) {
 		var ident = new LocationIdentifier(providerId, locationId);
 
 		return locationRepository.findById(ident)
-				.map(this::toDto).orElse(null);
+				.map(this::toDto);
 	}
 
 	private LocationInformation toDto(Location it) {

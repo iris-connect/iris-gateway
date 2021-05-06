@@ -7,6 +7,7 @@ import iris.location_service.service.LocationService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -49,9 +50,10 @@ public class LocationRPCImpl implements LocationRPC {
 	public Object getLocationDetails(
 			@JsonRpcParam(value = "providerId") String providerId,
 			@JsonRpcParam(value = "locationId") String locationId) {
-		LocationInformation locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId,
+		Optional<LocationInformation> locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId,
 				locationId);
-		if (locationInformation != null)
+
+		if (locationInformation.isPresent())
 			return locationInformation;
 
 		return "NOT FOUND";

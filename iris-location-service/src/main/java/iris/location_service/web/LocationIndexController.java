@@ -12,6 +12,7 @@ import iris.location_service.search.db.LocationRepository;
 import iris.location_service.service.LocationService;
 import lombok.AllArgsConstructor;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -73,13 +74,12 @@ public class LocationIndexController {
 	public ResponseEntity<LocationInformation> getLocation(@PathVariable("providerId") String providerId,
 			@PathVariable("locationId") String locationId) {
 		// TODO: Authenticate API Access
-		LocationInformation locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId,
+		Optional<LocationInformation> locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId,
 				locationId);
-		if (locationInformation != null)
-			return new ResponseEntity<LocationInformation>(
-					locationInformation, HttpStatus.OK);
 
-		return new ResponseEntity<LocationInformation>(HttpStatus.NOT_FOUND);
+		return locationInformation.map(information -> new ResponseEntity<>(
+				information, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
 	}
 
 }
