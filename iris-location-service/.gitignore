@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Lucene index data ###
+!**/src/main/java/iris/location_service/search/lucene/data
