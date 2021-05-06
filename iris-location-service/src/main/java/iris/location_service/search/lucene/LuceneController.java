@@ -20,12 +20,10 @@ import java.util.List;
 public class LuceneController {
     private StandardAnalyzer analyzer;
     private Directory dir;
-    private IndexWriterConfig config;
 
     public LuceneController() throws IOException {
         analyzer = new StandardAnalyzer();
         dir = FSDirectory.open(Paths.get("/data"));
-        config = new IndexWriterConfig(analyzer);
     }
 
     public List<Location> search(){
@@ -50,6 +48,7 @@ public class LuceneController {
     }
 
     private void indexDocument(Document doc) throws Exception{
+        IndexWriterConfig config = new IndexWriterConfig(analyzer);
         IndexWriter writer = new IndexWriter(dir, config);
         writer.addDocument(doc);
         writer.close();
