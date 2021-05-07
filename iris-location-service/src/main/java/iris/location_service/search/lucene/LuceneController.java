@@ -43,7 +43,20 @@ public class LuceneController {
 
     private Document createDocument(Location location){
         Document doc = new Document();
+        // Is the ID relevant for us?
+        // doc.add(new TextField("name", location.getId().toString(), Field.Store.YES));
+        // "publicKey" is not gettable
         doc.add(new TextField("name", location.getName(), Field.Store.YES));
+        doc.add(new TextField("name", location.getContactOfficialName(), Field.Store.YES));
+        doc.add(new TextField("name", location.getContactRepresentative(), Field.Store.YES));
+        doc.add(new TextField("name", location.getContactAddressStreet(), Field.Store.YES));
+        doc.add(new TextField("name", location.getContactAddressCity(), Field.Store.YES));
+        doc.add(new TextField("name", location.getContactAddressZip(), Field.Store.YES));
+        doc.add(new TextField("name", location.getContactOwnerEmail(), Field.Store.YES));
+        doc.add(new TextField("name", location.getContactEmail(), Field.Store.YES));
+        doc.add(new TextField("name", location.getContactPhone(), Field.Store.YES));
+
+        // I don't know what "contexts" are supposed to be, they are also not gettable.
         return doc;
     }
 
