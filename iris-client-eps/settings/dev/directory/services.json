@@ -26,7 +26,10 @@
       "name": "hd-1",
       "channels": [
         {
-          "type": "grpc_client"
+          "type": "grpc_server",
+          "settings": {
+            "address": "localhost:4446"
+          }
         }
       ]
     }
