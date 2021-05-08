@@ -1,34 +1,34 @@
 {
-  "entries" : [
+  "entries": [
     {
       "name": "demo-app",
-      "channels" : [
-		{
-          "type" : "grpc_server",
-          "settings" : {
-            "address" : "localhost:4444"
+      "channels": [
+        {
+          "type": "grpc_server",
+          "settings": {
+            "address": "localhost:4444"
           }
         }
       ]
     },
     {
       "name": "ls-1",
-      "channels" : [
+      "channels": [
         {
-          "type" : "grpc_server",
-          "settings" : {
-            "address" : "localhost:4445"
+          "type": "grpc_server",
+          "settings": {
+            "address": "locationservice.dev.iris-gateway.de:4445"
           }
         }
       ]
     },
     {
       "name": "hd-1",
-       "channels" : [
+      "channels": [
         {
-          "type" : "grpc_server",
-          "settings" : {
-            "address" : "localhost:4446"
+          "type": "grpc_server",
+          "settings": {
+            "address": "hd1.dev.iris-gateway.de:4446"
           }
         }
       ]
