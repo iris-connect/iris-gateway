@@ -1,9 +1,9 @@
 package iris.demo.checkin_app.datasubmission.service;
 
+import iris.demo.checkin_app.config.EPSClientProperties;
 import iris.demo.checkin_app.datarequest.model.dto.LocationDataRequestDto;
 import iris.demo.checkin_app.datasubmission.bootstrap.DataProviderLoader;
 import iris.demo.checkin_app.datasubmission.bootstrap.GuestLoader;
-import iris.demo.checkin_app.config.EPSClientProperties;
 import iris.demo.checkin_app.datasubmission.eps.EPSDataSubmissionClient;
 import iris.demo.checkin_app.datasubmission.eps.dto.DataSubmissionDto;
 import iris.demo.checkin_app.datasubmission.model.dto.DataProviderDto;
@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import javax.validation.constraints.NotNull;
 
 @Slf4j
 @Service
@@ -66,7 +66,8 @@ public class DataSubmissionService {
 			hdEnpoint = locationDataRequest.getHdEndpoint();
 		}
 
-		DataSubmissionDto dataSubmissionDto = DataSubmissionDto.builder().requestId(locationDataRequest.getRequestId())
+		DataSubmissionDto dataSubmissionDto = DataSubmissionDto.builder()
+				.requestId(locationDataRequest.getDataAuthorizationToken())
 				.guestList(guestList).build();
 
 		dataSubmissionClient.postDataSubmissionGuests(dataSubmissionDto, hdEnpoint);

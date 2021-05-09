@@ -10,6 +10,8 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,31 +19,21 @@ import javax.validation.constraints.NotNull;
 public class LocationDataRequestDto {
 
 	@NotNull
-	private String healthDepartment;
-
-	@NotNull
-	private String keyOfHealthDepartment;
-
-	@NotNull
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "UTC")
 	private Instant start;
 
 	@NotNull
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "UTC")
 	private Instant end;
 
 	private String requestDetails;
 
 	@NotNull
-	private UUID requestId;
+	private UUID dataAuthorizationToken;
 
 	@NotNull
 	private String locationId;
 
 	private String hdEndpoint;
-
-	/**
-	 * Reference id of the given key. This reference must be included in the submission in order to identify the correct
-	 * private key for decryption at the health department.
-	 */
-	private String keyReference;
 
 }
