@@ -14,6 +14,6 @@ import java.util.UUID;
 @Builder
 public class UpdateLocationsDTO {
 
-    private UUID providerId;
+    private String providerId;
     private List<LocationDto> locations;
 }

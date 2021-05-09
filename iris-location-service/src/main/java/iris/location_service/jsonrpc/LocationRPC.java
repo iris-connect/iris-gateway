@@ -13,13 +13,13 @@ import com.googlecode.jsonrpc4j.JsonRpcService;
 @JsonRpcService("/location-rpc")
 public interface LocationRPC {
 	String postLocationsToSearchIndex(
-			@JsonRpcParam(value = "providerId") UUID providerId,
+			@JsonRpcParam(value = "providerId") String providerId,
 			@JsonRpcParam(value = "locations") List<LocationInformation> locationList);
 
-	List<LocationOverviewDto> getProviderLocations(@JsonRpcParam(value = "providerId") UUID providerId);
+	List<LocationOverviewDto> getProviderLocations(@JsonRpcParam(value = "providerId") String providerId);
 
 	String deleteLocationFromSearchIndex(
-			@JsonRpcParam(value = "providerId") UUID providerId,
+			@JsonRpcParam(value = "providerId") String providerId,
 			@JsonRpcParam(value = "locationId") String locationId);
 
 	LocationList searchForLocation(@JsonRpcParam(value = "searchKeyword") String searchKeyword);

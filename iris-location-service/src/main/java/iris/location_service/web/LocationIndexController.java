@@ -43,7 +43,7 @@ public class LocationIndexController {
 	@DeleteMapping("/search-index/locations/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public ResponseEntity<Void> deleteLocationFromSearchIndex(
-			@RequestHeader(value = "x-provider-id", required = true) UUID providerId, @PathVariable("id") String id) {
+			@RequestHeader(value = "x-provider-id", required = true) String providerId, @PathVariable("id") String id) {
 		// TODO: Authenticate API Access
 
 		if (locationService.deleteLocation(providerId, id))
@@ -55,7 +55,7 @@ public class LocationIndexController {
 	@PutMapping("/search-index/locations")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> postLocationsToSearchIndex(
-			@RequestHeader(value = "x-provider-id", required = true) UUID providerId, @Valid @RequestBody LocationList body) {
+			@RequestHeader(value = "x-provider-id", required = true) String providerId, @Valid @RequestBody LocationList body) {
 		locationService.addLocations(providerId, body.getLocations());
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}

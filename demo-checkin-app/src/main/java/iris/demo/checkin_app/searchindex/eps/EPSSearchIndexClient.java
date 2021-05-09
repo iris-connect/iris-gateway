@@ -28,14 +28,14 @@ import java.util.UUID;
 @Slf4j
 public class EPSSearchIndexClient implements SearchIndexClient {
 
-	private final static String TEMPORARY_PROVIDER_ID = "f002f370-bd54-4325-ad91-1aff3bf730a5";
+	private final static String TEMPORARY_PROVIDER_ID = "demo-app";
 	private final JsonRpcHttpClient rpcClient;
 	private final EPSClientProperties epsClientProperties;
 
 	@Override
 	public void updateLocations(LocationsDto locationsDto) throws IRISDataSubmissionException {
 		UpdateLocationsDTO updateLocationsDTO = UpdateLocationsDTO.builder()
-				.providerId(UUID.fromString(TEMPORARY_PROVIDER_ID))
+				.providerId(TEMPORARY_PROVIDER_ID)
 				.locations(locationsDto.getLocations())
 				.build();
 		var methodName = epsClientProperties.getDefaultLocationServiceEndpoint() + ".postLocationsToSearchIndex";
@@ -49,7 +49,7 @@ public class EPSSearchIndexClient implements SearchIndexClient {
 	@Override
 	public void deleteLocation(LocationDto locationDto) throws IRISDataSubmissionException {
 		DeleteLocationDTO deleteLocationDTO = DeleteLocationDTO.builder()
-				.providerId(UUID.fromString(TEMPORARY_PROVIDER_ID))
+				.providerId(TEMPORARY_PROVIDER_ID)
 				.locationId(locationDto.getId().toString())
 				.build();
 		var methodName = epsClientProperties.getDefaultLocationServiceEndpoint() + ".deleteLocationFromSearchIndex";
