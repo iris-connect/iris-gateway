@@ -1,6 +1,5 @@
 package iris.demo.checkin_app.datasubmission.eps.dto;
 
-import com.googlecode.jsonrpc4j.JsonRpcParam;
 import iris.demo.checkin_app.datasubmission.model.dto.GuestListDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +12,7 @@ import java.util.UUID;
 @Builder
 public class DataSubmissionDto {
 
-	private String providerId;
+	private UUID requestId;
 	private GuestListDto guestList;
+
 }

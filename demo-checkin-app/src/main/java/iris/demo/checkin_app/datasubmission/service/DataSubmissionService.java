@@ -5,6 +5,7 @@ import iris.demo.checkin_app.datasubmission.bootstrap.DataProviderLoader;
 import iris.demo.checkin_app.datasubmission.bootstrap.GuestLoader;
 import iris.demo.checkin_app.config.EPSClientProperties;
 import iris.demo.checkin_app.datasubmission.eps.EPSDataSubmissionClient;
+import iris.demo.checkin_app.datasubmission.eps.dto.DataSubmissionDto;
 import iris.demo.checkin_app.datasubmission.model.dto.DataProviderDto;
 import iris.demo.checkin_app.datasubmission.model.dto.GuestDto;
 import iris.demo.checkin_app.datasubmission.model.dto.GuestListDto;
@@ -36,7 +37,7 @@ public class DataSubmissionService {
 
 	private final @NotNull EPSDataSubmissionClient dataSubmissionClient;
 
-	private Random random = new Random();
+	private final Random random = new Random();
 
 	public void sendDataForRequest(LocationDataRequestDto locationDataRequest) throws Exception {
 
@@ -45,7 +46,7 @@ public class DataSubmissionService {
 		var start = Optional.ofNullable(locationDataRequest.getStart())
 				.map(it -> it.minus(random.nextInt(100), ChronoUnit.MINUTES));
 		var end = Optional.ofNullable(locationDataRequest.getEnd())
-				.map(it->it.plus(random.nextInt(100), ChronoUnit.MINUTES));
+				.map(it -> it.plus(random.nextInt(100), ChronoUnit.MINUTES));
 		// 2 of 3 should have plausible values
 		for (int i = 0; i < 2; i++) {
 
@@ -56,20 +57,18 @@ public class DataSubmissionService {
 
 		DataProviderDto dataProvider = dataProviderLoader.getDataProvider();
 
-		GuestListDto guestList = GuestListDto.builder().
-            guests(guests).
-            additionalInformation("").
-            startDate(Instant.now()).
-            endDate(Instant.now().plus(6, ChronoUnit.HOURS)).
-            dataProvider(dataProvider).
-            build();
+		GuestListDto guestList = GuestListDto.builder().guests(guests).additionalInformation("").startDate(Instant.now())
+				.endDate(Instant.now().plus(6, ChronoUnit.HOURS)).dataProvider(dataProvider).build();
 
 		String hdEnpoint = epsClientProperties.getDefaultHealthDepartmentEndpoint();
 
-		if (!locationDataRequest.getHdEndpoint().isEmpty()) {
+		if (locationDataRequest.getHdEndpoint() != null) {
 			hdEnpoint = locationDataRequest.getHdEndpoint();
 		}
 
-		dataSubmissionClient.postDataSubmissionGuests(guestList, hdEnpoint);
+		DataSubmissionDto dataSubmissionDto = DataSubmissionDto.builder().requestId(locationDataRequest.getRequestId())
+				.guestList(guestList).build();
+
+		dataSubmissionClient.postDataSubmissionGuests(dataSubmissionDto, hdEnpoint);
 	}
 }
