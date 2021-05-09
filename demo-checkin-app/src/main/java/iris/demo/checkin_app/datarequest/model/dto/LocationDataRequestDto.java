@@ -5,8 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
@@ -14,33 +16,32 @@ import java.time.Instant;
 @Builder
 public class LocationDataRequestDto {
 
-    @NotNull
-    private String healthDepartment;
+	@NotNull
+	private String healthDepartment;
 
-    @NotNull
-    private String keyOfHealthDepartment;
+	@NotNull
+	private String keyOfHealthDepartment;
 
-    @NotNull
-    private Instant start;
+	@NotNull
+	private Instant start;
 
-    @NotNull
-    private Instant end;
+	@NotNull
+	private Instant end;
 
-    private String requestDetails;
+	private String requestDetails;
 
-    @NotNull
-    private String submissionUri;
+	@NotNull
+	private UUID requestId;
 
-    @NotNull
-    private String locationId;
+	@NotNull
+	private String locationId;
 
-    private String hdEndpoint;
+	private String hdEndpoint;
 
-    /**
-     * Reference id of the given key.
-     * This reference must be included in the submission in order to identify the
-     * correct private key for decryption at the health department.
-     */
-    private String keyReference;
+	/**
+	 * Reference id of the given key. This reference must be included in the submission in order to identify the correct
+	 * private key for decryption at the health department.
+	 */
+	private String keyReference;
 
 }
