@@ -1,11 +1,12 @@
 package iris.demo.checkin_app;
 
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.ssl.SSLContextBuilder;
+import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImplExporter;
+import iris.demo.checkin_app.datarequest.jsonrpc.DataRequestRPCImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.annotation.Bean;
 
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -13,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
 public class IrisDemoCheckinAppApplication {
 
 
@@ -22,5 +24,13 @@ public class IrisDemoCheckinAppApplication {
 		SpringApplication.run(IrisDemoCheckinAppApplication.class, args);
 
 	}
+
+	@Bean
+	public static AutoJsonRpcServiceImplExporter autoJsonRpcServiceImplExporter() {
+		return new AutoJsonRpcServiceImplExporter();
+	}
+
+	@Autowired
+	public DataRequestRPCImpl locationRPC;
 
 }
