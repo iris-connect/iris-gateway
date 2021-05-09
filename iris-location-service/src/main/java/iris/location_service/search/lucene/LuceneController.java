@@ -1,6 +1,7 @@
 package iris.location_service.search.lucene;
 
 import iris.location_service.search.db.model.Location;
+import lombok.Getter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -18,7 +19,9 @@ import java.util.List;
 
 
 public class LuceneController {
+    @Getter
     private StandardAnalyzer analyzer;
+    @Getter
     private Directory dir;
 
     public LuceneController() throws IOException {
@@ -26,8 +29,9 @@ public class LuceneController {
         dir = FSDirectory.open(Paths.get("iris-location-service\\src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
     }
 
-    public List<Location> search(){
-        //ToDo implements search
+    public List<Location> search(String keyword){
+        LuceneSearchIndex searchIndex = new LuceneSearchIndex(this);
+        searchIndex.search(keyword);
         return null;
     }
 
@@ -46,6 +50,8 @@ public class LuceneController {
         // Is the ID relevant for us?
         // doc.add(new TextField("name", location.getId().toString(), Field.Store.YES));
         // "publicKey" is not gettable
+        doc.add(new TextField("Id", location.getId().getLocationId(), Field.Store.YES));
+        doc.add(new TextField("ProviderId", location.getId().getProviderId(), Field.Store.YES));
         doc.add(new TextField("Name", location.getName(), Field.Store.YES));
         doc.add(new TextField("ContactOfficialName", location.getContactOfficialName(), Field.Store.YES));
         doc.add(new TextField("ContactRepresentative", location.getContactRepresentative(), Field.Store.YES));
@@ -55,12 +61,11 @@ public class LuceneController {
         doc.add(new TextField("ContactOwnerEmail", location.getContactOwnerEmail(), Field.Store.YES));
         doc.add(new TextField("ContactEmail", location.getContactEmail(), Field.Store.YES));
         doc.add(new TextField("ContactPhone", location.getContactPhone(), Field.Store.YES));
-
         // I don't know what "contexts" are supposed to be, they are also not gettable.
         return doc;
     }
 
-    private void indexDocument(Document doc) throws Exception{
+    private void indexDocument(Document doc) throws Exception {
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         IndexWriter writer = new IndexWriter(dir, config);
         writer.addDocument(doc);
