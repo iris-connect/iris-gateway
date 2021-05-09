@@ -13,6 +13,6 @@ import java.util.UUID;
 @Builder
 public class DeleteLocationDTO {
 
-    private UUID providerId;
+    private String providerId;
     private String locationId;
 }

@@ -16,7 +16,7 @@ public class EPSDataSubmissionClient {
 
 	private final JsonRpcHttpClient rpcClient;
 
-	private final static String TEMPORARY_PROVIDER_ID = "f002f370-bd54-4325-ad91-1aff3bf730a5";
+	private final static String TEMPORARY_PROVIDER_ID = "demo-app";
 
 	public void postDataSubmissionGuests(GuestListDto guestSubmission, String hdEndpoint) throws IRISDataSubmissionException {
 		var payload = DataSubmissionDto.builder().providerId(TEMPORARY_PROVIDER_ID).guestList(guestSubmission);
