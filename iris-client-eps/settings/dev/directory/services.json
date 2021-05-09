@@ -1,7 +1,7 @@
 {
   "entries": [
     {
-      "name": "op-1",
+      "name": "demo-app",
       "channels": [
         {
           "type": "grpc_server",

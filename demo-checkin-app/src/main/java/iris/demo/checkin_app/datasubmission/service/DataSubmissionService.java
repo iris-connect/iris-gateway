@@ -3,12 +3,12 @@ package iris.demo.checkin_app.datasubmission.service;
 import iris.demo.checkin_app.datarequest.model.dto.LocationDataRequestDto;
 import iris.demo.checkin_app.datasubmission.bootstrap.DataProviderLoader;
 import iris.demo.checkin_app.datasubmission.bootstrap.GuestLoader;
-import iris.demo.checkin_app.datasubmission.encryption.GuestListEncryptor;
+import iris.demo.checkin_app.config.EPSClientProperties;
+import iris.demo.checkin_app.datasubmission.eps.EPSDataSubmissionClient;
 import iris.demo.checkin_app.datasubmission.model.dto.DataProviderDto;
 import iris.demo.checkin_app.datasubmission.model.dto.GuestDto;
 import iris.demo.checkin_app.datasubmission.model.dto.GuestListDto;
-import iris.demo.checkin_app.datasubmission.model.dto.GuestSubmissionDto;
-import iris.demo.checkin_app.datasubmission.web.client.DataSubmissionClient;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
@@ -17,23 +17,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import javax.validation.constraints.NotNull;
 
 @Slf4j
 @Service
 @Component
+@RequiredArgsConstructor
 public class DataSubmissionService {
 
-	@Autowired
-	private GuestLoader guestLoader;
+	private final @NotNull GuestLoader guestLoader;
 
-	@Autowired
-	private DataProviderLoader dataProviderLoader;
+	private final @NotNull DataProviderLoader dataProviderLoader;
 
-	@Autowired
-	private DataSubmissionClient dataSubmissionClient;
+	private final @NotNull EPSClientProperties epsClientProperties;
+
+	private final @NotNull EPSDataSubmissionClient dataSubmissionClient;
 
 	private Random random = new Random();
 
@@ -54,24 +55,21 @@ public class DataSubmissionService {
 		}
 
 		DataProviderDto dataProvider = dataProviderLoader.getDataProvider();
-    GuestListDto guestList = GuestListDto.builder().
+
+		GuestListDto guestList = GuestListDto.builder().
             guests(guests).
             additionalInformation("").
             startDate(Instant.now()).
             endDate(Instant.now().plus(6, ChronoUnit.HOURS)).
             dataProvider(dataProvider).
             build();
-    GuestListEncryptor encryptor = GuestListEncryptor.builder().
-            guestList(guestList).
-            givenPublicKey(locationDataRequest.getKeyOfHealthDepartment()).
-            build();
 
-    GuestSubmissionDto guestSubmission = GuestSubmissionDto.builder().
-            encryptedData(encryptor.encrypt()).
-            keyReference(locationDataRequest.getKeyReference()).
-            secret(encryptor.getSecretKeyBase64()).
-            build();
+		String hdEnpoint = epsClientProperties.getDefaultHealthDepartmentEndpoint();
 
-    dataSubmissionClient.postDataSubmissionGuests(guestSubmission, locationDataRequest.getSubmissionUri());
+		if (!locationDataRequest.getHdEndpoint().isEmpty()) {
+			hdEnpoint = locationDataRequest.getHdEndpoint();
+		}
+
+		dataSubmissionClient.postDataSubmissionGuests(guestList, hdEnpoint);
 	}
 }

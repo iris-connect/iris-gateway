@@ -34,6 +34,8 @@ public class LocationDataRequestDto {
     @NotNull
     private String locationId;
 
+    private String hdEndpoint;
+
     /**
      * Reference id of the given key.
      * This reference must be included in the submission in order to identify the

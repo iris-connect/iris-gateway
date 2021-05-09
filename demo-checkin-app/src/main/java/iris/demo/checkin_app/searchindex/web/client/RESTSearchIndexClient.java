@@ -1,5 +1,6 @@
 package iris.demo.checkin_app.searchindex.web.client;
 
+import iris.demo.checkin_app.searchindex.SearchIndexClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -21,9 +22,8 @@ import iris.demo.checkin_app.searchindex.model.LocationDto;
 import iris.demo.checkin_app.searchindex.model.LocationsDto;
 
 @ConfigurationProperties(prefix = "iris.public-api", ignoreUnknownFields = false)
-@Component
 @Slf4j
-public class SearchIndexClient {
+public class RESTSearchIndexClient implements SearchIndexClient {
 
     private final static String TEMPORARY_PROVIDER_ID = "f002f370-bd54-4325-ad91-1aff3bf730a5";
 
@@ -31,7 +31,7 @@ public class SearchIndexClient {
     private final RestTemplate restTemplate;
     private String apihost;
 
-    public SearchIndexClient(RestTemplateBuilder restTemplateBuilder) {
+    public RESTSearchIndexClient(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 
