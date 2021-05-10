@@ -2,6 +2,8 @@ package iris.location_service.search.lucene;
 
 import iris.location_service.search.db.model.Location;
 import lombok.Getter;
+import lombok.Setter;
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -19,13 +21,18 @@ import java.util.List;
 
 
 public class LuceneController {
+    @Setter
     @Getter
-    private StandardAnalyzer analyzer;
+    private Analyzer analyzer;
     @Getter
     private Directory dir;
 
+    public void setDir(String path) throws IOException{
+        this.dir = FSDirectory.open(Paths.get(path));
+    }
+
     public LuceneController() throws IOException {
-        analyzer = new StandardAnalyzer();
+        Analyzer analyzer = new StandardAnalyzer();
         dir = FSDirectory.open(Paths.get("iris-location-service\\src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
     }
 
