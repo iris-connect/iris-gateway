@@ -33,7 +33,7 @@ public class LuceneController {
 
     public LuceneController() throws IOException {
         Analyzer analyzer = new StandardAnalyzer();
-        dir = FSDirectory.open(Paths.get("iris-location-service\\src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
+        dir = FSDirectory.open(Paths.get("src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
     }
 
     public List<Location> search(String keyword){
