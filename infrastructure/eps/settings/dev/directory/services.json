@@ -32,6 +32,17 @@
           }
         }
       ]
+    },
+    {
+      "name": "smartmeeting",
+      "channels": [
+        {
+          "type": "grpc_server",
+          "settings": {
+            "address": "iris.staging.smartmeeting.online:4444"
+          }
+        }
+      ]
     }
   ]
 }
