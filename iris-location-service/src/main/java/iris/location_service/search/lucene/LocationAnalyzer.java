@@ -19,19 +19,19 @@ public class LocationAnalyzer  extends Analyzer {
 
     /**
      * ":", "[" , "]" , "," "{" , "}" vielleicht auch zu Stop words
-     */
+
 
     String[]words = {"locations", "id", "name", "publicKey", "contact",
                      "officalName", "adress", "street", "city", "zip",
                      "ownerEmail", "email", "phone", "contexts"};
 
     CharArraySet stop_words = new CharArraySet(Arrays.asList(words),false);
-
+    */
     @Override
     protected TokenStreamComponents createComponents(String fieldName) {
         Tokenizer tokenizer = new WhitespaceTokenizer();
         TokenStream result = new LowerCaseFilter(tokenizer);
-        result = new StopFilter(result,stop_words);
+        //result = new StopFilter(result,stop_words);
         return new TokenStreamComponents(tokenizer, result);
     }
 }
