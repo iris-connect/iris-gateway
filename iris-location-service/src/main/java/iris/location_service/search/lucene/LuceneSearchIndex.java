@@ -4,6 +4,7 @@ import io.swagger.v3.oas.models.info.Contact;
 import iris.location_service.dto.LocationInformation;
 import iris.location_service.search.SearchIndex;
 import iris.location_service.search.db.model.Location;
+import lombok.AllArgsConstructor;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -14,16 +15,18 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
+@AllArgsConstructor
 public class LuceneSearchIndex implements SearchIndex {
+
     private LuceneController luceneController;
-    public LuceneSearchIndex(LuceneController luceneController) {
-        this.luceneController = luceneController;
-    }
+
     @Override
     public List<LocationInformation> search(String keyword) {
         try {

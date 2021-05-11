@@ -45,6 +45,8 @@ public class LocationIndexController {
 
 	private DBSearchIndex index;
 
+	private LuceneController luceneController;
+
 	@DeleteMapping("/search-index/locations/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public ResponseEntity<Void> deleteLocationFromSearchIndex(@RequestHeader(value = "x-provider-id", required = true) UUID providerId, @PathVariable("id") String id) {
@@ -81,8 +83,7 @@ public class LocationIndexController {
 
         locationRepository.saveAll(data);
         try {
-			LuceneController lucon = new LuceneController();
-			lucon.indexLocations(data);
+			luceneController.indexLocations(data);
 		}catch (Exception e){
         	e.printStackTrace();
 		}
