@@ -33,7 +33,10 @@ public class LuceneController {
     }
 
     public LuceneController() throws IOException {
+        // ToDO: Could be removed or should initialize class variable
         Analyzer analyzer = new StandardAnalyzer();
+
+        // ToDo: This only works at development time.
         dir = FSDirectory.open(Paths.get("src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
     }
 

@@ -27,14 +27,18 @@ public class LuceneSearchIndex implements SearchIndex {
 
     private LuceneController luceneController;
 
+
+
     @Override
     public List<LocationInformation> search(String keyword) {
         try {
             // create lucene index searchr
+            // ToDo: Move this to startup lifecycle ( @PostContruct Spring annotation )
             IndexReader reader = DirectoryReader.open(luceneController.getDir());
             IndexSearcher searcher = new IndexSearcher(reader);
 
             // create query
+            // ToDo: Move this to startup lifecycle ( @PostContruct Spring annotation )
             QueryParser parser = new QueryParser("Name",luceneController.getAnalyzer()); // TODO: 09.05.2021 search through all fields
             Query query = parser.parse(keyword);
 
