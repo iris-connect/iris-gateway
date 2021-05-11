@@ -19,8 +19,6 @@ channels: # defines all the channels that we want to open when starting the serv
     type: jsonrpc_server 
     settings:
       bind_address: "0.0.0.0:5555"
-      cors:
-        allowed_hosts: ["^http(?:s)?://localhost\\:\\d+$"]
       tls:
         ca_certificate_file: "$DIR/../../certs/root.crt"
         certificate_file: "$DIR/../../certs/ls-1.crt"
