@@ -71,10 +71,10 @@ services:
       - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
     environment:
       - EPS_SETTINGS=settings/dev/roles/public-proxy-1
-    command: [ "--level", "trace", "proxy", "public" ]
+    command: [ "--level", "trace", "proxy", "run", "public" ]
 
   public-proxy-eps:
-    image: luckylusa/eps-proxy:latest
+    image: luckylusa/iris-eps-server:v2
     expose:
       - 5556
       - 5544
