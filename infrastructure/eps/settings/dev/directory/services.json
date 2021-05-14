@@ -43,6 +43,28 @@
           }
         }
       ]
+    },
+    {
+      "name": "private-proxy-1",
+      "channels": [
+        {
+          "type": "grpc_client"
+        }
+      ]
+    },
+    {
+      "name": "public-proxy-1",
+      "channels": [
+        {
+          "type": "grpc_server",
+          "settings": {
+            "address": "iris.staging.smartmeeting.online:5559"
+          }
+        },
+        {
+          "type": "grpc_client"
+        }
+      ]
     }
   ]
 }
