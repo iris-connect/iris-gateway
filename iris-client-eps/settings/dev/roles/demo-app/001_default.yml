@@ -6,11 +6,22 @@ directory:
 channels: # defines all the channels that we want to open when starting the server
   - name: Stdout channel
     type: stdout
-    settings: { }
+    settings: {}
   - name: main gRPC server # accepts incoming gRPC connections to deliver and receive messages
     type: grpc_server
     settings:
       bind_address: "0.0.0.0:4444"
+      tls:
+        ca_certificate_file: "$DIR/../../certs/root.crt"
+        certificate_file: "$DIR/../../certs/demo-app.crt"
+        key_file: "$DIR/../../certs/demo-app.key"
+  - name: main JSON-RPC client # creates outgoing JSONRPC connections to deliver and receive messages
+    type: jsonrpc_client
+    settings:
+      endpoint: http://localhost:8091/data-request-rpc
+  - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
+    type: grpc_client
+    settings:
       tls:
         ca_certificate_file: "$DIR/../../certs/root.crt"
         certificate_file: "$DIR/../../certs/demo-app.crt"
@@ -23,7 +34,3 @@ channels: # defines all the channels that we want to open when starting the serv
         ca_certificate_file: "$DIR/../../certs/root.crt"
         certificate_file: "$DIR/../../certs/demo-app.crt"
         key_file: "$DIR/../../certs/demo-app.key"
-  - name: main JSON-RPC client # creates outgoing JSONRPC connections to deliver and receive messages
-    type: jsonrpc_client
-    settings:
-      endpoint: http://localhost:8091/data-request-rpc
