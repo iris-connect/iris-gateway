@@ -23,8 +23,8 @@ services:
       - 8080
 
   ls-1:
-    image: luckylusa/iris-eps-server:latest
-    expose: 
+    image: luckylusa/iris-eps-server:v2
+    expose:
       - 4445
     ports:
       - 4445:4445
@@ -46,11 +46,11 @@ services:
     restart: unless-stopped
 
   iris-app-api-demo-eps:
-    image: luckylusa/iris-eps-server:latest
+    image: luckylusa/iris-eps-server:v2
     depends_on:
       iris-app-api-demo:
         condition: service_started
-    expose: 
+    expose:
       - 4444
     ports:
       - 4444:4444
@@ -60,5 +60,38 @@ services:
       - EPS_SETTINGS=settings/dev/roles/demo-app
     command: [ "--level", "trace", "server", "run" ]
 
+  public-proxy:
+    image: luckylusa/eps-proxy:latest
+    expose:
+      - 4433
+      - 9999
+    ports:
+      - 4433:4433
+    volumes:
+      - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
+    environment:
+      - EPS_SETTINGS=settings/dev/roles/public-proxy-1
+    command: [ "--level", "trace", "proxy", "public" ]
+
+  public-proxy-eps:
+    image: luckylusa/eps-proxy:latest
+    expose:
+      - 5556
+      - 5544
+    ports:
+      - 5556:5556
+    volumes:
+      - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
+    environment:
+      - EPS_SETTINGS=settings/dev/roles/public-proxy-eps-1
+    command: [ "--level", "trace", "server", "run" ]
+
+  internal-server:
+    image: luckylusa/eps-internal-server:latest
+    volumes:
+      - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
+    expose:
+      - 8888
+    command: [ "--level", "trace" ]
 
 
