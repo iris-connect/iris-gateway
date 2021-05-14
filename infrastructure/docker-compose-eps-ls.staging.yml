@@ -61,12 +61,13 @@ services:
     command: [ "--level", "trace", "server", "run" ]
 
   public-proxy:
-    image: luckylusa/eps-proxy:latest
+    image: luckylusa/iris-eps-proxy:latest
     expose:
       - 4433
       - 9999
     ports:
       - 4433:4433
+      - 9999:9999
     volumes:
       - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
     environment:
@@ -79,7 +80,7 @@ services:
       - 5556
       - 5544
     ports:
-      - 5556:5556
+      - 5559:5559
     volumes:
       - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
     environment:
