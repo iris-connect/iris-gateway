@@ -26,21 +26,7 @@
       "name": "hd-1",
       "channels": [
         {
-          "type": "grpc_server",
-          "settings": {
-            "address": "iris.staging.iris-gateway.de:4446"
-          }
-        }
-      ]
-    },
-    {
-      "name": "smartmeeting",
-      "channels": [
-        {
-          "type": "grpc_server",
-          "settings": {
-            "address": "iris.staging.smartmeeting.online:4444"
-          }
+          "type": "grpc_client"
         }
       ]
     },
@@ -58,7 +44,7 @@
         {
           "type": "grpc_server",
           "settings": {
-            "address": "iris.staging.smartmeeting.online:5559"
+            "address": "iris.staging.iris-gateway.de:5559"
           }
         },
         {
