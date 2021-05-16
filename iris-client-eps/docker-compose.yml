@@ -1,0 +1,49 @@
+########################################################
+# Intended for local development eps servers           #
+########################################################
+
+version: '3'
+services:
+
+  ls-1:
+    image: luckylusa/iris-eps-bundle
+    expose:
+      - 4445
+      - 5555
+    ports:
+      - 4445:4445
+      - 5555:5555
+    volumes:
+      - .\settings:/app/settings
+    environment:
+      - EPS_SETTINGS=settings/dev/roles/ls-1
+    command: [ "--level", "debug", "server", "run" ]
+
+  demo-app:
+    image: luckylusa/iris-eps-bundle
+    expose:
+      - 4444
+      - 5554
+    ports:
+      - 4444:4444
+      - 5554:5554
+    volumes:
+      - .\settings:/app/settings
+    environment:
+      - EPS_SETTINGS=settings/dev/roles/demo-app
+    command: [ "--level", "debug", "server", "run" ]
+
+  hd-1:
+    image: luckylusa/iris-eps-bundle
+    expose:
+      - 4446
+      - 5556
+    ports:
+      - 4446:4446
+      - 5556:5556
+    volumes:
+      - .\settings:/app/settings
+    environment:
+      - EPS_SETTINGS=settings/dev/roles/hd-1
+    command: [ "--level", "debug", "server", "run" ]
+

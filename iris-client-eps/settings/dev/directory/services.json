@@ -6,7 +6,7 @@
         {
           "type": "grpc_server",
           "settings": {
-            "address": "localhost:4444"
+            "address": "demo-app:4444"
           }
         }
       ]
@@ -17,18 +17,7 @@
         {
           "type": "grpc_server",
           "settings": {
-            "address": "localhost:4445"
-          }
-        }
-      ]
-    },
-    {
-      "name": "hd-1",
-      "channels": [
-        {
-          "type": "grpc_server",
-          "settings": {
-            "address": "localhost:4446"
+            "address": "ls-1:4445"
           }
         }
       ]

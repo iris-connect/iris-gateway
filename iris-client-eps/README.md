@@ -5,12 +5,8 @@ To communicate with the distributed services, IRIS uses its own EPS (endpoint se
 ## Local development setup
 ### Install EPS
 The following steps are necessary:
-* Clone eps from [https://github.com/iris-gateway/eps](https://github.com/iris-gateway/eps)
-* Make eps binary and certificates accoring to [https://github.com/iris-gateway/eps#getting-started](https://github.com/iris-gateway/eps#getting-started) Go Compiler is needed.
-* Copy certificates from cloned directory /settings/dev/certs to this directory /settings/dev/certs
-* Switch to iris-client-eps directory
-* Start location service eps with `EPS_SETTINGS=settings/dev/roles/ls-1 eps --level debug server run`
-* Start operator eps with `EPS_SETTINGS=settings/dev/roles/op-1 eps --level debug server run`
+* In `iris-client-eps` directory run `docker run -v ./settings:/app/settings luckylusa/iris-eps-scripts certs` to generate certificates for development
+* Run demo-eps config with `docker-compose up -d`
 * `eps-client.clientUrl=https://localhost:5556/jsonrpc` should be set in iris-client-bff
 
 ### Create and change locations in location server
