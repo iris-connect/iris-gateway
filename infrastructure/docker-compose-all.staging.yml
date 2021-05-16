@@ -55,11 +55,11 @@ services:
         condition: service_healthy
       sormas:
         condition: service_healthy
-      iris-public: 
+      iris-public:
         condition: service_started
-      iris-location: 
+      iris-location:
         condition: service_started
-  
+
   iris-frontend:
     extends:
       file: docker-compose-hd-client.base.yml
