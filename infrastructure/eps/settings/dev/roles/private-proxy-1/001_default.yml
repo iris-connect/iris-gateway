@@ -1,5 +1,5 @@
 private:
-  bind_address: 0.0.0.0:5544
+  bind_address: 0.0.0.0:5545
   internal_endpoint: internal-server:8888
   jsonrpc_client:
     endpoint: https://private-proxy-1:7766/jsonrpc
