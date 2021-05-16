@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -24,19 +23,19 @@ public class LocationRPCImpl implements LocationRPC {
 
 	private final @NotNull LocationService locationService;
 
-	public String postLocationsToSearchIndex(String providerId, List<LocationInformation> locationList) {
-		locationService.addLocations(providerId, locationList);
+	public String postLocationsToSearchIndex(JsonRpcClientDto client, List<LocationInformation> locationList) {
+		locationService.addLocations(client.getName(), locationList);
 		return "OK";
 	}
 
 	@Override
-	public List<LocationOverviewDto> getProviderLocations(String providerId) {
-		return locationService.getProviderLocations(providerId);
+	public List<LocationOverviewDto> getProviderLocations(JsonRpcClientDto client) {
+		return locationService.getProviderLocations(client.getName());
 	}
 
 	@Override
-	public String deleteLocationFromSearchIndex(String providerId, String locationId) {
-		if (locationService.deleteLocation(providerId, locationId))
+	public String deleteLocationFromSearchIndex(JsonRpcClientDto client, String locationId) {
+		if (locationService.deleteLocation(client.getName(), locationId))
 			return "OK";
 		return "NOT FOUND";
 	}
