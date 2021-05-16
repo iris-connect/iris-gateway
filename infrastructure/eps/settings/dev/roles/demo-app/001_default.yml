@@ -34,3 +34,4 @@ channels: # defines all the channels that we want to open when starting the serv
         ca_certificate_file: "$DIR/../../certs/root.crt"
         certificate_file: "$DIR/../../certs/demo-app.crt"
         key_file: "$DIR/../../certs/demo-app.key"
+        verify_client: false
