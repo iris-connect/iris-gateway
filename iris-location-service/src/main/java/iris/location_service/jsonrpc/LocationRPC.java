@@ -5,7 +5,8 @@ import iris.location_service.dto.LocationList;
 import iris.location_service.dto.LocationOverviewDto;
 
 import java.util.List;
-import java.util.UUID;
+
+import javax.validation.Valid;
 
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcService;
@@ -13,13 +14,13 @@ import com.googlecode.jsonrpc4j.JsonRpcService;
 @JsonRpcService("/location-rpc")
 public interface LocationRPC {
 	String postLocationsToSearchIndex(
-			@JsonRpcParam(value = "providerId") String providerId,
+			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
 			@JsonRpcParam(value = "locations") List<LocationInformation> locationList);
 
-	List<LocationOverviewDto> getProviderLocations(@JsonRpcParam(value = "providerId") String providerId);
+	List<LocationOverviewDto> getProviderLocations(@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client);
 
 	String deleteLocationFromSearchIndex(
-			@JsonRpcParam(value = "providerId") String providerId,
+			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
 			@JsonRpcParam(value = "locationId") String locationId);
 
 	LocationList searchForLocation(@JsonRpcParam(value = "searchKeyword") String searchKeyword);
