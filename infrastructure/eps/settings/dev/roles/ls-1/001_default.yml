@@ -26,3 +26,10 @@ channels: # defines all the channels that we want to open when starting the serv
     type: jsonrpc_client
     settings:
       endpoint: http://iris-location:8080/location-rpc
+  - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
+    type: grpc_client
+    settings:
+      tls:
+        ca_certificate_file: "$DIR/../../certs/root.crt"
+        certificate_file: "$DIR/../../certs/ls-1.crt"
+        key_file: "$DIR/../../certs/ls-1.key"
