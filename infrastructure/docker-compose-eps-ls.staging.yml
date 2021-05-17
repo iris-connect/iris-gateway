@@ -88,5 +88,18 @@ services:
       - EPS_SETTINGS=settings/dev/roles/public-proxy-eps-1
     command: [ "--level", "trace", "server", "run" ]
 
+  sd-1:
+    image: luckylusa/iris-eps-bundle:latest
+    expose:
+      - 3322
+    ports:
+      - 3322:3322
+    volumes:
+      - ./settings:/app/settings
+      - /home/iris/service-directory:/tmp
+    environment:
+      - SD_SETTINGS=settings/dev/roles/sd-1
+    entrypoint: ./sd
+    command: [ "--level", "trace", "run" ]
 
 
