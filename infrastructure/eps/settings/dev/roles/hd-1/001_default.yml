@@ -4,7 +4,7 @@ directory:
   settings:
     jsonrpc_client:
       tls:
-        certificate_file: "$DIR/../../certs/hd1-1.crt"
+        certificate_file: "$DIR/../../certs/hd-1.crt"
         key_file: "$DIR/../../certs/hd-1.key"
         ca_certificate_file: "$DIR/../../certs/root.crt"
     ca_certificate_file: "$DIR/../../certs/root.crt"
@@ -34,3 +34,7 @@ channels: # defines all the channels that we want to open when starting the serv
         certificate_file: "$DIR/../../certs/hd-1.crt"
         key_file: "$DIR/../../certs/hd-1.key"
         verify_client: false
+signing:
+  certificate_file: "$DIR/../../certs/hd-1-sign.crt"
+  key_file: "$DIR/../../certs/hd-1-sign.key"
+  ca_certificate_file: "$DIR/../../certs/root.crt"
