@@ -15,7 +15,7 @@ version: '3'
 services:
 
   iris-location:
-    image: inoeg/iris-location-service:v1.0.0-alpha
+    image: inoeg/iris-location-service:v1.0.1-alpha
     restart: unless-stopped
     depends_on:
       - ls-1
