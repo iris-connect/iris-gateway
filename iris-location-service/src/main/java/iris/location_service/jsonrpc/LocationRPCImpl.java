@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Service;
 
-import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
 
 @AutoJsonRpcServiceImpl
@@ -41,14 +40,15 @@ public class LocationRPCImpl implements LocationRPC {
 	}
 
 	@Override
-	public LocationList searchForLocation(String searchKeyword) {
+	public LocationList searchForLocation(JsonRpcClientDto client, String searchKeyword) {
 		return new LocationList(locationService.search(searchKeyword));
 	}
 
 	@Override
 	public Object getLocationDetails(
-			@JsonRpcParam(value = "providerId") String providerId,
-			@JsonRpcParam(value = "locationId") String locationId) {
+			JsonRpcClientDto client,
+			String providerId,
+			String locationId) {
 		Optional<LocationInformation> locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId,
 				locationId);
 
