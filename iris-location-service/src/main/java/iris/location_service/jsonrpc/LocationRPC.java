@@ -23,9 +23,12 @@ public interface LocationRPC {
 			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
 			@JsonRpcParam(value = "locationId") String locationId);
 
-	LocationList searchForLocation(@JsonRpcParam(value = "searchKeyword") String searchKeyword);
+	LocationList searchForLocation(
+			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
+			@JsonRpcParam(value = "searchKeyword") String searchKeyword);
 
 	Object getLocationDetails(
+			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
 			@JsonRpcParam(value = "providerId") String providerId,
 			@JsonRpcParam(value = "locationId") String locationId);
 }
