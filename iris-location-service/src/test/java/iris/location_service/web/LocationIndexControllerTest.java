@@ -1,6 +1,6 @@
 package iris.location_service.web;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import iris.location_service.dto.LocationList;
 

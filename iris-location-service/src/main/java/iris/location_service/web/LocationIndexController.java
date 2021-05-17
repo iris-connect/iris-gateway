@@ -13,7 +13,6 @@ import iris.location_service.service.LocationService;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -62,7 +61,8 @@ public class LocationIndexController {
 	@PutMapping("/search-index/locations")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> postLocationsToSearchIndex(
-			@RequestHeader(value = "x-provider-id", required = true) String providerId, @Valid @RequestBody LocationList body) {
+			@RequestHeader(value = "x-provider-id", required = true) String providerId,
+			@Valid @RequestBody LocationList body) {
 		locationService.addLocations(providerId, body.getLocations());
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
