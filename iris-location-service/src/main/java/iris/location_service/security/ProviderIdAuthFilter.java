@@ -1,8 +1,8 @@
 package iris.location_service.security;
 
-import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
-
 import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
 public class ProviderIdAuthFilter extends AbstractPreAuthenticatedProcessingFilter {
 
