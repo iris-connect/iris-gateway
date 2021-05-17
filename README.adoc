@@ -239,12 +239,17 @@ dataToTransport = base64Encode(encrypted);
 keyToTransport = base64Encode(keyEncrypted);
 ```
 
-== Development 
+== Development
+
+For general information about development (commit messages, branching, …), see the iris-client repository.
+
+https://github.com/iris-gateway/iris-client#dev
+
 === Java parts
 
 Since most Java code of IRIS will be developed in the IRIS client BFF, please refer to its documentation for instructions on developing Java code.
 
-https://github.com/iris-gateway/iris-client#dev
+https://github.com/iris-gateway/iris-client#java
 
 == Deployment as Staging
 
