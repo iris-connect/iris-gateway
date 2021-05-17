@@ -35,7 +35,7 @@ services:
     command: [ "--level", "debug", "server", "run" ]
 
   iris-app-api-demo:
-    image: inoeg/demo-checkin-app:v1.0.0-alpha
+    image: inoeg/demo-checkin-app:v1.0.1-alpha
     environment:
       - EPS_CLIENT_CLIENT_URL=https://iris-app-api-demo-eps:5554/jsonrpc
     depends_on:
