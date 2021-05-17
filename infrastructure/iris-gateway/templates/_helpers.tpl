@@ -19,28 +19,20 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 
-{{- define "iris-gateway.public" -}}
-{{- include "iris-gateway.fullname" . }}-public
+{{- define "iris-gateway.locations" -}}
+{{- include "iris-gateway.fullname" . }}-locations
 {{- end }}
 
-{{- define "iris-gateway.public-labels" -}}
-app.kubernetes.io/name: {{ include "iris-gateway.public" . }}
+{{- define "iris-gateway.locations-eps" -}}
+{{- include "iris-gateway.fullname" . }}-locations-eps
 {{- end }}
 
-{{- define "iris-gateway.location" -}}
-{{- include "iris-gateway.fullname" . }}-location
+{{- define "iris-gateway.locations-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.locations" . }}
 {{- end }}
 
-{{- define "iris-gateway.location-labels" -}}
-app.kubernetes.io/name: {{ include "iris-gateway.location" . }}
-{{- end }}
-
-{{- define "iris-gateway.postgres" -}}
-{{ include "iris-gateway.fullname" . }}-postgres
-{{- end }}
-
-{{- define "iris-gateway.postgres-labels" -}}
-app.kubernetes.io/name: {{ include "iris-gateway.postgres" . }}
+{{- define "iris-gateway.locations-eps-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.locations-eps" . }}
 {{- end }}
 
 {{/*

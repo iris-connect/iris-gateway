@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "iris-gateway.location" . }}
+  name: {{ include "iris-gateway.locations" . }}
   labels:
-    {{- include "iris-gateway.location-labels" . | nindent 4 }}
+    {{- include "iris-gateway.locations-labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "iris-gateway.location-labels" . | nindent 6 }}
+      {{- include "iris-gateway.locations-labels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "iris-gateway.location-labels" . | nindent 8 }}
+        {{- include "iris-gateway.locations-labels" . | nindent 8 }}
     spec:
       containers:
         - name: location
-          image: {{ .Values.location.image }}
+          image: {{ .Values.locations.image }}:{{ .Values.locations.tag }}
           {{- if eq .Values.environment "local" }}
           imagePullPolicy: Never
           {{- else }}
@@ -24,5 +24,5 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.locations.port }}
               protocol: TCP
