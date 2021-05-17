@@ -95,7 +95,7 @@ services:
     ports:
       - 3322:3322
     volumes:
-      - ./settings:/app/settings
+      - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
       - /home/iris/service-directory:/tmp
     environment:
       - SD_SETTINGS=settings/dev/roles/sd-1

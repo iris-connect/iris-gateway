@@ -4,8 +4,8 @@ directory:
   settings:
     jsonrpc_client:
       tls:
-        certificate_file: "$DIR/../../certs/ls1-1.crt"
-        key_file: "$DIR/../../certs/ls1-1.key"
+        certificate_file: "$DIR/../../certs/ls-1.crt"
+        key_file: "$DIR/../../certs/ls-1.key"
         ca_certificate_file: "$DIR/../../certs/root.crt"
     ca_certificate_file: "$DIR/../../certs/root.crt"
     endpoints: [ "https://iris.staging.iris-gateway.de:3322/jsonrpc" ]
