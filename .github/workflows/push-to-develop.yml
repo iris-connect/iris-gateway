@@ -1,0 +1,60 @@
+name: Build, package and deploy (to test) all services on push to develop branch
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - iris-location-service/**
+      - .github/workflows/push-to-develop.yml
+
+jobs:
+  # https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image
+  build-location-service:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.3.4
+    
+      - name: Cache local Maven repository
+        uses: actions/cache@v2.1.5
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+    
+      - name: build, package and publish the image
+        run: >
+          mvn -B spring-boot:build-image -am -pl iris-location-service
+          -Dspring-boot.build-image.publish=true
+          -Dversion.tag="${{ github.sha }}"
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+          DOCKER_HUB_PW: ${{ secrets.DOCKER_HUB_PW }}
+
+  deployment:
+    needs: build-location-service
+    runs-on: self-hosted
+    container: alpine/helm:3.5.4
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Prepare k8s config
+        run: >
+          rm -rf ~/.kube &&
+          mkdir ~/.kube &&
+          echo "${{ secrets.KUBECONFIG_TEST }}" > ~/.kube/config
+
+      - name: Run helm deployment
+        run: >
+          helm upgrade --install
+          --namespace iris-gateway
+          --set environment=test
+          --set locations.tag="${{ github.sha }}"
+          iris-gateway ./infrastructure/iris-gateway
