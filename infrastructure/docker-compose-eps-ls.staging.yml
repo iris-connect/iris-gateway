@@ -24,6 +24,9 @@ services:
 
   ls-1:
     image: luckylusa/iris-eps-bundle:latest
+    depends_on:
+      sd-1:
+        condition: service_started
     expose:
       - 4445
     ports:
@@ -41,6 +44,8 @@ services:
     depends_on:
       iris-location:
         condition: service_started
+      iris-app-api-demo-eps:
+        condition: service_started
     ports:
       - 8091:8091
     restart: unless-stopped
@@ -48,7 +53,7 @@ services:
   iris-app-api-demo-eps:
     image: luckylusa/iris-eps-bundle:latest
     depends_on:
-      iris-app-api-demo:
+      sd-1:
         condition: service_started
     expose:
       - 4444
@@ -77,6 +82,9 @@ services:
 
   public-proxy-eps:
     image: luckylusa/iris-eps-bundle:latest
+    depends_on:
+      sd-1:
+        condition: service_started
     expose:
       - 5556
       - 5544
