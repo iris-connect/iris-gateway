@@ -2,7 +2,7 @@ name: demo-app
 directory:
   type: json
   settings:
-    path: "$DIR/../../directory/services.json"
+    path: "$DIR/../../directory"
 channels: # defines all the channels that we want to open when starting the server
   - name: Stdout channel
     type: stdout

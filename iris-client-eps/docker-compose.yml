@@ -14,7 +14,7 @@ services:
       - 4445:4445
       - 5555:5555
     volumes:
-      - .\settings:/app/settings
+      - ./settings:/app/settings
     environment:
       - EPS_SETTINGS=settings/dev/roles/ls-1
     command: [ "--level", "debug", "server", "run" ]
@@ -28,7 +28,7 @@ services:
       - 4444:4444
       - 5554:5554
     volumes:
-      - .\settings:/app/settings
+      - ./settings:/app/settings
     environment:
       - EPS_SETTINGS=settings/dev/roles/demo-app
     command: [ "--level", "trace", "server", "run" ]
@@ -42,21 +42,8 @@ services:
       - 4446:4446
       - 5556:5556
     volumes:
-      - .\settings:/app/settings
+      - ./settings:/app/settings
     environment:
       - EPS_SETTINGS=settings/dev/roles/hd-1
     command: [ "--level", "trace", "server", "run" ]
 
-  sd-1:
-    image: luckylusa/iris-eps-bundle:latest
-    expose:
-      - 3322
-    ports:
-      - 3322:3322
-    volumes:
-      - ./settings:/app/settings
-      - ./service-directory:/tmp
-    environment:
-      - SD_SETTINGS=settings/dev/roles/service-directory
-    entrypoint: ./sd
-    command: [ "--level", "trace", "run" ]
