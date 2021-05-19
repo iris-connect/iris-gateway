@@ -8,6 +8,6 @@ iris-gateway.de
 sudo su - iris
 cd ./infrastructure
 docker-compose -f docker-compose.staging.yml pull
-docker-compose -f docker-compose.staging.yml up -d
+docker-compose -f docker-compose.staging.yml -p staging up -d
 ```
 Frontend: https://iris.staging.iris-gateway.de
