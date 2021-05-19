@@ -8,12 +8,8 @@ import iris.location_service.search.lucene.LuceneController;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -38,17 +34,5 @@ public class LuceneAnalyzerTest {
         assertEquals(1,writer.getDocStats().maxDoc);
         writer.deleteAll();
         writer.close();
-    }
-
-    @Test
-    public void test() throws Exception{
-        Directory dir = FSDirectory.open(Paths.get("src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
-        Location testObject = new Location(new LocationIdentifier("123","123"),"Pablo","Pablo Hun", "Pablo","Rom 1", "Rom", "12345","pablo.h@test.com","pablotest@test.de","01234 1512435");
-        LuceneController testIt = new LuceneController();
-        int testExpected = dir.listAll().length+3;
-        testIt.indexLocation(testObject);
-
-        assertEquals(testExpected,dir.listAll().length);
-
     }
 }
