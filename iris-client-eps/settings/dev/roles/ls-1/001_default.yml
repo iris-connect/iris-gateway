@@ -1,15 +1,8 @@
 name: ls-1
 directory:
-  type: api
+  type: json
   settings:
-    jsonrpc_client:
-      tls:
-        certificate_file: "$DIR/../../certs/ls1-1.crt"
-        key_file: "$DIR/../../certs/ls1-1.key"
-        ca_certificate_file: "$DIR/../../certs/root.crt"
-    ca_certificate_file: "$DIR/../../certs/root.crt"
-    endpoints: [ "https://iris.staging.iris-gateway.de:3322/jsonrpc" ]
-    server_names: [ "sd-1" ]
+    path: "$DIR/../../directory"
 channels: # defines all the channels that we want to open when starting the server
   - name: Stdout channel
     type: stdout

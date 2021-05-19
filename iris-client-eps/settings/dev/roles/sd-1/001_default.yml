@@ -1,9 +1,0 @@
-jsonrpc_server: # the JSON-RPC server that the EPS server uses for communication
-  bind_address: "0.0.0.0:3322"
-  tls:
-    ca_certificate_file: "$DIR/../../certs/root.crt"
-    certificate_file: "$DIR/../../certs/sd-1.crt"
-    key_file: "$DIR/../../certs/sd-1.key"
-directory:
-  database_file: /tmp/service-directory.records
-  ca_certificate_file: "$DIR/../../certs/root.crt"

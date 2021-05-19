@@ -8,6 +8,8 @@ The following steps are necessary:
 * In `iris-client-eps` directory run `docker run -v ./settings:/app/settings luckylusa/iris-eps-scripts certs` to generate certificates for development
 * Run demo-eps config with `docker-compose up -d`
 * `eps-client.clientUrl=https://localhost:5556/jsonrpc` should be set in iris-client-bff
+* Please make sure `host.docker.internal` points to `172.17.0.1` on linux
+* iris-app-api-demo will push a location to location service and will deliver data for any date
 
 ### Create and change locations in location server
 
