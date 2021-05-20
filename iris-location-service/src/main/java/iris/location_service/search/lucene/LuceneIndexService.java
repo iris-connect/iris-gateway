@@ -3,7 +3,6 @@ package iris.location_service.search.lucene;
 import iris.location_service.dto.LocationInformation;
 import iris.location_service.search.SearchIndex;
 import iris.location_service.search.db.model.Location;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.lucene.analysis.Analyzer;
@@ -34,26 +33,29 @@ import java.util.List;
 @Service
 public class LuceneIndexService implements SearchIndex {
     @Setter
-    @Getter
     private Analyzer analyzer;
     @Getter
     private Directory dir;
-    private IndexReader reader;
     private IndexSearcher searcher;
-    QueryParser parser;
+    private QueryParser parser;
 
 
     @PostConstruct
-    private void postConstruct() throws IOException {
+    private void postConstruct() {
+        try {
+
         // ToDO: Could be removed or should initialize class variable
         analyzer = new StandardAnalyzer();
 
         // ToDo: This only works at development time.
         dir = FSDirectory.open(Paths.get("src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
 
-        reader = DirectoryReader.open(dir);
+        IndexReader reader = DirectoryReader.open(dir);
         searcher = new IndexSearcher(reader);
         parser = new QueryParser("Name",analyzer); // TODO: 09.05.2021 search through all fields
+        }catch (IOException e){
+            //ToDo proper exception handling
+        }
     }
 
     @Override
