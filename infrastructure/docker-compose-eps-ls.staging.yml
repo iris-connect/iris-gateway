@@ -66,7 +66,7 @@ services:
     command: [ "--level", "trace", "server", "run" ]
 
   public-proxy:
-    image: luckylusa/iris-eps-bundle:latest
+    image: luckylusa/iris-eps-proxy:latest
     expose:
       - 4433
       - 9999
@@ -75,7 +75,6 @@ services:
       - 9999:9999
     volumes:
       - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
-    entrypoint: ./proxy
     environment:
       - PROXY_SETTINGS=settings/dev/roles/public-proxy-1
     command: [ "--level", "trace", "run", "public" ]
