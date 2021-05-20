@@ -80,11 +80,8 @@ public class LocationIndexController {
         }).collect(Collectors.toList());
 
         locationRepository.saveAll(data);
-        try {
-			luceneIndexService.indexLocations(data);
-		}catch (Exception e){
-        	e.printStackTrace();
-		}
+        luceneIndexService.indexLocations(data);
+
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 

@@ -4,6 +4,8 @@ import iris.location_service.dto.LocationInformation;
 import iris.location_service.search.SearchIndex;
 import iris.location_service.search.db.model.Location;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -16,10 +18,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.springframework.stereotype.Service;
@@ -38,21 +37,18 @@ public class LuceneIndexService implements SearchIndex {
     private Directory dir;
     private IndexSearcher searcher;
     private QueryParser parser;
+    private LuceneSearcher luceneSearcher;
 
 
     @PostConstruct
     private void postConstruct() {
         try {
-
-        // ToDO: Could be removed or should initialize class variable
         analyzer = new StandardAnalyzer();
 
         // ToDo: This only works at development time.
         dir = FSDirectory.open(Paths.get("iris-location-service\\src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
 
-        IndexReader reader = DirectoryReader.open(dir);
-        searcher = new IndexSearcher(reader);
-        parser = new QueryParser("Name",analyzer); // TODO: 09.05.2021 search through all fields
+        luceneSearcher = new LuceneSearcher(dir, analyzer);
         }catch (IOException e){
             //ToDo proper exception handling
         }
@@ -60,11 +56,10 @@ public class LuceneIndexService implements SearchIndex {
 
     @Override
     public List<LocationInformation> search(String keyword){
-        try {
-            Query query = parser.parse(keyword);
+        try{
 
             // search
-            TopDocs results = searcher.search(query, 10);
+            TopDocs results = luceneSearcher.search(keyword);
 
             // parse to location list
             List<LocationInformation> locationList = new ArrayList<>();
@@ -83,9 +78,13 @@ public class LuceneIndexService implements SearchIndex {
         indexDocument(createDocument(location));
     }
 
-    public void indexLocations(List<Location> locations) throws Exception {
-        for(Location location:locations){
-            indexDocument(createDocument(location));
+    public void indexLocations(List<Location> locations){
+        try {
+            for(Location location:locations){
+                indexDocument(createDocument(location));
+            }
+        }catch (Exception e){
+            //ToDO proper exception handling
         }
     }
 
