@@ -43,7 +43,7 @@ public class LocationIndexController {
 
 	private DBSearchIndex index;
 
-	private LuceneIndexService luceneController;
+	private LuceneIndexService luceneIndexService;
 
 	@DeleteMapping("/search-index/locations/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
@@ -81,7 +81,7 @@ public class LocationIndexController {
 
         locationRepository.saveAll(data);
         try {
-			luceneController.indexLocations(data);
+			luceneIndexService.indexLocations(data);
 		}catch (Exception e){
         	e.printStackTrace();
 		}
