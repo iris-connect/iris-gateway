@@ -1,6 +1,9 @@
 package iris.location_service.search.lucene;
 
+import iris.location_service.dto.LocationInformation;
+import iris.location_service.search.SearchIndex;
 import iris.location_service.search.db.model.Location;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.lucene.analysis.Analyzer;
@@ -8,42 +11,70 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.MMapDirectory;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class LuceneController {
+public class LuceneIndexService implements SearchIndex {
     @Setter
     @Getter
     private Analyzer analyzer;
     @Getter
     private Directory dir;
+    private IndexReader reader;
+    private IndexSearcher searcher;
+    QueryParser parser;
 
-    public void setDir(String path) throws IOException{
-        this.dir = FSDirectory.open(Paths.get(path));
-    }
 
-    public LuceneController() throws IOException {
+    @PostConstruct
+    private void postConstruct() throws IOException {
         // ToDO: Could be removed or should initialize class variable
-        Analyzer analyzer = new StandardAnalyzer();
+        analyzer = new StandardAnalyzer();
 
         // ToDo: This only works at development time.
         dir = FSDirectory.open(Paths.get("src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
+
+        reader = DirectoryReader.open(dir);
+        searcher = new IndexSearcher(reader);
+        parser = new QueryParser("Name",analyzer); // TODO: 09.05.2021 search through all fields
     }
 
-    public List<Location> search(String keyword){
-        LuceneSearchIndex searchIndex = new LuceneSearchIndex(this);
-        searchIndex.search(keyword);
-        return null;
+    @Override
+    public List<LocationInformation> search(String keyword){
+        try {
+            Query query = parser.parse(keyword);
+
+            // search
+            TopDocs results = searcher.search(query, 10);
+
+            // parse to location list
+            List<LocationInformation> locationList = new ArrayList<>();
+            for (ScoreDoc resultScore: results.scoreDocs) {
+                Document result = searcher.doc(resultScore.doc);
+                LocationInformation location = createLocationInformation(result);
+                locationList.add(location);
+            }
+            return locationList;
+        } catch (IOException | ParseException e) {
+            return null; // TODO: 09.05.2021 return proper error object
+        }
     }
 
     public void indexLocation(Location location) throws Exception {
@@ -81,5 +112,13 @@ public class LuceneController {
         IndexWriter writer = new IndexWriter(dir, config);
         writer.addDocument(doc);
         writer.close();
+    }
+
+    public LocationInformation createLocationInformation(Document document) {
+        return new LocationInformation(); // TODO: 09.05.2021 add 'document to location information' parser
+    }
+
+    public void setDir(String path) throws IOException{
+        this.dir = FSDirectory.open(Paths.get(path));
     }
 }

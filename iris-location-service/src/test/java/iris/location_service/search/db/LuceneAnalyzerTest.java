@@ -4,7 +4,7 @@ package iris.location_service.search.db;
 import iris.location_service.search.db.model.Location;
 import iris.location_service.search.db.model.LocationIdentifier;
 import iris.location_service.search.lucene.LocationAnalyzer;
-import iris.location_service.search.lucene.LuceneController;
+import iris.location_service.search.lucene.LuceneIndexService;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -25,7 +25,7 @@ public class LuceneAnalyzerTest {
                 "1234","tobias","test@web.de","12345");
 
         Analyzer analyzer = new LocationAnalyzer();
-        LuceneController controller = new LuceneController() ;
+        LuceneIndexService controller = new LuceneIndexService() ;
         controller.setAnalyzer(analyzer);
         controller.setDir("target\\luceneTestIndex");
         controller.indexLocation(location);
