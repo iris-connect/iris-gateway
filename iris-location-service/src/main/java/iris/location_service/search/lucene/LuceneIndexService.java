@@ -48,7 +48,7 @@ public class LuceneIndexService implements SearchIndex {
         analyzer = new StandardAnalyzer();
 
         // ToDo: This only works at development time.
-        dir = FSDirectory.open(Paths.get("src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
+        dir = FSDirectory.open(Paths.get("iris-location-service\\src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
 
         IndexReader reader = DirectoryReader.open(dir);
         searcher = new IndexSearcher(reader);
