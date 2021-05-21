@@ -1,4 +1,6 @@
 private:
+  name: private-proxy-1
+  database_file: /tmp/private-proxy-announcements.db
   bind_address: 0.0.0.0:5545
   internal_endpoint: internal-server:8888
   jsonrpc_client:
