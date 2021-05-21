@@ -56,9 +56,6 @@
           "settings": {
             "address": "iris.staging.iris-gateway.de:5559"
           }
-        },
-        {
-          "type": "grpc_client"
         }
       ]
     }

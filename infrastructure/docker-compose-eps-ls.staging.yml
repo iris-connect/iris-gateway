@@ -86,7 +86,7 @@ services:
       sd-1:
         condition: service_started
     expose:
-      - 5556
+      - 5559
       - 5544
     ports:
       - 5559:5559
