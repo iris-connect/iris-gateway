@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "iris-gateway.locations" . }}
+  labels:
+    {{- include "iris-gateway.locations-labels" . | nindent 4 }}
+spec:
+  ports:
+    - port: {{ .Values.locations.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "iris-gateway.locations-labels" . | nindent 4 }}
