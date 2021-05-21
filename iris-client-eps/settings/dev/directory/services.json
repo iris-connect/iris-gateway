@@ -1,0 +1,34 @@
+{
+  "entries": [
+    {
+      "name": "demo-app",
+      "channels": [
+        {
+          "type": "grpc_server",
+          "settings": {
+            "address": "demo-app:4444"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ls-1",
+      "channels": [
+        {
+          "type": "grpc_server",
+          "settings": {
+            "address": "ls-1:4445"
+          }
+        }
+      ]
+    },
+    {
+      "name": "hd-1",
+      "channels": [
+        {
+          "type": "grpc_client"
+        }
+      ]
+    }
+  ]
+}
