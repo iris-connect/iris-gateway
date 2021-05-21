@@ -3,6 +3,7 @@ package iris.demo.checkin_app.datarequest.jsonrpc;
 import iris.demo.checkin_app.datarequest.model.dto.LocationDataRequestDto;
 import iris.demo.checkin_app.datasubmission.service.DataSubmissionService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,6 +13,7 @@ import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
 
 @AutoJsonRpcServiceImpl
 @AllArgsConstructor
+@Slf4j
 @Service
 public class DataRequestRPCImpl implements DataRequestRPC {
 
@@ -20,6 +22,7 @@ public class DataRequestRPCImpl implements DataRequestRPC {
 	@Override
 	public String createDataRequest(JsonRpcClientDto client, LocationDataRequestDto locationDataRequestDto) {
 		try {
+			log.info("Setting HD endpoint to " + client.getName());
 			locationDataRequestDto.setHdEndpoint(client.getName());
 			dataSubmissionService.sendDataForRequest(locationDataRequestDto);
 			return "OK";
