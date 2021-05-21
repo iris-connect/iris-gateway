@@ -75,6 +75,7 @@ services:
       - 9999:9999
     volumes:
       - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
+      - /home/iris/pub-proxy-db:/tmp
     environment:
       - PROXY_SETTINGS=settings/dev/roles/public-proxy-1
     command: [ "--level", "trace", "run", "public" ]
