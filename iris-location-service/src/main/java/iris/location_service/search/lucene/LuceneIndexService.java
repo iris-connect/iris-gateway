@@ -1,58 +1,90 @@
 package iris.location_service.search.lucene;
 
+import iris.location_service.dto.LocationInformation;
+import iris.location_service.search.SearchIndex;
 import iris.location_service.search.db.model.Location;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.MMapDirectory;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class LuceneController {
+public class LuceneIndexService implements SearchIndex {
     @Setter
-    @Getter
     private Analyzer analyzer;
     @Getter
     private Directory dir;
+    private IndexSearcher searcher;
+    private QueryParser parser;
+    private LuceneSearcher luceneSearcher;
 
-    public void setDir(String path) throws IOException{
-        this.dir = FSDirectory.open(Paths.get(path));
-    }
 
-    public LuceneController() throws IOException {
-        // ToDO: Could be removed or should initialize class variable
-        Analyzer analyzer = new StandardAnalyzer();
+    @PostConstruct
+    private void postConstruct() {
+        try {
+        analyzer = new StandardAnalyzer();
 
         // ToDo: This only works at development time.
-        dir = FSDirectory.open(Paths.get("src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
+        dir = FSDirectory.open(Paths.get("iris-location-service\\src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
+
+        luceneSearcher = new LuceneSearcher(dir, analyzer);
+        }catch (IOException e){
+            //ToDo proper exception handling
+        }
     }
 
-    public List<Location> search(String keyword){
-        LuceneSearchIndex searchIndex = new LuceneSearchIndex(this);
-        searchIndex.search(keyword);
-        return null;
+    @Override
+    public List<LocationInformation> search(String keyword){
+        try{
+
+            // search
+            TopDocs results = luceneSearcher.search(keyword);
+
+            // parse to location list
+            List<LocationInformation> locationList = new ArrayList<>();
+            for (ScoreDoc resultScore: results.scoreDocs) {
+                Document result = searcher.doc(resultScore.doc);
+                LocationInformation location = createLocationInformation(result);
+                locationList.add(location);
+            }
+            return locationList;
+        } catch (IOException | ParseException e) {
+            return null; // TODO: 09.05.2021 return proper error object
+        }
     }
 
     public void indexLocation(Location location) throws Exception {
         indexDocument(createDocument(location));
     }
 
-    public void indexLocations(List<Location> locations) throws Exception {
-        for(Location location:locations){
-            indexDocument(createDocument(location));
+    public void indexLocations(List<Location> locations){
+        try {
+            for(Location location:locations){
+                indexDocument(createDocument(location));
+            }
+        }catch (Exception e){
+            //ToDO proper exception handling
         }
     }
 
@@ -81,5 +113,13 @@ public class LuceneController {
         IndexWriter writer = new IndexWriter(dir, config);
         writer.addDocument(doc);
         writer.close();
+    }
+
+    public LocationInformation createLocationInformation(Document document) {
+        return new LocationInformation(); // TODO: 09.05.2021 add 'document to location information' parser
+    }
+
+    public void setDir(String path) throws IOException{
+        this.dir = FSDirectory.open(Paths.get(path));
     }
 }

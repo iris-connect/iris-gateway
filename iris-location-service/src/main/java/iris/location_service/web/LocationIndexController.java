@@ -11,7 +11,7 @@ import iris.location_service.search.db.DBSearchIndex;
 import iris.location_service.search.db.LocationRepository;
 import iris.location_service.search.db.model.Location;
 import iris.location_service.search.db.model.LocationIdentifier;
-import iris.location_service.search.lucene.LuceneController;
+import iris.location_service.search.lucene.LuceneIndexService;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;
@@ -19,11 +19,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Size;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -45,7 +43,7 @@ public class LocationIndexController {
 
 	private DBSearchIndex index;
 
-	private LuceneController luceneController;
+	private LuceneIndexService luceneIndexService;
 
 	@DeleteMapping("/search-index/locations/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
@@ -82,11 +80,8 @@ public class LocationIndexController {
         }).collect(Collectors.toList());
 
         locationRepository.saveAll(data);
-        try {
-			luceneController.indexLocations(data);
-		}catch (Exception e){
-        	e.printStackTrace();
-		}
+        luceneIndexService.indexLocations(data);
+
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 
