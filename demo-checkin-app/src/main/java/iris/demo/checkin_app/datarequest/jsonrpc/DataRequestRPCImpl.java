@@ -20,6 +20,7 @@ public class DataRequestRPCImpl implements DataRequestRPC {
 	@Override
 	public String createDataRequest(JsonRpcClientDto client, LocationDataRequestDto locationDataRequestDto) {
 		try {
+			locationDataRequestDto.setHdEndpoint(client.getName());
 			dataSubmissionService.sendDataForRequest(locationDataRequestDto);
 			return "OK";
 		} catch (Exception e) {
