@@ -37,4 +37,4 @@ channels: # defines all the channels that we want to open when starting the serv
 signing:
   certificate_file: "$DIR/../../certs/hd-1-sign.crt"
   key_file: "$DIR/../../certs/hd-1-sign.key"
-  ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
+  ca_certificate_file: "$DIR/../../certs/root.crt"
