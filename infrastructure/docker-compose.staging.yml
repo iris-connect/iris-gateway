@@ -71,8 +71,8 @@ services:
       iris-client:
         condition: service_started
 
-  iris-app-api-demo:
-    image: inoeg/iris-app-api-demo:${IRIS_VERSION}
+  demo-checkin-app:
+    image: inoeg/demo-checkin-app:${IRIS_VERSION}
     depends_on:
       iris-location:
         condition: service_started

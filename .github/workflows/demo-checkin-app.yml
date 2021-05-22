@@ -1,6 +1,7 @@
 # https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image
 
-name: Build and package image for iris-app-api-demo and deploy it to docker.io
+# Build and package image for demo-checkin-app and deploy it to docker.io
+name: demo-checkin-app Develop
 
 on:
   push:
