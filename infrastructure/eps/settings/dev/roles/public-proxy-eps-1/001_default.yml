@@ -1,4 +1,4 @@
-name: public-proxy-eps-1
+name: public-proxy-1
 directory:
   type: api
   settings:
