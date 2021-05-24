@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### Lucene index data ###
-!**/src/main/java/iris/location_service/search/lucene/data
+!**iris-location-service\src\main\java\iris\location_service\search\lucene\data
