@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 public class DataSubmissionDto {
 
-	private UUID requestId;
+	private UUID dataAuthorizationToken;
 	private GuestListDto guestList;
 
 }

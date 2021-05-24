@@ -67,7 +67,7 @@ public class DataSubmissionService {
 		}
 
 		DataSubmissionDto dataSubmissionDto = DataSubmissionDto.builder()
-				.requestId(locationDataRequest.getDataAuthorizationToken())
+				.dataAuthorizationToken(locationDataRequest.getDataAuthorizationToken())
 				.guestList(guestList).build();
 
 		dataSubmissionClient.postDataSubmissionGuests(dataSubmissionDto, hdEnpoint);
