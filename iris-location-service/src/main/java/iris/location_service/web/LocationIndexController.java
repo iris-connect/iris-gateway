@@ -91,7 +91,7 @@ public class LocationIndexController {
 			@Size(min = 4) @PathVariable("search_keyword") String searchKeyword) {
 		// TODO: Authenticate API Access
 
-		return new ResponseEntity<LocationList>(new LocationList(index.search(searchKeyword)), HttpStatus.OK);
+		return new ResponseEntity<LocationList>(new LocationList(luceneIndexService.search(searchKeyword)), HttpStatus.OK);
 	}
 
 	@GetMapping("/search/{providerId}/{locationId}")
