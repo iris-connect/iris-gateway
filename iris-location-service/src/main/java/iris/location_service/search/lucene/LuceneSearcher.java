@@ -1,6 +1,7 @@
 package iris.location_service.search.lucene;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
@@ -10,6 +11,8 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LuceneSearcher {
 
@@ -26,7 +29,7 @@ public class LuceneSearcher {
             indexSearcher = new IndexSearcher(reader);
         }
 
-        public TopDocs search(String searchString) throws IOException, ParseException {
+        public List<Document> search(String searchString) throws IOException, ParseException {
             BooleanQuery.Builder finalQuery = new BooleanQuery.Builder();
             QueryParser queryParser = new MultiFieldQueryParser(LuceneConstants.FIELDS, analyzer);
 
@@ -36,6 +39,12 @@ public class LuceneSearcher {
                     finalQuery.add(queryParser.parse(term.replace("~","")+"~2"), BooleanClause.Occur.MUST);
                 }
             }
-            return indexSearcher.search(finalQuery.build(), LuceneConstants.MAX_SEARCH);
+            TopDocs searchResult = indexSearcher.search(finalQuery.build(), LuceneConstants.MAX_SEARCH);
+
+            List<Document> result = new ArrayList<>();
+            for(ScoreDoc entry:searchResult.scoreDocs){
+                result.add(indexSearcher.doc(entry.doc));
+            }
+            return result;
         }
 }

@@ -33,8 +33,6 @@ public class LuceneIndexService implements SearchIndex {
     private Analyzer analyzer;
     @Getter
     private Directory dir;
-    private IndexSearcher searcher;
-    private QueryParser parser;
     private LuceneSearcher luceneSearcher;
 
 
@@ -57,14 +55,12 @@ public class LuceneIndexService implements SearchIndex {
         try{
 
             // search
-            TopDocs results = luceneSearcher.search(keyword);
+            List<Document> results = luceneSearcher.search(keyword);
 
             // parse to location list
             List<LocationInformation> locationList = new ArrayList<>();
-            for (ScoreDoc resultScore: results.scoreDocs) {
-                Document result = searcher.doc(resultScore.doc);
-                LocationInformation location = createLocationInformation(result);
-                locationList.add(location);
+            for(Document entry:results){
+                locationList.add(createLocationInformation(entry));
             }
             return locationList;
         } catch (IOException | ParseException e) {
