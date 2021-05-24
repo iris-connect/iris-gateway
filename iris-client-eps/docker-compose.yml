@@ -6,7 +6,7 @@ version: '3'
 services:
 
   ls-1:
-    image: luckylusa/iris-eps-server:v0.0.3007
+    image: inoeg/eps:v0.0.4
     expose:
       - 4445
       - 5555
@@ -20,7 +20,7 @@ services:
     command: [ "--level", "debug", "server", "run" ]
 
   demo-app:
-    image: luckylusa/iris-eps-server:v0.0.3007
+    image: inoeg/eps:v0.0.4
     expose:
       - 4444
       - 5554
@@ -34,7 +34,7 @@ services:
     command: [ "--level", "trace", "server", "run" ]
 
   hd-1:
-    image: luckylusa/iris-eps-server:v0.0.3007
+    image: inoeg/eps:v0.0.4
     expose:
       - 4446
       - 5556
@@ -48,7 +48,7 @@ services:
     command: [ "--level", "trace", "server", "run" ]
 
   public-proxy:
-    image: luckylusa/iris-eps-proxy:v0.0.3007
+    image: inoeg/proxy:v0.0.4
     expose:
       - 4433
       - 9999
@@ -64,7 +64,7 @@ services:
     command: [ "--level", "trace", "run", "public" ]
 
   public-proxy-eps:
-    image: luckylusa/iris-eps-server:v0.0.3007
+    image: inoeg/eps:v0.0.4
     expose:
       - 5559
       - 5544
@@ -77,7 +77,7 @@ services:
     command: [ "--level", "trace", "server", "run" ]
 
   private-proxy:
-    image: luckylusa/iris-eps-proxy:v0.0.3007
+    image: inoeg/proxy:v0.0.4
     expose:
       - 5544
       - 8877
@@ -89,7 +89,7 @@ services:
     command: [ "--level", "trace", "run", "private" ]
 
   private-proxy-1:
-    image: luckylusa/iris-eps-server:v0.0.3007
+    image: inoeg/eps:v0.0.4
     expose:
       - 7766
       - 7776
