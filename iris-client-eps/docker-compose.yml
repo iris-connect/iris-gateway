@@ -6,7 +6,7 @@ version: '3'
 services:
 
   ls-1:
-    image: luckylusa/iris-eps-bundle:latest
+    image: luckylusa/iris-eps-server:v0.0.3007
     expose:
       - 4445
       - 5555
@@ -20,7 +20,7 @@ services:
     command: [ "--level", "debug", "server", "run" ]
 
   demo-app:
-    image: luckylusa/iris-eps-bundle:latest
+    image: luckylusa/iris-eps-server:v0.0.3007
     expose:
       - 4444
       - 5554
@@ -34,7 +34,7 @@ services:
     command: [ "--level", "trace", "server", "run" ]
 
   hd-1:
-    image: luckylusa/iris-eps-bundle:latest
+    image: luckylusa/iris-eps-server:v0.0.3007
     expose:
       - 4446
       - 5556
@@ -45,5 +45,57 @@ services:
       - ./settings:/app/settings
     environment:
       - EPS_SETTINGS=settings/dev/roles/hd-1
+    command: [ "--level", "trace", "server", "run" ]
+
+  public-proxy:
+    image: luckylusa/iris-eps-proxy:v0.0.3007
+    expose:
+      - 4433
+      - 9999
+      - 6655
+    ports:
+      - 4433:4433
+      - 9999:9999
+    volumes:
+      - ./settings:/app/settings
+      - ./pub-proxy-db:/tmp
+    environment:
+      - PROXY_SETTINGS=settings/dev/roles/public-proxy-1
+    command: [ "--level", "trace", "run", "public" ]
+
+  public-proxy-eps:
+    image: luckylusa/iris-eps-server:v0.0.3007
+    expose:
+      - 5559
+      - 5544
+    ports:
+      - 5559:5559
+    volumes:
+      - ./settings:/app/settings
+    environment:
+      - EPS_SETTINGS=settings/dev/roles/public-proxy-eps-1
+    command: [ "--level", "trace", "server", "run" ]
+
+  private-proxy:
+    image: luckylusa/iris-eps-proxy:v0.0.3007
+    expose:
+      - 5544
+      - 8877
+    volumes:
+      - ./settings:/app/settings
+      - ./private-proxy-db:/tmp
+    environment:
+      - PROXY_SETTINGS=settings/dev/roles/private-proxy-1
+    command: [ "--level", "trace", "run", "private" ]
+
+  private-proxy-1:
+    image: luckylusa/iris-eps-server:v0.0.3007
+    expose:
+      - 7766
+      - 7776
+    volumes:
+      - ./settings:/app/settings
+    environment:
+      - EPS_SETTINGS=settings/dev/roles/private-proxy-eps-1
     command: [ "--level", "trace", "server", "run" ]
 

@@ -12,7 +12,7 @@ channels: # defines all the channels that we want to open when starting the serv
     settings:
       bind_address: "0.0.0.0:4445"
       tls:
-        ca_certificate_file: "$DIR/../../certs/root.crt"
+        ca_certificate_files: ["$DIR/../../certs/root.crt"]
         certificate_file: "$DIR/../../certs/ls-1.crt"
         key_file: "$DIR/../../certs/ls-1.key"
 
@@ -24,6 +24,6 @@ channels: # defines all the channels that we want to open when starting the serv
     type: grpc_client
     settings:
       tls:
-        ca_certificate_file: "$DIR/../../certs/root.crt"
+        ca_certificate_files: ["$DIR/../../certs/root.crt"]
         certificate_file: "$DIR/../../certs/ls-1.crt"
         key_file: "$DIR/../../certs/ls-1.key"
