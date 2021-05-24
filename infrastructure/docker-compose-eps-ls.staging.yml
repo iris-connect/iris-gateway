@@ -23,7 +23,7 @@ services:
       - 8080
 
   ls-1:
-    image: luckylusa/iris-eps-server:v0.0.3007
+    image: inoeg/eps:v0.0.4
     depends_on:
       sd-1:
         condition: service_started
@@ -51,7 +51,7 @@ services:
     restart: unless-stopped
 
   iris-app-api-demo-eps:
-    image: luckylusa/iris-eps-server:v0.0.3007
+    image: inoeg/eps:v0.0.4
     depends_on:
       sd-1:
         condition: service_started
@@ -66,7 +66,7 @@ services:
     command: [ "--level", "trace", "server", "run" ]
 
   public-proxy:
-    image: luckylusa/iris-eps-proxy:v0.0.3007
+    image: inoeg/proxy:v0.0.4
     expose:
       - 4433
       - 9999
@@ -82,7 +82,7 @@ services:
     command: [ "--level", "trace", "run", "public" ]
 
   public-proxy-eps:
-    image: luckylusa/iris-eps-server:v0.0.3007
+    image: inoeg/eps:v0.0.4
     depends_on:
       sd-1:
         condition: service_started
@@ -98,7 +98,7 @@ services:
     command: [ "--level", "trace", "server", "run" ]
 
   sd-1:
-    image: luckylusa/iris-eps-sd:v0.0.3007
+    image: inoeg/proxy:v0.0.4
     expose:
       - 3322
     ports:
