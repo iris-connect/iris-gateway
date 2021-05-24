@@ -98,7 +98,7 @@ services:
     command: [ "--level", "trace", "server", "run" ]
 
   sd-1:
-    image: inoeg/proxy:v0.0.4
+    image: inoeg/sd:v0.0.4
     expose:
       - 3322
     ports:
