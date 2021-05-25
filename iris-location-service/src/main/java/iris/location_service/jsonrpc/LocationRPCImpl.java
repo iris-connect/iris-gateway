@@ -6,7 +6,9 @@ import java.util.Optional;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
@@ -42,8 +44,12 @@ public class LocationRPCImpl implements LocationRPC {
 	}
 
 	@Override
-	public LocationList searchForLocation(JsonRpcClientDto client, String searchKeyword, Pageable pageable) {
-		Page<LocationInformation> page = locationService.search(searchKeyword, pageable);
+	public LocationList searchForLocation(JsonRpcClientDto client, String searchKeyword, PageableDto pageable) {
+		Pageable p = pageable.getSortBy().isPresent()
+				? PageRequest.of(pageable.getPage(), pageable.getSize(),
+						Sort.by(pageable.getDirection().get(), pageable.getSortBy().get()))
+				: PageRequest.of(pageable.getPage(), pageable.getSize());
+		Page<LocationInformation> page = locationService.search(searchKeyword, p);
 		return LocationList.builder().locations(page.getContent()).totalElements(page.getTotalElements()).build();
 	}
 

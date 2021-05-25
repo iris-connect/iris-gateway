@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.data.domain.Pageable;
-
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcService;
 
@@ -28,7 +26,7 @@ public interface LocationRPC {
 	LocationList searchForLocation(
 			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
 			@JsonRpcParam(value = "searchKeyword") String searchKeyword,
-			@JsonRpcParam(value = "pageable") Pageable pageable);
+			@JsonRpcParam(value = "pageable") PageableDto pageable);
 
 	Object getLocationDetails(
 			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
