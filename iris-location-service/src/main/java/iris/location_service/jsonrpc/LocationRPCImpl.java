@@ -45,9 +45,9 @@ public class LocationRPCImpl implements LocationRPC {
 
 	@Override
 	public LocationList searchForLocation(JsonRpcClientDto client, String searchKeyword, PageableDto pageable) {
-		Pageable p = pageable.getSortBy().isPresent()
+		Pageable p = pageable.getSortBy() != null
 				? PageRequest.of(pageable.getPage(), pageable.getSize(),
-						Sort.by(pageable.getDirection().get(), pageable.getSortBy().get()))
+						Sort.by(pageable.getDirection(), pageable.getSortBy()))
 				: PageRequest.of(pageable.getPage(), pageable.getSize());
 		Page<LocationInformation> page = locationService.search(searchKeyword, p);
 		return LocationList.builder().locations(page.getContent()).totalElements(page.getTotalElements()).build();
