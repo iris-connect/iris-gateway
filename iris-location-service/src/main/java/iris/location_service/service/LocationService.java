@@ -1,5 +1,16 @@
 package iris.location_service.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.validation.constraints.NotNull;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import iris.location_service.dto.LocationInformation;
 import iris.location_service.dto.LocationOverviewDto;
 import iris.location_service.search.db.DBSearchIndex;
@@ -8,15 +19,6 @@ import iris.location_service.search.db.model.Location;
 import iris.location_service.search.db.model.LocationIdentifier;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.validation.constraints.NotNull;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Slf4j
@@ -77,8 +79,8 @@ public class LocationService {
 		return false;
 	}
 
-	public List<LocationInformation> search(String searchKeyword) {
-		return index.search(searchKeyword);
+	public Page<LocationInformation> search(String searchKeyword, Pageable pageable) {
+		return index.search(searchKeyword, pageable);
 	}
 
 	public Optional<LocationInformation> getLocationByProviderIdAndLocationId(String providerId, String locationId) {

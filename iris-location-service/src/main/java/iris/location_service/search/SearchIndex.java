@@ -1,9 +1,10 @@
 package iris.location_service.search;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import iris.location_service.dto.LocationInformation;
 
-import java.util.List;
-
 public interface SearchIndex {
-    List<LocationInformation> search(String keyword);
+	Page<LocationInformation> search(String keyword, Pageable pageable);
 }

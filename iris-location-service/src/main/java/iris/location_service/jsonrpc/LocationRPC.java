@@ -1,15 +1,17 @@
 package iris.location_service.jsonrpc;
 
-import iris.location_service.dto.LocationInformation;
-import iris.location_service.dto.LocationList;
-import iris.location_service.dto.LocationOverviewDto;
-
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
+
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcService;
+
+import iris.location_service.dto.LocationInformation;
+import iris.location_service.dto.LocationList;
+import iris.location_service.dto.LocationOverviewDto;
 
 @JsonRpcService("/location-rpc")
 public interface LocationRPC {
@@ -25,7 +27,8 @@ public interface LocationRPC {
 
 	LocationList searchForLocation(
 			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
-			@JsonRpcParam(value = "searchKeyword") String searchKeyword);
+			@JsonRpcParam(value = "searchKeyword") String searchKeyword,
+			@JsonRpcParam(value = "pageable") Pageable pageable);
 
 	Object getLocationDetails(
 			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,

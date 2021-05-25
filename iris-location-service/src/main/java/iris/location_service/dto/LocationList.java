@@ -1,21 +1,21 @@
 package iris.location_service.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import javax.validation.constraints.NotNull;
+
+import lombok.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
+@Data
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class LocationList {
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-public class LocationList   {
+	@NotNull
+	private List<LocationInformation> locations;
 
-  @NotNull
-  private List<LocationInformation> locations;
+	private long totalElements;
 
 }

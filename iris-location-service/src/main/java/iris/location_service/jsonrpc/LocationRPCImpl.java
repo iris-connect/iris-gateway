@@ -1,19 +1,21 @@
 package iris.location_service.jsonrpc;
 
-import iris.location_service.dto.LocationInformation;
-import iris.location_service.dto.LocationList;
-import iris.location_service.dto.LocationOverviewDto;
-import iris.location_service.service.LocationService;
-import lombok.AllArgsConstructor;
-
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
+
+import iris.location_service.dto.LocationInformation;
+import iris.location_service.dto.LocationList;
+import iris.location_service.dto.LocationOverviewDto;
+import iris.location_service.service.LocationService;
+import lombok.AllArgsConstructor;
 
 @AutoJsonRpcServiceImpl
 @AllArgsConstructor
@@ -40,8 +42,9 @@ public class LocationRPCImpl implements LocationRPC {
 	}
 
 	@Override
-	public LocationList searchForLocation(JsonRpcClientDto client, String searchKeyword) {
-		return new LocationList(locationService.search(searchKeyword));
+	public LocationList searchForLocation(JsonRpcClientDto client, String searchKeyword, Pageable pageable) {
+		Page<LocationInformation> page = locationService.search(searchKeyword, pageable);
+		return LocationList.builder().locations(page.getContent()).totalElements(page.getTotalElements()).build();
 	}
 
 	@Override
