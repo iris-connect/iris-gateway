@@ -5,13 +5,6 @@ package iris.location_service.web;
  * @author Kai Greshake
  */
 
-import iris.location_service.dto.LocationInformation;
-import iris.location_service.dto.LocationList;
-import iris.location_service.search.db.DBSearchIndex;
-import iris.location_service.search.db.LocationRepository;
-import iris.location_service.service.LocationService;
-import lombok.AllArgsConstructor;
-
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -19,10 +12,19 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import iris.location_service.dto.LocationInformation;
+import iris.location_service.dto.LocationList;
+import iris.location_service.search.db.DBSearchIndex;
+import iris.location_service.search.db.LocationRepository;
+import iris.location_service.service.LocationService;
+import lombok.AllArgsConstructor;
 
 @RestController
 @Validated
@@ -63,10 +65,13 @@ public class LocationIndexController {
 	@GetMapping("/search/{search_keyword}")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<LocationList> searchSearchKeywordGet(
-			@Size(min = 4) @PathVariable("search_keyword") String searchKeyword) {
+			@Size(min = 4) @PathVariable("search_keyword") String searchKeyword, Pageable pageable) {
 		// TODO: Authenticate API Access
 
-		return new ResponseEntity<LocationList>(new LocationList(index.search(searchKeyword)), HttpStatus.OK);
+		Page<LocationInformation> page = index.search(searchKeyword, pageable);
+		LocationList locationList = LocationList.builder().locations(page.getContent())
+				.totalElements(page.getTotalElements()).build();
+		return new ResponseEntity<>(locationList, HttpStatus.OK);
 	}
 
 	@GetMapping("/search/{providerId}/{locationId}")
