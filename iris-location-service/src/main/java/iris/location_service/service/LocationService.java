@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
@@ -30,7 +29,7 @@ public class LocationService {
 
 	private final @NotNull DBSearchIndex index;
 
-	public void addLocations(UUID providerId, List<LocationInformation> locations) {
+	public void addLocations(String providerId, List<LocationInformation> locations) {
 		// TODO: Authenticate API Access
 
 		// TODO: Define sensible limits for this API
@@ -42,7 +41,7 @@ public class LocationService {
 		locationRepository.saveAll(data);
 	}
 
-	private Location getLocationFromLocationInformation(UUID providerId, LocationInformation entry) {
+	private Location getLocationFromLocationInformation(String providerId, LocationInformation entry) {
 
 		// Reset possibly sent provider id. We need to ensure this comes from
 		// the authentication system and isn't user-provided!
@@ -51,12 +50,12 @@ public class LocationService {
 
 		// For the search index, we are only interested in a subset of the data structure for location information
 		// Can be replaced
-		location.setId(new LocationIdentifier(providerId.toString(), entry.getId()));
+		location.setId(new LocationIdentifier(providerId, entry.getId()));
 
 		return location;
 	}
 
-	public List<LocationOverviewDto> getProviderLocations(UUID providerId) {
+	public List<LocationOverviewDto> getProviderLocations(String providerId) {
 
 		List<Location> providerLocations = locationRepository.findByIdProviderId(providerId.toString());
 
@@ -66,7 +65,7 @@ public class LocationService {
 
 	}
 
-	public boolean deleteLocation(UUID providerId, String locationId) {
+	public boolean deleteLocation(String providerId, String locationId) {
 		// Construct a new ID to match the (provider, id) pair key
 		LocationIdentifier ident = new LocationIdentifier(providerId.toString(), locationId);
 

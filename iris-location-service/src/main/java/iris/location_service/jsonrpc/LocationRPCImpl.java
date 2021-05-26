@@ -8,13 +8,11 @@ import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Service;
 
-import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
 
 @AutoJsonRpcServiceImpl
@@ -24,32 +22,33 @@ public class LocationRPCImpl implements LocationRPC {
 
 	private final @NotNull LocationService locationService;
 
-	public String postLocationsToSearchIndex(UUID providerId, List<LocationInformation> locationList) {
-		locationService.addLocations(providerId, locationList);
+	public String postLocationsToSearchIndex(JsonRpcClientDto client, List<LocationInformation> locationList) {
+		locationService.addLocations(client.getName(), locationList);
 		return "OK";
 	}
 
 	@Override
-	public List<LocationOverviewDto> getProviderLocations(UUID providerId) {
-		return locationService.getProviderLocations(providerId);
+	public List<LocationOverviewDto> getProviderLocations(JsonRpcClientDto client) {
+		return locationService.getProviderLocations(client.getName());
 	}
 
 	@Override
-	public String deleteLocationFromSearchIndex(UUID providerId, String locationId) {
-		if (locationService.deleteLocation(providerId, locationId))
+	public String deleteLocationFromSearchIndex(JsonRpcClientDto client, String locationId) {
+		if (locationService.deleteLocation(client.getName(), locationId))
 			return "OK";
 		return "NOT FOUND";
 	}
 
 	@Override
-	public LocationList searchForLocation(String searchKeyword) {
+	public LocationList searchForLocation(JsonRpcClientDto client, String searchKeyword) {
 		return new LocationList(locationService.search(searchKeyword));
 	}
 
 	@Override
 	public Object getLocationDetails(
-			@JsonRpcParam(value = "providerId") String providerId,
-			@JsonRpcParam(value = "locationId") String locationId) {
+			JsonRpcClientDto client,
+			String providerId,
+			String locationId) {
 		Optional<LocationInformation> locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId,
 				locationId);
 

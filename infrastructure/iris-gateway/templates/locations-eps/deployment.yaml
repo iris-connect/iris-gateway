@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "iris-gateway.locations-eps" . }}
+  labels:
+    {{- include "iris-gateway.locations-labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "iris-gateway.locations-eps-labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "iris-gateway.locations-eps-labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: location
+          image: {{ .Values.eps.image }}:{{ .Values.eps.tag }}
+          {{- if eq .Values.environment "local" }}
+          imagePullPolicy: Never
+          {{- else }}
+          imagePullPolicy: Always
+          {{- end }}
+          args: [--level, debug, server, run]
+          ports:
+            - name: grpc
+              containerPort: {{ .Values.locations.nodePort }}
+              protocol: TCP
+          volumeMounts:
+            - mountPath: {{ .Values.tls.mountPath }}
+              name: tls
+              readOnly: true
+            - mountPath: /config
+              name: config
+              readOnly: true
+          env:
+            - name: EPS_SETTINGS
+              value: {{ .Values.eps.configMountPath }}/settings.yml
+      volumes:
+        - name: tls
+          secret:
+            secretName: {{ include "iris-gateway.locations-eps" . }}-tls
+        - name: config
+          configMap:
+            name: {{ include "iris-gateway.locations-eps" . }}
