@@ -15,7 +15,7 @@ spec:
         {{- include "iris-gateway.locations-labels" . | nindent 8 }}
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: {{ .Values.locations.port }}
+        prometheus.io/port: "{{ .Values.locations.port }}"
         prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
