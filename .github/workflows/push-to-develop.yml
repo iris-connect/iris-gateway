@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - develop
-    paths:
-      - iris-location-service/**
-      - .github/workflows/push-to-develop.yml
 
 jobs:
   # https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image
