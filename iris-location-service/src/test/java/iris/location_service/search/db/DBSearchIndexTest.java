@@ -37,7 +37,7 @@ class DBSearchIndexTest {
 		var location = createLocation();
 
 		// then
-		searchIndex.getRepo().saveAll(Collections.singletonList(location));
+		searchIndex.getRepo().saveLocations(Collections.singletonList(location));
 
 		// assert
 		assertEquals(1, searchIndex.search("Zwoeinz", null).getContent().size());
