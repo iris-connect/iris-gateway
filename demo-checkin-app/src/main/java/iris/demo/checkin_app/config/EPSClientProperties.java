@@ -16,8 +16,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class EPSClientProperties {
 
-	private final @NotNull String defaultHealthDepartmentEndpoint;
-
 	private final @NotNull String defaultLocationServiceEndpoint;
 
 }

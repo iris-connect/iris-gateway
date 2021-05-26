@@ -60,16 +60,10 @@ public class DataSubmissionService {
 		GuestListDto guestList = GuestListDto.builder().guests(guests).additionalInformation("").startDate(Instant.now())
 				.endDate(Instant.now().plus(6, ChronoUnit.HOURS)).dataProvider(dataProvider).build();
 
-		String hdEnpoint = epsClientProperties.getDefaultHealthDepartmentEndpoint();
-
-		if (locationDataRequest.getHdEndpoint() != null) {
-			hdEnpoint = locationDataRequest.getHdEndpoint();
-		}
-
 		DataSubmissionDto dataSubmissionDto = DataSubmissionDto.builder()
 				.dataAuthorizationToken(locationDataRequest.getDataAuthorizationToken())
 				.guestList(guestList).build();
 
-		dataSubmissionClient.postDataSubmissionGuests(dataSubmissionDto, hdEnpoint);
+		dataSubmissionClient.postDataSubmissionGuests(dataSubmissionDto, locationDataRequest.getHdEndpoint());
 	}
 }
