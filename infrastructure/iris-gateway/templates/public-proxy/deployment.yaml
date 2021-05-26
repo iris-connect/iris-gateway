@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "iris-gateway.public-proxy" . }}
+  labels:
+    {{- include "iris-gateway.public-proxy-labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "iris-gateway.public-proxy-labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "iris-gateway.public-proxy-labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: public-proxy
+          image: {{ .Values.publicProxy.image }}:{{ .Values.epsRepoTag }}
+          imagePullPolicy: Always
+          args: [--level, trace, run, public]
+          ports:
+            - name: node-port-tls
+              containerPort: {{ .Values.publicProxy.nodePortTls }}
+              protocol: TCP
+            - name: node-port-int
+              containerPort: {{ .Values.publicProxy.nodePortInternal }}
+              protocol: TCP
+            - name: json-rpc-port
+              containerPort: {{ .Values.publicProxy.jsonRpcPort }}
+              protocol: TCP
+          volumeMounts:
+            - mountPath: {{ .Values.tls.mountPath }}
+              name: tls
+              readOnly: true
+            - mountPath: /config
+              name: config
+              readOnly: true
+            - mountPath: {{ .Values.publicProxy.persistentStoragePath }}
+              name: persistent-storage
+          env:
+            - name: PROXY_SETTINGS
+              value: {{ .Values.eps.configMountPath }}/settings.yml
+      volumes:
+        - name: tls
+          secret:
+            secretName: {{ .Values.tls.secretName }}
+        - name: config
+          configMap:
+            name: {{ include "iris-gateway.public-proxy" . }}
+        - name: persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ include "iris-gateway.public-proxy" . }}

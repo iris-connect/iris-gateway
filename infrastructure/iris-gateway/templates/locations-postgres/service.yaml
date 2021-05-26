@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "iris-gateway.locations-postgres" . }}
+  labels:
+  {{- include "iris-gateway.locations-postgres-labels" . | nindent 4 }}
+spec:
+  ports:
+    - port: {{ .Values.postgres.port }}
+      targetPort: tcp
+      protocol: TCP
+      name: tcp
+  selector:
+  {{- include "iris-gateway.locations-postgres-labels" . | nindent 4 }}

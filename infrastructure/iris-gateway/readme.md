@@ -1,33 +1,7 @@
 # Iris gateway helm chart
 
 ## Environments
-There are 3 supported environments: `local`, `test` & `production`.
-
-### local
-A local kubernetes cluster, e.g. minikube. Install with `helm upgrade --install --namespace iris-gateway --create-namespace --set environment=local iris-gateway .`.
-
-#### local docker images on minikube
-To use local images (instead of pulling them from docker hub), you have to use minikube's docker environment, 
-and build the images there:
-1. `eval $(minikube docker-env)`
-1. `./mvnw spring-boot:build-image -DskipTests`
-
-You can also use the python scripts:
-
-| script | purpose |
---- | ---
-| `minikube-check-dependencies.py` | test if you have the required packages installed |
-| `minikube-start.py` | start the minikube instance, if it's not running yet |
-| `minikube-build-docker.py` | build the docker image for the minikube deployment - uses a remote docker connection |
-| `minikube-deploy.py` | run the deployment |
-| `minikube-undeploy.py` | remove the deployment |
-| `minikube-stop.py` | stop the minikube instance |
-
-#### local database
-Postgres is created as a container. Secrets are created automatically; see [secret.yaml](templates/postgres/secret.yaml).
-
-#### local test for public-server
-`curl -sk $(minikube service --url --https iris-gateway-public) | jq`
+There are 2 supported environments: `test` & `production`.
 
 ### test
 The test kubernetes cluster, provided by AKDB. Install with `helm upgrade --install --namespace iris-gateway --set environment=test iris-gateway .`.
@@ -44,6 +18,30 @@ Postgres is provided outside the kubernetes cluster. Secrets have to be created 
 with the name `postgres-production`. For required secret keys/env vars, see [secret.yaml](templates/postgres/secret.yaml).
 
 ## TODOs
-- persistent storage for postgres container: local?
 - health checks
 - log configuration (JSON)
+- restart after config changes
+
+## kubeconfig template
+This kubeconfig needs to be set as a secret for github actions.
+
+```yaml
+apiVersion: v1
+clusters:
+  - cluster:
+      insecure-skip-tls-verify: true # TODO replace with CA cert
+      server: https://api.k8s.akdb.net:6443
+    name: default
+contexts:
+  - context:
+      cluster: default
+      user: default
+    name: default
+current-context: default
+kind: Config
+preferences: {}
+users:
+  - name: default
+    user:
+      token: <service-account-token for user namespace-admin>
+```

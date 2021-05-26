@@ -17,11 +17,7 @@ spec:
       containers:
         - name: location
           image: {{ .Values.locations.image }}:{{ .Values.locations.tag }}
-          {{- if eq .Values.environment "local" }}
-          imagePullPolicy: Never
-          {{- else }}
           imagePullPolicy: Always
-          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.locations.port }}
