@@ -59,8 +59,8 @@ public class LocationRPCImpl implements LocationRPC {
 		Page<LocationInformation> page = locationService.search(searchKeyword, pageable);
 
 		return LocationQueryResult.builder()
-				.page(page.getSize())
 				.size(page.getSize())
+				.page(page.getNumber())
 				.locations(page.getContent())
 				.totalElements(page.getTotalElements())
 				.build();
