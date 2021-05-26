@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotNull;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -77,8 +79,8 @@ public class LocationService {
 		return false;
 	}
 
-	public List<LocationInformation> search(String searchKeyword) {
-		return index.search(searchKeyword);
+	public Page<LocationInformation> search(String searchKeyword, Pageable pageable) {
+		return index.search(searchKeyword, pageable);
 	}
 
 	public Optional<LocationInformation> getLocationByProviderIdAndLocationId(String providerId, String locationId) {
