@@ -7,11 +7,11 @@ data:
     public:
       name: public-proxy-1
       database_file: {{ .Values.publicProxy.persistentStoragePath }}/public-proxy-announcements.db
-      tls_bind_address: 0.0.0.0:{{ .Values.publicProxy.nodePortTls }}
-      internal_bind_address: 0.0.0.0:{{ .Values.publicProxy.nodePortInternal }}
-      internal_endpoint: {{ .Values.environment }}.iris-gateway.de:{{ .Values.publicProxy.nodePortInternal }}
+      tls_bind_address: 0.0.0.0:{{ .Values.nodePorts.publicProxyTls }}
+      internal_bind_address: 0.0.0.0:{{ .Values.nodePorts.publicProxyInternal }}
+      internal_endpoint: {{ .Values.environment }}.iris-gateway.de:{{ .Values.nodePorts.publicProxyInternal }}
       jsonrpc_client:
-        endpoint: https://{{ include "iris-gateway.public-proxy-eps" . }}:{{ .Values.publicProxy.jsonRpcPortEps }}/jsonrpc
+        endpoint: https://{{ include "iris-gateway.public-proxy-eps" . }}:{{ .Values.publicProxyEps.jsonRpcPort }}/jsonrpc
         server_name: public-proxy-1
         tls:
           certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"

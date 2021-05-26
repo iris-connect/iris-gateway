@@ -5,7 +5,7 @@ metadata:
 data:
   settings.yml: |
     jsonrpc_server: # the JSON-RPC server that the EPS server uses for communication
-      bind_address: "0.0.0.0:{{ .Values.serviceDirectory.nodePort }}"
+      bind_address: "0.0.0.0:{{ .Values.nodePorts.serviceDirectory }}"
       tls:
         ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
         certificate_file: "{{ .Values.tls.mountPath }}/sd-1.crt"

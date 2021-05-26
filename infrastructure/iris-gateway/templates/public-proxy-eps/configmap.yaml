@@ -14,7 +14,7 @@ data:
             certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
             key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
         ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
-        endpoints: [ "https://{{ include "iris-gateway.service-directory" . }}:{{ .Values.serviceDirectory.nodePort }}/jsonrpc" ]
+        endpoints: [ "https://{{ include "iris-gateway.service-directory" . }}:{{ .Values.nodePorts.serviceDirectory }}/jsonrpc" ]
         server_names: [ "sd-1" ]
     channels:  # defines all the channels that we want to open when starting the server
       - name: Stdout channel
@@ -23,7 +23,7 @@ data:
       - name: main gRPC server  # accepts incoming gRPC connections to deliver and receive messages
         type: grpc_server
         settings:
-          bind_address: "0.0.0.0:{{ .Values.publicProxy.nodePortEps }}"
+          bind_address: "0.0.0.0:{{ .Values.nodePorts.publicProxyEps }}"
           tls:
             ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
             certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
@@ -48,7 +48,7 @@ data:
       - name: main JSON-RPC server # accepts incoming JSONRPC connections to deliver and receive messages
         type: jsonrpc_server
         settings:
-          bind_address: "0.0.0.0:{{ .Values.publicProxy.jsonRpcPortEps }}"
+          bind_address: "0.0.0.0:{{ .Values.publicProxyEps.jsonRpcPort }}"
           tls:
             ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
             certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"

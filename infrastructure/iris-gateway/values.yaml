@@ -3,13 +3,20 @@
 #   production: --set environment=production
 environment: undefined
 
+epsRepoTag: v0.0.4
+
 tls:
   keystoreSecretName: tls-keystore
   keystoreCredentialsSecretName: tls-keystore-credentials
   mountPath: /tls
   secretName: iris-gateway-tls
 
-epsRepoTag: v0.0.4
+nodePorts:
+  locationsEps: 32323
+  serviceDirectory: 32324
+  publicProxyTls: 32325
+  publicProxyInternal: 32326
+  publicProxyEps: 32327
 
 eps:
   image: inoeg/eps
@@ -19,27 +26,24 @@ locations:
   image: inoeg/iris-location-service
   tag: 0.0.1-SNAPSHOT  # optional overwrite via CLI: --set locations.tag=<docker image tag>
   port: 8080
-  nodePort: 32323
 
 postgres:
   storageDir: /var/lib/postgresql/data/pgdata
   port: 5432
 
 serviceDirectory:
-  nodePort: 32324
   image: inoeg/sd
   configMountPath: /config
   persistentStoragePath: /storage
 
 publicProxy:
-  nodePortTls: 32325
-  nodePortInternal: 32326
-  nodePortEps: 32327
   jsonRpcPort: 6655
-  jsonRpcPortEps: 5544
   image: inoeg/proxy
   configMountPath: /config
   persistentStoragePath: /storage
+
+publicProxyEps:
+  jsonRpcPort: 5544
 
 domains:
   test: test.iris-gateway.de

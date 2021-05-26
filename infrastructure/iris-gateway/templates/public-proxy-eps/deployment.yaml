@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         {{- include "iris-gateway.public-proxy-eps-labels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/public-proxy-eps/configmap.yaml") . | sha256sum }}
     spec:
       containers:
         - name: public-proxy-eps
@@ -21,10 +23,10 @@ spec:
           args: [--level, trace, server, run]
           ports:
             - name: node-port-eps
-              containerPort: {{ .Values.publicProxy.nodePortEps }}
+              containerPort: {{ .Values.nodePorts.publicProxyEps }}
               protocol: TCP
             - name: json-rpc-eps
-              containerPort: {{ .Values.publicProxy.jsonRpcPortEps }}
+              containerPort: {{ .Values.publicProxyEps.jsonRpcPort }}
               protocol: TCP
           volumeMounts:
             - mountPath: {{ .Values.tls.mountPath }}
