@@ -23,11 +23,11 @@ spec:
           image: {{ .Values.locations.image }}:{{ .Values.locations.tag }}
           imagePullPolicy: Always
           livenessProbe:
-              httpGet:
-                port: {{ .Values.locations.port }}
-                path: /actuator/info
-              initialDelaySeconds: 30
-              timeoutSeconds: 10
+            httpGet:
+              port: {{ .Values.locations.port }}
+              path: /actuator/info
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
           readinessProbe:
             httpGet:
               port: {{ .Values.locations.port }}
