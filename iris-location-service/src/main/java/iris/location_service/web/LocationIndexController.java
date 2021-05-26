@@ -85,7 +85,7 @@ public class LocationIndexController {
 				locationId);
 
 		return locationInformation.map(ResponseEntity::ok)
-				.orElseGset(ResponseEntity.notFound()::build);
+				.orElseGet(ResponseEntity.notFound()::build);
 
 	}
 
