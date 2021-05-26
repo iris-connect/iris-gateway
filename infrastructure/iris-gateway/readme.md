@@ -8,14 +8,14 @@ The test kubernetes cluster, provided by AKDB. Install with `helm upgrade --inst
 
 #### test database
 Postgres is created as a container. Secrets have to be created manually _before_ deploying this chart, 
-with the name `postgres-test`. For required secret keys/env vars, see [secret.yaml](templates/postgres/secret.yaml).
+with the name `postgres-test`.
 
 ### production
 The production kubernetes cluster, provided by AKDB. Install with `helm upgrade --install --namespace iris-gateway --set environment=production iris-gateway .`.
 
 #### production database
 Postgres is provided outside the kubernetes cluster. Secrets have to be created manually _before_ deploying this chart,
-with the name `postgres-production`. For required secret keys/env vars, see [secret.yaml](templates/postgres/secret.yaml).
+with the name `postgres-production`.
 
 ## TODOs
 - health checks
