@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         {{- include "iris-gateway.service-directory-labels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/service-directory/configmap.yaml") . | sha256sum }}
     spec:
       containers:
         - name: service-directory
