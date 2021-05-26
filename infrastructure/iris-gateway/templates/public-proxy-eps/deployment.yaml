@@ -1,27 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "iris-gateway.locations-eps" . }}
+  name: {{ include "iris-gateway.public-proxy-eps" . }}
   labels:
-    {{- include "iris-gateway.locations-labels" . | nindent 4 }}
+    {{- include "iris-gateway.public-proxy-eps-labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "iris-gateway.locations-eps-labels" . | nindent 6 }}
+      {{- include "iris-gateway.public-proxy-eps-labels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "iris-gateway.locations-eps-labels" . | nindent 8 }}
+        {{- include "iris-gateway.public-proxy-eps-labels" . | nindent 8 }}
     spec:
       containers:
-        - name: location
+        - name: public-proxy-eps
           image: {{ .Values.eps.image }}:{{ .Values.epsRepoTag }}
           imagePullPolicy: Always
           args: [--level, trace, server, run]
           ports:
-            - name: grpc
-              containerPort: {{ .Values.locations.nodePort }}
+            - name: node-port-eps
+              containerPort: {{ .Values.publicProxy.nodePortEps }}
+              protocol: TCP
+            - name: json-rpc-eps
+              containerPort: {{ .Values.publicProxy.jsonRpcPortEps }}
               protocol: TCP
           volumeMounts:
             - mountPath: {{ .Values.tls.mountPath }}
@@ -39,4 +42,4 @@ spec:
             secretName: {{ .Values.tls.secretName }}
         - name: config
           configMap:
-            name: {{ include "iris-gateway.locations-eps" . }}
+            name: {{ include "iris-gateway.public-proxy-eps" . }}

@@ -6,9 +6,16 @@ data:
   settings.yml: |
     name: ls-1
     directory:
-      type: json
+      type: api
       settings:
-        path: "{{ .Values.eps.configMountPath }}/services.json"
+        jsonrpc_client:
+          tls:
+            ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+            certificate_file: "{{ .Values.tls.mountPath }}/ls-1.crt"
+            key_file: "{{ .Values.tls.mountPath }}/ls-1.key"
+        ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+        endpoints: [ "https://{{ include "iris-gateway.service-directory" . }}:{{ .Values.serviceDirectory.nodePort }}/jsonrpc" ]
+        server_names: [ "sd-1" ]
     channels:  # defines all the channels that we want to open when starting the server
       - name: Stdout channel
         type: stdout
@@ -18,7 +25,7 @@ data:
         settings:
           bind_address: "0.0.0.0:{{ .Values.locations.nodePort }}"
           tls:
-            ca_certificate_file: "{{ .Values.tls.mountPath }}/root.crt"
+            ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
             certificate_file: "{{ .Values.tls.mountPath }}/ls-1.crt"
             key_file: "{{ .Values.tls.mountPath }}/ls-1.key"
       - name: main JSON-RPC client  # creates outgoing JSONRPC connections to deliver and receive messages
@@ -26,19 +33,10 @@ data:
         settings:
           # needs to match the endpoint configuration in the spring boot app
           endpoint: http://{{ include "iris-gateway.locations" . }}:{{ .Values.locations.port }}/location-rpc
-  services.json: |
-    {
-      "entries": [
-        {
-          "name": "ls-1",
-          "channels": [
-            {
-              "type": "grpc_server",
-              "settings": {
-                "address": "locations.{{ index .Values.domains .Values.environment }}"
-              }
-            }
-          ]
-        }
-      ]
-    }
+      - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
+        type: grpc_client
+        settings:
+          tls:
+            ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+            certificate_file: "{{ .Values.tls.mountPath }}/ls-1.crt"
+            key_file: "{{ .Values.tls.mountPath }}/ls-1.key"

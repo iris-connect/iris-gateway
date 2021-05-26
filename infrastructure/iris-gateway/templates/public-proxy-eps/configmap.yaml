@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "iris-gateway.public-proxy-eps" . }}
+data:
+  settings.yml: |
+    name: public-proxy-1
+    directory:
+      type: api
+      settings:
+        jsonrpc_client:
+          tls:
+            ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+            certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
+            key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
+        ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+        endpoints: [ "https://{{ include "iris-gateway.service-directory" . }}:{{ .Values.serviceDirectory.nodePort }}/jsonrpc" ]
+        server_names: [ "sd-1" ]
+    channels:  # defines all the channels that we want to open when starting the server
+      - name: Stdout channel
+        type: stdout
+        settings: {}
+      - name: main gRPC server  # accepts incoming gRPC connections to deliver and receive messages
+        type: grpc_server
+        settings:
+          bind_address: "0.0.0.0:{{ .Values.publicProxy.nodePortEps }}"
+          tls:
+            ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+            certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
+            key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
+      - name: main JSON-RPC client  # creates outgoing JSONRPC connections to deliver and receive messages
+        type: jsonrpc_client
+        settings:
+          # needs to match the endpoint configuration in the spring boot app
+          endpoint: http://{{ include "iris-gateway.public-proxy" . }}:{{ .Values.publicProxy.jsonRpcPort }}/jsonrpc
+          server_name: public-proxy-1
+          tls:
+            ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+            certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
+            key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
+      - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
+        type: grpc_client
+        settings:
+          tls:
+            ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+            certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
+            key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
+      - name: main JSON-RPC server # accepts incoming JSONRPC connections to deliver and receive messages
+        type: jsonrpc_server
+        settings:
+          bind_address: "0.0.0.0:{{ .Values.publicProxy.jsonRpcPortEps }}"
+          tls:
+            ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+            certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
+            key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"

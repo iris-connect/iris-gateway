@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "iris-gateway.service-directory" . }}
+  labels:
+    {{- include "iris-gateway.service-directory-labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "iris-gateway.service-directory-labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "iris-gateway.service-directory-labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: service-directory
+          image: {{ .Values.serviceDirectory.image }}:{{ .Values.epsRepoTag }}
+          imagePullPolicy: Always
+          args: [--level, trace, run]
+          ports:
+            - name: grpc
+              containerPort: {{ .Values.serviceDirectory.nodePort }}
+              protocol: TCP
+          volumeMounts:
+            - mountPath: {{ .Values.tls.mountPath }}
+              name: tls
+              readOnly: true
+            - mountPath: /config
+              name: config
+              readOnly: true
+            - mountPath: {{ .Values.serviceDirectory.persistentStoragePath }}
+              name: persistent-storage
+          env:
+            - name: SD_SETTINGS
+              value: {{ .Values.eps.configMountPath }}/settings.yml
+      volumes:
+        - name: tls
+          secret:
+            secretName: {{ .Values.tls.secretName }}
+        - name: config
+          configMap:
+            name: {{ include "iris-gateway.service-directory" . }}
+        - name: persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ include "iris-gateway.service-directory" . }}

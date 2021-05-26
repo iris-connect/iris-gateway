@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "iris-gateway.service-directory" . }}
+data:
+  settings.yml: |
+    jsonrpc_server: # the JSON-RPC server that the EPS server uses for communication
+      bind_address: "0.0.0.0:{{ .Values.serviceDirectory.nodePort }}"
+      tls:
+        ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+        certificate_file: "{{ .Values.tls.mountPath }}/sd-1.crt"
+        key_file: "{{ .Values.tls.mountPath }}/sd-1.key"
+    directory:
+      database_file: {{ .Values.serviceDirectory.persistentStoragePath }}/service-directory.records
+      ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
