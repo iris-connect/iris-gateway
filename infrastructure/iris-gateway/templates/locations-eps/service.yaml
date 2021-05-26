@@ -7,9 +7,9 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: {{ .Values.locations.nodePort }}
+    - port: {{ .Values.nodePorts.locationsEps }}
       targetPort: grpc
-      nodePort: {{ .Values.locations.nodePort }}
+      nodePort: {{ .Values.nodePorts.locationsEps }}
       protocol: TCP
       name: grpc
   selector:
