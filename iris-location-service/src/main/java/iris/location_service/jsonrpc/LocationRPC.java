@@ -1,8 +1,8 @@
 package iris.location_service.jsonrpc;
 
 import iris.location_service.dto.LocationInformation;
-import iris.location_service.dto.LocationList;
 import iris.location_service.dto.LocationOverviewDto;
+import iris.location_service.dto.LocationQueryResult;
 
 import java.util.List;
 
@@ -23,9 +23,10 @@ public interface LocationRPC {
 			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
 			@JsonRpcParam(value = "locationId") String locationId);
 
-	LocationList searchForLocation(
+	LocationQueryResult searchForLocation(
 			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
-			@JsonRpcParam(value = "searchKeyword") String searchKeyword);
+			@JsonRpcParam(value = "searchKeyword") String searchKeyword,
+			@JsonRpcParam(value = "pageable") PageableDto pageable);
 
 	Object getLocationDetails(
 			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
