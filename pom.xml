@@ -18,7 +18,6 @@
 	</properties>
 
 	<modules>
-		<module>iris-public-server</module>
 		<module>iris-location-service</module>
 		<module>demo-checkin-app</module>
 		<module>demo-contact-diary-app</module>
