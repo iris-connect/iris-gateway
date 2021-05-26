@@ -51,11 +51,11 @@ $ ./mvnw spring-boot:run -PlocalDev -am -pl iris-location-service <4>
 
 # in a third console
 $ cd iris <2>
-$ ./mvnw spring-boot:run -PlocalDev -am -pl iris-app-api-demo <5>
+$ ./mvnw spring-boot:run -PlocalDev -am -pl demo-checkin-app <5>
 
 # in a fourth console
 $ cd iris <2>
-$ ./mvnw spring-boot:run -PlocalDev -am -pl iris-api-generator,iris-client-sormas-sidecar <6>
+$ ./mvnw spring-boot:run -PlocalDev -am -pl iris-api-generator,iris-client-bff <6>
 ----
 <1> Clone the repository.
 <2> Switch to the root directory.
@@ -89,9 +89,9 @@ fi
 
 $tab"cd IRIS/iris-public-server && mvn clean && ./mvnw spring-boot:run -PlocalDev -am$end"
 $tab"cd IRIS/iris-location-service && mvn clean && sleep 5 && ./mvnw spring-boot:run -PlocalDev -am$end"
-$tab"cd IRIS && sleep 10 && ./mvnw spring-boot:run -PlocalDev -am -pl iris-app-api-demo$end"
+$tab"cd IRIS && sleep 10 && ./mvnw spring-boot:run -PlocalDev -am -pl demo-checkin-app$end"
 
-$tab"cd IRIS && sleep 15 && ./mvnw spring-boot:run -PlocalDev -am -pl iris-client-sormas-sidecar$end"
+$tab"cd IRIS && sleep 15 && ./mvnw spring-boot:run -PlocalDev -am -pl iris-client-bff$end"
 if [[ $* == *--fe* ]]
 then
   $tab"cd iris-client-frontend && sleep 15 && npm run serve$end"
