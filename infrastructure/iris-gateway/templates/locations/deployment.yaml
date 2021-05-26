@@ -13,11 +13,27 @@ spec:
     metadata:
       labels:
         {{- include "iris-gateway.locations-labels" . | nindent 8 }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: {{ .Values.locations.port }}
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
         - name: location
           image: {{ .Values.locations.image }}:{{ .Values.locations.tag }}
           imagePullPolicy: Always
+          livenessProbe:
+              httpGet:
+                port: {{ .Values.locations.port }}
+                path: /actuator/info
+              initialDelaySeconds: 30
+              timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.locations.port }}
+              path: /actuator/health
+            initialDelaySeconds: 20
+            timeoutSeconds: 5
           ports:
             - name: http
               containerPort: {{ .Values.locations.port }}
