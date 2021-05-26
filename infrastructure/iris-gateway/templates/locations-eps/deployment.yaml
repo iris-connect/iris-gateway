@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         {{- include "iris-gateway.locations-eps-labels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/locations-eps/configmap.yaml") . | sha256sum }}
     spec:
       containers:
         - name: location
@@ -21,7 +23,7 @@ spec:
           args: [--level, trace, server, run]
           ports:
             - name: grpc
-              containerPort: {{ .Values.locations.nodePort }}
+              containerPort: {{ .Values.nodePorts.locationsEps }}
               protocol: TCP
           volumeMounts:
             - mountPath: {{ .Values.tls.mountPath }}

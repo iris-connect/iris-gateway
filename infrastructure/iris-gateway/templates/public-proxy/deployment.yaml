@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         {{- include "iris-gateway.public-proxy-labels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/public-proxy/configmap.yaml") . | sha256sum }}
     spec:
       containers:
         - name: public-proxy
@@ -21,10 +23,10 @@ spec:
           args: [--level, trace, run, public]
           ports:
             - name: node-port-tls
-              containerPort: {{ .Values.publicProxy.nodePortTls }}
+              containerPort: {{ .Values.nodePorts.publicProxyTls }}
               protocol: TCP
             - name: node-port-int
-              containerPort: {{ .Values.publicProxy.nodePortInternal }}
+              containerPort: {{ .Values.nodePorts.publicProxyInternal }}
               protocol: TCP
             - name: json-rpc-port
               containerPort: {{ .Values.publicProxy.jsonRpcPort }}

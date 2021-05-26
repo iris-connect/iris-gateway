@@ -7,14 +7,14 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: {{ .Values.publicProxy.nodePortTls }}
+    - port: {{ .Values.nodePorts.publicProxyTls }}
       targetPort: node-port-tls
-      nodePort: {{ .Values.publicProxy.nodePortTls }}
+      nodePort: {{ .Values.nodePorts.publicProxyTls }}
       protocol: TCP
       name: node-port-tls
-    - port: {{ .Values.publicProxy.nodePortInternal }}
+    - port: {{ .Values.nodePorts.publicProxyInternal }}
       targetPort: node-port-int
-      nodePort: {{ .Values.publicProxy.nodePortInternal }}
+      nodePort: {{ .Values.nodePorts.publicProxyInternal }}
       protocol: TCP
       name: node-port-int
     - port: {{ .Values.publicProxy.jsonRpcPort }}
