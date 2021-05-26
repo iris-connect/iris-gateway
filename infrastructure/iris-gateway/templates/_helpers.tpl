@@ -27,12 +27,44 @@ If release name contains chart name it will be used as a full name.
 {{- include "iris-gateway.fullname" . }}-locations-eps
 {{- end }}
 
+{{- define "iris-gateway.locations-postgres" -}}
+{{ include "iris-gateway.fullname" . }}-locations-postgres
+{{- end }}
+
+{{- define "iris-gateway.service-directory" -}}
+{{ include "iris-gateway.fullname" . }}-service-directory
+{{- end }}
+
+{{- define "iris-gateway.public-proxy" -}}
+{{ include "iris-gateway.fullname" . }}-public-proxy
+{{- end }}
+
+{{- define "iris-gateway.public-proxy-eps" -}}
+{{ include "iris-gateway.fullname" . }}-public-proxy-eps
+{{- end }}
+
 {{- define "iris-gateway.locations-labels" -}}
 app.kubernetes.io/name: {{ include "iris-gateway.locations" . }}
 {{- end }}
 
 {{- define "iris-gateway.locations-eps-labels" -}}
 app.kubernetes.io/name: {{ include "iris-gateway.locations-eps" . }}
+{{- end }}
+
+{{- define "iris-gateway.locations-postgres-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.locations-postgres" . }}
+{{- end }}
+
+{{- define "iris-gateway.service-directory-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.service-directory" . }}
+{{- end }}
+
+{{- define "iris-gateway.public-proxy-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.public-proxy" . }}
+{{- end }}
+
+{{- define "iris-gateway.public-proxy-eps-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.public-proxy-eps" . }}
 {{- end }}
 
 {{/*

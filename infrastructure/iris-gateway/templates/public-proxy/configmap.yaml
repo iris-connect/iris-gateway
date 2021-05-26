@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "iris-gateway.public-proxy" . }}
+data:
+  settings.yml: |
+    public:
+      name: public-proxy-1
+      database_file: {{ .Values.publicProxy.persistentStoragePath }}/public-proxy-announcements.db
+      tls_bind_address: 0.0.0.0:{{ .Values.publicProxy.nodePortTls }}
+      internal_bind_address: 0.0.0.0:{{ .Values.publicProxy.nodePortInternal }}
+      internal_endpoint: {{ .Values.environment }}.iris-gateway.de:{{ .Values.publicProxy.nodePortInternal }}
+      jsonrpc_client:
+        endpoint: https://{{ include "iris-gateway.public-proxy-eps" . }}:{{ .Values.publicProxy.jsonRpcPortEps }}/jsonrpc
+        server_name: public-proxy-1
+        tls:
+          certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
+          key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
+          ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+      jsonrpc_server: # the JSON-RPC server that the EPS server uses for communication
+        bind_address: "0.0.0.0:{{ .Values.publicProxy.jsonRpcPort }}"
+        tls:
+          ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+          certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
+          key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
+          validate_client: false
