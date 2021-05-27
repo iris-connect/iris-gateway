@@ -19,7 +19,7 @@ spec:
       containers:
         - name: public-proxy
           image: {{ .Values.publicProxy.image }}:{{ .Values.epsRepoTag }}
-          imagePullPolicy: Always
+          imagePullPolicy: {{ include "iris-gateway.pullPolicy" . }}
           args: [--level, trace, run, public]
           ports:
             - name: node-port-tls

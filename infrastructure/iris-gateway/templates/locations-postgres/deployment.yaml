@@ -17,7 +17,7 @@ spec:
       containers:
         - name: postgres
           image: postgres
-          imagePullPolicy: Always
+          imagePullPolicy: {{ include "iris-gateway.pullPolicy" . }}
           ports:
             - name: tcp
               containerPort: {{ .Values.postgres.port }}
