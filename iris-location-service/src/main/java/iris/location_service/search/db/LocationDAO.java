@@ -20,8 +20,6 @@ import iris.location_service.search.db.model.LocationIdentifier;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,47 +35,44 @@ import org.springframework.stereotype.Service;
 @Service
 public class LocationDAO {
 
-  @Value("${spring.datasource.driverClassName:}")
-  private String datasourceDriver;
+	@Value("${spring.datasource.driverClassName:}")
+	private String datasourceDriver;
 
-  @Autowired
-  private LocationRepository locationRepo;
+	@Autowired
+	private LocationRepository locationRepo;
 
-  @PersistenceContext
-  private EntityManager em;
+	@Transactional
+	public void saveLocations(List<Location> locations) {
 
-  @Transactional
-  public void saveLocations(List<Location> locations) {
+		locationRepo.saveAll(locations);
 
-	locationRepo.saveAll(locations);
-
-	if (isPostgresActive()) {
-	  em.createNamedQuery("Location.update.tokens").executeUpdate();
+		if (isPostgresActive()) {
+			locationRepo.updateTokens();
+		}
 	}
-  }
 
-  public Page<Location> searchLocations(String keyword, Pageable pageable) {
+	public Page<Location> searchLocations(String keyword, Pageable pageable) {
 
-	if (isPostgresActive()) {
-	  return locationRepo.fulltextSearch(keyword, pageable);
-	} else {
-	  return locationRepo.findByNameContainingIgnoreCase(keyword, pageable);
+		if (isPostgresActive()) {
+			return locationRepo.fulltextSearch(keyword, pageable);
+		} else {
+			return locationRepo.findByNameContainingIgnoreCase(keyword, pageable);
+		}
 	}
-  }
 
-  public Optional<Location> findById(LocationIdentifier ident) {
-	return locationRepo.findById(ident);
-  }
+	public Optional<Location> findById(LocationIdentifier ident) {
+		return locationRepo.findById(ident);
+	}
 
-  public void delete(Location entity) {
-	locationRepo.delete(entity);
-  }
+	public void delete(Location entity) {
+		locationRepo.delete(entity);
+	}
 
-  public Streamable<Location> findByIdProviderId(String providerId) {
-	return locationRepo.findByIdProviderId(providerId);
-  }
+	public Streamable<Location> findByIdProviderId(String providerId) {
+		return locationRepo.findByIdProviderId(providerId);
+	}
 
-  private boolean isPostgresActive() {
-	return datasourceDriver.equals("org.postgresql.Driver");
-  }
+	private boolean isPostgresActive() {
+		return datasourceDriver.equals("org.postgresql.Driver");
+	}
 }
