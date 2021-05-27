@@ -24,6 +24,9 @@ class DBSearchIndexTest {
 
 	@Autowired
 	private DBSearchIndex searchIndex;
+	
+	@Autowired
+	private LocationDAO locationDao;
 
 	@Autowired
 	private ModelMapper mapper;
@@ -37,7 +40,7 @@ class DBSearchIndexTest {
 		var location = createLocation();
 
 		// then
-		searchIndex.getRepo().saveAll(Collections.singletonList(location));
+		locationDao.saveLocations(Collections.singletonList(location));
 
 		// assert
 		assertEquals(1, searchIndex.search("Zwoeinz", null).getContent().size());
