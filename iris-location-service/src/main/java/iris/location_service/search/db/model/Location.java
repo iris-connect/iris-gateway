@@ -15,25 +15,25 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 public class Location {
 
-  @EmbeddedId
-  private LocationIdentifier id;
+	@EmbeddedId
+	private LocationIdentifier id;
 
-  private String name;
+	private String name;
 
-  private String contactOfficialName;
+	private String contactOfficialName;
 
-  private String contactRepresentative;
+	private String contactRepresentative;
 
-  private String contactAddressStreet;
+	private String contactAddressStreet;
 
-  private String contactAddressCity;
+	private String contactAddressCity;
 
-  private String contactAddressZip;
+	private String contactAddressZip;
 
-  private String contactOwnerEmail;
+	private String contactOwnerEmail;
 
-  private String contactEmail;
+	private String contactEmail;
 
-  private String contactPhone;
+	private String contactPhone;
 
 }
