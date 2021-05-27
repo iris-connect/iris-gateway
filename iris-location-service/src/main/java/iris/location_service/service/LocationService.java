@@ -3,7 +3,7 @@ package iris.location_service.service;
 import iris.location_service.dto.LocationInformation;
 import iris.location_service.dto.LocationOverviewDto;
 import iris.location_service.search.db.DBSearchIndex;
-import iris.location_service.search.db.LocationRepository;
+import iris.location_service.search.db.LocationDAO;
 import iris.location_service.search.db.model.Location;
 import iris.location_service.search.db.model.LocationIdentifier;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ public class LocationService {
 
   private final @NotNull ModelMapper mapper;
 
-  private final @NotNull LocationRepository locationRepository;
+  private final @NotNull LocationDAO locationDao;
 
   private final @NotNull DBSearchIndex index;
 
@@ -40,7 +40,7 @@ public class LocationService {
 	  return getLocationFromLocationInformation(providerId, entry);
 	}).collect(Collectors.toList());
 
-	locationRepository.saveAll(data);
+	locationDao.saveLocations(data);
   }
 
   private Location getLocationFromLocationInformation(String providerId, LocationInformation entry) {
@@ -59,7 +59,7 @@ public class LocationService {
 
   public List<LocationOverviewDto> getProviderLocations(String providerId) {
 
-	var providerLocations = locationRepository.findByIdProviderId(providerId.toString());
+	var providerLocations = locationDao.findByIdProviderId(providerId.toString());
 
 	return providerLocations.map(location -> {
 	  return new LocationOverviewDto(location.getId().getLocationId(), location.getName());
@@ -71,9 +71,9 @@ public class LocationService {
 	// Construct a new ID to match the (provider, id) pair key
 	LocationIdentifier ident = new LocationIdentifier(providerId.toString(), locationId);
 
-	Optional<Location> match = locationRepository.findById(ident);
+	Optional<Location> match = locationDao.findById(ident);
 	if (match.isPresent()) {
-	  locationRepository.delete(match.get());
+	  locationDao.delete(match.get());
 	  return true;
 	}
 	return false;
@@ -86,7 +86,7 @@ public class LocationService {
   public Optional<LocationInformation> getLocationByProviderIdAndLocationId(String providerId, String locationId) {
 	var ident = new LocationIdentifier(providerId, locationId);
 
-	return locationRepository.findById(ident)
+	return locationDao.findById(ident)
 		.map(this::toDto);
   }
 

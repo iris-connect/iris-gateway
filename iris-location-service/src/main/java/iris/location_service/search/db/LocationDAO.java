@@ -15,56 +15,66 @@
 package iris.location_service.search.db;
 
 import iris.location_service.search.db.model.Location;
+import iris.location_service.search.db.model.LocationIdentifier;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Streamable;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Jens Kutzsche
  */
-public class CustomLocationRepositoryImpl implements CustomLocationRepository {
+@Service
+public class LocationDAO {
 
   @Value("${spring.datasource.driverClassName:}")
   private String datasourceDriver;
 
+  @Autowired
+  private LocationRepository locationRepo;
+
   @PersistenceContext
   private EntityManager em;
 
-  @Override
   @Transactional
   public void saveLocations(List<Location> locations) {
 
-	locations.forEach(em::persist);
+	locationRepo.saveAll(locations);
 
 	if (isPostgresActive()) {
 	  em.createNamedQuery("Location.update.tokens").executeUpdate();
 	}
   }
 
-  @Override
-  public Streamable<Location> searchLocations(String keyword) {
-
-	TypedQuery<Location> query;
+  public Page<Location> searchLocations(String keyword, Pageable pageable) {
 
 	if (isPostgresActive()) {
-
-	  query = em.createNamedQuery("Location.fulltext", Location.class);
-	  query.setParameter(1, keyword);
-
+	  return locationRepo.fulltextSearch(keyword, pageable);
 	} else {
-
-	  query = em.createNamedQuery("Location.findByName", Location.class);
-	  query.setParameter("keyword", keyword);
+	  return locationRepo.findByNameContainingIgnoreCase(keyword, pageable);
 	}
+  }
 
-	return Streamable.of(query.getResultList());
+  public Optional<Location> findById(LocationIdentifier ident) {
+	return locationRepo.findById(ident);
+  }
+
+  public void delete(Location entity) {
+	locationRepo.delete(entity);
+  }
+
+  public Streamable<Location> findByIdProviderId(String providerId) {
+	return locationRepo.findByIdProviderId(providerId);
   }
 
   private boolean isPostgresActive() {
