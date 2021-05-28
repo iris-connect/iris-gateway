@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -38,21 +39,32 @@ public class LuceneIndexService implements SearchIndex {
 
     private LuceneSearcher luceneSearcher;
 
+    private IndexWriter writer;
+
     @Setter
     @Autowired
     private LuceneIndexServiceProperties luceneIndexServiceProperties;
 
+    @PreDestroy
+    public void preDestroy() throws IOException {
+        writer.close();
+    }
+
     @PostConstruct
-    private void postConstruct() {
+    public void postConstruct() {
         try {
         analyzer = new StandardAnalyzer();
+
+        var config = new IndexWriterConfig(analyzer);
 
         // ToDo: This only works at development time.
         dir = FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory()));
 
+        writer = new IndexWriter(dir, config);
+
         luceneSearcher = new LuceneSearcher(dir, analyzer);
         }catch (IOException e){
-            //ToDo proper exception handling
+            e.printStackTrace();
         }
     }
 
@@ -118,10 +130,8 @@ public class LuceneIndexService implements SearchIndex {
     }
 
     private void indexNewDocument(Document doc) throws Exception {
-        IndexWriterConfig config = new IndexWriterConfig(analyzer);
-        IndexWriter writer = new IndexWriter(dir, config);
         writer.addDocument(doc);
-        writer.close();
+        writer.flush();
     }
 
     private void indexExistingDocument(Document doc) throws Exception {
@@ -133,6 +143,7 @@ public class LuceneIndexService implements SearchIndex {
     }
 
     public LocationInformation createLocationInformation(Document document) {
+        // Missing: Mapping Document -> Location (verbinden mit Location -> Document)
         return new LocationInformation(); // TODO: 09.05.2021 add 'document to location information' parser
     }
 
