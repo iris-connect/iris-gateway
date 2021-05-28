@@ -55,6 +55,6 @@ jobs:
           --set environment=test
           --set locations.tag="${{ github.sha }}"
           --wait
-          --timeout 180
+          --timeout 3m
           --debug
           iris-gateway ./infrastructure/iris-gateway

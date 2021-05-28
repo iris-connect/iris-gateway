@@ -13,4 +13,4 @@ fi
 
 helm upgrade --install \
   --set environment=local --set locations.tag=$tag \
-    iris-gateway ./infrastructure/iris-gateway  --wait --debug
+    iris-gateway ./infrastructure/iris-gateway  --wait --debug --timeout 3m
