@@ -114,6 +114,8 @@ public class LuceneIndexService implements SearchIndex {
         // Is the ID relevant for us?
         // doc.add(new TextField("name", location.getId().toString(), Field.Store.YES));
         // "publicKey" is not gettable
+        // recover: 1, Location: 1 (1, 1)
+        // e-Guest: 2, Location: 1 (2, 1)
         doc.add(new TextField("Id", location.getId().getLocationId(), Field.Store.YES));
         doc.add(new TextField("ProviderId", location.getId().getProviderId(), Field.Store.YES));
         doc.add(new TextField("Name", location.getName(), Field.Store.YES));
