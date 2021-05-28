@@ -4,7 +4,9 @@ import iris.location_service.dto.LocationInformation;
 import iris.location_service.search.SearchIndex;
 import iris.location_service.search.db.model.Location;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -13,12 +15,9 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -28,13 +27,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class LuceneIndexService implements SearchIndex {
+
     @Setter
     private Analyzer analyzer;
+
     @Getter
     private Directory dir;
+
     private LuceneSearcher luceneSearcher;
 
+    @Setter
+    @Autowired
+    private LuceneIndexServiceProperties luceneIndexServiceProperties;
 
     @PostConstruct
     private void postConstruct() {
@@ -42,7 +48,7 @@ public class LuceneIndexService implements SearchIndex {
         analyzer = new StandardAnalyzer();
 
         // ToDo: This only works at development time.
-        dir = FSDirectory.open(Paths.get("iris-location-service\\src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
+        dir = FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory()));
 
         luceneSearcher = new LuceneSearcher(dir, analyzer);
         }catch (IOException e){
@@ -64,21 +70,30 @@ public class LuceneIndexService implements SearchIndex {
             }
             return locationList;
         } catch (IOException | ParseException e) {
-            return null; // TODO: 09.05.2021 return proper error object
+            log.error("Error while searching for [{}]: ", keyword, e);
+            return new ArrayList<>();
         }
     }
 
     public void indexLocation(Location location) throws Exception {
-        indexDocument(createDocument(location));
+        indexNewDocument(createDocument(location));
     }
 
     public void indexLocations(List<Location> locations){
         try {
             for(Location location:locations){
-                indexDocument(createDocument(location));
+                // gibt es die Location bereits?
+                // Zwei Anbieter benutzen die selbe id.
+                // Provider A und B
+                // Location: A -> ID: X
+                // Location: B -> ID: X
+                // See LocationIdentifier
+                // if location does not exist
+                indexNewDocument(createDocument(location));
+                // if location exists updateDocument(createDocument(location));
             }
         }catch (Exception e){
-            //ToDO proper exception handling
+            log.error("Error while indexLocations: ", e);
         }
     }
 
@@ -102,11 +117,19 @@ public class LuceneIndexService implements SearchIndex {
         return doc;
     }
 
-    private void indexDocument(Document doc) throws Exception {
+    private void indexNewDocument(Document doc) throws Exception {
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         IndexWriter writer = new IndexWriter(dir, config);
         writer.addDocument(doc);
         writer.close();
+    }
+
+    private void indexExistingDocument(Document doc) throws Exception {
+        // ToDo: Implement based on existing ID
+    }
+
+    private void deleteExistingDocument(Document doc) throws Exception {
+        // ToDo: Implement based on existing ID
     }
 
     public LocationInformation createLocationInformation(Document document) {
