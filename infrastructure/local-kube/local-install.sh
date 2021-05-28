@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 cd ../../
 headTag=$(git rev-parse HEAD)
 if [[ "$(  docker images -f reference='inoeg/iris-location-service:'"$headTag"''  2> /dev/null)" == "" ]]; then
