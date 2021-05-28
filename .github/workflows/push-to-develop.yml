@@ -36,7 +36,7 @@ jobs:
 
   deployment:
     needs: build-location-service
-    runs-on: self-hosted
+    runs-on: [self-hosted, env-test]
     container: alpine/helm:3.5.4
 
     steps:
