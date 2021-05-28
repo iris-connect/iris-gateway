@@ -43,6 +43,8 @@ services:
   iris-location:
     image: inoeg/iris-location-service:${IRIS_VERSION}
     restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
 
   ls-1:
     image: inoeg/eps-server
