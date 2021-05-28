@@ -22,6 +22,14 @@ spec:
         - name: location
           image: {{ .Values.locations.image }}:{{ .Values.locations.tag }}
           imagePullPolicy: {{ include "iris-gateway.pullPolicy" . }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: postgres
+            - name: POSTGRES_DATABASE
+              value: locations
+          envFrom:
+            - secretRef:
+                name: {{ include "iris-gateway.locations-postgres" . }}
           livenessProbe:
             httpGet:
               port: {{ .Values.locations.port }}
