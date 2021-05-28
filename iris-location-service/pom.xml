@@ -130,7 +130,6 @@
                         <name>${docker.image.prefix}/${project.artifactId}:${version.tag}</name>
                         <env>
                             <!-- embeds environment variables into an image: https://github.com/paketo-buildpacks/environment-variables -->
-                            <BPE_SPRING_PROFILES_ACTIVE>docker</BPE_SPRING_PROFILES_ACTIVE>
                             <!-- with GraalVM <BP_BOOT_NATIVE_IMAGE>true</BP_BOOT_NATIVE_IMAGE> -->
                         </env>
                     </image>
