@@ -21,17 +21,17 @@ spec:
       containers:
         - name: location
           image: {{ .Values.locations.image }}:{{ .Values.locations.tag }}
-          imagePullPolicy: Always
+          imagePullPolicy: {{ include "iris-gateway.pullPolicy" . }}
           livenessProbe:
             httpGet:
               port: {{ .Values.locations.port }}
-              path: /actuator/info
+              path: /actuator/health/liveness
             initialDelaySeconds: 30
             timeoutSeconds: 10
           readinessProbe:
             httpGet:
               port: {{ .Values.locations.port }}
-              path: /actuator/health
+              path: /actuator/health/readiness
             initialDelaySeconds: 20
             timeoutSeconds: 5
           ports:

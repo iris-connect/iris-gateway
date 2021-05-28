@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2.3.4
-    
+
       - name: Cache local Maven repository
         uses: actions/cache@v2.1.5
         with:
@@ -24,7 +24,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-    
+
       - name: build, package and publish the image
         run: >
           mvn -B spring-boot:build-image -am -pl iris-location-service
@@ -54,4 +54,7 @@ jobs:
           --namespace iris-gateway
           --set environment=test
           --set locations.tag="${{ github.sha }}"
+          --wait
+          --timeout 180
+          --debug
           iris-gateway ./infrastructure/iris-gateway
