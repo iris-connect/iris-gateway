@@ -1,5 +1,5 @@
 public:
-  name: public-proxy-1
+  name: public-proxy
   database_file: /tmp/public-proxy-announcements.db
   tls_bind_address: 0.0.0.0:4433
   internal_bind_address: 0.0.0.0:9999
@@ -12,7 +12,7 @@ public:
       key_file: "$DIR/../../certs/public-proxy-1.key"
       ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
   jsonrpc_server: # the JSON-RPC server that the EPS server uses for communication
-    bind_address: "0.0.0.0:6655"
+    bind_address: 0.0.0.0:6655
     tls:
       ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
       certificate_file: "$DIR/../../certs/public-proxy-1.crt"

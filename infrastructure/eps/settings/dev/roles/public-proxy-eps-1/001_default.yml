@@ -1,4 +1,4 @@
-name: public-proxy-1
+name: public-proxy
 directory:
   type: api
   settings:
@@ -23,7 +23,7 @@ channels: # defines all the channels that we want to open when starting the serv
     type: jsonrpc_client
     settings:
       endpoint: https://public-proxy:6655/jsonrpc
-      server_name: public-proxy-1
+      server_name: public-proxy
       tls:
         ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
         certificate_file: "$DIR/../../certs/public-proxy-1.crt"
