@@ -1,5 +1,5 @@
 public:
-  name: public-proxy
+  name: public-proxy-1
   database_file: /tmp/public-proxy-announcements.db
   tls_bind_address: 0.0.0.0:4433
   internal_bind_address: 0.0.0.0:9999

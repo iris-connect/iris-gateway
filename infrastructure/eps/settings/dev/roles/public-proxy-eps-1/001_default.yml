@@ -1,4 +1,4 @@
-name: public-proxy
+name: public-proxy-1
 directory:
   type: api
   settings:
