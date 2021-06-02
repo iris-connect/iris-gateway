@@ -57,11 +57,12 @@ public class GuestLoader {
             if (naughty_encoded.startsWith("#") || naughty_encoded.isBlank()) {
                 continue;
             }
+            System.out.println("Zeile: " + naughty_encoded);
             var naughty = new String(Base64.getDecoder().decode(naughty_encoded), UTF_8);
             var bad_guest = new GuestDto();
             bad_guest.setFirstName(naughty);
             bad_guest.setLastName(naughty);
-            bad_guest.setDateOfBirth(Date.valueOf("0000-00-00"));
+            bad_guest.setDateOfBirth(Date.valueOf("1999-09-09"));
             bad_guest.setSex(SexDto.UNKNOWN);
             bad_guest.setEmail(naughty);
             bad_guest.setPhone(naughty);
@@ -75,8 +76,8 @@ public class GuestLoader {
             bad_guest.setAttendanceInformation(new AttendanceInformationDto(
                     naughty,
                     naughty,
-                    Instant.MAX,
-                    Instant.MIN
+                    Instant.now(),
+                    Instant.now()
             ));
             bad_guest.setIdentityChecked(true);
             guests.add(bad_guest);
