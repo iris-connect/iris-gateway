@@ -1,0 +1,62 @@
+# TODO delete this file
+
+name: test prod runner
+
+on:
+  push:
+    branches:
+      - test-prod-runner
+
+jobs:
+  # https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image
+  build-location-service:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.3.4
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v2.1.6
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: build, package and publish the image
+        run: >
+          mvn -B spring-boot:build-image -am -pl iris-location-service
+          -Dspring-boot.build-image.publish=true
+          -Dversion.tag="${{ github.sha }}"
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+          DOCKER_HUB_PW: ${{ secrets.DOCKER_HUB_PW }}
+
+  deployment:
+    needs: build-location-service
+    runs-on: [self-hosted, env-prod]
+    container: alpine/helm:3.5.4
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Prepare k8s config
+        run: >
+          rm -rf ~/.kube &&
+          mkdir ~/.kube &&
+          echo "${{ secrets.KUBECONFIG_PROD }}" > ~/.kube/config
+
+      - name: Run helm deployment
+        run: >
+          helm upgrade --install
+          --namespace iris-gateway
+          --set environment=prod
+          --set locations.tag="${{ github.sha }}"
+          --wait
+          --timeout 3m
+          --debug
+          iris-gateway ./infrastructure/iris-gateway

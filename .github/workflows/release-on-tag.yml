@@ -49,3 +49,32 @@ jobs:
             **/deployment-${{ steps.get_version.outputs.VERSION }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deployment:
+    needs: build
+    runs-on: [self-hosted, env-prod]
+    container: alpine/helm:3.5.4
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+      - name: Prepare k8s config
+        run: >
+          rm -rf ~/.kube &&
+          mkdir ~/.kube &&
+          echo "${{ secrets.KUBECONFIG_PROD }}" > ~/.kube/config
+
+      - name: Run helm deployment
+        run: >
+          helm upgrade --install
+          --namespace iris-gateway
+          --set environment=prod
+          --set locations.tag="${{ steps.get_version.outputs.VERSION }}"
+          --wait
+          --timeout 3m
+          --debug
+          iris-gateway ./infrastructure/iris-gateway
