@@ -23,4 +23,4 @@ data:
           ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
           certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
           key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
-          validate_client: false
+          verify_client: false
