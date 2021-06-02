@@ -93,6 +93,8 @@ services:
     expose:
       - 7766
       - 7776
+    ports:
+      - 7766:7766
     volumes:
       - ./settings:/app/settings
     environment:
