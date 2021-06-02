@@ -3,7 +3,7 @@
 #   production: --set environment=production
 environment: undefined
 
-epsRepoTag: v0.1.3
+epsRepoTag: v0.1.4
 
 tls:
   keystoreSecretName: tls-keystore
