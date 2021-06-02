@@ -6,6 +6,7 @@ import iris.location_service.search.db.model.Location;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.flogger.Flogger;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -57,14 +58,13 @@ public class LuceneIndexService implements SearchIndex {
 
         var config = new IndexWriterConfig(analyzer);
 
-        // ToDo: This only works at development time.
         dir = FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory()));
 
         writer = new IndexWriter(dir, config);
 
         luceneSearcher = new LuceneSearcher(dir, analyzer);
         }catch (IOException e){
-            e.printStackTrace();
+            log.error("Error can´t init LuceneIndexService: " + e);
         }
     }
 
