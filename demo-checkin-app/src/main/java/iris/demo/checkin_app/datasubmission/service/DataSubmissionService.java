@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -42,24 +41,18 @@ public class DataSubmissionService {
 
 	public void sendDataForRequest(LocationDataRequestDto locationDataRequest) throws Exception {
 
-		List<GuestDto> guests;
+		List<GuestDto> guests = guestLoader.getGuests();
 
-		if (locationDataRequest.getLocationId().equals("53cfaa3f-4cff-4fab-8842-9fecd81ba563")) {
-			guests = guestLoader.getNaughtyGuests();
-		} else {
-			guests = guestLoader.getGuests();
+		var start = Optional.ofNullable(locationDataRequest.getStart())
+				.map(it -> it.minus(random.nextInt(100), ChronoUnit.MINUTES));
+		var end = Optional.ofNullable(locationDataRequest.getEnd())
+				.map(it -> it.plus(random.nextInt(100), ChronoUnit.MINUTES));
+		// 2 of 3 should have plausible values
+		for (int i = 0; i < 2; i++) {
 
-			var start = Optional.ofNullable(locationDataRequest.getStart())
-					.map(it -> it.minus(random.nextInt(100), ChronoUnit.MINUTES));
-			var end = Optional.ofNullable(locationDataRequest.getEnd())
-					.map(it -> it.plus(random.nextInt(100), ChronoUnit.MINUTES));
-			// 2 of 3 should have plausible values
-			for (int i = 0; i < 2; i++) {
-
-				var guest = guests.get(i);
-				guest.getAttendanceInformation().setAttendFrom(start.orElse(null));
-				guest.getAttendanceInformation().setAttendTo(end.orElse(null));
-			}
+			var guest = guests.get(i);
+			guest.getAttendanceInformation().setAttendFrom(start.orElse(null));
+			guest.getAttendanceInformation().setAttendTo(end.orElse(null));
 		}
 
 		DataProviderDto dataProvider = dataProviderLoader.getDataProvider();
