@@ -1,24 +1,24 @@
 :toc: macro
 
-# image:logo/iris-logo.png[width=100] IRIS Gateway
+# Gateway
 
 IRIS stands for "Integration of Remote systems into Infection control Software" and is intended to be the central point of mediation between the various contact, event and guest tracking apps on the one hand and the infection control software (e.g. SORMAS) in the health departments on the other.
 
-This repository is used to manage the development and source code of IRIS.
+This repository is used to manage the development and source code of IRIS connect.
 
-NOTE: The IRIS system is work in progress. If you are interested or have questions please reach out to us.
+NOTE: The IRIS connect is work in progress. If you are interested or have questions please reach out to us.
 
 toc::[]
 
 ////
 == Concept
 
-There is a concept written in German which describes the IRIS system: https://github.com/healthIMIS/IRIS-Concept/releases/latest[Last release of the concept]
+There is a concept written in German which describes the IRIS connect system: https://github.com/healthIMIS/IRIS-Concept/releases/latest[Last release of the concept]
 ////
 
-== IRIS System
+== IRIS connect System
 
-There are three services in the IRIS system:
+There are three services in IRIS connect:
 
 - One zentral server (`public-server`) which provides a REST API for the citizen apps and receives the apps' data.
 - One zentral service (`location-service`) which provides a REST API for the location apps and which builds and maintains an index of connected locations.
