@@ -28,14 +28,14 @@ class LuceneIndexServiceTest {
     private LuceneIndexServiceProperties luceneIndexServiceProperties;
 
     @BeforeTestExecution
-    public void setUp() {
+    public void setUp() throws Exception {
         luceneIndexService.postConstruct();
+        indexDocument();
     }
 
     @Test
     public void testWriter() throws Exception{
         int testExpected =  FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory())).listAll().length;
-        indexDocument();
         int testValue = FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory())).listAll().length;
         assertTrue(testExpected<=testValue);
     }
@@ -53,7 +53,6 @@ class LuceneIndexServiceTest {
      */
     @Test
     void searchListIsNotEmptyIfDocumentsArePresentAndKeyWordMatches() throws Exception {
-        indexDocument();
         assertTrue( 1<= luceneIndexService.search("pablo").size());
     }
 
