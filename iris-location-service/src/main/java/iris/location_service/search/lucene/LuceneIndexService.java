@@ -65,6 +65,7 @@ public class LuceneIndexService implements SearchIndex {
         luceneSearcher = new LuceneSearcher(dir, analyzer);
         }catch (IOException e){
             log.error("Error can´t init LuceneIndexService: " + e);
+            System.out.println("Fehler exeption");
         }
     }
 
@@ -96,12 +97,21 @@ public class LuceneIndexService implements SearchIndex {
             for(Location location:locations){
                 // gibt es die Location bereits?
                 // Zwei Anbieter benutzen die selbe id.
+                //Document name -> documentxyz+"-"+providerid+"-"+id
                 // Provider A und B
                 // Location: A -> ID: X
                 // Location: B -> ID: X
+
+                //TODO was ist wenn der User eine andere App nutzt zum updaten?
+
                 // See LocationIdentifier
                 // if location does not exist
-                indexNewDocument(createDocument(location));
+                if(search(location.getName()).isEmpty()){
+                    indexNewDocument(createDocument(location));
+                }else{
+                    indexExistingDocument(createDocument(location));
+                }
+
                 // if location exists updateDocument(createDocument(location));
             }
         }catch (Exception e){
