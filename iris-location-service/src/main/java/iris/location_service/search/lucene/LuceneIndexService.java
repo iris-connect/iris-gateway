@@ -16,6 +16,8 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,8 +152,12 @@ public class LuceneIndexService implements SearchIndex {
         // ToDo: Implement based on existing ID
     }
 
-    private void deleteExistingDocument(Document doc) throws Exception {
+    private void deleteDocumentById(String id) throws Exception {
         // ToDo: Implement based on existing ID
+        QueryParser parser = new QueryParser("Id", analyzer);
+        Query query = parser.parse(id);
+        writer.deleteDocuments(query);
+        writer.flush();
     }
 
     public LocationInformation createLocationInformation(Document document) {
