@@ -1,12 +1,13 @@
 package iris.location_service.search.lucene;
 
+import iris.location_service.dto.LocationAddress;
+import iris.location_service.dto.LocationContact;
 import iris.location_service.dto.LocationInformation;
 import iris.location_service.search.SearchIndex;
 import iris.location_service.search.db.model.Location;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.extern.flogger.Flogger;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -20,6 +21,7 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +46,8 @@ public class LuceneIndexService implements SearchIndex {
 
     private IndexWriter writer;
 
+    //private ModelMapper mapper;
+
     @Setter
     @Autowired
     private LuceneIndexServiceProperties luceneIndexServiceProperties;
@@ -57,6 +61,9 @@ public class LuceneIndexService implements SearchIndex {
     public void postConstruct() {
         try {
         analyzer = new StandardAnalyzer();
+
+        //mapper = new ModelMapper();
+        //mapper.getConfiguration().setAmbiguityIgnored(true);
 
         var config = new IndexWriterConfig(analyzer);
 
@@ -159,7 +166,7 @@ public class LuceneIndexService implements SearchIndex {
 
     private void indexNewDocument(Document doc) throws Exception {
         writer.addDocument(doc);
-        writer.flush();
+        writer.commit();
     }
 
     private void indexExistingDocument(Document doc) throws Exception {
@@ -176,7 +183,29 @@ public class LuceneIndexService implements SearchIndex {
 
     public LocationInformation createLocationInformation(Document document) {
         // Missing: Mapping Document -> Location (verbinden mit Location -> Document)
-        return new LocationInformation(); // TODO: 09.05.2021 add 'document to location information' parser
+        //var locationInformation = mapper.map(document , LocationInformation.class);
+        var locationInformation = new LocationInformation();
+
+        var locationContact = new LocationContact();
+        var locationAddress = new LocationAddress();
+        locationAddress.setStreet(document.get("ContactAddressStreet"));
+        locationAddress.setCity(document.get("ContactAddressCity"));
+        locationAddress.setZip(document.get("ContactAddressZip"));
+
+        locationContact.setAddress(locationAddress);
+        locationContact.setEmail(document.get("ContactEmail"));
+        locationContact.setOfficialName(document.get("ContactOfficialName"));
+        locationContact.setOwnerEmail(document.get("ContactOwnerEmail"));
+        locationContact.setPhone(document.get("ContactPhone"));
+        locationContact.setRepresentative(document.get("ContactRepresentative"));
+
+        locationInformation.setId(document.get("Id"));
+        locationInformation.setProviderId( document.get("ProviderId"));
+        locationInformation.setName(document.get("Name"));
+        locationInformation.setContact(locationContact);
+        return locationInformation;
+        // TODO: ADD all other information like Context and PublicKey maybe with ModelMapper?
+        // Context and PublicKey not in document ??
     }
 
     public void setDir(String path) throws IOException{
