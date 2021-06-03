@@ -27,9 +27,11 @@ class LuceneIndexServiceTest {
     @Autowired
     private LuceneIndexServiceProperties luceneIndexServiceProperties;
 
-    @BeforeTestExecution
+
+    @BeforeEach
     public void setUp() throws Exception {
         luceneIndexService.postConstruct();
+        System.out.println("Test start");
         indexDocument();
     }
 

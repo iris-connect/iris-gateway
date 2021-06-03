@@ -65,7 +65,7 @@ public class LuceneIndexService implements SearchIndex {
         luceneSearcher = new LuceneSearcher(dir, analyzer);
         }catch (IOException e){
             log.error("Error can´t init LuceneIndexService: " + e);
-            System.out.println("Fehler exeption");
+            System.out.println("Fehler exception post construct: " + e);
         }
     }
 
