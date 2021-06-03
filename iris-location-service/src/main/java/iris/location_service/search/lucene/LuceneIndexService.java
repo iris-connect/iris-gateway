@@ -67,7 +67,7 @@ public class LuceneIndexService implements SearchIndex {
         luceneSearcher = new LuceneSearcher(dir, analyzer);
         }catch (IOException e){
             log.error("Error can´t init LuceneIndexService: " + e);
-            System.out.println("Fehler exception post construct: " + e);
+            System.out.println("Error in post construct: " + e);
         }
     }
 
@@ -118,6 +118,20 @@ public class LuceneIndexService implements SearchIndex {
             }
         }catch (Exception e){
             log.error("Error while indexLocations: ", e);
+        }
+    }
+
+    public void deleteLocation(Location location){
+        try {
+            deleteDocumentById(String.valueOf(location.getId()));
+        }catch (Exception e){
+            log.error("Error while deleting Location: ", e);
+        }
+    }
+
+    public void deleteLocations(List<Location> locations){
+        for(Location location: locations){
+            deleteLocation(location);
         }
     }
 
