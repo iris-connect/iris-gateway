@@ -16,6 +16,8 @@ import org.springframework.test.context.event.annotation.BeforeTestExecution;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -65,7 +67,11 @@ class LuceneIndexServiceTest {
     void indexDocument() throws Exception {
         Directory dir = FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory()));
         Location testObject = new Location(new LocationIdentifier("123","123"),"Pablo","Pablo Hun", "Pablo","Rom 1", "Rom", "12345","pablo.h@test.com","pablotest@test.de","01234 1512435");
-        luceneIndexService.indexLocation(testObject);
+
+        List<Location> testObjects = new ArrayList<>();
+        testObjects.add(testObject);
+
+        luceneIndexService.indexLocations(testObjects);
     }
 
 

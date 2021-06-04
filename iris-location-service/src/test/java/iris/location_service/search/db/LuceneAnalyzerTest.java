@@ -19,6 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,7 +40,11 @@ public class LuceneAnalyzerTest {
         LuceneIndexService controller = new LuceneIndexService() ;
         controller.setAnalyzer(analyzer);
         controller.setDir("target\\luceneTestIndex");
-        controller.indexLocation(location);
+
+        List<Location> locations = new ArrayList<>();
+        locations.add(location);
+
+        controller.indexLocations(locations);
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         IndexWriter writer = new IndexWriter(controller.getDir(), config);
         assertEquals(1,writer.getDocStats().maxDoc);
@@ -52,7 +58,11 @@ public class LuceneAnalyzerTest {
         Location testObject = new Location(new LocationIdentifier("123","123"),"Pablo","Pablo Hun", "Pablo","Rom 1", "Rom", "12345","pablo.h@test.com","pablotest@test.de","01234 1512435");
         LuceneIndexService testIt = new LuceneIndexService();
         int testExpected = dir.listAll().length+3;
-        testIt.indexLocation(testObject);
+
+        List<Location> testObjects = new ArrayList<>();
+        testObjects.add(testObject);
+
+        testIt.indexLocations(testObjects);
 
         assertEquals(testExpected,dir.listAll().length);
 

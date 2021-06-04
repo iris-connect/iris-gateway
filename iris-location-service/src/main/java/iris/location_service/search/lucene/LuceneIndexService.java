@@ -111,11 +111,11 @@ public class LuceneIndexService implements SearchIndex {
 
                 // See LocationIdentifier
                 // if location does not exist
-                if(search(location.getName()).isEmpty()){
+                // if(search(location.getName()).isEmpty()){
                     indexNewDocument(createDocument(location));
-                }else{
-                    indexExistingDocument(createDocument(location));
-                }
+                //}else{
+                //    indexExistingDocument(createDocument(location));
+                //}
 
                 // if location exists updateDocument(createDocument(location));
             }
