@@ -1,5 +1,6 @@
 package iris.location_service.search.lucene;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class LuceneSearcher {
 
         private Directory dir;
@@ -46,5 +48,19 @@ public class LuceneSearcher {
                 result.add(indexSearcher.doc(entry.doc));
             }
             return result;
+        }
+
+        public Document searchById(String providerId, String id){
+            try {
+            BooleanQuery.Builder finalQuery = new BooleanQuery.Builder();
+            finalQuery.add(new QueryParser("ProviderId", analyzer).parse(providerId), BooleanClause.Occur.MUST);
+            finalQuery.add(new QueryParser("Id", analyzer).parse(id), BooleanClause.Occur.MUST);
+
+            TopDocs searchResult = indexSearcher.search(finalQuery.build(), 1);
+            return indexSearcher.doc(searchResult.scoreDocs[0].doc);
+            }catch (Exception e){
+                log.error("Error while seacrhById: ", e);
+                return null;
+            }
         }
 }

@@ -18,6 +18,8 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -111,7 +113,7 @@ public class LuceneIndexService implements SearchIndex {
 
                 // See LocationIdentifier
                 // if location does not exist
-                if(search(location.getName()).isEmpty()){
+                if(luceneSearcher.searchById(location.getId().getProviderId(), location.getId().getLocationId()) == null){
                     indexNewDocument(createDocument(location));
                 }else{
                     indexExistingDocument(createDocument(location));
@@ -126,7 +128,7 @@ public class LuceneIndexService implements SearchIndex {
 
     public void deleteLocation(Location location){
         try {
-            deleteDocumentById(String.valueOf(location.getId()));
+            deleteDocumentById(location.getId().getProviderId(), location.getId().getLocationId());
         }catch (Exception e){
             log.error("Error while deleting Location: ", e);
         }
@@ -169,11 +171,12 @@ public class LuceneIndexService implements SearchIndex {
         // ToDo: Implement based on existing ID
     }
 
-    private void deleteDocumentById(String id) throws Exception {
+    private void deleteDocumentById(String providerId,String id) throws Exception {
         // ToDo: Implement based on existing ID
-        QueryParser parser = new QueryParser("Id", analyzer);
-        Query query = parser.parse(id);
-        writer.deleteDocuments(query);
+        BooleanQuery.Builder finalQuery = new BooleanQuery.Builder();
+        finalQuery.add(new QueryParser("ProviderId", analyzer).parse(providerId), BooleanClause.Occur.MUST);
+        finalQuery.add(new QueryParser("Id", analyzer).parse(id), BooleanClause.Occur.MUST);
+        writer.deleteDocuments(finalQuery.build());
         writer.flush();
     }
 
