@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "36828f64-bf9f-4ac1-b5cb-aa802bbd5916",
+		"_postman_id": "0bb25d19-5634-4bef-9944-70975ef4aa7f",
 		"name": "IRIS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -9,10 +9,49 @@
 			"name": "Add locations to search index",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "x-provider-id",
+						"value": "f002f370-bd54-4325-ad91-1aff3bf730a5",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"locations\": [\n        {\n            \"id\": \"0d4b783a-59fa-4687-9bf8-d1f7e15d040d\",\n            \"name\": \"FC Darmstadt\",\n            \"publicKey\": \"FC Darmstadt\",\n            \"contact\": {\n                \"officialName\": \"Fussballclub Darmstadt\",\n                \"representative\": \"Hans Mueller\",\n                \"address\": {\n                    \"street\": \"Testallee 42\",\n                    \"city\": \"Hintertupfingen\",\n                    \"zip\": \"12345\"\n                },\n                \"ownerEmail\": \"tim@smartmeeting.online\",\n                \"email\": \"tim@smartmeeting.online\",\n                \"phone\": \"0151 47110815\"\n            },\n            \"contexts\": [\n                {\n                    \"id\": \"702830d0-7665-400e-821e-1cef4df4c792\",\n                    \"name\": \"Ausssenbereich\"\n                },\n                {\n                    \"id\": \"b220f816-d850-4260-b988-ef0ae171a498\",\n                    \"name\": \"Innenbereich\"\n                }\n            ]\n        },\n        {\n            \"id\": \"7dd80f34-f9cd-456a-9b60-357d0a3485c7\",\n            \"name\": \"Da Michele\",\n            \"publicKey\": \"Da Michele\",\n            \"contact\": {\n                \"officialName\": \"SmartMeeting GmbH\",\n                \"representative\": \"Tim Lusa\",\n                \"address\": {\n                    \"street\": \"Europaplatz 5\",\n                    \"city\": \"Darmstadt\",\n                    \"zip\": \"64293\"\n                },\n                \"ownerEmail\": \"tim@smartmeeting.online\",\n                \"email\": \"tim@smartmeeting.online\",\n                \"phone\": \"0151 47110815\"\n            },\n            \"contexts\": [\n                {\n                    \"id\": \"862b483c-35b8-4de7-a6af-61a30f355b9b\",\n                    \"name\": \"Tisch 1\"\n                }\n            ]\n        }\n    ]\n}",
+					"raw": "{\n  \"locations\": [\n    {\n      \"id\": \"0d4b783a-59fa-4687-9bf8-d1f7e15d040d\",\n      \"name\": \"FC Darmstadt\",\n      \"publicKey\": \"FC Darmstadt\",\n      \"contact\": {\n        \"officialName\": \"Fussballclub Darmstadt\",\n        \"representative\": \"Hans Mueller\",\n        \"address\": {\n          \"street\": \"Testallee 42\",\n          \"city\": \"Hintertupfingen\",\n          \"zip\": \"12345\"\n        },\n        \"ownerEmail\": \"tim@smartmeeting.online\",\n        \"email\": \"tim@smartmeeting.online\",\n        \"phone\": \"0151 47110815\"\n      },\n      \"contexts\": [\n        {\n          \"id\": \"702830d0-7665-400e-821e-1cef4df4c792\",\n          \"name\": \"Ausssenbereich\"\n        },\n        {\n          \"id\": \"b220f816-d850-4260-b988-ef0ae171a498\",\n          \"name\": \"Innenbereich\"\n        }\n      ]\n    },\n    {\n      \"id\": \"7dd80f34-f9cd-456a-9b60-357d0a3485c7\",\n      \"name\": \"Da Michele\",\n      \"publicKey\": \"Da Michele\",\n      \"contact\": {\n        \"officialName\": \"SmartMeeting GmbH\",\n        \"representative\": \"Tim Lusa\",\n        \"address\": {\n          \"street\": \"Europaplatz 5\",\n          \"city\": \"Darmstadt\",\n          \"zip\": \"64293\"\n        },\n        \"ownerEmail\": \"tim@smartmeeting.online\",\n        \"email\": \"tim@smartmeeting.online\",\n        \"phone\": \"0151 47110815\"\n      },\n      \"contexts\": [\n        {\n          \"id\": \"862b483c-35b8-4de7-a6af-61a30f355b9b\",\n          \"name\": \"Tisch 1\"\n        }\n      ]\n    },\n    {\n      \"id\": \"6hc79k34-f9cd-456a-9b60-923d0a3485c7\",\n      \"name\": \"Berlin Döner\",\n      \"publicKey\": \"Berlin Döner\",\n      \"contact\": {\n        \"officialName\": \"Döner GmbH\",\n        \"representative\": \"Gerd Meier\",\n        \"address\": {\n          \"street\": \"Breite Straße 7\",\n          \"city\": \"Darmstadt\",\n          \"zip\": \"64293\"\n        },\n        \"ownerEmail\": \"gerdmeier@t-online.de\",\n        \"email\": \"gerdmeier@t-online.de\",\n        \"phone\": \"0151 34780815\"\n      },\n      \"contexts\": [\n        {\n          \"id\": \"979t5231b-35b8-4de7-a6af-61a30f355b9b\",\n          \"name\": \"Tisch 1\"\n        }\n      ]\n    },\n    {\n      \"id\": \"6td034d34-f9cd-456a-9b60-923d0a3485c7\",\n      \"name\": \"Friseur Mario\",\n      \"publicKey\": \"Friseur Mario\",\n      \"contact\": {\n        \"officialName\": \"Friseur Mario GmbH\",\n        \"representative\": \"Gerd Meier\",\n        \"address\": {\n          \"street\": \"Test Straße 76\",\n          \"city\": \"Darmstadt\",\n          \"zip\": \"64293\"\n        },\n        \"ownerEmail\": \"gerdmeier@t-online.de\",\n        \"email\": \"gerdmeier@t-online.de\",\n        \"phone\": \"0151 34780815\"\n      },\n      \"contexts\": [\n        {\n          \"id\": \"4395f4b1b-35b8-4de7-a6af-61a30f355b9b\",\n          \"name\": \"Platz 1\"\n        }\n      ]\n    },\n    {\n      \"id\": \"1rs924c24-f9cd-456a-9b60-923d0a3485c7\",\n      \"name\": \"Friseursalon Darmstadt\",\n      \"publicKey\": \"Friseursalon Darmstadt\",\n      \"contact\": {\n        \"officialName\": \"Friseursalon Darmstadt GmbH\",\n        \"representative\": \"Gerd Meier\",\n        \"address\": {\n          \"street\": \"Alte Straße 76\",\n          \"city\": \"Darmstadt\",\n          \"zip\": \"64293\"\n        },\n        \"ownerEmail\": \"gerdmeier@t-online.de\",\n        \"email\": \"gerdmeier@t-online.de\",\n        \"phone\": \"0151 34780815\"\n      },\n      \"contexts\": [\n        {\n          \"id\": \"206gf3x1b-35b8-4de7-a6af-61a30f355b9b\",\n          \"name\": \"Platz 1\"\n        }\n      ]\n    },\n    {\n      \"id\": \"67g3s4c24-f9cd-456a-9b60-923d0a3485c7\",\n      \"name\": \"Dart Club Darmstadt\",\n      \"publicKey\": \"Dart Club Darmstadt\",\n      \"contact\": {\n        \"officialName\": \"Dart Club Darmstadt\",\n        \"representative\": \"Gerd Meier\",\n        \"address\": {\n          \"street\": \"Zur Schenke 31\",\n          \"city\": \"Darmstadt\",\n          \"zip\": \"64293\"\n        },\n        \"ownerEmail\": \"gerdmeier@t-online.de\",\n        \"email\": \"gerdmeier@t-online.de\",\n        \"phone\": \"0151 34780815\"\n      },\n      \"contexts\": [\n        {\n          \"id\": \"3k60g3x1b-35b8-4de7-a6af-61a30f355b9b\",\n          \"name\": \"Board 1\"\n        }\n      ]\n    },\n    {\n      \"id\": \"20fh63l57-f9cd-456a-9b60-923d0a3485c7\",\n      \"name\": \"Royal Döner\",\n      \"publicKey\": \"Royal Döner\",\n      \"contact\": {\n        \"officialName\": \"Royal Döner\",\n        \"representative\": \"Gerd Meier\",\n        \"address\": {\n          \"street\": \"Braunschweiger Straße 1\",\n          \"city\": \"Salzgitter\",\n          \"zip\": \"38259\"\n        },\n        \"ownerEmail\": \"gerdmeier@t-online.de\",\n        \"email\": \"gerdmeier@t-online.de\",\n        \"phone\": \"0151 34780815\"\n      },\n      \"contexts\": [\n        {\n          \"id\": \"0e30d3x8d-35b8-4de7-a6af-61a30f355b9b\",\n          \"name\": \"Tisch 1\"\n        }\n      ]\n    },\n    {\n      \"id\": \"329d6g40w2-f9cd-456a-9b60-923d0a3485c7\",\n      \"name\": \"Eiscafe Roma\",\n      \"publicKey\": \"Eiscafe Roma\",\n      \"contact\": {\n        \"officialName\": \"Eiscafe Roma\",\n        \"representative\": \"Gerd Meier\",\n        \"address\": {\n          \"street\": \"Breite Straße 5\",\n          \"city\": \"Salzgitter\",\n          \"zip\": \"38259\"\n        },\n        \"ownerEmail\": \"gerdmeier@t-online.de\",\n        \"email\": \"gerdmeier@t-online.de\",\n        \"phone\": \"0151 34780815\"\n      },\n      \"contexts\": [\n        {\n          \"id\": \"43k20d46s-35b8-4de7-a6af-61a30f355b9b\",\n          \"name\": \"Tisch 1\"\n        }\n      ]\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/search-index/locations",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"search-index",
+						"locations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add locations to s ind. other Provider",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-provider-id",
+						"value": "bcf054fd-c904-484a-acdb-798e151c5142",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"locations\": [\n    {\n      \"id\": \"0d4b783a-59fa-4687-9bf8-d1f7e15d040d\",\n      \"name\": \"Pizzeria de Angelo\",\n      \"publicKey\": \"Pizzeria de Angelo\",\n      \"contact\": {\n        \"officialName\": \"De Angelo GmbH\",\n        \"representative\": \"Gerd Meier\",\n        \"address\": {\n          \"street\": \"Breite Straße 76\",\n          \"city\": \"Darmstadt\",\n          \"zip\": \"64293\"\n        },\n        \"ownerEmail\": \"gerdmeier@t-online.de\",\n        \"email\": \"gerdmeier@t-online.de\",\n        \"phone\": \"0151 34780815\"\n      },\n      \"contexts\": [\n        {\n          \"id\": \"4395f4b1b-35b8-4de7-a6af-61a30f355b9b\",\n          \"name\": \"Tisch 1\"\n        }\n      ]\n    }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -36,7 +75,13 @@
 			"name": "Delete locations from search index",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "x-provider-id",
+						"value": "f002f370-bd54-4325-ad91-1aff3bf730a5",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"locations\": [\n        {\n            \"id\": \"0d4b783a-59fa-4687-9bf8-d1f7e15d040d\",\n            \"name\": \"FC Darmstadt\",\n            \"publicKey\": \"FC Darmstadt\",\n            \"contact\": {\n                \"officialName\": \"Fussballclub Darmstadt\",\n                \"representative\": \"Hans Mueller\",\n                \"address\": {\n                    \"street\": \"Testallee 42\",\n                    \"city\": \"Hintertupfingen\",\n                    \"zip\": \"12345\"\n                },\n                \"ownerEmail\": \"tim@smartmeeting.online\",\n                \"email\": \"tim@smartmeeting.online\",\n                \"phone\": \"0151 47110815\"\n            },\n            \"contexts\": [\n                {\n                    \"id\": \"702830d0-7665-400e-821e-1cef4df4c792\",\n                    \"name\": \"Ausssenbereich\"\n                },\n                {\n                    \"id\": \"b220f816-d850-4260-b988-ef0ae171a498\",\n                    \"name\": \"Innenbereich\"\n                }\n            ]\n        },\n        {\n            \"id\": \"7dd80f34-f9cd-456a-9b60-357d0a3485c7\",\n            \"name\": \"Da Michele\",\n            \"publicKey\": \"Da Michele\",\n            \"contact\": {\n                \"officialName\": \"SmartMeeting GmbH\",\n                \"representative\": \"Tim Lusa\",\n                \"address\": {\n                    \"street\": \"Europaplatz 5\",\n                    \"city\": \"Darmstadt\",\n                    \"zip\": \"64293\"\n                },\n                \"ownerEmail\": \"tim@smartmeeting.online\",\n                \"email\": \"tim@smartmeeting.online\",\n                \"phone\": \"0151 47110815\"\n            },\n            \"contexts\": [\n                {\n                    \"id\": \"862b483c-35b8-4de7-a6af-61a30f355b9b\",\n                    \"name\": \"Tisch 1\"\n                }\n            ]\n        }\n    ]\n}",
@@ -67,7 +112,13 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "x-provider-id",
+						"value": "f002f370-bd54-4325-ad91-1aff3bf730a5",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"locations\": [\n        {\n            \"id\": \"0d4b783a-59fa-4687-9bf8-d1f7e15d040d\",\n            \"name\": \"FC Darmstadt\",\n            \"publicKey\": \"FC Darmstadt\",\n            \"contact\": {\n                \"officialName\": \"Fussballclub Darmstadt\",\n                \"representative\": \"Hans Mueller\",\n                \"address\": {\n                    \"street\": \"Testallee 42\",\n                    \"city\": \"Hintertupfingen\",\n                    \"zip\": \"12345\"\n                },\n                \"ownerEmail\": \"tim@smartmeeting.online\",\n                \"email\": \"tim@smartmeeting.online\",\n                \"phone\": \"0151 47110815\"\n            },\n            \"contexts\": [\n                {\n                    \"id\": \"702830d0-7665-400e-821e-1cef4df4c792\",\n                    \"name\": \"Ausssenbereich\"\n                },\n                {\n                    \"id\": \"b220f816-d850-4260-b988-ef0ae171a498\",\n                    \"name\": \"Innenbereich\"\n                }\n            ]\n        },\n        {\n            \"id\": \"7dd80f34-f9cd-456a-9b60-357d0a3485c7\",\n            \"name\": \"Da Michele\",\n            \"publicKey\": \"Da Michele\",\n            \"contact\": {\n                \"officialName\": \"SmartMeeting GmbH\",\n                \"representative\": \"Tim Lusa\",\n                \"address\": {\n                    \"street\": \"Europaplatz 5\",\n                    \"city\": \"Darmstadt\",\n                    \"zip\": \"64293\"\n                },\n                \"ownerEmail\": \"tim@smartmeeting.online\",\n                \"email\": \"tim@smartmeeting.online\",\n                \"phone\": \"0151 47110815\"\n            },\n            \"contexts\": [\n                {\n                    \"id\": \"862b483c-35b8-4de7-a6af-61a30f355b9b\",\n                    \"name\": \"Tisch 1\"\n                }\n            ]\n        }\n    ]\n}",
