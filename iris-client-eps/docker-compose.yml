@@ -18,6 +18,8 @@ services:
     environment:
       - EPS_SETTINGS=settings/dev/roles/ls-1
     command: [ "--level", "debug", "server", "run" ]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   demo-app:
     image: inoeg/eps:v0.0.4
@@ -32,6 +34,8 @@ services:
     environment:
       - EPS_SETTINGS=settings/dev/roles/demo-app
     command: [ "--level", "trace", "server", "run" ]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   hd-1:
     image: inoeg/eps:v0.0.4
@@ -46,6 +50,8 @@ services:
     environment:
       - EPS_SETTINGS=settings/dev/roles/hd-1
     command: [ "--level", "trace", "server", "run" ]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   public-proxy:
     image: inoeg/proxy:v0.0.4
