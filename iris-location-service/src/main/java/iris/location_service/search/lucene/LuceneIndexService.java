@@ -108,17 +108,13 @@ public class LuceneIndexService implements SearchIndex {
                 // Location: A -> ID: X
                 // Location: B -> ID: X
 
-                //TODO was ist wenn der User eine andere App nutzt zum updaten?
-
                 // See LocationIdentifier
                 // if location does not exist index it else delete old entry and index new one
                 try {
-                    if(luceneSearcher.searchById(location.getId().getProviderId(), location.getId().getLocationId()) == null){
-                        indexDocument(createDocument(location));
-                    }else{
+                    if(luceneSearcher.searchById(location.getId().getProviderId(), location.getId().getLocationId()) != null){
                         deleteDocumentById(location.getId().getProviderId(), location.getId().getLocationId());
-                        indexDocument(createDocument(location));
                     }
+                    indexDocument(createDocument(location));
                 }catch (Exception e){
                     log.error("Error while index location: ", e);
                 }
