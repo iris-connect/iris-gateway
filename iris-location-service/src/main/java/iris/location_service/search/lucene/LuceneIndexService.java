@@ -97,10 +97,6 @@ public class LuceneIndexService implements SearchIndex {
         }
     }
 
-    public void indexLocation(Location location) throws Exception {
-        indexNewDocument(createDocument(location));
-    }
-
     public void indexLocations(List<Location> locations){
         try {
             for(Location location:locations){
