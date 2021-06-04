@@ -38,7 +38,7 @@ public class LuceneSearcher {
             String[] terms = searchString.split(" ");
             for (String term : terms){
                 if(!term.equals("")) {
-                    finalQuery.add(queryParser.parse(term.replace("~","")+"~2"), BooleanClause.Occur.MUST);
+                    finalQuery.add(queryParser.parse(term.replace("~","")+"~2"), BooleanClause.Occur.SHOULD);
                 }
             }
             TopDocs searchResult = indexSearcher.search(finalQuery.build(), LuceneConstants.MAX_SEARCH);
