@@ -52,29 +52,7 @@ public class LuceneAnalyzerTest {
         writer.close();
     }
 
-    @Test
-    public void testWriter() throws Exception{
-        Directory dir = FSDirectory.open(Paths.get("iris-location-service\\src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
-        Location testObject = new Location(new LocationIdentifier("123","123"),"Pablo","Pablo Hun", "Pablo","Rom 1", "Rom", "12345","pablo.h@test.com","pablotest@test.de","01234 1512435");
-        LuceneIndexService testIt = new LuceneIndexService();
-        int testExpected = dir.listAll().length+3;
 
-        List<Location> testObjects = new ArrayList<>();
-        testObjects.add(testObject);
-
-        testIt.indexLocations(testObjects);
-
-        assertEquals(testExpected,dir.listAll().length);
-
-    }
-    @Test
-    public void testSearcher() throws Exception{
-        LuceneIndexService testLuceneObj = new LuceneIndexService();
-        testLuceneObj.search("FC");
-        System.out.println(testLuceneObj.search("FC"));
-
-
-    }
 
 
 }

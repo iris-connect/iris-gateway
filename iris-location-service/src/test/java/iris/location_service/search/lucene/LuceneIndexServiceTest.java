@@ -14,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.context.event.annotation.BeforeTestExecution;
 
+import javax.annotation.PostConstruct;
+import javax.persistence.PostLoad;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ class LuceneIndexServiceTest {
         indexDocument();
     }
 
+    //TODO an den neuen Testdurchlauf anpassen
     @Test
     public void testWriter() throws Exception{
         int testExpected =  FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory())).listAll().length;
@@ -73,6 +76,8 @@ class LuceneIndexServiceTest {
 
         luceneIndexService.indexLocations(testObjects);
     }
+
+
 
 
 }
