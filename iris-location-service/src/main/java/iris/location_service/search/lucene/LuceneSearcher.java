@@ -57,7 +57,11 @@ public class LuceneSearcher {
             finalQuery.add(new QueryParser("Id", analyzer).parse(id), BooleanClause.Occur.MUST);
 
             TopDocs searchResult = indexSearcher.search(finalQuery.build(), 1);
-            return indexSearcher.doc(searchResult.scoreDocs[0].doc);
+            ScoreDoc[] scoreDocs = searchResult.scoreDocs;
+            if(scoreDocs.length > 0 ){
+                return indexSearcher.doc(scoreDocs[0].doc);
+            }
+            return null;
             }catch (Exception e){
                 log.error("Error while seacrhById: ", e);
                 return null;

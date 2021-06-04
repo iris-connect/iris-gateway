@@ -5,7 +5,6 @@ import iris.location_service.dto.LocationContact;
 import iris.location_service.dto.LocationInformation;
 import iris.location_service.search.SearchIndex;
 import iris.location_service.search.db.model.Location;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -100,8 +99,8 @@ public class LuceneIndexService implements SearchIndex {
     }
 
     public void indexLocations(List<Location> locations){
-        try {
             for(Location location:locations){
+
                 // gibt es die Location bereits?
                 // Zwei Anbieter benutzen die selbe id.
                 //Document name -> documentxyz+"-"+providerid+"-"+id
@@ -112,31 +111,27 @@ public class LuceneIndexService implements SearchIndex {
                 //TODO was ist wenn der User eine andere App nutzt zum updaten?
 
                 // See LocationIdentifier
-                // if location does not exist
-                if(luceneSearcher.searchById(location.getId().getProviderId(), location.getId().getLocationId()) == null){
-                    indexNewDocument(createDocument(location));
-                }else{
-                    indexExistingDocument(createDocument(location));
+                // if location does not exist index it else delete old entry and index new one
+                try {
+                    if(luceneSearcher.searchById(location.getId().getProviderId(), location.getId().getLocationId()) == null){
+                        indexDocument(createDocument(location));
+                    }else{
+                        deleteDocumentById(location.getId().getProviderId(), location.getId().getLocationId());
+                        indexDocument(createDocument(location));
+                    }
+                }catch (Exception e){
+                    log.error("Error while index location: ", e);
                 }
-
-                // if location exists updateDocument(createDocument(location));
             }
-        }catch (Exception e){
-            log.error("Error while indexLocations: ", e);
-        }
-    }
-
-    public void deleteLocation(Location location){
-        try {
-            deleteDocumentById(location.getId().getProviderId(), location.getId().getLocationId());
-        }catch (Exception e){
-            log.error("Error while deleting Location: ", e);
-        }
     }
 
     public void deleteLocations(List<Location> locations){
         for(Location location: locations){
-            deleteLocation(location);
+            try {
+                deleteDocumentById(location.getId().getProviderId(), location.getId().getLocationId());
+            }catch (Exception e){
+                log.error("Error while deleting location: ", e);
+            }
         }
     }
 
@@ -162,14 +157,11 @@ public class LuceneIndexService implements SearchIndex {
         return doc;
     }
 
-    private void indexNewDocument(Document doc) throws Exception {
+    private void indexDocument(Document doc) throws Exception {
         writer.addDocument(doc);
         writer.commit();
     }
 
-    private void indexExistingDocument(Document doc) throws Exception {
-        // ToDo: Implement based on existing ID
-    }
 
     private void deleteDocumentById(String providerId,String id) throws Exception {
         // ToDo: Implement based on existing ID
