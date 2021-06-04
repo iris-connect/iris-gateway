@@ -22,7 +22,7 @@ channels: # defines all the channels that we want to open when starting the serv
   - name: main JSON-RPC client # creates outgoing JSONRPC connections to deliver and receive messages
     type: jsonrpc_client
     settings:
-      endpoint: http://public-proxy:6655/jsonrpc
+      endpoint: https://public-proxy:6655/jsonrpc
       server_name: public-proxy
       tls:
         ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
@@ -39,6 +39,11 @@ channels: # defines all the channels that we want to open when starting the serv
     type: jsonrpc_server
     settings:
       bind_address: "0.0.0.0:5544"
+      tls:
+        certificate_file: "$DIR/../../certs/public-proxy-1.crt"
+        key_file: "$DIR/../../certs/public-proxy-1.key"
+        ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
+        verify_client: false
 
 
 
