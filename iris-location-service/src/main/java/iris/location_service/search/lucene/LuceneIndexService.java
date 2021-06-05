@@ -110,6 +110,8 @@ public class LuceneIndexService implements SearchIndex {
 
                 // See LocationIdentifier
                 // if location does not exist index it else delete old entry and index new one
+                // ToDo: Fix multiple documents with the same location and provider id exist -> TestCase.
+                // ToDo: Fix inconsistencies during startup and shutdown.
                 try {
                     if(luceneSearcher.searchById(location.getId().getProviderId(), location.getId().getLocationId()) != null){
                         deleteDocumentById(location.getId().getProviderId(), location.getId().getLocationId());
