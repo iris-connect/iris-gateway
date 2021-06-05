@@ -31,6 +31,13 @@ public class LuceneSearcher {
             indexSearcher = new IndexSearcher(reader);
         }
 
+    /**
+     * Search indexed locations
+     * @param searchString
+     * @return List<Document> of the best results in order
+     * @throws IOException
+     * @throws ParseException
+     */
         public List<Document> search(String searchString) throws IOException, ParseException {
             BooleanQuery.Builder finalQuery = new BooleanQuery.Builder();
             QueryParser queryParser = new MultiFieldQueryParser(LuceneConstants.FIELDS, analyzer);
@@ -50,6 +57,13 @@ public class LuceneSearcher {
             return result;
         }
 
+    /**
+     * Search a indexed location be id
+     * @param providerId Provider id of the location
+     * @param id Location id of the location
+     * @return If the location is found the method returns a Lucene Document with the data of it. Otherwise
+     * the method will return null
+     */
         public Document searchById(String providerId, String id){
             try {
             BooleanQuery.Builder finalQuery = new BooleanQuery.Builder();
