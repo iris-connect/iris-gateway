@@ -12,11 +12,11 @@ data:
       internal_endpoint: {{ .Values.environment }}.iris-gateway.de:{{ .Values.nodePorts.publicProxyInternal }}
       jsonrpc_client:
         endpoint: https://{{ include "iris-gateway.public-proxy-eps" . }}:{{ .Values.publicProxyEps.jsonRpcPort }}/jsonrpc
-        server_name: public-proxy-1
         tls:
           certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
           key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
           ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+          server_name: public-proxy-1
       jsonrpc_server: # the JSON-RPC server that the EPS server uses for communication
         bind_address: "0.0.0.0:{{ .Values.publicProxy.jsonRpcPort }}"
         tls:
