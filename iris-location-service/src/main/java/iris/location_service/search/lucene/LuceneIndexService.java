@@ -71,6 +71,7 @@ public class LuceneIndexService implements SearchIndex {
         dir = FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory()));
 
         writer = new IndexWriter(dir, config);
+        writer.commit();
 
         luceneSearcher = new LuceneSearcher(dir, analyzer);
         }catch (IOException e){
