@@ -33,11 +33,11 @@ data:
         settings:
           # needs to match the endpoint configuration in the spring boot app
           endpoint: http://{{ include "iris-gateway.public-proxy" . }}:{{ .Values.publicProxy.jsonRpcPort }}/jsonrpc
-          server_name: public-proxy-1
           tls:
             ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
             certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
             key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
+            server_name: public-proxy-1
       - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
         type: grpc_client
         settings:
