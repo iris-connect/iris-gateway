@@ -76,8 +76,9 @@ public class LuceneSearcher {
             TopDocs searchResult = indexSearcher.search(finalQuery.build(), 1);
             ScoreDoc[] scoreDocs = searchResult.scoreDocs;
             if(scoreDocs.length > 0 ){
+                Document doc = indexSearcher.doc(scoreDocs[0].doc);
                 indexSearcher.getIndexReader().close();
-                return indexSearcher.doc(scoreDocs[0].doc);
+                return doc;
             }
             }catch (Exception e){
                 log.error("Error while seacrhById: ", e);
