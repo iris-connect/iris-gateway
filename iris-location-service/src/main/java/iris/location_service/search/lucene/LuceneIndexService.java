@@ -168,7 +168,7 @@ public class LuceneIndexService implements SearchIndex {
         finalQuery.add(new QueryParser("ProviderId", analyzer).parse(providerId), BooleanClause.Occur.MUST);
         finalQuery.add(new QueryParser("Id", analyzer).parse(id), BooleanClause.Occur.MUST);
         writer.deleteDocuments(finalQuery.build());
-        writer.flush();
+        writer.commit();
     }
 
     public LocationInformation createLocationInformation(Document document) {
