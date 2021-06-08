@@ -31,7 +31,7 @@ public class LuceneSearcher {
 
     /**
      * Search indexed locations
-     * @param searchString
+     * @param searchString String to search for
      * @return List<Document> of the best results in order
      * @throws IOException
      * @throws ParseException
@@ -53,6 +53,7 @@ public class LuceneSearcher {
             for(ScoreDoc entry:searchResult.scoreDocs){
                 result.add(indexSearcher.doc(entry.doc));
             }
+            indexSearcher.getIndexReader().close();
             return result;
         }
 
@@ -75,11 +76,13 @@ public class LuceneSearcher {
             TopDocs searchResult = indexSearcher.search(finalQuery.build(), 1);
             ScoreDoc[] scoreDocs = searchResult.scoreDocs;
             if(scoreDocs.length > 0 ){
+                indexSearcher.getIndexReader().close();
                 return indexSearcher.doc(scoreDocs[0].doc);
             }
             }catch (Exception e){
                 log.error("Error while seacrhById: ", e);
             }
+            indexSearcher.getIndexReader().close();
             return null;
         }
 
