@@ -113,7 +113,7 @@ public class LuceneIndexService implements SearchIndex {
                 // ToDo: Fix multiple documents with the same location and provider id exist -> TestCase.
                 // ToDo: Fix inconsistencies during startup and shutdown.
                 try {
-                    if(luceneSearcher.searchById(location.getId().getProviderId(), location.getId().getLocationId()) != null){
+                    if(luceneSearcher.searchById(location.getId()) != null){
                         deleteDocumentById(location.getId().getProviderId(), location.getId().getLocationId());
                     }
                     indexDocument(createDocument(location));

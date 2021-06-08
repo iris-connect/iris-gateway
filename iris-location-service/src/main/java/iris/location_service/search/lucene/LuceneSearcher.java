@@ -1,5 +1,6 @@
 package iris.location_service.search.lucene;
 
+import iris.location_service.search.db.model.LocationIdentifier;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -21,14 +22,11 @@ public class LuceneSearcher {
         private Directory dir;
         private Analyzer analyzer;
 
-        private IndexSearcher indexSearcher;
-
         public LuceneSearcher(Directory dir, Analyzer analyzer) throws IOException {
             this.dir = dir;
             this.analyzer = analyzer;
 
-            IndexReader reader = DirectoryReader.open(dir);
-            indexSearcher = new IndexSearcher(reader);
+
         }
 
     /**
@@ -39,6 +37,7 @@ public class LuceneSearcher {
      * @throws ParseException
      */
         public List<Document> search(String searchString) throws IOException, ParseException {
+            IndexSearcher indexSearcher = updateSearcher();
             BooleanQuery.Builder finalQuery = new BooleanQuery.Builder();
             QueryParser queryParser = new MultiFieldQueryParser(LuceneConstants.FIELDS, analyzer);
 
@@ -59,12 +58,15 @@ public class LuceneSearcher {
 
     /**
      * Search a indexed location be id
-     * @param providerId Provider id of the location
-     * @param id Location id of the location
+     * @param locationIdentifier LocationIdentifier for provider and location id
      * @return If the location is found the method returns a Lucene Document with the data of it. Otherwise
      * the method will return null
      */
-        public Document searchById(String providerId, String id){
+        public Document searchById(LocationIdentifier locationIdentifier) throws IOException {
+            String providerId = locationIdentifier.getProviderId();
+            String id = locationIdentifier.getLocationId();
+
+            IndexSearcher indexSearcher = updateSearcher();
             try {
             BooleanQuery.Builder finalQuery = new BooleanQuery.Builder();
             finalQuery.add(new QueryParser("ProviderId", analyzer).parse(providerId), BooleanClause.Occur.MUST);
@@ -75,10 +77,14 @@ public class LuceneSearcher {
             if(scoreDocs.length > 0 ){
                 return indexSearcher.doc(scoreDocs[0].doc);
             }
-            return null;
             }catch (Exception e){
                 log.error("Error while seacrhById: ", e);
-                return null;
             }
+            return null;
+        }
+
+        private IndexSearcher updateSearcher() throws IOException {
+            IndexReader reader = DirectoryReader.open(dir);
+            return new IndexSearcher(reader);
         }
 }
