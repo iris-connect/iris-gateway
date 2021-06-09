@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.boot.actuate.health.Status;
+
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcService;
 
@@ -32,4 +34,6 @@ public interface LocationRPC {
 			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
 			@JsonRpcParam(value = "providerId") String providerId,
 			@JsonRpcParam(value = "locationId") String locationId);
+
+	Status getHealth(@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client);
 }
