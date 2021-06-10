@@ -11,6 +11,8 @@ import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
+import org.springframework.boot.actuate.health.HealthEndpoint;
+import org.springframework.boot.actuate.health.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -24,7 +26,9 @@ import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
 public class LocationRPCImpl implements LocationRPC {
 
 	private final @NotNull LocationService locationService;
+	private final @NotNull HealthEndpoint healthEndpoint;
 
+	@Override
 	public String postLocationsToSearchIndex(JsonRpcClientDto client, List<LocationInformation> locationList) {
 		locationService.addLocations(client.getName(), locationList);
 		return "OK";
@@ -80,4 +84,8 @@ public class LocationRPCImpl implements LocationRPC {
 		return "NOT FOUND";
 	}
 
+	@Override
+	public Status getHealth(JsonRpcClientDto client) {
+		return healthEndpoint.health().getStatus();
+	}
 }
