@@ -28,10 +28,10 @@ IMPORTANT: Make sure you have the Lombok plugin installed in your IDE so that yo
 
 For general information about development (commit messages, branching, …), see the iris-client repository.
 
-https://github.com/iris-gateway/iris-client#dev
+https://github.com/iris-connect/iris-client#dev
 
 === Java parts
 
 Since most Java code of IRIS will be developed in the IRIS client BFF, please refer to its documentation for instructions on developing Java code.
 
-https://github.com/iris-gateway/iris-client#java
+https://github.com/iris-connect/iris-client#java
