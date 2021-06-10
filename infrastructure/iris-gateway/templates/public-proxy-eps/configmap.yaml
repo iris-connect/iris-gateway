@@ -32,7 +32,7 @@ data:
         type: jsonrpc_client
         settings:
           # needs to match the endpoint configuration in the spring boot app
-          endpoint: http://{{ include "iris-gateway.public-proxy" . }}:{{ .Values.publicProxy.jsonRpcPort }}/jsonrpc
+          endpoint: https://{{ include "iris-gateway.public-proxy" . }}:{{ .Values.publicProxy.jsonRpcPort }}/jsonrpc
           tls:
             ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
             certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
