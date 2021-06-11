@@ -15,6 +15,9 @@ spec:
         {{- include "iris-gateway.public-proxy-eps-labels" . | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/public-proxy-eps/configmap.yaml") . | sha256sum }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "2112"
+        prometheus.io/path: "/metrics"
     spec:
       containers:
         - name: public-proxy-eps
@@ -38,6 +41,8 @@ spec:
           env:
             - name: EPS_SETTINGS
               value: {{ .Values.eps.configMountPath }}/settings.yml
+            - name: METRICS_ENABLED
+              value: 'true'
       volumes:
         - name: tls
           secret:
