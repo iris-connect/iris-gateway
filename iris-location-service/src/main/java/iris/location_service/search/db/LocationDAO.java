@@ -53,11 +53,11 @@ public class LocationDAO {
 
 	public Page<Location> searchLocations(String keyword, Pageable pageable) {
 
-		if (isPostgresActive()) {
-			return locationRepo.fulltextSearch(keyword, pageable);
-		} else {
-			return locationRepo.findByNameContainingIgnoreCase(keyword, pageable);
-		}
+		// if (isPostgresActive()) {
+		// return locationRepo.fulltextSearch(keyword, pageable);
+		// } else {
+		return locationRepo.findByNameContainingIgnoreCase(keyword, pageable);
+		// }
 	}
 
 	public Optional<Location> findById(LocationIdentifier ident) {
