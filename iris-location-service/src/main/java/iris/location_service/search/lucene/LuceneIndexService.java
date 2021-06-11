@@ -5,7 +5,6 @@ import iris.location_service.dto.LocationContact;
 import iris.location_service.dto.LocationInformation;
 import iris.location_service.search.SearchIndex;
 import iris.location_service.search.db.model.Location;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +17,8 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -70,6 +71,7 @@ public class LuceneIndexService implements SearchIndex {
         dir = FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory()));
 
         writer = new IndexWriter(dir, config);
+        writer.commit();
 
         luceneSearcher = new LuceneSearcher(dir, analyzer);
         }catch (IOException e){
@@ -97,13 +99,9 @@ public class LuceneIndexService implements SearchIndex {
         }
     }
 
-    public void indexLocation(Location location) throws Exception {
-        indexNewDocument(createDocument(location));
-    }
-
     public void indexLocations(List<Location> locations){
-        try {
             for(Location location:locations){
+
                 // gibt es die Location bereits?
                 // Zwei Anbieter benutzen die selbe id.
                 //Document name -> documentxyz+"-"+providerid+"-"+id
@@ -111,34 +109,28 @@ public class LuceneIndexService implements SearchIndex {
                 // Location: A -> ID: X
                 // Location: B -> ID: X
 
-                //TODO was ist wenn der User eine andere App nutzt zum updaten?
-
                 // See LocationIdentifier
-                // if location does not exist
-                if(search(location.getName()).isEmpty()){
-                    indexNewDocument(createDocument(location));
-                }else{
-                    indexExistingDocument(createDocument(location));
+                // if location does not exist index it else delete old entry and index new one
+                // ToDo: Fix multiple documents with the same location and provider id exist -> TestCase.
+                // ToDo: Fix inconsistencies during startup and shutdown.
+                try {
+                    if(luceneSearcher.searchById(location.getId()) != null){
+                        deleteDocumentById(location.getId().getProviderId(), location.getId().getLocationId());
+                    }
+                    indexDocument(createDocument(location));
+                }catch (Exception e){
+                    log.error("Error while index location: ", e);
                 }
-
-                // if location exists updateDocument(createDocument(location));
             }
-        }catch (Exception e){
-            log.error("Error while indexLocations: ", e);
-        }
-    }
-
-    public void deleteLocation(Location location){
-        try {
-            deleteDocumentById(String.valueOf(location.getId()));
-        }catch (Exception e){
-            log.error("Error while deleting Location: ", e);
-        }
     }
 
     public void deleteLocations(List<Location> locations){
         for(Location location: locations){
-            deleteLocation(location);
+            try {
+                deleteDocumentById(location.getId().getProviderId(), location.getId().getLocationId());
+            }catch (Exception e){
+                log.error("Error while deleting location: ", e);
+            }
         }
     }
 
@@ -164,21 +156,19 @@ public class LuceneIndexService implements SearchIndex {
         return doc;
     }
 
-    private void indexNewDocument(Document doc) throws Exception {
+    private void indexDocument(Document doc) throws Exception {
         writer.addDocument(doc);
         writer.commit();
     }
 
-    private void indexExistingDocument(Document doc) throws Exception {
-        // ToDo: Implement based on existing ID
-    }
 
-    private void deleteDocumentById(String id) throws Exception {
+    private void deleteDocumentById(String providerId,String id) throws Exception {
         // ToDo: Implement based on existing ID
-        QueryParser parser = new QueryParser("Id", analyzer);
-        Query query = parser.parse(id);
-        writer.deleteDocuments(query);
-        writer.flush();
+        BooleanQuery.Builder finalQuery = new BooleanQuery.Builder();
+        finalQuery.add(new QueryParser("ProviderId", analyzer).parse(providerId), BooleanClause.Occur.MUST);
+        finalQuery.add(new QueryParser("Id", analyzer).parse(id), BooleanClause.Occur.MUST);
+        writer.deleteDocuments(finalQuery.build());
+        writer.commit();
     }
 
     public LocationInformation createLocationInformation(Document document) {

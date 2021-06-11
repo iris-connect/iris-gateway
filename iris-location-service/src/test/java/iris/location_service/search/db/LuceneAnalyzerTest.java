@@ -19,6 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,7 +40,11 @@ public class LuceneAnalyzerTest {
         LuceneIndexService controller = new LuceneIndexService() ;
         controller.setAnalyzer(analyzer);
         controller.setDir("target\\luceneTestIndex");
-        controller.indexLocation(location);
+
+        List<Location> locations = new ArrayList<>();
+        locations.add(location);
+
+        controller.indexLocations(locations);
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         IndexWriter writer = new IndexWriter(controller.getDir(), config);
         assertEquals(1,writer.getDocStats().maxDoc);
@@ -46,25 +52,7 @@ public class LuceneAnalyzerTest {
         writer.close();
     }
 
-    @Test
-    public void testWriter() throws Exception{
-        Directory dir = FSDirectory.open(Paths.get("iris-location-service\\src\\main\\java\\iris\\location_service\\search\\lucene\\data"));
-        Location testObject = new Location(new LocationIdentifier("123","123"),"Pablo","Pablo Hun", "Pablo","Rom 1", "Rom", "12345","pablo.h@test.com","pablotest@test.de","01234 1512435");
-        LuceneIndexService testIt = new LuceneIndexService();
-        int testExpected = dir.listAll().length+3;
-        testIt.indexLocation(testObject);
 
-        assertEquals(testExpected,dir.listAll().length);
-
-    }
-    @Test
-    public void testSearcher() throws Exception{
-        LuceneIndexService testLuceneObj = new LuceneIndexService();
-        testLuceneObj.search("FC");
-        System.out.println(testLuceneObj.search("FC"));
-
-
-    }
 
 
 }
