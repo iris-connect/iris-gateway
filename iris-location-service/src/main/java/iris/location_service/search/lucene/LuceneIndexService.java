@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -19,10 +20,8 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +30,9 @@ import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -61,7 +62,11 @@ public class LuceneIndexService implements SearchIndex {
     @PostConstruct
     public void postConstruct() {
         try {
-        analyzer = new StandardAnalyzer();
+
+        Map<String, Analyzer> map = new HashMap();
+        map.put("Id",new LocationAnalyzer());
+        map.put("ProviderId",new LocationAnalyzer());
+        analyzer =  new PerFieldAnalyzerWrapper(new StandardAnalyzer(), map);
 
         //mapper = new ModelMapper();
         //mapper.getConfiguration().setAmbiguityIgnored(true);
