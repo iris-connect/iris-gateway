@@ -1,6 +1,6 @@
 # Security Policy
 
-This document describes the security policy and reporting procedures for the iris-client
+This document describes the security policy and reporting procedures for the iris-gateway
 project.
 
   * [Reporting a Security Issue](#reporting-a-security-issue)
