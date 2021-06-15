@@ -57,6 +57,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
       - name: Prepare k8s config
         run: >
           rm -rf ~/.kube &&
