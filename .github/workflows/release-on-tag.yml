@@ -53,13 +53,12 @@ jobs:
     needs: build
     runs-on: [self-hosted, env-prod]
     container: alpine/helm:3.5.4
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - uses: actions/checkout@v1
-
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
       - name: Prepare k8s config
         run: >
