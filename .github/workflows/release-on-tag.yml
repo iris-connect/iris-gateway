@@ -67,7 +67,7 @@ jobs:
         run: >
           helm upgrade --install
           --namespace iris-gateway
-          --set environment=prod
+          --set environment=production
           --set locations.tag="${{ steps.get_version.outputs.VERSION }}"
           --wait
           --timeout 3m
