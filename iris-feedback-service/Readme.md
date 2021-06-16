@@ -6,7 +6,7 @@ The configuration of the git repository, which is responsible for saving the git
 
 
 ## Starting service
-To start the service the personal access token  has to be passed to the service at startup. With this token the service is able to send post requests to the configured git repository. The following command is used to start the individual Iris-Feedback-Service:
+To start the service the personal access token has to be passed to the service at startup. With this token the service is able to send post requests to the configured git repository. The following command is used to start the individual Iris-Feedback-Service with a specific token <mark>$token</mark>
 ```
-mvn spring-boot:run  -Dspring-boot.run.arguments="--git.personalAccessToken=$token" -am -pl iris-feedback-service
+mvn spring-boot:run  -Dspring-boot.run.arguments="--git.personalAccessToken=<mark>$token</mark>" -am -pl iris-feedback-service
 ```
