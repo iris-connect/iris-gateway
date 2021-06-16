@@ -4,18 +4,18 @@ metadata:
   name: {{ include "iris-gateway.locations-eps" . }}
 data:
   settings.yml: |
-    name: ls-1
+    name: {{ (index .Values.serviceNames .Values.environment).locations }}
     directory:
       type: api
       settings:
         jsonrpc_client:
           tls:
             ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
-            certificate_file: "{{ .Values.tls.mountPath }}/ls-1.crt"
-            key_file: "{{ .Values.tls.mountPath }}/ls-1.key"
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.key"
         ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
         endpoints: [ "https://{{ include "iris-gateway.service-directory" . }}:{{ .Values.nodePorts.serviceDirectory }}/jsonrpc" ]
-        server_names: [ "sd-1" ]
+        server_names: [ "{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}" ]
     channels:  # defines all the channels that we want to open when starting the server
       - name: Stdout channel
         type: stdout
@@ -26,8 +26,8 @@ data:
           bind_address: "0.0.0.0:{{ .Values.nodePorts.locationsEps }}"
           tls:
             ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
-            certificate_file: "{{ .Values.tls.mountPath }}/ls-1.crt"
-            key_file: "{{ .Values.tls.mountPath }}/ls-1.key"
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.key"
       - name: main JSON-RPC client  # creates outgoing JSONRPC connections to deliver and receive messages
         type: jsonrpc_client
         settings:
@@ -38,5 +38,5 @@ data:
         settings:
           tls:
             ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
-            certificate_file: "{{ .Values.tls.mountPath }}/ls-1.crt"
-            key_file: "{{ .Values.tls.mountPath }}/ls-1.key"
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.key"

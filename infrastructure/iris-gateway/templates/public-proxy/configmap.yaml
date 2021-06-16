@@ -5,7 +5,7 @@ metadata:
 data:
   settings.yml: |
     public:
-      name: public-proxy-1
+      name: {{ (index .Values.serviceNames .Values.environment).publicProxy }}
       database_file: {{ .Values.publicProxy.persistentStoragePath }}/public-proxy-announcements.db
       tls_bind_address: 0.0.0.0:{{ .Values.nodePorts.publicProxyTls }}
       internal_bind_address: 0.0.0.0:{{ .Values.nodePorts.publicProxyInternal }}
@@ -13,14 +13,14 @@ data:
       jsonrpc_client:
         endpoint: https://{{ include "iris-gateway.public-proxy-eps" . }}:{{ .Values.publicProxyEps.jsonRpcPort }}/jsonrpc
         tls:
-          certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
-          key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
+          certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
+          key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
           ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
-          server_name: public-proxy-1
+          server_name: {{ (index .Values.serviceNames .Values.environment).publicProxy }}
       jsonrpc_server: # the JSON-RPC server that the EPS server uses for communication
         bind_address: "0.0.0.0:{{ .Values.publicProxy.jsonRpcPort }}"
         tls:
           ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
-          certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
-          key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
+          certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
+          key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
           verify_client: false
