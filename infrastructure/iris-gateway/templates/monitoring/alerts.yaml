@@ -10,7 +10,7 @@ spec:
           annotations:
             message: "Pod {{ "{{ $labels.pod }}" }} is crash looping\n  LABELS: {{ "{{ $labels }}" }}"
             summary: Kubernetes pod repeatedly restarting
-          expr: increase(kube_pod_container_status_restarts_total{namespace="{{ .Release.Namespace }}"}[1m]) > 3
+          expr: increase(kube_pod_container_status_restarts_total{namespace="iris-gateway"}[5m]) > 1
           for: 1m
           labels:
             receiver: iris-alerts-{{ .Values.environment }}
