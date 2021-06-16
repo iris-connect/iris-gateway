@@ -10,6 +10,12 @@ tls:
   keystoreCredentialsSecretName: tls-keystore-credentials
   mountPath: /tls
   secretName: iris-gateway-tls
+  rootCertificates:
+    test:
+      - root.crt
+    production:
+      - self-signed-ca-x1.crt
+      - self-signed-ca-x2.crt
 
 nodePorts:
   locationsEps: 32323

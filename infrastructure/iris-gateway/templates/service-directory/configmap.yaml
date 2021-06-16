@@ -7,9 +7,15 @@ data:
     jsonrpc_server: # the JSON-RPC server that the EPS server uses for communication
       bind_address: "0.0.0.0:{{ .Values.nodePorts.serviceDirectory }}"
       tls:
-        ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+            ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
         certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}.crt"
         key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}.key"
     directory:
       database_file: {{ .Values.serviceDirectory.persistentStoragePath }}/service-directory.records
-      ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+            ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
