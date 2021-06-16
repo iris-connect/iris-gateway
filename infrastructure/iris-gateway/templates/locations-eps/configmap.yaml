@@ -10,10 +10,16 @@ data:
       settings:
         jsonrpc_client:
           tls:
-            ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+            ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
             certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.crt"
             key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.key"
-        ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+        ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+          - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
         endpoints: [ "https://{{ include "iris-gateway.service-directory" . }}:{{ .Values.nodePorts.serviceDirectory }}/jsonrpc" ]
         server_names: [ "{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}" ]
     channels:  # defines all the channels that we want to open when starting the server
@@ -25,7 +31,10 @@ data:
         settings:
           bind_address: "0.0.0.0:{{ .Values.nodePorts.locationsEps }}"
           tls:
-            ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+            ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
             certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.crt"
             key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.key"
       - name: main JSON-RPC client  # creates outgoing JSONRPC connections to deliver and receive messages
@@ -37,6 +46,9 @@ data:
         type: grpc_client
         settings:
           tls:
-            ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
+            ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
             certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.crt"
             key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.key"
