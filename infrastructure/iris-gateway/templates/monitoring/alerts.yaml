@@ -21,3 +21,6 @@ spec:
             message: "Pod {{ "{{ $labels.pod }}" }} is restarting too often: {{ "{{ printf \"%.2f\" $value }}" }} times / 5 minutes\n  LABELS: {{ "{{ $labels }}" }}"
             summary: Pod is restarting too often
           for: 15m
+          labels:
+            receiver: iris-alerts-{{ .Values.environment }}
+            severity: warning
