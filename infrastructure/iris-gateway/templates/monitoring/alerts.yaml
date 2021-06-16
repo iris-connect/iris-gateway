@@ -13,5 +13,5 @@ spec:
           expr: increase(kube_pod_container_status_restarts_total{namespace="{{ .Release.Namespace }}"}[1m]) > 3
           for: 1m
           labels:
-            receiver: iris-alerts-test
+            receiver: iris-alerts-{{ .Values.environment }}
             severity: critical
