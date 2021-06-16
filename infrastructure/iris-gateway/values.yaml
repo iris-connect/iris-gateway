@@ -18,6 +18,16 @@ nodePorts:
   publicProxyInternal: 32326
   publicProxyEps: 32327
 
+serviceNames:
+  test:
+    locations: ls-1
+    publicProxy: public-proxy-1
+    serviceDirectory: sd-1
+  production:
+    locations: locations-production-1
+    publicProxy: public-proxy-production-1
+    serviceDirectory: service-directory-production-1
+
 eps:
   image: inoeg/eps
   configMountPath: /config

@@ -4,18 +4,18 @@ metadata:
   name: {{ include "iris-gateway.public-proxy-eps" . }}
 data:
   settings.yml: |
-    name: public-proxy-1
+    name: {{ (index .Values.serviceNames .Values.environment).publicProxy }}
     directory:
       type: api
       settings:
         jsonrpc_client:
           tls:
             ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
-            certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
-            key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
         ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
         endpoints: [ "https://{{ include "iris-gateway.service-directory" . }}:{{ .Values.nodePorts.serviceDirectory }}/jsonrpc" ]
-        server_names: [ "sd-1" ]
+        server_names: [ "{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}" ]
     channels:  # defines all the channels that we want to open when starting the server
       - name: Stdout channel
         type: stdout
@@ -26,8 +26,8 @@ data:
           bind_address: "0.0.0.0:{{ .Values.nodePorts.publicProxyEps }}"
           tls:
             ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
-            certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
-            key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
       - name: main JSON-RPC client  # creates outgoing JSONRPC connections to deliver and receive messages
         type: jsonrpc_client
         settings:
@@ -35,22 +35,22 @@ data:
           endpoint: https://{{ include "iris-gateway.public-proxy" . }}:{{ .Values.publicProxy.jsonRpcPort }}/jsonrpc
           tls:
             ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
-            certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
-            key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
-            server_name: public-proxy-1
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
+            server_name: {{ (index .Values.serviceNames .Values.environment).publicProxy }}
       - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
         type: grpc_client
         settings:
           tls:
             ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
-            certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
-            key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
       - name: main JSON-RPC server # accepts incoming JSONRPC connections to deliver and receive messages
         type: jsonrpc_server
         settings:
           bind_address: "0.0.0.0:{{ .Values.publicProxyEps.jsonRpcPort }}"
           tls:
             ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
-            certificate_file: "{{ .Values.tls.mountPath }}/public-proxy-1.crt"
-            key_file: "{{ .Values.tls.mountPath }}/public-proxy-1.key"
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
             verify_client: false
