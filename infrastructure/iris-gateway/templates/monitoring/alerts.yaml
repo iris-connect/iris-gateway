@@ -18,7 +18,7 @@ spec:
         - alert: KubernetesPodRestartingTooOften
           expr: rate(kube_pod_container_status_restarts_total{namespace="iris-gateway"}[5m]) * 60 * 5 > 0
           annotations:
-            message: "Pod {{ "{{ $labels.pod }}" }} is restarting too often: {{ "{{ printf \"%.2f\" $value }}" }} times / 5 minutes\n  LABELS: {{ "{{ $labels }}" }}"
+            message: "Pod {{ "{{ $labels.pod }}" }} is restarting too often: {{ "{{ $value }}" }} times / 5 minutes\n  LABELS: {{ "{{ $labels }}" }}"
             summary: Pod is restarting too often
           for: 15m
           labels:
