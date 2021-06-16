@@ -73,7 +73,7 @@ jobs:
           --namespace iris-gateway
           --set environment=production
           --set locations.tag="${{ steps.get_version.outputs.VERSION }}"
-          --wait
+          --atomic
           --timeout 3m
           --debug
           iris-gateway ./infrastructure/iris-gateway
