@@ -8,8 +8,8 @@ data:
       bind_address: "0.0.0.0:{{ .Values.nodePorts.serviceDirectory }}"
       tls:
         ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
-        certificate_file: "{{ .Values.tls.mountPath }}/sd-1.crt"
-        key_file: "{{ .Values.tls.mountPath }}/sd-1.key"
+        certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}.crt"
+        key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}.key"
     directory:
       database_file: {{ .Values.serviceDirectory.persistentStoragePath }}/service-directory.records
       ca_certificate_files: [ "{{ .Values.tls.mountPath }}/root.crt" ]
