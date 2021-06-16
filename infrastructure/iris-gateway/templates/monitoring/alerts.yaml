@@ -6,12 +6,18 @@ spec:
   groups:
     - name: kube-state-metrics
       rules:
-        - alert: KubernetesPodCrashLooping
+        - alert: KubernetesPodNotStarting
+          expr: kube_pod_container_status_waiting_reason{namespace="iris-gateway", reason!="ContainerCreating"} == 1
           annotations:
-            message: "Pod {{ "{{ $labels.pod }}" }} is crash looping\n  LABELS: {{ "{{ $labels }}" }}"
-            summary: Kubernetes pod repeatedly restarting
-          expr: increase(kube_pod_container_status_restarts_total{namespace="iris-gateway"}[5m]) > 1
+            message: "Pod {{ "{{ $labels.pod }}" }} is not able to start: {{ "{{ $labels.reason }}" }}\n  LABELS: {{ "{{ $labels }}" }}"
+            summary: Pod is not able to start
           for: 1m
           labels:
             receiver: iris-alerts-{{ .Values.environment }}
             severity: critical
+        - alert: KubernetesPodRestartingTooOften
+          expr: rate(kube_pod_container_status_restarts_total{namespace="iris-gateway"}[5m]) * 60 * 5 > 0
+          annotations:
+            message: "Pod {{ "{{ $labels.pod }}" }} is restarting too often: {{ "{{ printf \"%.2f\" $value }}" }} times / 5 minutes\n  LABELS: {{ "{{ $labels }}" }}"
+            summary: Pod is restarting too often
+          for: 15m
