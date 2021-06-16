@@ -15,17 +15,17 @@ data:
         tls:
           certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
           key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
-            ca_certificate_files:
+          ca_certificate_files:
 {{- range (index .Values.tls.rootCertificates .Values.environment) }}
-              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+            - "{{ $.Values.tls.mountPath }}/{{ . }}"
 {{- end}}
           server_name: {{ (index .Values.serviceNames .Values.environment).publicProxy }}
       jsonrpc_server: # the JSON-RPC server that the EPS server uses for communication
         bind_address: "0.0.0.0:{{ .Values.publicProxy.jsonRpcPort }}"
         tls:
-            ca_certificate_files:
+          ca_certificate_files:
 {{- range (index .Values.tls.rootCertificates .Values.environment) }}
-              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+            - "{{ $.Values.tls.mountPath }}/{{ . }}"
 {{- end}}
           certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
           key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
