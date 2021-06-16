@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "iris-gateway.fullname" . }}-spring-boot-actuator
+spec:
+  endpoints:
+    - interval: 15s
+      path: /actuator/prometheus
+      port: http
+  selector:
+    matchLabels:
+      prometheusMetricsType: spring-boot-actuator

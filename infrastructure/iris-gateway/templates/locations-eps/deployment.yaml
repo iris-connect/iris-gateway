@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "iris-gateway.locations-eps" . }}
   labels:
-    {{- include "iris-gateway.locations-labels" . | nindent 4 }}
+    {{- include "iris-gateway.locations-eps-labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
