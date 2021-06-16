@@ -45,7 +45,6 @@ If release name contains chart name it will be used as a full name.
 
 {{- define "iris-gateway.locations-labels" -}}
 app.kubernetes.io/name: {{ include "iris-gateway.locations" . }}
-prometheusMetricsType: spring-boot-actuator
 {{- end }}
 
 {{- define "iris-gateway.locations-eps-labels" -}}
