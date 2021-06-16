@@ -4,6 +4,7 @@ metadata:
   name: {{ include "iris-gateway.locations" . }}
   labels:
     {{- include "iris-gateway.locations-labels" . | nindent 4 }}
+    prometheusMetricsType: spring-boot-actuator
 spec:
   ports:
     - port: {{ .Values.locations.port }}
