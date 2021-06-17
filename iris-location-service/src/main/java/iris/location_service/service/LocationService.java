@@ -8,6 +8,7 @@ import iris.location_service.search.db.model.Location;
 import iris.location_service.search.db.model.LocationIdentifier;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,16 +30,29 @@ public class LocationService {
 
 	private final @NotNull DBSearchIndex index;
 
-	public void addLocations(String providerId, List<LocationInformation> locations) {
+	public List<String> addLocations(String providerId, List<LocationInformation> locations) {
 		// TODO: Authenticate API Access
 
-		// TODO: Define sensible limits for this API
+		List<String> listOfInvalidLocations = new ArrayList<String>();
 
 		var data = locations.stream().map(entry -> {
-			return getLocationFromLocationInformation(providerId, entry);
-		}).collect(Collectors.toList());
+			Location location = getLocationFromLocationInformation(providerId, entry);
+			if (entry.getName() == null
+				|| location.getContactRepresentative() == null
+				|| (location.getContactEmail() == null && location.getContactPhone() == null)) {
+				listOfInvalidLocations.add(entry.getId());
+			}
+			return location;
+		})
+			.filter(
+				entry -> entry.getName() != null
+					&& entry.getContactRepresentative() != null
+					&& (entry.getContactEmail() != null || entry.getContactPhone() != null))
+			.collect(Collectors.toList());
 
 		locationDao.saveLocations(data);
+
+		return listOfInvalidLocations;
 	}
 
 	private Location getLocationFromLocationInformation(String providerId, LocationInformation entry) {
@@ -84,8 +98,7 @@ public class LocationService {
 	public Optional<LocationInformation> getLocationByProviderIdAndLocationId(String providerId, String locationId) {
 		var ident = new LocationIdentifier(providerId, locationId);
 
-		return locationDao.findById(ident)
-				.map(this::toDto);
+		return locationDao.findById(ident).map(this::toDto);
 	}
 
 	private LocationInformation toDto(Location it) {
