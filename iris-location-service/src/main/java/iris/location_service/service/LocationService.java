@@ -40,6 +40,8 @@ public class LocationService {
 	public List<String> addLocations(String providerId, List<LocationInformation> locations) {
 		// TODO: Authenticate API Access
 
+		// TODO: Add validation for phone numbers
+
 		List<String> listOfInvalidLocations = new ArrayList<String>();
 
 		var data = locations.stream().map(entry -> {

@@ -22,11 +22,10 @@ public class IrisLocationServiceApplication {
 
 		var properties = PropertiesLoaderUtils.loadAllProperties("git.properties");
 		var banner = new ResourceBanner(new ClassPathResource("iris-banner.txt")) {
+
 			@Override
 			protected String getApplicationVersion(Class<?> sourceClass) {
-				return properties.getProperty("git.build.version", "-") + " ("
-						+ properties.getProperty("git.commit.id.abbrev", "-")
-						+ ")";
+				return properties.getProperty("git.build.version", "-") + " (" + properties.getProperty("git.commit.id.abbrev", "-") + ")";
 			}
 		};
 
