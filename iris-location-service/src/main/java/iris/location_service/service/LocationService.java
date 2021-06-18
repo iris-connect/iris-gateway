@@ -30,6 +30,13 @@ public class LocationService {
 
 	private final @NotNull DBSearchIndex index;
 
+	static boolean isValidEmail(String email) {
+		if (email == null)
+			return false;
+		String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+		return email.matches(regex);
+	}
+
 	public List<String> addLocations(String providerId, List<LocationInformation> locations) {
 		// TODO: Authenticate API Access
 
@@ -39,7 +46,7 @@ public class LocationService {
 			Location location = getLocationFromLocationInformation(providerId, entry);
 			if (entry.getName() == null
 				|| location.getContactRepresentative() == null
-				|| (location.getContactEmail() == null && location.getContactPhone() == null)) {
+				|| (!isValidEmail(location.getContactEmail()) && location.getContactPhone() == null)) {
 				listOfInvalidLocations.add(entry.getId());
 			}
 			return location;
@@ -47,7 +54,7 @@ public class LocationService {
 			.filter(
 				entry -> entry.getName() != null
 					&& entry.getContactRepresentative() != null
-					&& (entry.getContactEmail() != null || entry.getContactPhone() != null))
+					&& (isValidEmail(entry.getContactEmail()) || entry.getContactPhone() != null))
 			.collect(Collectors.toList());
 
 		locationDao.saveLocations(data);
