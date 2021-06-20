@@ -15,6 +15,12 @@ data:
         key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}.key"
     directory:
       database_file: {{ .Values.serviceDirectory.persistentStoragePath }}/service-directory.records
+{{ if .Values.tls.intermediateCertificates }}
+      ca_intermediate_certificate_files:
+{{- range (index .Values.tls.intermediateCertificates .Values.environment) }}
+        - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+{{ end }}
       ca_certificate_files:
 {{- range (index .Values.tls.rootCertificates .Values.environment) }}
         - "{{ $.Values.tls.mountPath }}/{{ . }}"
