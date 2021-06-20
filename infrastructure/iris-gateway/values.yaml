@@ -3,7 +3,7 @@
 #   production: --set environment=production
 environment: undefined
 
-epsRepoTag: v0.1.13
+epsRepoTag: v0.1.14
 
 tls:
   keystoreSecretName: tls-keystore
@@ -16,6 +16,10 @@ tls:
     production:
       - self-signed-ca-x1.crt
       - self-signed-ca-x2.crt
+  intermediateCertificates:
+    production:
+      - inter-r1.crt
+      - inter-r2.crt
 
 nodePorts:
   locationsEps: 32323
