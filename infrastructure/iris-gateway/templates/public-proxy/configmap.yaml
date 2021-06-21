@@ -29,4 +29,4 @@ data:
 {{- end}}
           certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
           key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
-          verify_client: false
+          insecure_skip_verify: true
