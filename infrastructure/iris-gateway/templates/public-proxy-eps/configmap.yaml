@@ -41,7 +41,6 @@ data:
 {{- end}}
             certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
             key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
-            insecure_skip_verify: true
       - name: main JSON-RPC client  # creates outgoing JSONRPC connections to deliver and receive messages
         type: jsonrpc_client
         settings:
@@ -55,7 +54,6 @@ data:
             certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
             key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
             server_name: {{ (index .Values.serviceNames .Values.environment).publicProxy }}
-            insecure_skip_verify: true
       - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
         type: grpc_client
         settings:

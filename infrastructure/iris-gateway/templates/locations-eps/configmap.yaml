@@ -41,7 +41,6 @@ data:
 {{- end}}
             certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.crt"
             key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.key"
-            insecure_skip_verify: true
       - name: main JSON-RPC client  # creates outgoing JSONRPC connections to deliver and receive messages
         type: jsonrpc_client
         settings:

@@ -13,7 +13,6 @@ data:
 {{- end}}
         certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}.crt"
         key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}.key"
-        insecure_skip_verify: true
     directory:
       database_file: {{ .Values.serviceDirectory.persistentStoragePath }}/service-directory.records
       ca_intermediate_certificate_files:
