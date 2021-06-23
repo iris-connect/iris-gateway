@@ -21,4 +21,5 @@ data:
       --column-inserts \
       {{ .Values.postgres.dbName }} > "${DEST}/{{ .Values.postgres.dbName }}.sql"
     echo 'backup succeeded'
-    ls -l "${DEST}"
+    set -x
+    ls -l "${DEST}/{{ .Values.postgres.dbName }}.sql"
