@@ -6,6 +6,8 @@ metadata:
     {{- include "iris-gateway.locations-postgres-backup-labels" . | nindent 4 }}
 spec:
   schedule: '@midnight'
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 10
   jobTemplate:
     spec:
       template:
