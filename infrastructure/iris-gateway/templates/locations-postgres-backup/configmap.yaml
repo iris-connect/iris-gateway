@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "iris-gateway.locations-postgres-backup" . }}
+data:
+  backup.sh: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    # reference: https://simplebackups.io/blog/the-ultimate-postgresql-database-backup-script/
+
+    DIR=$(date +%d-%m-%y)
+    DEST="{{ .Values.postgres.backupDir }}/${DIR}"
+    mkdir -p "${DEST}"
+
+    PGPASSWORD="${POSTGRES_PASSWORD}" pg_dump \
+      --host="${POSTGRES_HOST}" \
+      --username="${POSTGRES_USER}" \
+      --inserts \
+      --column-inserts \
+      {{ .Values.postgres.dbName }} > "${DEST}/{{ .Values.postgres.dbName }}.sql"

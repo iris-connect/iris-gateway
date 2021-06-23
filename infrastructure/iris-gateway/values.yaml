@@ -50,7 +50,9 @@ locations:
 
 postgres:
   storageDir: /var/lib/postgresql/data/pgdata
+  backupDir: /backups
   port: 5432
+  dbName: locations
 
 serviceDirectory:
   image: inoeg/sd
