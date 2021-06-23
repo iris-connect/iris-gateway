@@ -11,7 +11,7 @@ spec:
       template:
         metadata:
           labels:
-            {{- include "iris-gateway.locations-postgres-backup" . | nindent 12 }}
+            {{- include "iris-gateway.locations-postgres-backup-labels" . | nindent 12 }}
           annotations:
             checksum/scripts: {{ include (print $.Template.BasePath "/locations-postgres-backup/configmap.yaml") . | sha256sum }}
         spec:
