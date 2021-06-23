@@ -3,7 +3,7 @@
 #   production: --set environment=production
 environment: undefined
 
-epsRepoTag: v0.1.16
+epsRepoTag: v0.1.18
 
 tls:
   keystoreSecretName: tls-keystore
@@ -13,10 +13,11 @@ tls:
   rootCertificates:
     test:
       - root.crt
+      - dtrust-test-root.crt
     production:
       - self-signed-ca-x1.crt
       - self-signed-ca-x2.crt
-      - dtrust-test-root.crt
+      - dtrust-root.crt
   intermediateCertificates:
     production:
       - inter-r1.crt
