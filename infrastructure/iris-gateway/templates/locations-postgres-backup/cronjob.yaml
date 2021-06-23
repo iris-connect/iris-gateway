@@ -23,7 +23,7 @@ spec:
               command: [ /scripts/backup.sh ]
               envFrom:
                 - secretRef:
-                    name: {{ include "iris-gateway.locations-postgres-backup" . }}
+                    name: {{ include "iris-gateway.locations-postgres" . }}
               volumeMounts:
                 - mountPath: {{ .Values.postgres.backupDir }}
                   name: persistent-storage
