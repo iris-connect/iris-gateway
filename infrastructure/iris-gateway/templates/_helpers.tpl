@@ -31,6 +31,10 @@ If release name contains chart name it will be used as a full name.
 {{ include "iris-gateway.fullname" . }}-locations-postgres
 {{- end }}
 
+{{- define "iris-gateway.locations-postgres-backup" -}}
+{{ include "iris-gateway.fullname" . }}-locations-postgres-backup
+{{- end }}
+
 {{- define "iris-gateway.service-directory" -}}
 {{ include "iris-gateway.fullname" . }}-service-directory
 {{- end }}
@@ -53,6 +57,10 @@ app.kubernetes.io/name: {{ include "iris-gateway.locations-eps" . }}
 
 {{- define "iris-gateway.locations-postgres-labels" -}}
 app.kubernetes.io/name: {{ include "iris-gateway.locations-postgres" . }}
+{{- end }}
+
+{{- define "iris-gateway.locations-postgres-backup-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.locations-postgres-backup" . }}
 {{- end }}
 
 {{- define "iris-gateway.service-directory-labels" -}}
