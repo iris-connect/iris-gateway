@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "iris-gateway.locations-postgres-backup" . }}
+  labels:
+    {{- include "iris-gateway.locations-postgres-backup-labels" . | nindent 4 }}
+spec:
+  schedule: '@midnight'
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "iris-gateway.locations-postgres-backup" . | nindent 12 }}
+          annotations:
+            checksum/scripts: {{ include (print $.Template.BasePath "/locations-postgres-backup/configmap.yaml") . | sha256sum }}
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: postgres
+              image: postgres
+              imagePullPolicy: {{ include "iris-gateway.pullPolicy" . }}
+              command: [ /scripts/backup.sh ]
+              envFrom:
+                - secretRef:
+                    name: {{ include "iris-gateway.locations-postgres-backup" . }}
+              volumeMounts:
+                - mountPath: {{ .Values.postgres.backupDir }}
+                  name: persistent-storage
+                - mountPath: /scripts
+                  name: scripts
+                  readOnly: true
+          volumes:
+            - name: persistent-storage
+              persistentVolumeClaim:
+                claimName: {{ include "iris-gateway.locations-postgres-backup" . }}
+            - name: scripts
+              configMap:
+                name: {{ include "iris-gateway.locations-postgres-backup" . }}
+                defaultMode: 0755
