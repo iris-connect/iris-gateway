@@ -1,7 +1,8 @@
 package iris.demo.contact_diary_app.submission.rpc;
 
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
-import iris.demo.contact_diary_app.submission.rpc.dto.*;
+import iris.demo.contact_diary_app.submission.rpc.dto.CaseSubmissionDto;
+import iris.demo.contact_diary_app.submission.rpc.dto.JsonRPCStringResult;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
