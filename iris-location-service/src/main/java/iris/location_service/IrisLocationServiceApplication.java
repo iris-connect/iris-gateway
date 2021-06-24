@@ -1,6 +1,9 @@
 package iris.location_service;
 
+import iris.location_service.jsonrpc.LocationRPCImpl;
+
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ResourceBanner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,6 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+
+import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImplExporter;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
@@ -32,7 +37,7 @@ public class IrisLocationServiceApplication {
 
 	@Bean
 	public ModelMapper modelMapper() {
-		
+
 		var mapper = new ModelMapper();
 		// mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 		mapper.getConfiguration().setAmbiguityIgnored(true);
@@ -40,4 +45,13 @@ public class IrisLocationServiceApplication {
 
 		return mapper;
 	}
+
+	@Bean
+	public static AutoJsonRpcServiceImplExporter autoJsonRpcServiceImplExporter() {
+		return new AutoJsonRpcServiceImplExporter();
+	}
+
+	@Autowired
+	public LocationRPCImpl locationRPC;
+
 }
