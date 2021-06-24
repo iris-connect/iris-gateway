@@ -1,0 +1,27 @@
+{
+  "contactPersons": [
+    {
+      "firstName": "Hans",
+      "lastName": "Müller",
+      "dateOfBirth": "1985-03-28",
+      "sex": "UNKNOWN",
+      "email": "p5o50dtktj@temporary-mail.net",
+      "phone": "0151 47110815",
+      "mobilePhone": "0151 47110815",
+      "address": {
+        "street": "Lietzensee-Ufer",
+        "houseNumber": "75",
+        "zipCode": "01657",
+        "city": "Meißen"
+      },
+      "workPlace": {
+
+      },
+      "contactInformation": {
+
+      }
+    }
+  ],
+  "startDate": "2021-03-28T19:21:28.071Z",
+  "endDate": "2021-03-28T23:21:28.071Z"
+}

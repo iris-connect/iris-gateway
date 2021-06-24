@@ -1,0 +1,17 @@
+{
+  "events": [
+    {
+      "name": "Restaurant Hirsch",
+      "phone": "12345678",
+      "address": {
+        "street": "Schlossallee",
+        "houseNumber": "42",
+        "zipCode": "12345",
+        "city": "Neustadt"
+      },
+      "additionalInformation": "Nichts"
+    }
+  ],
+  "startDate": "2021-03-28T19:21:28.071Z",
+  "endDate": "2021-03-28T23:21:28.071Z"
+}

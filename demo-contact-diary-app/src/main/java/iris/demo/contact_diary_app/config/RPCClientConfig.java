@@ -6,7 +6,7 @@ import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-//import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.context.annotation.Bean;
@@ -29,10 +29,15 @@ import java.util.HashMap;
 @Getter
 public class RPCClientConfig {
 
-	private final @NonNull String clientUrl;
+	private final @NonNull String proxyClientUrl;
 
 	@Bean
-	public JsonRpcHttpClient rpcClient() throws MalformedURLException, NoSuchAlgorithmException, KeyManagementException {
+	public JsonRpcHttpClient proxyRpcClient()
+			throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+		return rpcClient(proxyClientUrl);
+	}
+
+	public JsonRpcHttpClient rpcClient(String clientUrl) throws MalformedURLException, NoSuchAlgorithmException, KeyManagementException {
 
 		ObjectMapper jacksonObjectMapper = new ObjectMapper();
 		jacksonObjectMapper.registerModule(new JavaTimeModule());
@@ -41,36 +46,36 @@ public class RPCClientConfig {
 				jacksonObjectMapper,
 				new URL(clientUrl),
 				new HashMap<>());
-//
-//		// Can be removed when we include the root certs
-//		SSLContext sc = getAllCertsTrustedSSLContext();
-//		client.setSslContext(sc);
-//		client.setHostNameVerifier(new NoopHostnameVerifier());
-//
-//		// This is SO! important
-//		client.setContentType("application/json");
-//
+
+		// Can be removed when we include the root certs
+		SSLContext sc = getAllCertsTrustedSSLContext();
+		client.setSslContext(sc);
+		client.setHostNameVerifier(new NoopHostnameVerifier());
+
+		// This is SO! important
+		client.setContentType("application/json");
+
 		return client;
 	}
 
-//	private SSLContext getAllCertsTrustedSSLContext() throws NoSuchAlgorithmException, KeyManagementException {
-//		TrustManager[] trustAllCerts = new TrustManager[] {
-//				new X509TrustManager() {
-//					public X509Certificate[] getAcceptedIssuers() {
-//						return null;
-//					}
-//
-//					public void checkClientTrusted(
-//							X509Certificate[] certs, String authType) {}
-//
-//					public void checkServerTrusted(
-//							X509Certificate[] certs, String authType) {}
-//				}
-//		};
-//
-//		SSLContext sc = SSLContext.getInstance("SSL");
-//		sc.init(null, trustAllCerts, new SecureRandom());
-//		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-//		return sc;
-//	}
+	private SSLContext getAllCertsTrustedSSLContext() throws NoSuchAlgorithmException, KeyManagementException {
+		TrustManager[] trustAllCerts = new TrustManager[] {
+				new X509TrustManager() {
+					public X509Certificate[] getAcceptedIssuers() {
+						return null;
+					}
+
+					public void checkClientTrusted(
+							X509Certificate[] certs, String authType) {}
+
+					public void checkServerTrusted(
+							X509Certificate[] certs, String authType) {}
+				}
+		};
+
+		SSLContext sc = SSLContext.getInstance("SSL");
+		sc.init(null, trustAllCerts, new SecureRandom());
+		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+		return sc;
+	}
 }
