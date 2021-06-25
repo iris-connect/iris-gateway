@@ -11,5 +11,5 @@ public class CaseSubmissionDto {
     private UUID dataAuthorizationToken;
     private Contacts contacts;
     private Events events;
-    private CaseDataProvider caseDataProvider;
+    private CaseDataProvider dataProvider;
 }
