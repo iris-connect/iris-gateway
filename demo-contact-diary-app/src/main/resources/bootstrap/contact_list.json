@@ -15,11 +15,26 @@
         "city": "Meißen"
       },
       "workPlace": {
-
+        "name": "Rübezahl AG",
+        "pointOfContact": "Büro",
+        "phone": "0172 898767",
+        "address":{
+          "street": "Heinrich-Heine-Allee",
+          "houseNumber": "12",
+          "zipCode": "45612",
+          "city": "Friesheim"
+        }
       },
       "contactInformation": {
-
+        "firstContactDate": "2021-06-21T14:45:00.000Z",
+        "lastContactDate": "2021-06-28T20:13:00.000Z",
+        "contactCategory": "HIGH_RISK_MED",
+        "basicConditions": "Mit Maske"
       }
+    },
+    {
+      "firstName": "Gertrud",
+      "lastName": "Meier"
     }
   ],
   "startDate": "2021-03-28T19:21:28.071Z",

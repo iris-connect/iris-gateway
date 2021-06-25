@@ -29,7 +29,7 @@ public class SubmissionService {
         CaseSubmissionDto submissionDto = new CaseSubmissionDto(UUID.fromString(submissionData.getDataAuthorizationToken()),
                 contactsLoader.getContacts(), eventsLoader.getEvents(), dataProviderLoader.getDataProvider());
 
-        // TODO: Correct Endpoint
-        epsCaseSubmissionClient.postCaseSubmission(submissionDto, submissionData.getConnectionAuthorizationToken());
+        var result = epsCaseSubmissionClient.postCaseSubmission(submissionDto, submissionData.getConnectionAuthorizationToken());
+        log.info("Submit result: {}", result);
     }
 }
