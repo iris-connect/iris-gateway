@@ -9,6 +9,7 @@ import iris.location_service.dto.LocationInformation;
 import iris.location_service.dto.LocationList;
 import iris.location_service.search.db.DBSearchIndex;
 import iris.location_service.search.db.LocationRepository;
+import iris.location_service.search.lucene.LuceneIndexService;
 import iris.location_service.service.LocationService;
 import lombok.AllArgsConstructor;
 
@@ -43,6 +44,7 @@ public class LocationIndexController {
 	 */
 
 	private final @NotNull LocationService locationService;
+	private final @NotNull LuceneIndexService luceneIndexService;
 	private final ModelMapper mapper;
 	private final LocationRepository locationRepository;
 	private final DBSearchIndex index;
@@ -53,7 +55,10 @@ public class LocationIndexController {
 			@RequestHeader(value = "x-provider-id", required = true) UUID providerId, @PathVariable("id") String id) {
 		// TODO: Authenticate API Access
 
-		if (locationService.deleteLocation(providerId, id))
+//		if (locationService.deleteLocation(providerId, id))
+//			return new ResponseEntity<Void>(HttpStatus.OK);
+
+		if (luceneIndexService.deleteLocation(providerId, id))
 			return new ResponseEntity<Void>(HttpStatus.OK);
 
 		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
@@ -63,7 +68,8 @@ public class LocationIndexController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> postLocationsToSearchIndex(
 			@RequestHeader(value = "x-provider-id", required = true) UUID providerId, @Valid @RequestBody LocationList body) {
-		locationService.addLocations(providerId, body.getLocations());
+//		locationService.addLocations(providerId, body.getLocations());
+		luceneIndexService.indexLocations(providerId, body.getLocations());
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 
@@ -73,7 +79,8 @@ public class LocationIndexController {
 			@Size(min = 4) @PathVariable("search_keyword") String searchKeyword) {
 		// TODO: Authenticate API Access
 
-		return new ResponseEntity<LocationList>(new LocationList(index.search(searchKeyword)), HttpStatus.OK);
+//		return new ResponseEntity<LocationList>(new LocationList(luceneIndexService.search(searchKeyword)), HttpStatus.OK);
+		return new ResponseEntity<LocationList>(new LocationList(luceneIndexService.search(searchKeyword)), HttpStatus.OK);
 	}
 
 	@GetMapping("/search/{providerId}/{locationId}")
@@ -81,8 +88,9 @@ public class LocationIndexController {
 	public ResponseEntity<LocationInformation> getLocation(@PathVariable("providerId") String providerId,
 			@PathVariable("locationId") String locationId) {
 		// TODO: Authenticate API Access
-		Optional<LocationInformation> locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId,
-				locationId);
+//		Optional<LocationInformation> locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId,
+//				locationId);
+		Optional<LocationInformation> locationInformation = luceneIndexService.searchByProviderIdAndLocationId(providerId,locationId);
 
 		return locationInformation.map(ResponseEntity::ok)
 				.orElseGet(ResponseEntity.notFound()::build);
