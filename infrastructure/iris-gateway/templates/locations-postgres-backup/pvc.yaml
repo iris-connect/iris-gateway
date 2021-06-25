@@ -5,9 +5,16 @@ metadata:
   labels:
   {{- include "iris-gateway.locations-postgres-backup-labels" . | nindent 4 }}
 spec:
+{{- if (eq .Values.environment "test") }}
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  volumeName: locations-postgres-backups
+{{- else }}
   accessModes:
     - ReadWriteOnce
-  storageClassName: managed-nfs-storage  # TODO use secondary class, as soon as it is available
+  storageClassName: managed-nfs-storage
+{{- end }}
   resources:
     requests:
       storage: 10Gi
