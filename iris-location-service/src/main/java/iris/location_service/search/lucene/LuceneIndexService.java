@@ -9,7 +9,6 @@ import iris.location_service.search.db.model.LocationIdentifier;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.dynamic.DynamicType;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -30,17 +29,19 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.swing.text.html.Option;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
 
+/**
+ * Initializes the lucene Searcher
+ * provides functions for creating/deleting/searching/indexing locations
+ */
 @Service
 @Slf4j
 public class LuceneIndexService implements SearchIndex {
 
-    @Setter
     private Analyzer analyzer;
 
     @Getter
@@ -52,38 +53,39 @@ public class LuceneIndexService implements SearchIndex {
 
     private @NotNull ModelMapper mapper;
 
-    //private ModelMapper mapper;
-
     @Setter
     @Autowired
     private LuceneIndexServiceProperties luceneIndexServiceProperties;
 
-
+    /**
+     * closes the indexwriter
+     * @throws IOException when indexwriter fails
+     */
     @PreDestroy
     public void preDestroy() throws IOException {
         writer.close();
     }
 
+    /**
+     * initializes analyzer and lucenesearcher
+     */
     @PostConstruct
     public void postConstruct() {
         try {
 
-        Map<String, Analyzer> map = new HashMap();
-        map.put("Id",new LocationAnalyzer());
-        map.put("ProviderId",new LocationAnalyzer());
-        analyzer =  new PerFieldAnalyzerWrapper(new StandardAnalyzer(), map);
+            Map<String, Analyzer> map = new HashMap<>();
+            map.put("Id",new IdAnalyzer());
+            map.put("ProviderId",new IdAnalyzer());
+            analyzer =  new PerFieldAnalyzerWrapper(new StandardAnalyzer(), map);
 
-        //mapper = new ModelMapper();
-        //mapper.getConfiguration().setAmbiguityIgnored(true);
+            var config = new IndexWriterConfig(analyzer);
 
-        var config = new IndexWriterConfig(analyzer);
+            dir = FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory()));
 
-        dir = FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory()));
+            writer = new IndexWriter(dir, config);
+            writer.commit();
 
-        writer = new IndexWriter(dir, config);
-        writer.commit();
-
-        luceneSearcher = new LuceneSearcher(dir, analyzer);
+            luceneSearcher = new LuceneSearcher(dir, analyzer);
         }catch (IOException e){
             log.error("Error can´t init LuceneIndexService: " + e);
             System.out.println("Error in post construct: " + e);
@@ -111,6 +113,12 @@ public class LuceneIndexService implements SearchIndex {
         }
     }
 
+    /**
+     * searches for a location by its location identifier (requires provider and location id)
+     * @param providerId the provider ID
+     * @param locationId the location ID
+     * @return a location information object (or null)
+     */
     public Optional<LocationInformation> searchByProviderIdAndLocationId(String providerId, String locationId){
         LocationInformation result = null;
         try {
@@ -122,17 +130,15 @@ public class LuceneIndexService implements SearchIndex {
         return Optional.of(result);
     }
 
+    /**
+     * indexes a given list of locations
+     * if a given location exists it will be replaced
+     * @param providerId the provider id
+     * @param locations the list of locations
+     */
     public void indexLocations(UUID providerId, List<LocationInformation> locations){
 
         for(LocationInformation locationInfo :locations){
-            // gibt es die Location bereits?
-            // Zwei Anbieter benutzen die selbe id.
-            //Document name -> documentxyz+"-"+providerid+"-"+id
-            // Provider A und B
-            // Location: A -> ID: X
-            // Location: B -> ID: X
-            // See LocationIdentifier
-            // if locationInfo does not exist index it else delete old entry and index new one
             // ToDo: Fix multiple documents with the same locationInfo and provider id exist -> TestCase.
             // ToDo: Fix inconsistencies during startup and shutdown.
             LocationIdentifier locIdent = new LocationIdentifier(providerId.toString(), locationInfo.getId());
@@ -148,6 +154,13 @@ public class LuceneIndexService implements SearchIndex {
         }
     }
 
+    /**
+     * deletes a location of a given id
+     *
+     * @param providerID the provider id
+     * @param locationId the location id
+     * @return bool whether there was no error or not
+     */
     public boolean deleteLocation(UUID providerID, String locationId){
         LocationIdentifier locIdent = new LocationIdentifier(providerID.toString(), locationId);
         try {
@@ -156,9 +169,14 @@ public class LuceneIndexService implements SearchIndex {
             log.error("Error while deleting location: ", e);
             return false;
         }
-        return false;
+        return true;
     }
 
+    /**
+     * creates a new document for a given location
+     * @param location the location object
+     * @return the document
+     */
     private Document createDocument(Location location){
         Document doc = new Document();
         // Is the ID relevant for us?
@@ -181,12 +199,21 @@ public class LuceneIndexService implements SearchIndex {
         return doc;
     }
 
+    /**
+     * adds a given document to the index writer
+     * @param doc the document
+     * @throws Exception thrown when writer fails
+     */
     private void indexDocument(Document doc) throws Exception {
         writer.addDocument(doc);
         writer.commit();
     }
 
-
+    /**
+     * deletes a document by its location identifier
+     * @param locIndent the location identifier
+     * @throws Exception thrown when the writer fails
+     */
     private void deleteDocumentById(LocationIdentifier locIndent) throws Exception {
         String providerId = locIndent.getProviderId();
         String locationId = locIndent.getLocationId();
@@ -198,6 +225,11 @@ public class LuceneIndexService implements SearchIndex {
         writer.commit();
     }
 
+    /**
+     * converts a given document into a location information object
+     * @param document the document
+     * @return the location information object
+     */
     public LocationInformation createLocationInformation(Document document) {
         // Missing: Mapping Document -> Location (verbinden mit Location -> Document)
         //var locationInformation = mapper.map(document , LocationInformation.class);
@@ -223,6 +255,12 @@ public class LuceneIndexService implements SearchIndex {
         return locationInformation;
     }
 
+    /**
+     * creates a location object from an identifier and a location information object
+     * @param locationInfo the location information
+     * @param locIdent the location identifier
+     * @return the new location object
+     */
     private Location createLocation(LocationInformation locationInfo, LocationIdentifier locIdent){
         // Reset possibly sent provider id. We need to ensure this comes from
         // the authentication system and isn't user-provided!
@@ -235,6 +273,11 @@ public class LuceneIndexService implements SearchIndex {
         return location;
     }
 
+    /**
+     * updates the lucene index directory
+     * @param path the new directory path
+     * @throws IOException thrown if path does not exist
+     */
     public void setDir(String path) throws IOException{
         this.dir = FSDirectory.open(Paths.get(path));
     }

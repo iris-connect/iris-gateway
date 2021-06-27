@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
 
+
 @AutoJsonRpcServiceImpl
 @AllArgsConstructor
 @Service
@@ -24,9 +25,10 @@ public class LocationRPCImpl implements LocationRPC {
 
 	private final @NotNull LocationService locationService;
 
+	// todo: override missing?
 	public String postLocationsToSearchIndex(UUID providerId, List<LocationInformation> locationList) {
 		locationService.addLocations(providerId, locationList);
-		return "OK";
+		return "OK"; //todo: error handling ?
 	}
 
 	@Override
