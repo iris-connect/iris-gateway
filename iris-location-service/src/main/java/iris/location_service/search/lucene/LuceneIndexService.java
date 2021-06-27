@@ -139,8 +139,7 @@ public class LuceneIndexService implements SearchIndex {
     public void indexLocations(UUID providerId, List<LocationInformation> locations){
 
         for(LocationInformation locationInfo :locations){
-            // ToDo: Fix multiple documents with the same locationInfo and provider id exist -> TestCase.
-            // ToDo: Fix inconsistencies during startup and shutdown.
+            // ToDo: TestCase multiple documents with the same locationInfo and provider id should not exist
             LocationIdentifier locIdent = new LocationIdentifier(providerId.toString(), locationInfo.getId());
             try {
                 if(luceneSearcher.searchById(locIdent) != null){
@@ -233,10 +232,10 @@ public class LuceneIndexService implements SearchIndex {
     public LocationInformation createLocationInformation(Document document) {
         // Missing: Mapping Document -> Location (verbinden mit Location -> Document)
         //var locationInformation = mapper.map(document , LocationInformation.class);
-        var locationInformation = new LocationInformation();
+        LocationInformation locationInformation = new LocationInformation();
 
-        var locationContact = new LocationContact();
-        var locationAddress = new LocationAddress();
+        LocationContact locationContact = new LocationContact();
+        LocationAddress locationAddress = new LocationAddress();
         locationAddress.setStreet(document.get("ContactAddressStreet"));
         locationAddress.setCity(document.get("ContactAddressCity"));
         locationAddress.setZip(document.get("ContactAddressZip"));
