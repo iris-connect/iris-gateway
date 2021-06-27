@@ -41,7 +41,8 @@ public class LuceneSearcher {
             BooleanQuery.Builder finalQuery = new BooleanQuery.Builder();
             QueryParser queryParser = new MultiFieldQueryParser(LuceneConstants.FIELDS, analyzer);
 
-            String[] terms = searchString.split(" ");
+            searchString = LuceneConstants.escapeLuceneKeywords(searchString);
+            String[] terms = searchString.split("( |\\\\-)");
             for (String term : terms){
                 if(!term.equals("")) {
                     finalQuery.add(queryParser.parse(term.replace("~","")+"~2"), BooleanClause.Occur.SHOULD);
