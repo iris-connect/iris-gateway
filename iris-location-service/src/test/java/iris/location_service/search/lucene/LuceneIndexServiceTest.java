@@ -52,7 +52,16 @@ class LuceneIndexServiceTest {
     void indexDocument() throws Exception {
         Directory dir = FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory()));
         Location testLocation = new Location(new LocationIdentifier("f002f370-bd54-4325-ad91-1aff3bf730a5","123"),"Pablo","Pablo Hun", "Pablo","Rom 1", "Rom", "12345","pablo.h@test.com","pablotest@test.de","01234 1512435");
-        LocationInformation testObject = new LocationInformation();
+
+        List<LocationInformation> list = getNewLocationInformation(testLocation);
+
+
+
+        luceneIndexService.indexLocations(providerId, list);
+    }
+
+    private List<LocationInformation> getNewLocationInformation(Location testLocation) {
+        LocationInformation locInf = new LocationInformation();
 
         LocationContact locationContact = new LocationContact();
         LocationAddress locationAddress = new LocationAddress();
@@ -67,15 +76,15 @@ class LuceneIndexServiceTest {
         locationContact.setPhone(testLocation.getContactPhone());
         locationContact.setRepresentative(testLocation.getContactRepresentative());
 
-        testObject.setId(testLocation.getId().getLocationId());
-        testObject.setProviderId( testLocation.getId().getProviderId());
-        testObject.setName(testLocation.getName());
-        testObject.setContact(locationContact);
+        locInf.setId(testLocation.getId().getLocationId());
+        locInf.setProviderId( testLocation.getId().getProviderId());
+        locInf.setName(testLocation.getName());
+        locInf.setContact(locationContact);
 
-        List<LocationInformation> testObjects = new ArrayList<>();
-        testObjects.add(testObject);
+        List<LocationInformation> locList = new ArrayList<>();
+        locList.add(locInf);
 
-        luceneIndexService.indexLocations(providerId,testObjects);
+        return locList;
     }
 
     //TODO an den neuen Testdurchlauf anpassen
@@ -105,20 +114,47 @@ class LuceneIndexServiceTest {
 
     @Test
     void deleteLocation() throws IOException {
-        Location loc = new Location(new LocationIdentifier("f002f370-bd54-4325-ad91-1aff3bf730a5","123"),"Pablo","Pablo Hun", "Pablo","Rom 1", "Rom", "12345","pablo.h@test.com","pablotest@test.de","01234 1512435");
+        // Location loc = new Location(new LocationIdentifier("f002f370-bd54-4325-ad91-1aff3bf730a5","123"),"Pablo","Pablo Hun", "Pablo","Rom 1", "Rom", "12345","pablo.h@test.com","pablotest@test.de","01234 1512435");
         int previous = luceneIndexService.search("Pablo").size();
         int previousCount = FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory())).listAll().length;
 
         System.out.println("Anzahl gefundener Doc vor dem Löschen: " + previous);
-        luceneIndexService.deleteLocation(providerId,loc.getId().getLocationId());
+        luceneIndexService.deleteLocation(providerId, "123");
 
         int expected = luceneIndexService.search("Pablo").size();
         int expectedCount = FSDirectory.open(Paths.get(luceneIndexServiceProperties.getIndexDirectory())).listAll().length;
         System.out.println("Anzahl gefundener Doc nach dem Löschen: " + expected);
 
-
-
         assertTrue(previous > expected && previousCount == expectedCount+3);
+    }
+
+    @Test
+    void checkIfLocationInformationUpdatesWhenSameID() throws IOException {
+        int sizeBeforeUpdate = luceneIndexService.search("Pablo").size();
+        assertEquals(1, sizeBeforeUpdate);
+
+        Location testLocation = new Location(new LocationIdentifier("f002f370-bd54-4325-ad91-1aff3bf730a5","123"),"Escobar","Escobar Test", "Escobar","Rom 1", "Rom", "12345","Escobar.h@test.com","Escobartest@test.de","01234 1512435");
+        List<LocationInformation> list = getNewLocationInformation(testLocation);
+        luceneIndexService.indexLocations(providerId, list);
+
+        int sizeAfterUpdate = luceneIndexService.search("Pablo").size();
+        assertEquals(0, sizeAfterUpdate);
+
+        int sizeAfterUpdate2 = luceneIndexService.search("Escobar").size();
+        assertEquals(1, sizeAfterUpdate2);
+    }
+
+    @Test
+    void checkIfLocationIdentifierIsUnique() throws IOException {
+        long locationCount = luceneIndexService.searchByProviderIdAndLocationId("f002f370-bd54-4325-ad91-1aff3bf730a5", "123").stream().count();
+        assertEquals(1, locationCount);
+
+        Location testLocation = new Location(new LocationIdentifier("f002f370-bd54-4325-ad91-1aff3bf730a5","123"),"Escobar","Escobar Test", "Escobar","Rom 1", "Rom", "12345","Escobar.h@test.com","Escobartest@test.de","01234 1512435");
+        List<LocationInformation> list = getNewLocationInformation(testLocation);
+        luceneIndexService.indexLocations(providerId, list);
+
+        long locationCount2 = luceneIndexService.searchByProviderIdAndLocationId("f002f370-bd54-4325-ad91-1aff3bf730a5", "123").stream().count();
+        assertEquals(1, locationCount2);
     }
 
 }

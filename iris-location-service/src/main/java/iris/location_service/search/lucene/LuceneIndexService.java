@@ -139,7 +139,6 @@ public class LuceneIndexService implements SearchIndex {
     public void indexLocations(UUID providerId, List<LocationInformation> locations){
 
         for(LocationInformation locationInfo :locations){
-            // ToDo: TestCase multiple documents with the same locationInfo and provider id should not exist
             LocationIdentifier locIdent = new LocationIdentifier(providerId.toString(), locationInfo.getId());
             try {
                 if(luceneSearcher.searchById(locIdent) != null){
