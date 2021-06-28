@@ -120,14 +120,13 @@ public class LuceneIndexService implements SearchIndex {
      * @return a location information object (or null)
      */
     public Optional<LocationInformation> searchByProviderIdAndLocationId(String providerId, String locationId){
-        LocationInformation result = null;
         try {
             Document location = luceneSearcher.searchById(new LocationIdentifier(providerId, locationId));
-            result = createLocationInformation(location);
+            return Optional.of(createLocationInformation(location));
         } catch (IOException e) {
             log.error("Error while searching by LocationIdentifier for [{},{}]", providerId, locationId, e);
+            return Optional.empty();
         }
-        return Optional.of(result);
     }
 
     /**
