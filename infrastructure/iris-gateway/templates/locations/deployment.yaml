@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "iris-gateway.locations" . }}
+  labels:
+    {{- include "iris-gateway.locations-labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "iris-gateway.locations-labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "iris-gateway.locations-labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: location
+          image: {{ .Values.locations.image }}:{{ .Values.locations.tag }}
+          imagePullPolicy: {{ include "iris-gateway.pullPolicy" . }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: postgres
+            - name: POSTGRES_DATABASE
+              value: {{ .Values.postgres.dbName }}
+          envFrom:
+            - secretRef:
+                name: {{ include "iris-gateway.locations-postgres" . }}
+          livenessProbe:
+            httpGet:
+              port: {{ .Values.locations.port }}
+              path: /actuator/health/liveness
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.locations.port }}
+              path: /actuator/health/readiness
+            initialDelaySeconds: 20
+            timeoutSeconds: 5
+          ports:
+            - name: http
+              containerPort: {{ .Values.locations.port }}
+              protocol: TCP

@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "iris-gateway.public-proxy-eps" . }}
+data:
+  settings.yml: |
+    name: {{ (index .Values.serviceNames .Values.environment).publicProxy }}
+    directory:
+      type: api
+      settings:
+        jsonrpc_client:
+          tls:
+            ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
+        ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+          - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+        ca_intermediate_certificate_files:
+{{- range (index .Values.tls.intermediateCertificates .Values.environment) }}
+          - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+        endpoints: [ "https://{{ include "iris-gateway.service-directory" . }}:{{ .Values.nodePorts.serviceDirectory }}/jsonrpc" ]
+        server_names: [ "{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}" ]
+    channels:  # defines all the channels that we want to open when starting the server
+      - name: Stdout channel
+        type: stdout
+        settings: {}
+      - name: main gRPC server  # accepts incoming gRPC connections to deliver and receive messages
+        type: grpc_server
+        settings:
+          bind_address: "0.0.0.0:{{ .Values.nodePorts.publicProxyEps }}"
+          tls:
+            ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
+      - name: main JSON-RPC client  # creates outgoing JSONRPC connections to deliver and receive messages
+        type: jsonrpc_client
+        settings:
+          # needs to match the endpoint configuration in the spring boot app
+          endpoint: https://{{ include "iris-gateway.public-proxy" . }}:{{ .Values.publicProxy.jsonRpcPort }}/jsonrpc
+          tls:
+            ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
+            server_name: {{ (index .Values.serviceNames .Values.environment).publicProxy }}
+      - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
+        type: grpc_client
+        settings:
+          tls:
+            ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
+      - name: main JSON-RPC server # accepts incoming JSONRPC connections to deliver and receive messages
+        type: jsonrpc_server
+        settings:
+          bind_address: "0.0.0.0:{{ .Values.publicProxyEps.jsonRpcPort }}"
+          tls:
+            ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"

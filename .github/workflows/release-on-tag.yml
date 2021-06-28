@@ -4,21 +4,20 @@ on:
   push:
     tags:
       - 'v*'
-
-defaults:
-  run:
-    shell: bash
-
+      
 jobs:
   build:
     runs-on: ubuntu-20.04
-
+    defaults:
+      run:
+        shell: bash
+        
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       - name: Cache local Maven repository
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.6
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -49,3 +48,32 @@ jobs:
             **/deployment-${{ steps.get_version.outputs.VERSION }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deployment:
+    needs: build
+    runs-on: [self-hosted, env-prod]
+    container: alpine/helm:3.5.4
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+      - name: Prepare k8s config
+        run: >
+          rm -rf ~/.kube &&
+          mkdir ~/.kube &&
+          echo "${{ secrets.KUBECONFIG_PROD }}" > ~/.kube/config
+
+      - name: Run helm deployment
+        run: >
+          helm upgrade --install
+          --namespace iris-gateway
+          --set environment=production
+          --set locations.tag="${{ steps.get_version.outputs.VERSION }}"
+          --atomic
+          --timeout 3m
+          --debug
+          iris-gateway ./infrastructure/iris-gateway

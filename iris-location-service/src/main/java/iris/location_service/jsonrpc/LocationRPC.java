@@ -1,11 +1,14 @@
 package iris.location_service.jsonrpc;
 
 import iris.location_service.dto.LocationInformation;
-import iris.location_service.dto.LocationList;
 import iris.location_service.dto.LocationOverviewDto;
+import iris.location_service.dto.LocationQueryResult;
 
 import java.util.List;
-import java.util.UUID;
+
+import javax.validation.Valid;
+
+import org.springframework.boot.actuate.health.Status;
 
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcService;
@@ -23,7 +26,7 @@ public interface LocationRPC {
 	 * @return status response string
 	 */
 	String postLocationsToSearchIndex(
-			@JsonRpcParam(value = "providerId") UUID providerId,
+			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
 			@JsonRpcParam(value = "locations") List<LocationInformation> locationList);
 
 	/**
@@ -31,7 +34,7 @@ public interface LocationRPC {
 	 * @param providerId the provider ID
 	 * @return list of Locationreferences
 	 */
-	List<LocationOverviewDto> getProviderLocations(@JsonRpcParam(value = "providerId") UUID providerId);
+	List<LocationOverviewDto> getProviderLocations(@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client);
 
 	/**
 	 * deletes a specified location
@@ -40,7 +43,7 @@ public interface LocationRPC {
 	 * @return a response string
 	 */
 	String deleteLocationFromSearchIndex(
-			@JsonRpcParam(value = "providerId") UUID providerId,
+			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
 			@JsonRpcParam(value = "locationId") String locationId);
 
 	/**
@@ -48,7 +51,10 @@ public interface LocationRPC {
 	 * @param searchKeyword the keyword
 	 * @return a locationlist object containing all matching locations
 	 */
-	LocationList searchForLocation(@JsonRpcParam(value = "searchKeyword") String searchKeyword);
+	LocationQueryResult searchForLocation(
+			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
+			@JsonRpcParam(value = "searchKeyword") String searchKeyword,
+			@JsonRpcParam(value = "pageable") PageableDto pageable);
 
 	/**
 	 * returns an object containing all data about a given location
@@ -57,6 +63,9 @@ public interface LocationRPC {
 	 * @return a LocationInformation object
 	 */
 	Object getLocationDetails(
+			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
 			@JsonRpcParam(value = "providerId") String providerId,
 			@JsonRpcParam(value = "locationId") String locationId);
+
+	Status getHealth(@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client);
 }

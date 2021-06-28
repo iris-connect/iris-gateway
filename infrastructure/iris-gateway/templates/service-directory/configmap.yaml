@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "iris-gateway.service-directory" . }}
+data:
+  settings.yml: |
+    jsonrpc_server: # the JSON-RPC server that the EPS server uses for communication
+      bind_address: "0.0.0.0:{{ .Values.nodePorts.serviceDirectory }}"
+      tls:
+        ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+          - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+        certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}.crt"
+        key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}.key"
+    directory:
+      database_file: {{ .Values.serviceDirectory.persistentStoragePath }}/service-directory.records
+      ca_intermediate_certificate_files:
+{{- range (index .Values.tls.intermediateCertificates .Values.environment) }}
+        - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+      ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+        - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}

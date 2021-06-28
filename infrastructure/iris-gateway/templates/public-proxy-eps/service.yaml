@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "iris-gateway.public-proxy-eps" . }}
+  labels:
+    {{- include "iris-gateway.public-proxy-eps-labels" . | nindent 4 }}
+spec:
+  type: NodePort
+  ports:
+    - port: {{ .Values.nodePorts.publicProxyEps }}
+      targetPort: node-port-eps
+      nodePort: {{ .Values.nodePorts.publicProxyEps }}
+      protocol: TCP
+      name: node-port-eps
+    - port: {{ .Values.publicProxyEps.jsonRpcPort }}
+      targetPort: json-rpc-eps
+      protocol: TCP
+      name: json-rpc-eps
+  selector:
+    {{- include "iris-gateway.public-proxy-eps-labels" . | nindent 4 }}

@@ -28,15 +28,6 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -46,6 +37,15 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
@@ -66,11 +66,22 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- for health checks used in k8s cluster-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
         <!-- Third party libs -->
         <dependency>
@@ -114,16 +125,16 @@
             <type>pom</type>
         </dependency>
 
-		<!--Spring Docs -->
-		<dependency>
-			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.5.7</version>
-		</dependency>
+        <!--Spring Docs -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.5.7</version>
+        </dependency>
     </dependencies>
 
     <build>
-    	<finalName>${project.artifactId}-${version.tag}</finalName>
+        <finalName>${project.artifactId}-${version.tag}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -142,29 +153,28 @@
                         <name>${docker.image.prefix}/${project.artifactId}:${version.tag}</name>
                         <env>
                             <!-- embeds environment variables into an image: https://github.com/paketo-buildpacks/environment-variables -->
-                            <BPE_SPRING_PROFILES_ACTIVE>docker</BPE_SPRING_PROFILES_ACTIVE>
                             <!-- with GraalVM <BP_BOOT_NATIVE_IMAGE>true</BP_BOOT_NATIVE_IMAGE> -->
                         </env>
                     </image>
-					<docker>
-						<publishRegistry>
-							<username>${env.DOCKER_HUB_USER}</username>
-							<password>${env.DOCKER_HUB_PW}</password>
-							<!-- <token></token>
-							<url>https://docker.example.com/v1/</url>
-							<email>user@example.com</email>-->
-						</publishRegistry>
-					</docker>
+                    <docker>
+                        <publishRegistry>
+                            <username>${env.DOCKER_HUB_USER}</username>
+                            <password>${env.DOCKER_HUB_PW}</password>
+                            <!-- <token></token>
+                            <url>https://docker.example.com/v1/</url>
+                            <email>user@example.com</email>-->
+                        </publishRegistry>
+                    </docker>
                 </configuration>
             </plugin>
 
-			<plugin>
-				<groupId>pl.project13.maven</groupId>
-				<artifactId>git-commit-id-plugin</artifactId>
-				<configuration>
-					<offline>true</offline>
-				</configuration>
-			</plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <configuration>
+                    <offline>true</offline>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

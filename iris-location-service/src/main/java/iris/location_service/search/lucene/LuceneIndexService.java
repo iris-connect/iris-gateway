@@ -25,6 +25,9 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -95,7 +98,7 @@ public class LuceneIndexService implements SearchIndex {
     }
 
     @Override
-    public List<LocationInformation> search(String keyword){
+    public Page<LocationInformation> search(String keyword, Pageable pageable){
         try{
 
             // search
@@ -106,10 +109,12 @@ public class LuceneIndexService implements SearchIndex {
             for(Document entry:results){
                 locationList.add(createLocationInformation(entry));
             }
-            return locationList;
+            // ToDo: Pageable result
+            // return locationList;
+            return null;
         } catch (IOException | ParseException e) {
             log.error("Error while searching for [{}]: ", keyword, e);
-            return new ArrayList<>();
+            return new PageImpl(new ArrayList<>());
         }
     }
 

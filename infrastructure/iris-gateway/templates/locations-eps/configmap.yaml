@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "iris-gateway.locations-eps" . }}
+data:
+  settings.yml: |
+    name: {{ (index .Values.serviceNames .Values.environment).locations }}
+    directory:
+      type: api
+      settings:
+        jsonrpc_client:
+          tls:
+            ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.key"
+        ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+          - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+        ca_intermediate_certificate_files:
+{{- range (index .Values.tls.intermediateCertificates .Values.environment) }}
+          - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+        endpoints: [ "https://{{ include "iris-gateway.service-directory" . }}:{{ .Values.nodePorts.serviceDirectory }}/jsonrpc" ]
+        server_names: [ "{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}" ]
+    channels:  # defines all the channels that we want to open when starting the server
+      - name: Stdout channel
+        type: stdout
+        settings: {}
+      - name: main gRPC server  # accepts incoming gRPC connections to deliver and receive messages
+        type: grpc_server
+        settings:
+          bind_address: "0.0.0.0:{{ .Values.nodePorts.locationsEps }}"
+          tls:
+            ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.key"
+      - name: main JSON-RPC client  # creates outgoing JSONRPC connections to deliver and receive messages
+        type: jsonrpc_client
+        settings:
+          # needs to match the endpoint configuration in the spring boot app
+          endpoint: http://{{ include "iris-gateway.locations" . }}:{{ .Values.locations.port }}/location-rpc
+      - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
+        type: grpc_client
+        settings:
+          tls:
+            ca_certificate_files:
+{{- range (index .Values.tls.rootCertificates .Values.environment) }}
+              - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
+            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.crt"
+            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.key"

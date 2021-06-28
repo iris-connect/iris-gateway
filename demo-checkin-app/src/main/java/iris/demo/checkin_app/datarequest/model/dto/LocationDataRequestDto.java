@@ -5,8 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Data
 @NoArgsConstructor
@@ -14,31 +18,22 @@ import java.time.Instant;
 @Builder
 public class LocationDataRequestDto {
 
-    @NotNull
-    private String healthDepartment;
+	@NotNull
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "UTC")
+	private Instant start;
 
-    @NotNull
-    private String keyOfHealthDepartment;
+	@NotNull
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "UTC")
+	private Instant end;
 
-    @NotNull
-    private Instant start;
+	private String requestDetails;
 
-    @NotNull
-    private Instant end;
+	@NotNull
+	private UUID dataAuthorizationToken;
 
-    private String requestDetails;
+	@NotNull
+	private String locationId;
 
-    @NotNull
-    private String submissionUri;
-
-    @NotNull
-    private String locationId;
-
-    /**
-     * Reference id of the given key.
-     * This reference must be included in the submission in order to identify the
-     * correct private key for decryption at the health department.
-     */
-    private String keyReference;
+	private String hdEndpoint;
 
 }
