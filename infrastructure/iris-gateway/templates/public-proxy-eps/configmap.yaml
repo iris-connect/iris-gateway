@@ -20,6 +20,10 @@ data:
 {{- range (index .Values.tls.rootCertificates .Values.environment) }}
           - "{{ $.Values.tls.mountPath }}/{{ . }}"
 {{- end}}
+        ca_intermediate_certificate_files:
+{{- range (index .Values.tls.intermediateCertificates .Values.environment) }}
+          - "{{ $.Values.tls.mountPath }}/{{ . }}"
+{{- end}}
         endpoints: [ "https://{{ include "iris-gateway.service-directory" . }}:{{ .Values.nodePorts.serviceDirectory }}/jsonrpc" ]
         server_names: [ "{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}" ]
     channels:  # defines all the channels that we want to open when starting the server
@@ -71,4 +75,3 @@ data:
 {{- end}}
             certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.crt"
             key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).publicProxy }}.key"
-            verify_client: false

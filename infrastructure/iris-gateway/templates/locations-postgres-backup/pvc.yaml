@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "iris-gateway.locations-postgres-backup" . }}
+  labels:
+  {{- include "iris-gateway.locations-postgres-backup-labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: managed-nfs-storage  # TODO use secondary class, as soon as it is available
+  resources:
+    requests:
+      storage: 10Gi

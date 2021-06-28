@@ -3,7 +3,7 @@
 #   production: --set environment=production
 environment: undefined
 
-epsRepoTag: v0.1.13
+epsRepoTag: v0.1.22
 
 tls:
   keystoreSecretName: tls-keystore
@@ -13,9 +13,15 @@ tls:
   rootCertificates:
     test:
       - root.crt
+      - dtrust-test-root.crt
     production:
       - self-signed-ca-x1.crt
       - self-signed-ca-x2.crt
+      - dtrust-root.crt
+  intermediateCertificates:
+    production:
+      - inter-r1.crt
+      - inter-r2.crt
 
 nodePorts:
   locationsEps: 32323
@@ -45,7 +51,9 @@ locations:
 
 postgres:
   storageDir: /var/lib/postgresql/data/pgdata
+  backupDir: /backups
   port: 5432
+  dbName: locations
 
 serviceDirectory:
   image: inoeg/sd
