@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "iris-gateway.locations-postgres" . }}
+  labels:
+    {{- include "iris-gateway.locations-postgres-labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "iris-gateway.locations-postgres-labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "iris-gateway.locations-postgres-labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: postgres
+          image: postgres
+          imagePullPolicy: {{ include "iris-gateway.pullPolicy" . }}
+          ports:
+            - name: tcp
+              containerPort: {{ .Values.postgres.port }}
+              protocol: TCP
+          env:
+            - name: POSTGRES_DB
+              value: {{ .Values.postgres.dbName }}
+            - name: PGDATA
+              value: {{ .Values.postgres.storageDir }}
+          envFrom:
+            - secretRef:
+                name: {{ include "iris-gateway.locations-postgres" . }}
+          volumeMounts:
+            - mountPath: {{ .Values.postgres.storageDir }}
+              name: persistent-storage
+      volumes:
+        - name: persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ include "iris-gateway.locations-postgres" . }}

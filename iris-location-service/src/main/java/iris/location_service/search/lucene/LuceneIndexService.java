@@ -25,6 +25,9 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -95,7 +98,7 @@ public class LuceneIndexService implements SearchIndex {
     }
 
     @Override
-    public List<LocationInformation> search(String keyword){
+    public Page<LocationInformation> search(String keyword, Pageable pageable){
         try{
 
             // search
@@ -106,10 +109,12 @@ public class LuceneIndexService implements SearchIndex {
             for(Document entry:results){
                 locationList.add(createLocationInformation(entry));
             }
-            return locationList;
+            // ToDo: Pageable result
+            // return locationList;
+            return null;
         } catch (IOException | ParseException e) {
             log.error("Error while searching for [{}]: ", keyword, e);
-            return new ArrayList<>();
+            return new PageImpl(new ArrayList<>());
         }
     }
 
@@ -138,8 +143,6 @@ public class LuceneIndexService implements SearchIndex {
     public void indexLocations(UUID providerId, List<LocationInformation> locations){
 
         for(LocationInformation locationInfo :locations){
-            // ToDo: Fix multiple documents with the same locationInfo and provider id exist -> TestCase.
-            // ToDo: Fix inconsistencies during startup and shutdown.
             LocationIdentifier locIdent = new LocationIdentifier(providerId.toString(), locationInfo.getId());
             try {
                 if(luceneSearcher.searchById(locIdent) != null){
@@ -232,10 +235,10 @@ public class LuceneIndexService implements SearchIndex {
     public LocationInformation createLocationInformation(Document document) {
         // Missing: Mapping Document -> Location (verbinden mit Location -> Document)
         //var locationInformation = mapper.map(document , LocationInformation.class);
-        var locationInformation = new LocationInformation();
+        LocationInformation locationInformation = new LocationInformation();
 
-        var locationContact = new LocationContact();
-        var locationAddress = new LocationAddress();
+        LocationContact locationContact = new LocationContact();
+        LocationAddress locationAddress = new LocationAddress();
         locationAddress.setStreet(document.get("ContactAddressStreet"));
         locationAddress.setCity(document.get("ContactAddressCity"));
         locationAddress.setZip(document.get("ContactAddressZip"));

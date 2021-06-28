@@ -19,28 +19,60 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 
-{{- define "iris-gateway.public" -}}
-{{- include "iris-gateway.fullname" . }}-public
+{{- define "iris-gateway.locations" -}}
+{{- include "iris-gateway.fullname" . }}-locations
 {{- end }}
 
-{{- define "iris-gateway.public-labels" -}}
-app.kubernetes.io/name: {{ include "iris-gateway.public" . }}
+{{- define "iris-gateway.locations-eps" -}}
+{{- include "iris-gateway.fullname" . }}-locations-eps
 {{- end }}
 
-{{- define "iris-gateway.location" -}}
-{{- include "iris-gateway.fullname" . }}-location
+{{- define "iris-gateway.locations-postgres" -}}
+{{ include "iris-gateway.fullname" . }}-locations-postgres
 {{- end }}
 
-{{- define "iris-gateway.location-labels" -}}
-app.kubernetes.io/name: {{ include "iris-gateway.location" . }}
+{{- define "iris-gateway.locations-postgres-backup" -}}
+{{ include "iris-gateway.fullname" . }}-locations-postgres-backup
 {{- end }}
 
-{{- define "iris-gateway.postgres" -}}
-{{ include "iris-gateway.fullname" . }}-postgres
+{{- define "iris-gateway.service-directory" -}}
+{{ include "iris-gateway.fullname" . }}-service-directory
 {{- end }}
 
-{{- define "iris-gateway.postgres-labels" -}}
-app.kubernetes.io/name: {{ include "iris-gateway.postgres" . }}
+{{- define "iris-gateway.public-proxy" -}}
+{{ include "iris-gateway.fullname" . }}-public-proxy
+{{- end }}
+
+{{- define "iris-gateway.public-proxy-eps" -}}
+{{ include "iris-gateway.fullname" . }}-public-proxy-eps
+{{- end }}
+
+{{- define "iris-gateway.locations-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.locations" . }}
+{{- end }}
+
+{{- define "iris-gateway.locations-eps-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.locations-eps" . }}
+{{- end }}
+
+{{- define "iris-gateway.locations-postgres-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.locations-postgres" . }}
+{{- end }}
+
+{{- define "iris-gateway.locations-postgres-backup-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.locations-postgres-backup" . }}
+{{- end }}
+
+{{- define "iris-gateway.service-directory-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.service-directory" . }}
+{{- end }}
+
+{{- define "iris-gateway.public-proxy-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.public-proxy" . }}
+{{- end }}
+
+{{- define "iris-gateway.public-proxy-eps-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.public-proxy-eps" . }}
 {{- end }}
 
 {{/*
@@ -48,4 +80,16 @@ Create chart name and version as used by the chart label.
 */}}
 {{- define "iris-gateway.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+
+{{/*
+Pullpolicy to enable local testing
+*/}}
+{{- define "iris-gateway.pullPolicy" -}}
+{{- if eq "local" .Values.environment }}
+	{{- "IfNotPresent" }}
+{{- else }}
+	{{- "Always" }}
+{{- end }}
 {{- end }}

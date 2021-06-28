@@ -3,17 +3,72 @@
 #   production: --set environment=production
 environment: undefined
 
-public:
-  image: inoeg/iris-public-server:0.0.1-SNAPSHOT
-  nodePort: 30001
+epsRepoTag: v0.1.22
 
-location:
-  image: inoeg/iris-location-service:0.0.1-SNAPSHOT
-  nodePort: 30002
+tls:
+  keystoreSecretName: tls-keystore
+  keystoreCredentialsSecretName: tls-keystore-credentials
+  mountPath: /tls
+  secretName: iris-gateway-tls
+  rootCertificates:
+    test:
+      - root.crt
+      - dtrust-test-root.crt
+    production:
+      - self-signed-ca-x1.crt
+      - self-signed-ca-x2.crt
+      - dtrust-root.crt
+  intermediateCertificates:
+    production:
+      - inter-r1.crt
+      - inter-r2.crt
+
+nodePorts:
+  locationsEps: 32323
+  serviceDirectory: 32324
+  publicProxyTls: 32325
+  publicProxyInternal: 32326
+  publicProxyEps: 32327
+
+serviceNames:
+  test:
+    locations: ls-1
+    publicProxy: public-proxy-1
+    serviceDirectory: sd-1
+  production:
+    locations: locations-production-1
+    publicProxy: public-proxy-production-1
+    serviceDirectory: service-directory-production-1
+
+eps:
+  image: inoeg/eps
+  configMountPath: /config
+
+locations:
+  image: inoeg/iris-location-service
+  tag: undefined  # will be set during deployment
+  port: 8080
 
 postgres:
   storageDir: /var/lib/postgresql/data/pgdata
+  backupDir: /backups
+  port: 5432
+  dbName: locations
 
-# needed only if multiple deployments are needed in the same environment.
-# nodePorts need to be unique globally, for all deployments in the same environment.
-nodePortOffsets: 0
+serviceDirectory:
+  image: inoeg/sd
+  configMountPath: /config
+  persistentStoragePath: /storage
+
+publicProxy:
+  jsonRpcPort: 6655
+  image: inoeg/proxy
+  configMountPath: /config
+  persistentStoragePath: /storage
+
+publicProxyEps:
+  jsonRpcPort: 5544
+
+domains:
+  test: test.iris-gateway.de
+  production: iris-gateway.de

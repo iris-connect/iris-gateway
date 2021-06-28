@@ -1,0 +1,150 @@
+{
+  "records": [
+    {
+      "created_at": "2021-05-21T09:11:27+00:00",
+      "section": "channels",
+      "name": "demo-app",
+      "data": [
+        {
+          "type": "grpc_server",
+          "settings": {
+            "address": "demo-app:4444"
+          }
+        }
+      ]
+    },
+    {
+      "created_at": "2021-05-21T09:11:27+00:00",
+      "section": "channels",
+      "name": "ls-1",
+      "data": [
+        {
+          "type": "grpc_server",
+          "settings": {
+            "address": "ls-1:4445"
+          }
+        }
+      ]
+    },
+    {
+      "created_at": "2021-05-21T09:11:27+00:00",
+      "section": "channels",
+      "name": "hd-1",
+      "data": [
+        {
+          "type": "grpc_client"
+        }
+      ]
+    },
+    {
+      "created_at": "2021-05-22T20:18:01Z",
+      "section": "channels",
+      "name": "private-proxy-1",
+      "data": [
+        {
+          "type": "grpc_server",
+          "settings": {
+            "address": "private-proxy-1:7776"
+          }
+        },
+        {
+          "type": "grpc_client"
+        }
+      ]
+    },
+    {
+      "created_at": "2021-05-22T08:50:00Z",
+      "section": "groups",
+      "name": "public-proxy-1",
+      "data": [
+        "proxy-providers"
+      ]
+    },
+    {
+      "created_at": "2021-05-22T08:50:00Z",
+      "section": "services",
+      "name": "public-proxy-1",
+      "data": [
+        {
+          "name": "proxy",
+          "permissions": [
+            {
+              "group": "proxy-users",
+              "rights": [
+                "call"
+              ]
+            }
+          ],
+          "methods": [
+            {
+              "name": "announceConnection"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "created_at": "2021-05-24T06:38:00Z",
+      "section": "settings",
+      "name": "hd-1",
+      "data": [
+        {
+          "service": "proxy",
+          "environment": "production",
+          "settings": {
+            "allowed_domains": [
+              ".proxy.test-gesundheitsamt.de"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "created_at": "2021-05-24T06:38:00Z",
+      "section": "settings",
+      "name": "private-proxy-1",
+      "data": [
+        {
+          "service": "proxy",
+          "environment": "production",
+          "settings": {
+            "allowed_domains": [
+              ".proxy.test-gesundheitsamt.de"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "created_at": "2021-05-22T08:50:00Z",
+      "section": "services",
+      "name": "private-proxy-1",
+      "data": [
+        {
+          "name": "proxy-client",
+          "permissions": [
+            {
+              "group": "proxy-providers",
+              "rights": [
+                "call"
+              ]
+            }
+          ],
+          "methods": [
+            {
+              "name": "incomingConnection"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "created_at": "2021-05-22T08:50:00Z",
+      "section": "groups",
+      "name": "private-proxy-1",
+      "data": [
+        "proxy-users"
+      ]
+    }
+  ]
+}
