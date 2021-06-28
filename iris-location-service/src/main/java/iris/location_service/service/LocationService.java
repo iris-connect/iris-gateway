@@ -30,17 +30,23 @@ public class LocationService {
 
 	private final @NotNull DBSearchIndex index;
 
-	static boolean isValidEmail(String email) {
+	static boolean isValidAndNotNullEmail(String email) {
 		if (email == null)
 			return false;
 		String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
 		return email.matches(regex);
 	}
 
+	static boolean isValidAndNotNullPhoneNumber(String phoneNumber) {
+		if (phoneNumber == null)
+			return false;
+		String regex = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$" + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
+			+ "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";;
+		return phoneNumber.matches(regex);
+	}
+
 	public List<String> addLocations(String providerId, List<LocationInformation> locations) {
 		// TODO: Authenticate API Access
-
-		// TODO: Add validation for phone numbers
 
 		List<String> listOfInvalidLocations = new ArrayList<String>();
 
@@ -48,7 +54,7 @@ public class LocationService {
 			Location location = getLocationFromLocationInformation(providerId, entry);
 			if (entry.getName() == null
 				|| location.getContactRepresentative() == null
-				|| (!isValidEmail(location.getContactEmail()) && location.getContactPhone() == null)) {
+				|| (!isValidAndNotNullEmail(location.getContactEmail()) && !isValidAndNotNullPhoneNumber(location.getContactPhone()))) {
 				listOfInvalidLocations.add(entry.getId());
 			}
 			return location;
@@ -56,7 +62,7 @@ public class LocationService {
 			.filter(
 				entry -> entry.getName() != null
 					&& entry.getContactRepresentative() != null
-					&& (isValidEmail(entry.getContactEmail()) || entry.getContactPhone() != null))
+					&& (isValidAndNotNullEmail(entry.getContactEmail()) || isValidAndNotNullPhoneNumber(entry.getContactPhone())))
 			.collect(Collectors.toList());
 
 		locationDao.saveLocations(data);
