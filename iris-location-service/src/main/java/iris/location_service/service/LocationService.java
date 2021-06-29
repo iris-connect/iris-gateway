@@ -40,8 +40,9 @@ public class LocationService {
 	static boolean isValidAndNotNullPhoneNumber(String phoneNumber) {
 		if (phoneNumber == null)
 			return false;
-		String regex = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$" + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
-			+ "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";;
+		String regex =
+			"|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$" + "^((((\\()?0\\d{4}(\\))?)|(\\+49 (\\()?\\d{4}(\\))?))([/ -])(\\d{6}(-\\d{2})?))$"
+				+ "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$" + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";;
 		return phoneNumber.matches(regex);
 	}
 
