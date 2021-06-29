@@ -13,9 +13,12 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.actuate.health.HealthEndpoint;
 
+@ExtendWith(MockitoExtension.class)
 public class LocationRPCImplTest {
 
 	String LOCATION_ID_1 = "ID_0001";
@@ -38,8 +41,6 @@ public class LocationRPCImplTest {
 	public void postLocationsToSearchIndexWithCorrectData() {
 		List<String> returnList = new ArrayList<String>();
 
-		// TODO: Nullpointer Error in when 
-
 		when(locationService.addLocations(any(), any())).thenReturn(returnList);
 
 		JsonRpcClientDto clientDto = getJsonClientDto();
@@ -55,15 +56,14 @@ public class LocationRPCImplTest {
 		returnList.add(LOCATION_ID_1);
 		returnList.add(LOCATION_ID_2);
 
-		// TODO: Nullpointer Error in when 
-
 		when(locationService.addLocations(any(), any())).thenReturn(returnList);
 
 		JsonRpcClientDto clientDto = getJsonClientDto();
 		List<LocationInformation> locationList = getLocationInformationList();
 		String returnString = systemUnderTest.postLocationsToSearchIndex(clientDto, locationList);
 
-		assertEquals("Invalid Locations detected: " + LOCATION_ID_1 + ", " + LOCATION_ID_2, returnString);
+		String expectedReturnString = "Invalid Locations detected: " + LOCATION_ID_1 + ", " + LOCATION_ID_2;
+		assertEquals(expectedReturnString, returnString);
 	}
 
 	JsonRpcClientDto getJsonClientDto() {

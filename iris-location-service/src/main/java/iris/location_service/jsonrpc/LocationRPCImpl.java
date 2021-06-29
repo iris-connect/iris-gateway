@@ -33,13 +33,13 @@ public class LocationRPCImpl implements LocationRPC {
 	public String postLocationsToSearchIndex(JsonRpcClientDto client, List<LocationInformation> locationList) {
 		List<String> listOfInvalidAddresses = locationService.addLocations(client.getName(), locationList);
 
-		if (listOfInvalidAddresses.size() >= 1) {
+		if (!listOfInvalidAddresses.isEmpty()) {
 			String output = "Invalid Locations detected: ";
 			for (Iterator iterator = listOfInvalidAddresses.iterator(); iterator.hasNext();) {
 				output += (String) iterator.next() + ", ";
 			}
 
-			return output.substring(0, output.length() - 3);
+			return output.substring(0, output.length() - 2);
 		} else {
 			return "OK";
 		}
