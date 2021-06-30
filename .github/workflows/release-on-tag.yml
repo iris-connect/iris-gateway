@@ -54,6 +54,8 @@ jobs:
     runs-on: [self-hosted, env-prod]
     container: alpine/helm:3.5.4
 
+    environment: production
+
     steps:
       - uses: actions/checkout@v1
 
@@ -65,7 +67,7 @@ jobs:
         run: >
           rm -rf ~/.kube &&
           mkdir ~/.kube &&
-          echo "${{ secrets.KUBECONFIG_PROD }}" > ~/.kube/config
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
 
       - name: Run helm deployment
         run: >
