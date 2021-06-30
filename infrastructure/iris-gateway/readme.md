@@ -45,7 +45,8 @@ prod.iris-gateway.de | 193.28.249.53
     TOKEN=$(kubectl -n iris-gateway get secret $SECRET_NAME -o json | jq -r '.data.token' | base64 -d)
     echo $TOKEN
     ```
-1. add token to kubeconfig, add as secret to GitHub repo, as `KUBECONFIG_TEST` or `KUBECONFIG_PROD`
+1. add token to kubeconfig, add as secret to GitHub repo, as `KUBECONFIG` 
+to the specific _environment_ (`test` or `production`)
     ```yaml
     apiVersion: v1
     clusters:

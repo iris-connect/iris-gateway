@@ -39,6 +39,8 @@ jobs:
     runs-on: [self-hosted, env-test]
     container: alpine/helm:3.5.4
 
+    environment: test
+
     steps:
       - uses: actions/checkout@v1
 
@@ -46,7 +48,7 @@ jobs:
         run: >
           rm -rf ~/.kube &&
           mkdir ~/.kube &&
-          echo "${{ secrets.KUBECONFIG_TEST }}" > ~/.kube/config
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
 
       - name: Run helm deployment
         run: >
