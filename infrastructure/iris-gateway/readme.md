@@ -1,5 +1,8 @@
 # Iris gateway helm chart
 
+## Component overview
+![Component overview](components.jpg)
+
 ## AKDB
 
 ### Citrix issue: SSL error 61 / ca cert missing
