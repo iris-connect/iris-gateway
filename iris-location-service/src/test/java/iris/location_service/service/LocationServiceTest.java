@@ -1,6 +1,8 @@
 package iris.location_service.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.verify;
 
 import iris.location_service.dto.LocationContact;
 import iris.location_service.dto.LocationInformation;
@@ -13,12 +15,12 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class LocationServiceTest {
 
 	String LOCATION_ID_1 = "ID_0001_Valid";
@@ -42,7 +44,7 @@ public class LocationServiceTest {
 
 	LocationService systemUnderTest;
 
-	@Mock
+	@Autowired
 	ModelMapper mapper;
 
 	@Mock
@@ -61,10 +63,9 @@ public class LocationServiceTest {
 		JsonRpcClientDto clientDto = getJsonClientDto();
 		List<LocationInformation> locationList = getLocationInformationListWithOnlyValidCases();
 
-		// TODO: WHEN cases
-
 		List<String> listOfReturnStrings = systemUnderTest.addLocations(clientDto.getName(), locationList);
 
+		verify(locationDao).saveLocations(anyList());
 		assertEquals(0, listOfReturnStrings.size());
 	}
 
@@ -73,16 +74,15 @@ public class LocationServiceTest {
 		JsonRpcClientDto clientDto = getJsonClientDto();
 		List<LocationInformation> locationList = getLocationInformationList();
 
-		// TODO: WHEN cases		
-
 		List<String> listOfReturnStrings = systemUnderTest.addLocations(clientDto.getName(), locationList);
 
+		verify(locationDao).saveLocations(anyList());
 		assertEquals(5, listOfReturnStrings.size());
-		assertEquals(LOCATION_ID_2, listOfReturnStrings.get(1));
-		assertEquals(LOCATION_ID_3, listOfReturnStrings.get(2));
-		assertEquals(LOCATION_ID_4, listOfReturnStrings.get(3));
-		assertEquals(LOCATION_ID_6, listOfReturnStrings.get(6));
-		assertEquals(LOCATION_ID_8, listOfReturnStrings.get(7));
+		assertEquals(LOCATION_ID_2, listOfReturnStrings.get(0));
+		assertEquals(LOCATION_ID_3, listOfReturnStrings.get(1));
+		assertEquals(LOCATION_ID_4, listOfReturnStrings.get(2));
+		assertEquals(LOCATION_ID_6, listOfReturnStrings.get(3));
+		assertEquals(LOCATION_ID_8, listOfReturnStrings.get(4));
 	}
 
 	JsonRpcClientDto getJsonClientDto() {
@@ -97,13 +97,13 @@ public class LocationServiceTest {
 			getLocationInformation(
 				LOCATION_ID_1,
 				"providerId",
-				"LOCATION_NAME",
+				LOCATION_NAME,
 				"publicKey",
 				"officialName",
-				"REPRESENTATIVE_NAME",
+				REPRESENTATIVE_NAME,
 				"ownerEmail",
-				"VALID_EMAIL",
-				"VALID_PHONE"));
+				VALID_EMAIL,
+				VALID_PHONE));
 		locationList.add(
 			getLocationInformation(
 				LOCATION_ID_2,
@@ -111,29 +111,29 @@ public class LocationServiceTest {
 				null,
 				"publicKey",
 				"officialName",
-				"REPRESENTATIVE_NAME",
+				REPRESENTATIVE_NAME,
 				"ownerEmail",
-				"VALID_EMAIL",
-				"VALID_PHONE"));
+				VALID_EMAIL,
+				VALID_PHONE));
 		locationList.add(
 			getLocationInformation(
 				LOCATION_ID_3,
 				"providerId",
-				"LOCATION_NAME",
+				LOCATION_NAME,
 				"publicKey",
 				"officialName",
 				null,
 				"ownerEmail",
-				"VALID_EMAIL",
-				"VALID_PHONE"));
+				VALID_EMAIL,
+				VALID_PHONE));
 		locationList.add(
 			getLocationInformation(
 				LOCATION_ID_4,
 				"providerId",
-				"LOCATION_NAME",
+				LOCATION_NAME,
 				"publicKey",
 				"officialName",
-				"REPRESENTATIVE_NAME",
+				REPRESENTATIVE_NAME,
 				"ownerEmail",
 				null,
 				null));
@@ -141,46 +141,46 @@ public class LocationServiceTest {
 			getLocationInformation(
 				LOCATION_ID_5,
 				"providerId",
-				"LOCATION_NAME",
+				LOCATION_NAME,
 				"publicKey",
 				"officialName",
-				"REPRESENTATIVE_NAME",
+				REPRESENTATIVE_NAME,
 				"ownerEmail",
 				null,
-				"VALID_PHONE"));
+				VALID_PHONE));
 		locationList.add(
 			getLocationInformation(
 				LOCATION_ID_6,
 				"providerId",
-				"LOCATION_NAME",
+				LOCATION_NAME,
 				"publicKey",
 				"officialName",
-				"REPRESENTATIVE_NAME",
+				REPRESENTATIVE_NAME,
 				"ownerEmail",
-				"INVALID_EMAIL",
+				INVALID_EMAIL,
 				null));
 		locationList.add(
 			getLocationInformation(
 				LOCATION_ID_7,
 				"providerId",
-				"LOCATION_NAME",
+				LOCATION_NAME,
 				"publicKey",
 				"officialName",
-				"REPRESENTATIVE_NAME",
+				REPRESENTATIVE_NAME,
 				"ownerEmail",
-				"VALID_EMAIL",
+				VALID_EMAIL,
 				null));
 		locationList.add(
 			getLocationInformation(
 				LOCATION_ID_8,
 				"providerId",
-				"LOCATION_NAME",
+				LOCATION_NAME,
 				"publicKey",
 				"officialName",
-				"REPRESENTATIVE_NAME",
+				REPRESENTATIVE_NAME,
 				"ownerEmail",
 				null,
-				"INVALID_PHONE"));
+				INVALID_PHONE));
 		return locationList;
 	}
 
@@ -190,34 +190,34 @@ public class LocationServiceTest {
 			getLocationInformation(
 				LOCATION_ID_1,
 				"providerId",
-				"LOCATION_NAME",
+				LOCATION_NAME,
 				"publicKey",
 				"officialName",
-				"REPRESENTATIVE_NAME",
+				REPRESENTATIVE_NAME,
 				"ownerEmail",
-				"VALID_EMAIL",
-				"VALID_PHONE"));
+				VALID_EMAIL,
+				VALID_PHONE));
 		locationList.add(
 			getLocationInformation(
 				LOCATION_ID_5,
 				"providerId",
-				"LOCATION_NAME",
+				LOCATION_NAME,
 				"publicKey",
 				"officialName",
-				"REPRESENTATIVE_NAME",
+				REPRESENTATIVE_NAME,
 				"ownerEmail",
 				null,
-				"VALID_PHONE"));
+				VALID_PHONE));
 		locationList.add(
 			getLocationInformation(
 				LOCATION_ID_7,
 				"providerId",
-				"LOCATION_NAME",
+				LOCATION_NAME,
 				"publicKey",
 				"officialName",
-				"REPRESENTATIVE_NAME",
+				REPRESENTATIVE_NAME,
 				"ownerEmail",
-				"VALID_EMAIL",
+				VALID_EMAIL,
 				null));
 		return locationList;
 	}

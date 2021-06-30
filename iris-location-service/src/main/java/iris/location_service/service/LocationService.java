@@ -41,14 +41,13 @@ public class LocationService {
 		if (phoneNumber == null)
 			return false;
 		String regex =
-			"|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$" + "^((((\\()?0\\d{4}(\\))?)|(\\+49 (\\()?\\d{4}(\\))?))([/ -])(\\d{6}(-\\d{2})?))$"
-				+ "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$" + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
+			"^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$" + "|^((((\\()?0\\d{4}(\\))?)|(\\+49 (\\()?\\d{4}(\\))?))([/ -])(\\d{6}(-\\d{2})?))$"
+				+ "|^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$" + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
 		return phoneNumber.matches(regex);
 	}
 
 	public List<String> addLocations(String providerId, List<LocationInformation> locations) {
 		// TODO: Authenticate API Access
-
 		List<String> listOfInvalidLocations = new ArrayList<String>();
 
 		var data = locations.stream().map(entry -> {
@@ -72,7 +71,6 @@ public class LocationService {
 	}
 
 	private Location getLocationFromLocationInformation(String providerId, LocationInformation entry) {
-
 		// Reset possibly sent provider id. We need to ensure this comes from
 		// the authentication system and isn't user-provided!
 		entry.setProviderId(providerId.toString());
