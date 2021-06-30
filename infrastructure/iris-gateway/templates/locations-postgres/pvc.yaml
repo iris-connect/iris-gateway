@@ -5,9 +5,16 @@ metadata:
   labels:
   {{- include "iris-gateway.locations-postgres-labels" . | nindent 4 }}
 spec:
+{{- if (eq .Values.environment "test") }}
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  volumeName: locations-postgres
+{{- else }}
   accessModes:
     - ReadWriteOnce
   storageClassName: managed-nfs-storage
+{{- end }}
   resources:
     requests:
       storage: 10Gi
