@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Data Submission</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fafafa" />
+  </head>
+
+  <body>
+    <h1>Index Case Data Submission</h1>
+
+    <div>
+      <button id="submit">Submit Payload to Target URL</button>
+      <span>Result will be printed in browser console.</span>
+    </div>
+
+    <div>
+      <label for="url">URL with iris parameter</label>
+      <input
+        id="url"
+        type="text"
+        placeholder="https://digitales-wartezimmer.org/index-case?iris=ey..."
+      />
+
+      <label for="publicProxyPort"
+        >Publix proxy port (4433 for dev and 32325 for test+prod)</label
+      >
+      <input id="publicProxyPort" type="text" value="4433" />
+    </div>
+
+    <div>
+      <label for="payload">Payload</label>
+      <textarea id="payload"> asd </textarea>
+    </div>
+
+    <script>
+      const dummyPayload = {
+        contacts: {
+          contactPersons: [
+            {
+              firstName: "Eveline",
+              lastName: "Okuneva",
+              dateOfBirth: "2021-06-29T16:44:39.225Z",
+              sex: "MALE",
+              email: "Dejuan34@gmail.com",
+              phone: "512-928-9341",
+              mobilePhone: "284-607-2800",
+              address: {
+                street: "8323 Golda Canyon",
+                houseNumber: "12",
+                zipCode: "13455",
+                city: "East Websterville",
+              },
+              workPlace: {
+                name: "Graham Inc",
+                pointOfContact: "North Patriciaside",
+                phone: "668-295-6925",
+                address: {
+                  street: "69402 Evelyn Run",
+                  houseNumber: "55",
+                  zipCode: "13456",
+                  city: "South Kevon",
+                },
+              },
+              contactInformation: {
+                firstContactDate: "2021-06-29T16:44:39.226Z",
+                lastContactDate: "2021-06-29T16:44:39.226Z",
+                contactCategory: "HIGH_RISK",
+                basicConditions: "string",
+              },
+            },
+            {
+              firstName: "Ibrahim",
+              lastName: "Bogan",
+              dateOfBirth: "2021-06-29T16:44:39.226Z",
+              sex: "MALE",
+              email: "Jerrod88@gmail.com",
+              phone: "317-638-4175",
+              mobilePhone: "426-373-7195",
+              address: {
+                street: "6858 Alexane Walk",
+                houseNumber: "66",
+                zipCode: "55146",
+                city: "Terenceborough",
+              },
+              workPlace: {
+                name: "Beer, Renner and Prohaska",
+                pointOfContact: "Jordybury",
+                phone: "638-574-6839",
+                address: {
+                  street: "669 Joyce Prairie",
+                  houseNumber: "15",
+                  zipCode: "56125",
+                  city: "Pomona",
+                },
+              },
+              contactInformation: {
+                firstContactDate: "2021-06-29T16:44:39.226Z",
+                lastContactDate: "2021-06-29T16:44:39.226Z",
+                contactCategory: "HIGH_RISK",
+                basicConditions: "string",
+              },
+            },
+            {
+              firstName: "Colten",
+              lastName: "Schaden",
+              dateOfBirth: "2021-06-29T16:44:39.226Z",
+              sex: "MALE",
+              email: "Thalia70@yahoo.com",
+              phone: "627-827-7589",
+              mobilePhone: "888-728-3015",
+              address: {
+                street: "7262 Kristofer Way",
+                houseNumber: "65",
+                zipCode: "44698",
+                city: "Port Henriette",
+              },
+              workPlace: {
+                name: "Corwin - Spinka",
+                pointOfContact: "Sengerberg",
+                phone: "873-617-9067",
+                address: {
+                  street: "35766 Little Mountains",
+                  houseNumber: "4",
+                  zipCode: "46416",
+                  city: "Annabelview",
+                },
+              },
+              contactInformation: {
+                firstContactDate: "2021-06-29T16:44:39.227Z",
+                lastContactDate: "2021-06-29T16:44:39.227Z",
+                contactCategory: "HIGH_RISK",
+                basicConditions: "string",
+              },
+            },
+          ],
+          startDate: "2021-06-29T16:44:39.227Z",
+          endDate: "2021-06-29T16:44:39.227Z",
+        },
+        events: {
+          events: [
+            {
+              name: "Marks, Purdy and Hammes",
+              phone: "474-804-3143",
+              address: {
+                street: "150 Dooley Rue",
+                houseNumber: "3",
+                zipCode: "13154",
+                city: "North Jerrell",
+              },
+              additionalInformation: "string",
+            },
+            {
+              name: "Rau Group",
+              phone: "731-257-9633",
+              address: {
+                street: "5990 Korey Lock",
+                houseNumber: "6",
+                zipCode: "87898",
+                city: "Alizestad",
+              },
+              additionalInformation: "string",
+            },
+          ],
+          startDate: "2021-06-29T16:44:39.227Z",
+          endDate: "2021-06-29T16:44:39.227Z",
+        },
+        dataProvider: {
+          firstName: "Kellen",
+          lastName: "Nolan",
+          dateOfBirth: "2021-06-29T16:44:39.227Z",
+        },
+      };
+
+      document.getElementById("payload").value = JSON.stringify(
+        dummyPayload,
+        undefined,
+        2
+      );
+
+      document.getElementById("submit").onclick = () => {
+        const targetUrl = document.getElementById("url").value?.trim();
+        const payload = document.getElementById("payload").value?.trim();
+        const publicProxyPort = document
+          .getElementById("publicProxyPort")
+          .value?.trim();
+
+        if (!targetUrl || !payload || !publicProxyPort) {
+          console.error(
+            "Target URL or payload or public-proxy-port were not provided"
+          );
+          return;
+        }
+
+        const urlParams = new URL(targetUrl).searchParams;
+        const irisDataSubmissionURL = urlParams.get("iris");
+        if (!irisDataSubmissionURL) {
+          console.error(
+            "iris query parameter not found for Target URL or undefined"
+          );
+          console.error("hint: check if target url contains '.../?iris=ey...");
+          return;
+        }
+
+        const decodedIrisDataSubmissionURLData = JSON.parse(
+          atob(irisDataSubmissionURL)
+        );
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: JSON.stringify({
+            id: 1,
+            jsonrpc: "2.0",
+            method: "submitContactAndEventData",
+            params: {
+              ...JSON.parse(payload),
+              dataAuthorizationToken: decodedIrisDataSubmissionURLData.d,
+            },
+          }),
+        };
+
+        console.info("Sending request via", decodedIrisDataSubmissionURLData);
+        const url = `https://${decodedIrisDataSubmissionURLData.c}:${publicProxyPort}/data-submission-rpc`;
+        console.info("Target url", url);
+        fetch(url, requestOptions)
+          .then((response) => response.text())
+          .then((result) => console.log(result))
+          .catch((error) => console.log("error", error));
+      };
+    </script>
+  </body>
+</html>
+
+<style>
+  * {
+    margin: 10px;
+  }
+  label {
+    font-weight: bold;
+  }
+  #url,
+  #publicProxyPort,
+  #payload {
+    width: 100%;
+  }
+
+  #payload {
+    height: 70vh;
+  }
+</style>
