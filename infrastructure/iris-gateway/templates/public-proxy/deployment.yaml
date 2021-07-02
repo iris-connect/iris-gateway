@@ -38,7 +38,7 @@ spec:
             - mountPath: /config
               name: config
               readOnly: true
-            - mountPath: {{ .Values.publicProxy.persistentStoragePath }}
+            - mountPath: {{ .Values.publicProxy.storageDir }}
               name: persistent-storage
           env:
             - name: PROXY_SETTINGS

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "iris-gateway.service-directory-backup" . }}
+data:
+  backup.sh: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    SRC="{{ .Values.serviceDirectory.storageDir }}"
+    DIR=$(date +%d-%m-%y)
+    DEST="{{ .Values.serviceDirectory.backupDir }}/${DIR}"
+    mkdir -p "${DEST}"
+
+    echo 'backup starting'
+    cp -R "${SRC}" "${DEST}"
+    echo 'backup succeeded'
+    find "${DEST}" -type f -exec ls -lh {} \;
