@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "iris-gateway.service-directory-backup" . }}
+  labels:
+  {{- include "iris-gateway.service-directory-backup-labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  volumeName: service-directory-backups
+  resources:
+    requests:
+      storage: 1Gi
+
+# kubectl -n iris-gateway create job --from cronjob/iris-gateway-service-directory-backup sd-backup
