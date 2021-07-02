@@ -39,6 +39,10 @@ If release name contains chart name it will be used as a full name.
 {{ include "iris-gateway.fullname" . }}-service-directory
 {{- end }}
 
+{{- define "iris-gateway.service-directory-backup" -}}
+{{ include "iris-gateway.fullname" . }}-service-directory-backup
+{{- end }}
+
 {{- define "iris-gateway.public-proxy" -}}
 {{ include "iris-gateway.fullname" . }}-public-proxy
 {{- end }}
@@ -65,6 +69,10 @@ app.kubernetes.io/name: {{ include "iris-gateway.locations-postgres-backup" . }}
 
 {{- define "iris-gateway.service-directory-labels" -}}
 app.kubernetes.io/name: {{ include "iris-gateway.service-directory" . }}
+{{- end }}
+
+{{- define "iris-gateway.service-directory-backup-labels" -}}
+app.kubernetes.io/name: {{ include "iris-gateway.service-directory-backup" . }}
 {{- end }}
 
 {{- define "iris-gateway.public-proxy-labels" -}}
