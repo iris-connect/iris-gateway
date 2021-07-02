@@ -6,6 +6,7 @@ import iris.location_service.search.db.DBSearchIndex;
 import iris.location_service.search.db.LocationDAO;
 import iris.location_service.search.db.model.Location;
 import iris.location_service.search.db.model.LocationIdentifier;
+import iris.location_service.utils.ValidationHelper;
 import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
@@ -30,23 +31,7 @@ public class LocationService {
 
 	private final @NotNull DBSearchIndex index;
 
-	static boolean isValidAndNotNullEmail(String email) {
-		if (email == null)
-			return false;
-		String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-		return email.matches(regex);
-	}
-
-	static boolean isValidAndNotNullPhoneNumber(String phoneNumber) {
-		if (phoneNumber == null)
-			return false;
-		String regex =
-			"^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$" + "|^((((\\()?0\\d{4}(\\))?)|(\\+49 (\\()?\\d{4}(\\))?))([/ -])(\\d{6}(-\\d{2})?))$"
-				+ "|^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$" + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
-		return phoneNumber.matches(regex);
-	}
-
-	public List<String> addLocations(String providerId, List<LocationInformation> locations) {
+    public List<String> addLocations(String providerId, List<LocationInformation> locations) {
 		// TODO: Authenticate API Access
 		List<String> listOfInvalidLocations = new ArrayList<String>();
 
@@ -54,7 +39,7 @@ public class LocationService {
 			Location location = getLocationFromLocationInformation(providerId, entry);
 			if (entry.getName() == null
 				|| location.getContactRepresentative() == null
-				|| (!isValidAndNotNullEmail(location.getContactEmail()) && !isValidAndNotNullPhoneNumber(location.getContactPhone()))) {
+				|| (!ValidationHelper.isValidAndNotNullEmail(location.getContactEmail()) && !ValidationHelper.isValidAndNotNullPhoneNumber(location.getContactPhone()))) {
 				listOfInvalidLocations.add(entry.getId());
 			}
 			return location;
@@ -62,7 +47,7 @@ public class LocationService {
 			.filter(
 				entry -> entry.getName() != null
 					&& entry.getContactRepresentative() != null
-					&& (isValidAndNotNullEmail(entry.getContactEmail()) || isValidAndNotNullPhoneNumber(entry.getContactPhone())))
+					&& (ValidationHelper.isValidAndNotNullEmail(entry.getContactEmail()) || ValidationHelper.isValidAndNotNullPhoneNumber(entry.getContactPhone())))
 			.collect(Collectors.toList());
 
 		locationDao.saveLocations(data);
