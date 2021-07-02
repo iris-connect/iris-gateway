@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
@@ -31,26 +30,25 @@ public class LocationService {
 
 	private final @NotNull DBSearchIndex index;
 
-    public List<String> addLocations(String providerId, List<LocationInformation> locations) {
+	public List<String> addLocations(String providerId, List<LocationInformation> locations) {
 		// TODO: Authenticate API Access
 		List<String> listOfInvalidLocations = new ArrayList<String>();
+		List<Location> listOfValidLocations = new ArrayList<Location>();
 
-		var data = locations.stream().map(entry -> {
-			Location location = getLocationFromLocationInformation(providerId, entry);
-			if (entry.getName() == null
-				|| location.getContactRepresentative() == null
-				|| (!ValidationHelper.isValidAndNotNullEmail(location.getContactEmail()) && !ValidationHelper.isValidAndNotNullPhoneNumber(location.getContactPhone()))) {
-				listOfInvalidLocations.add(entry.getId());
+		for (LocationInformation locationInformation : locations) {
+			Location location = getLocationFromLocationInformation(providerId, locationInformation);
+
+			if (location.getName() != null
+				&& location.getContactRepresentative() != null
+				&& (ValidationHelper.isValidAndNotNullEmail(location.getContactEmail())
+					|| ValidationHelper.isValidAndNotNullPhoneNumber(location.getContactPhone()))) {
+				listOfValidLocations.add(location);
+			} else {
+				listOfInvalidLocations.add(locationInformation.getId());
 			}
-			return location;
-		})
-			.filter(
-				entry -> entry.getName() != null
-					&& entry.getContactRepresentative() != null
-					&& (ValidationHelper.isValidAndNotNullEmail(entry.getContactEmail()) || ValidationHelper.isValidAndNotNullPhoneNumber(entry.getContactPhone())))
-			.collect(Collectors.toList());
+		}
 
-		locationDao.saveLocations(data);
+		locationDao.saveLocations(listOfValidLocations);
 
 		return listOfInvalidLocations;
 	}
