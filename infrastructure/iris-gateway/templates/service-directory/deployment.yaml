@@ -32,7 +32,7 @@ spec:
             - mountPath: /config
               name: config
               readOnly: true
-            - mountPath: {{ .Values.serviceDirectory.persistentStoragePath }}
+            - mountPath: {{ .Values.serviceDirectory.storageDir }}
               name: persistent-storage
           env:
             - name: SD_SETTINGS
