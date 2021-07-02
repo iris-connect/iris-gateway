@@ -6,7 +6,6 @@ import iris.location_service.dto.LocationQueryResult;
 import iris.location_service.service.LocationService;
 import lombok.AllArgsConstructor;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,11 +33,13 @@ public class LocationRPCImpl implements LocationRPC {
 		List<String> listOfInvalidAddresses = locationService.addLocations(client.getName(), locationList);
 
 		if (!listOfInvalidAddresses.isEmpty()) {
-			String output = "Invalid Locations detected: ";
-			for (Iterator iterator = listOfInvalidAddresses.iterator(); iterator.hasNext();) {
-				output += (String) iterator.next() + ", ";
+			StringBuilder outputString = new StringBuilder();
+			outputString.append("Invalid Locations detected: ");
+			for (int i = 0; i < listOfInvalidAddresses.size(); i++) {
+				outputString.append(listOfInvalidAddresses.get(i) + ", ");
 			}
 
+			String output = outputString.toString();
 			return output.substring(0, output.length() - 2);
 		} else {
 			return "OK";
