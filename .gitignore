@@ -75,3 +75,6 @@ hs_err_pid*
 
 # MACOS
 .DS_Store
+
+# Generated files
+iris-client-eps/settings/test/

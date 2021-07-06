@@ -6,11 +6,12 @@ import iris.location_service.search.db.DBSearchIndex;
 import iris.location_service.search.db.LocationDAO;
 import iris.location_service.search.db.model.Location;
 import iris.location_service.search.db.model.LocationIdentifier;
+import iris.location_service.utils.ValidationHelper;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
@@ -29,20 +30,30 @@ public class LocationService {
 
 	private final @NotNull DBSearchIndex index;
 
-	public void addLocations(String providerId, List<LocationInformation> locations) {
+	public List<String> addLocations(String providerId, List<LocationInformation> locations) {
 		// TODO: Authenticate API Access
+		List<String> listOfInvalidLocations = new ArrayList<String>();
+		List<Location> listOfValidLocations = new ArrayList<Location>();
 
-		// TODO: Define sensible limits for this API
+		for (LocationInformation locationInformation : locations) {
+			Location location = getLocationFromLocationInformation(providerId, locationInformation);
 
-		var data = locations.stream().map(entry -> {
-			return getLocationFromLocationInformation(providerId, entry);
-		}).collect(Collectors.toList());
+			if (location.getName() != null
+				&& location.getContactRepresentative() != null
+				&& (ValidationHelper.isValidAndNotNullEmail(location.getContactEmail())
+					|| ValidationHelper.isValidAndNotNullPhoneNumber(location.getContactPhone()))) {
+				listOfValidLocations.add(location);
+			} else {
+				listOfInvalidLocations.add(locationInformation.getId());
+			}
+		}
 
-		locationDao.saveLocations(data);
+		locationDao.saveLocations(listOfValidLocations);
+
+		return listOfInvalidLocations;
 	}
 
 	private Location getLocationFromLocationInformation(String providerId, LocationInformation entry) {
-
 		// Reset possibly sent provider id. We need to ensure this comes from
 		// the authentication system and isn't user-provided!
 		entry.setProviderId(providerId.toString());
@@ -84,8 +95,7 @@ public class LocationService {
 	public Optional<LocationInformation> getLocationByProviderIdAndLocationId(String providerId, String locationId) {
 		var ident = new LocationIdentifier(providerId, locationId);
 
-		return locationDao.findById(ident)
-				.map(this::toDto);
+		return locationDao.findById(ident).map(this::toDto);
 	}
 
 	private LocationInformation toDto(Location it) {
