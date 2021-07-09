@@ -56,9 +56,9 @@ jobs:
 
       - name: define Enviroment Variables for postgres-ha upgrade
         run: >
-          - export REPMGR_PASSWORD=$(kubectl get secret --namespace iris-gateway iris-client-app-postgresqlha-postgresql -o jsonpath="{.data.repmgr-password}" | base64 -d)
-          - export ADMIN_PASSWORD=$(kubectl get secret --namespace iris-gateway iris-client-app-postgresqlha-pgpool -o jsonpath="{.data.admin-password}" | base64 -d)
-          - export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace iris-gateway iris-client-app-postgresqlha-postgresql -o jsonpath="{.data.postgresql-password}" | base64 -d)
+          export REPMGR_PASSWORD=$(kubectl get secret --namespace iris-gateway iris-client-app-postgresqlha-postgresql -o jsonpath="{.data.repmgr-password}" | base64 -d) &&
+          export ADMIN_PASSWORD=$(kubectl get secret --namespace iris-gateway iris-client-app-postgresqlha-pgpool -o jsonpath="{.data.admin-password}" | base64 -d) &&
+          export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace iris-gateway iris-client-app-postgresqlha-postgresql -o jsonpath="{.data.postgresql-password}" | base64 -d)
 
       - name: Run helm deployment
         run: >
@@ -77,4 +77,4 @@ jobs:
       - name: Delete downloaded helm charts
         if: ${{ always() }}
         run: >
-          rm -rf iris-gateway/infrastructure/iris-gateway/charts
+          rm -rf ./infrastructure/iris-gateway/charts
