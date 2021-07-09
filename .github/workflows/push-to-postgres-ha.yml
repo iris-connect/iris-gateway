@@ -63,6 +63,7 @@ jobs:
           --set postgresqlha.postgresql.repmgrPassword="${{ secrets.REPMGR_PASSWORD }}"
           --set postgresqlha.pgpool.adminPassword="${{ secrets.PGPOOL_ADMIN_PASSWORD }}"
           --set postgresqlha.postgresql.password="${{ secrets.POSTGRESQL_PASSWORD }}"
+          --set postgresqlha.pgpool.customUsers.passwords="${{ secrets.POSTGRESQL_PASSWORD }}"
           --wait
           --timeout 3m
           --debug

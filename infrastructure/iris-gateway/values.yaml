@@ -81,7 +81,8 @@ postgresqlha:
   postgresql:
     backupDir: /backups
     database: locations
-    existingSecret: iris-gateway-locations-postgres
+    username: locations
+    #password: "" will be set by cli
     replicaCount: 3
     resources: {}
       # limits:
@@ -91,10 +92,10 @@ postgresqlha:
       #   cpu: 250m
       #   memory: 256Mi
   pgpool:
-    customUsersSecret: iris-gateway-locations-postgres
-    # customUsers:
-    #   usernames: ""
-    #   passwords: ""
+    #customUsersSecret: iris-gateway-locations-postgres
+    customUsers:
+      usernames: locations
+      #passwords: "" ## will be set by cli
   volumePermissions:
     enabled: true
     resources: {}
