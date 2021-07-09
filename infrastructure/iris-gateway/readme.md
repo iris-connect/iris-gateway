@@ -37,7 +37,7 @@ prod.iris-gateway.de | 193.28.249.53
     TOKEN=$(kubectl -n iris-gateway get secret $SECRET_NAME -o json | jq -r '.data.token' | base64 -d)
     echo $TOKEN
     ```
-1. add token to kubeconfig, add as secret to GitHub repo, as `KUBECONFIG` 
+1. add token to kubeconfig, add as secret to GitHub repo, as `KUBECONFIG`
 to the specific _environment_ (`test` or `production`)
     ```yaml
     apiVersion: v1
@@ -71,6 +71,11 @@ to the specific _environment_ (`test` or `production`)
       POSTGRES_HOST: aXJpcy1nYXRld2F5LWxvY2F0aW9ucy1wb3N0Z3Jlcw==  # iris-gateway-locations-postgres
       POSTGRES_PASSWORD: ...  # b64 encoded
       POSTGRES_USER: ...  # b64 encoded
+      postgresql-postgres-password: ...  # b64 encoded
+      postgresql-password: ...  # b64 encoded
+      repmgr-password: ...  # b64 encoded
+      usernames: ... #b64 encoded
+      passwords: ... #b64 encoded
     ```
 1. create secret `iris-gateway-tls` manually in `iris-gateway`
     ```yaml

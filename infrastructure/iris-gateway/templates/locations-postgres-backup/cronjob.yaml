@@ -27,7 +27,7 @@ spec:
                 - secretRef:
                     name: {{ include "iris-gateway.locations-postgres" . }}
               volumeMounts:
-                - mountPath: {{ .Values.postgres.backupDir }}
+                - mountPath: {{ .Values.postgresqlha.postgres.backupDir }}
                   name: persistent-storage
                 - mountPath: /scripts
                   name: scripts

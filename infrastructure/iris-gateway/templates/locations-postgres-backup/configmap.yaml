@@ -10,7 +10,7 @@ data:
     # reference: https://simplebackups.io/blog/the-ultimate-postgresql-database-backup-script/
 
     DIR=$(date +%d-%m-%y)
-    DEST="{{ .Values.postgres.backupDir }}/${DIR}"
+    DEST="{{ .Values.postgresqlha.postgres.backupDir }}/${DIR}"
     mkdir -p "${DEST}"
 
     echo 'backup starting'

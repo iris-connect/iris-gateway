@@ -24,9 +24,9 @@ spec:
               protocol: TCP
           env:
             - name: POSTGRES_DB
-              value: {{ .Values.postgres.dbName }}
+              value: {{ .Values.postgresqlha.postgres.dbName }}
             - name: PGDATA
-              value: {{ .Values.postgres.storageDir }}
+              value: {{ .Values.postgresqlha.postgres.storageDir }}
           envFrom:
             - secretRef:
                 name: {{ include "iris-gateway.locations-postgres" . }}
