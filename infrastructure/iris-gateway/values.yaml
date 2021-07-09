@@ -80,7 +80,7 @@ postgresqlha:
     enabled: true
   postgresql:
     backupDir: /backups
-    database: locations
+    dbName: locations
     username: locations
     #password: "" will be set by cli
     replicaCount: 3
