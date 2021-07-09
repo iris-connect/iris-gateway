@@ -54,21 +54,15 @@ jobs:
       - name: Update Helm dependencys
         run: helm dependency update ./infrastructure/iris-gateway
 
-      - name: define Enviroment Variables for postgres-ha upgrade
-        run: >
-          export REPMGR_PASSWORD=$(kubectl get secret --namespace iris-gateway iris-client-app-postgresqlha-postgresql -o jsonpath="{.data.repmgr-password}" | base64 -d) &&
-          export ADMIN_PASSWORD=$(kubectl get secret --namespace iris-gateway iris-client-app-postgresqlha-pgpool -o jsonpath="{.data.admin-password}" | base64 -d) &&
-          export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace iris-gateway iris-client-app-postgresqlha-postgresql -o jsonpath="{.data.postgresql-password}" | base64 -d)
-
       - name: Run helm deployment
         run: >
           helm upgrade --install
           --namespace iris-gateway
           --set environment=test
           --set locations.tag="${{ github.sha }}"
-          --set postgresqlha.postgresql.repmgrPassword=$REPMGR_PASSWORD
-          --set postgresqlha.pgpool.adminPassword=$ADMIN_PASSWORD
-          --set postgresqlha.postgresql.password=$POSTGRESQL_PASSWORD
+          --set postgresqlha.postgresql.repmgrPassword="${{ secrets.REPMGR_PASSWORD }}"
+          --set postgresqlha.pgpool.adminPassword="${{ secrets.PGPOOL_ADMIN_PASSWORD }}"
+          --set postgresqlha.postgresql.password="${{ secrets.POSTGRESQL_PASSWORD }}"
           --wait
           --timeout 3m
           --debug
