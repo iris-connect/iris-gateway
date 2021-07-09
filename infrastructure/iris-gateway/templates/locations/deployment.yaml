@@ -22,7 +22,7 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: postgres
             - name: POSTGRES_DATABASE
-              value: {{ .Values.postgres.dbName }}
+              value: {{ .Values.postgresqlha.postgresql.database }}
           envFrom:
             - secretRef:
                 name: {{ include "iris-gateway.locations-postgres" . }}
