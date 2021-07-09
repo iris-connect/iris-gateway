@@ -78,3 +78,4 @@ hs_err_pid*
 
 # Generated files
 iris-client-eps/settings/test/
+infrastructure/iris-gateway/charts/
