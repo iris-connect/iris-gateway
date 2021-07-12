@@ -1,15 +1,15 @@
 # https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image
 
-# Build and package image for demo-checkin-app and deploy it to docker.io
-name: demo-checkin-app Develop
+# Build and package image for demo-contact-diary-app and deploy it to docker.io
+name: demo-contact-diary-app Develop
 
 on:
   push:
     branches:
       - develop
     paths:
-      - demo-checkin-app/**
-      - .github/workflows/demo-checkin-app.yml
+      - demo-contact-diary-app/**
+      - .github/workflows/demo-contact-diary-app.yml
 
 defaults:
   run:
@@ -33,7 +33,7 @@ jobs:
 
       - name: build, package and publish the image
         run: >
-          mvn -B spring-boot:build-image -am -pl demo-checkin-app
+          mvn -B spring-boot:build-image -am -pl demo-contact-diary-app
           -Dspring-boot.build-image.publish=true
           -Dversion.tag="develop"
         env:

@@ -28,6 +28,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
+		<docker.image.prefix>inoeg</docker.image.prefix>
 		<version.tag>${project.version}</version.tag>
 	</properties>
 
@@ -89,21 +90,21 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
-<!--					<image>-->
-<!--						<name>${docker.image.prefix}/${project.artifactId}:${version.tag}</name>-->
-<!--						<env>-->
-<!--							&lt;!&ndash; embeds environment variables into an image: https://github.com/paketo-buildpacks/environment-variables &ndash;&gt;-->
-<!--							<BPE_SPRING_PROFILES_ACTIVE>docker</BPE_SPRING_PROFILES_ACTIVE>-->
-<!--							&lt;!&ndash; with GraalVM <BP_BOOT_NATIVE_IMAGE>true</BP_BOOT_NATIVE_IMAGE> &ndash;&gt;-->
-<!--						</env>-->
-<!--					</image>-->
-<!--					<docker>-->
-<!--						<publishRegistry>-->
-<!--							<username>${env.DOCKER_HUB_USER}</username>-->
-<!--							<password>${env.DOCKER_HUB_PW}</password>-->
-<!--							&lt;!&ndash; <token></token> <url>https://docker.example.com/v1/</url> <email>user@example.com</email> &ndash;&gt;-->
-<!--						</publishRegistry>-->
-<!--					</docker>-->
+					<image>
+						<name>${docker.image.prefix}/${project.artifactId}:${version.tag}</name>
+						<env>
+							<!-- embeds environment variables into an image: https://github.com/paketo-buildpacks/environment-variables -->
+							<BPE_SPRING_PROFILES_ACTIVE>docker</BPE_SPRING_PROFILES_ACTIVE>
+							<!-- with GraalVM <BP_BOOT_NATIVE_IMAGE>true</BP_BOOT_NATIVE_IMAGE> -->
+						</env>
+					</image>
+					<docker>
+						<publishRegistry>
+							<username>${env.DOCKER_HUB_USER}</username>
+							<password>${env.DOCKER_HUB_PW}</password>
+							<!-- <token></token> <url>https://docker.example.com/v1/</url> <email>user@example.com</email> -->
+						</publishRegistry>
+					</docker>
 				</configuration>
 			</plugin>
 		</plugins>
