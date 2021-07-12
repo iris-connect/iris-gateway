@@ -1,15 +1,7 @@
 # Iris gateway helm chart
 
-## AKDB
-
-### Citrix issue: SSL error 61 / ca cert missing
-1. Download https://www.telesec.de/assets/downloads/PKI-Repository/TeleSec_Business_CA_1.cer
-1. Convert to pem: `openssl x509 -inform der -outform pem -in TeleSec_Business_CA_1.cer -out TeleSec_Business_CA_1.pem`
-1. Move to citrix ca cert dir: `sudo cp TeleSec_Business_CA_1.pem /opt/Citrix/ICAClient/keystore/cacerts/`
-
-### Proxy in AKDB (e.g. to pull docker images von dockerhub)
-proxy.akdb.net:3128
-
+## Component overview
+![Component overview](components.jpg)
 
 ## Environments
 There are 2 supported environments: `test` & `production`.
@@ -45,13 +37,14 @@ prod.iris-gateway.de | 193.28.249.53
     TOKEN=$(kubectl -n iris-gateway get secret $SECRET_NAME -o json | jq -r '.data.token' | base64 -d)
     echo $TOKEN
     ```
-1. add token to kubeconfig, add as secret to GitHub repo, as `KUBECONFIG_TEST` or `KUBECONFIG_PROD`
+1. add token to kubeconfig, add as secret to GitHub repo, as `KUBECONFIG` 
+to the specific _environment_ (`test` or `production`)
     ```yaml
     apiVersion: v1
     clusters:
       - cluster:
           insecure-skip-tls-verify: true # TODO replace with CA cert
-          server: https://api.k8s.akdb.net:6443
+          server: <ask operations colleagues for api server url>
         name: default
     contexts:
       - context:

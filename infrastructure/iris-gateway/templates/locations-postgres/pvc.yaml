@@ -6,8 +6,9 @@ metadata:
   {{- include "iris-gateway.locations-postgres-labels" . | nindent 4 }}
 spec:
   accessModes:
-    - ReadWriteOnce
-  storageClassName: managed-nfs-storage
+    - ReadWriteMany
+  storageClassName: ""
+  volumeName: locations-postgres
   resources:
     requests:
       storage: 10Gi

@@ -30,8 +30,20 @@ public class LocationRPCImpl implements LocationRPC {
 
 	@Override
 	public String postLocationsToSearchIndex(JsonRpcClientDto client, List<LocationInformation> locationList) {
-		locationService.addLocations(client.getName(), locationList);
-		return "OK";
+		List<String> listOfInvalidAddresses = locationService.addLocations(client.getName(), locationList);
+
+		if (!listOfInvalidAddresses.isEmpty()) {
+			StringBuilder outputString = new StringBuilder();
+			outputString.append("Invalid Locations detected: ");
+			for (int i = 0; i < listOfInvalidAddresses.size(); i++) {
+				outputString.append(listOfInvalidAddresses.get(i) + ", ");
+			}
+
+			String output = outputString.toString();
+			return output.substring(0, output.length() - 2);
+		} else {
+			return "OK";
+		}
 	}
 
 	@Override
@@ -49,34 +61,25 @@ public class LocationRPCImpl implements LocationRPC {
 	@Override
 	public LocationQueryResult searchForLocation(JsonRpcClientDto client, String searchKeyword, PageableDto dto) {
 
-		var pageable = PageRequest.of(
-				dto.getPage(),
-				dto.getSize());
+		var pageable = PageRequest.of(dto.getPage(), dto.getSize());
 
 		if (dto.getSortBy() != null) {
-			pageable = PageRequest.of(
-					dto.getPage(),
-					dto.getSize(),
-					Sort.by(dto.getDirection(), dto.getSortBy()));
+			pageable = PageRequest.of(dto.getPage(), dto.getSize(), Sort.by(dto.getDirection(), dto.getSortBy()));
 		}
 
 		Page<LocationInformation> page = locationService.search(searchKeyword, pageable);
 
 		return LocationQueryResult.builder()
-				.size(page.getSize())
-				.page(page.getNumber())
-				.locations(page.getContent())
-				.totalElements(page.getTotalElements())
-				.build();
+			.size(page.getSize())
+			.page(page.getNumber())
+			.locations(page.getContent())
+			.totalElements(page.getTotalElements())
+			.build();
 	}
 
 	@Override
-	public Object getLocationDetails(
-			JsonRpcClientDto client,
-			String providerId,
-			String locationId) {
-		Optional<LocationInformation> locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId,
-				locationId);
+	public Object getLocationDetails(JsonRpcClientDto client, String providerId, String locationId) {
+		Optional<LocationInformation> locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId, locationId);
 
 		if (locationInformation.isPresent())
 			return locationInformation;

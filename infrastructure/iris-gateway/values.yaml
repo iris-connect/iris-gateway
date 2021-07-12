@@ -3,7 +3,7 @@
 #   production: --set environment=production
 environment: undefined
 
-epsRepoTag: v0.1.19
+epsRepoTag: v0.1.22
 
 tls:
   keystoreSecretName: tls-keystore
@@ -56,15 +56,16 @@ postgres:
   dbName: locations
 
 serviceDirectory:
+  storageDir: /storage
+  backupDir: /backups
   image: inoeg/sd
   configMountPath: /config
-  persistentStoragePath: /storage
 
 publicProxy:
+  storageDir: /storage
   jsonRpcPort: 6655
   image: inoeg/proxy
   configMountPath: /config
-  persistentStoragePath: /storage
 
 publicProxyEps:
   jsonRpcPort: 5544

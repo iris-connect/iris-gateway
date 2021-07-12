@@ -6,8 +6,9 @@ metadata:
   {{- include "iris-gateway.service-directory-labels" . | nindent 4 }}
 spec:
   accessModes:
-    - ReadWriteOnce
-  storageClassName: managed-nfs-storage
+    - ReadWriteMany
+  storageClassName: ""
+  volumeName: service-directory
   resources:
     requests:
       storage: 1Gi

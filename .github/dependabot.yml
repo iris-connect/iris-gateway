@@ -4,5 +4,12 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
-      
+      interval: "weekly"
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "docker"
+    directory: "infrastructure/docker/nginx/Dockerfile"
+    schedule:
+      interval: "weekly"

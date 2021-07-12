@@ -6,7 +6,7 @@ data:
   settings.yml: |
     public:
       name: {{ (index .Values.serviceNames .Values.environment).publicProxy }}
-      database_file: {{ .Values.publicProxy.persistentStoragePath }}/public-proxy-announcements.db
+      database_file: {{ .Values.publicProxy.storageDir }}/public-proxy-announcements.db
       tls_bind_address: 0.0.0.0:{{ .Values.nodePorts.publicProxyTls }}
       internal_bind_address: 0.0.0.0:{{ .Values.nodePorts.publicProxyInternal }}
       internal_endpoint: {{ .Values.environment }}.iris-gateway.de:{{ .Values.nodePorts.publicProxyInternal }}

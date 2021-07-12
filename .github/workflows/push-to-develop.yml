@@ -29,7 +29,7 @@ jobs:
         run: >
           mvn -B spring-boot:build-image -am -pl iris-location-service
           -Dspring-boot.build-image.publish=true
-          -Dversion.tag="${{ github.sha }}"
+          -Dversion.tag="develop"
         env:
           DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
           DOCKER_HUB_PW: ${{ secrets.DOCKER_HUB_PW }}
@@ -39,6 +39,8 @@ jobs:
     runs-on: [self-hosted, env-test]
     container: alpine/helm:3.5.4
 
+    environment: test
+
     steps:
       - uses: actions/checkout@v1
 
@@ -46,14 +48,14 @@ jobs:
         run: >
           rm -rf ~/.kube &&
           mkdir ~/.kube &&
-          echo "${{ secrets.KUBECONFIG_TEST }}" > ~/.kube/config
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
 
       - name: Run helm deployment
         run: >
           helm upgrade --install
           --namespace iris-gateway
           --set environment=test
-          --set locations.tag="${{ github.sha }}"
+          --set locations.tag="develop"
           --wait
           --timeout 3m
           --debug

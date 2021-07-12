@@ -6,8 +6,9 @@ metadata:
   {{- include "iris-gateway.locations-postgres-backup-labels" . | nindent 4 }}
 spec:
   accessModes:
-    - ReadWriteOnce
-  storageClassName: managed-nfs-storage  # TODO use secondary class, as soon as it is available
+    - ReadWriteMany
+  storageClassName: ""
+  volumeName: locations-postgres-backups
   resources:
     requests:
       storage: 10Gi

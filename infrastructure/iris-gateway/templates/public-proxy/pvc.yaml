@@ -6,8 +6,9 @@ metadata:
   {{- include "iris-gateway.public-proxy-labels" . | nindent 4 }}
 spec:
   accessModes:
-    - ReadWriteOnce
-  storageClassName: managed-nfs-storage
+    - ReadWriteMany
+  storageClassName: ""
+  volumeName: public-proxy
   resources:
     requests:
       storage: 1Gi
