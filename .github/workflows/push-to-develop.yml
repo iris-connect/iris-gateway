@@ -50,13 +50,25 @@ jobs:
           mkdir ~/.kube &&
           echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
 
+      - name: Update Helm dependencys
+        run: helm dependency update ./infrastructure/iris-gateway
+
       - name: Run helm deployment
         run: >
           helm upgrade --install
           --namespace iris-gateway
           --set environment=test
           --set locations.tag="${{ github.sha }}"
+          --set postgresqlha.postgresql.repmgrPassword="${{ secrets.REPMGR_PASSWORD }}"
+          --set postgresqlha.pgpool.adminPassword="${{ secrets.PGPOOL_ADMIN_PASSWORD }}"
+          --set postgresqlha.postgresql.password="${{ secrets.POSTGRESQL_PASSWORD }}"
+          --set postgresqlha.pgpool.customUsers.passwords="${{ secrets.POSTGRESQL_PASSWORD }}"
           --wait
           --timeout 3m
           --debug
           iris-gateway ./infrastructure/iris-gateway
+
+      - name: Delete downloaded helm charts
+        if: ${{ always() }}
+        run: >
+          rm -rf iris-gateway/infrastructure/iris-gateway/charts
