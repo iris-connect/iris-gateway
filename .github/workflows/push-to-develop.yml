@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - chore/fix_develop_image_tag
 
 jobs:
   # https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image
@@ -33,30 +34,46 @@ jobs:
         env:
           DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
           DOCKER_HUB_PW: ${{ secrets.DOCKER_HUB_PW }}
+#
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USER }}
+          password: ${{ secrets.DOCKER_HUB_PW }}
 
-  deployment:
-    needs: build-location-service
-    runs-on: [self-hosted, env-test]
-    container: alpine/helm:3.5.4
+      - name: Republish with develop tag
+        run: |
+          NAMESPACE=inoeg
+          ARTIFACT=iris-location-service
+          TAG=develop
+          TARGET=${NAMESPACE}/${ARTIFACT}:${TAG}
+          echo target: $TARGET
+          docker tag ${NAMESPACE}/${ARTIFACT}:${{ github.sha }} ${TARGET}
+          docker push $TARGET
 
-    environment: test
-
-    steps:
-      - uses: actions/checkout@v1
-
-      - name: Prepare k8s config
-        run: >
-          rm -rf ~/.kube &&
-          mkdir ~/.kube &&
-          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
-
-      - name: Run helm deployment
-        run: >
-          helm upgrade --install
-          --namespace iris-gateway
-          --set environment=test
-          --set locations.tag="${{ github.sha }}"
-          --wait
-          --timeout 3m
-          --debug
-          iris-gateway ./infrastructure/iris-gateway
+#  deployment:
+#    needs: build-location-service
+#    runs-on: [self-hosted, env-test]
+#    container: alpine/helm:3.5.4
+#
+#    environment: test
+#
+#    steps:
+#      - uses: actions/checkout@v1
+#
+#      - name: Prepare k8s config
+#        run: >
+#          rm -rf ~/.kube &&
+#          mkdir ~/.kube &&
+#          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+#
+#      - name: Run helm deployment
+#        run: >
+#          helm upgrade --install
+#          --namespace iris-gateway
+#          --set environment=test
+#          --set locations.tag="${{ github.sha }}"
+#          --wait
+#          --timeout 3m
+#          --debug
+#          iris-gateway ./infrastructure/iris-gateway
