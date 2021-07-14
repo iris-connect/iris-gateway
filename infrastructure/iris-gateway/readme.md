@@ -59,24 +59,6 @@ to the specific _environment_ (`test` or `production`)
         user:
           token: <service-account-token for user namespace-admin>
     ```
-1. create secret `iris-gateway-locations-postgres` manually in `iris-gateway`
-    ```yaml
-    apiVersion: v1
-    kind: Secret
-    type: Opaque
-    metadata:
-      name: iris-gateway-locations-postgres
-      namespace: iris-gateway
-    data:
-      POSTGRES_HOST: aXJpcy1nYXRld2F5LWxvY2F0aW9ucy1wb3N0Z3Jlcw==  # iris-gateway-locations-postgres
-      POSTGRES_PASSWORD: ...  # b64 encoded
-      POSTGRES_USER: ...  # b64 encoded
-      postgresql-postgres-password: ...  # b64 encoded
-      postgresql-password: ...  # b64 encoded
-      repmgr-password: ...  # b64 encoded
-      usernames: ... #b64 encoded
-      passwords: ... #b64 encoded
-    ```
 1. create secret `iris-gateway-tls` manually in `iris-gateway`
     ```yaml
     apiVersion: v1
