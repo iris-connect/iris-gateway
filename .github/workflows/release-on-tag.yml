@@ -4,14 +4,14 @@ on:
   push:
     tags:
       - 'v*'
-      
+
 jobs:
   build:
     runs-on: ubuntu-20.04
     defaults:
       run:
         shell: bash
-        
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2.3.4
@@ -23,11 +23,11 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-    
+
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-    
+
       - name: build Jars and Images
         run: mvn -B clean package spring-boot:repackage spring-boot:build-image -Dspring-boot.build-image.publish=true -Dversion.tag=${{ steps.get_version.outputs.VERSION }}
         env:
@@ -69,13 +69,25 @@ jobs:
           mkdir ~/.kube &&
           echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
 
+      - name: Update Helm dependencys
+        run: helm dependency update ./infrastructure/iris-gateway
+
       - name: Run helm deployment
         run: >
           helm upgrade --install
           --namespace iris-gateway
           --set environment=production
           --set locations.tag="${{ steps.get_version.outputs.VERSION }}"
+          --set postgresqlha.postgresql.repmgrPassword="${{ secrets.REPMGR_PASSWORD }}"
+          --set postgresqlha.pgpool.adminPassword="${{ secrets.PGPOOL_ADMIN_PASSWORD }}"
+          --set postgresqlha.postgresql.password="${{ secrets.POSTGRESQL_PASSWORD }}"
+          --set postgresqlha.pgpool.customUsers.passwords="${{ secrets.POSTGRESQL_PASSWORD }}"
           --atomic
           --timeout 3m
           --debug
           iris-gateway ./infrastructure/iris-gateway
+
+      - name: Delete downloaded helm charts
+        if: ${{ always() }}
+        run: >
+          rm -rf iris-gateway/infrastructure/iris-gateway/charts
