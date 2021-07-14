@@ -49,8 +49,51 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  deployment:
-    needs: build
+  deployment-test:
+    needs: build-location-service
+    runs-on: [self-hosted, env-test]
+    container: alpine/helm:3.5.4
+
+    environment: test
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+      - name: Prepare k8s config
+        run: >
+          rm -rf ~/.kube &&
+          mkdir ~/.kube &&
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+
+      - name: Update Helm dependencys
+        run: helm dependency update ./infrastructure/iris-gateway
+
+      - name: Run helm deployment
+        run: >
+          helm upgrade --install
+          --namespace iris-gateway
+          --set environment=test
+          --set locations.tag="${{ steps.get_version.outputs.VERSION }}"
+          --set postgresqlha.postgresql.repmgrPassword="${{ secrets.REPMGR_PASSWORD }}"
+          --set postgresqlha.pgpool.adminPassword="${{ secrets.PGPOOL_ADMIN_PASSWORD }}"
+          --set postgresqlha.postgresql.password="${{ secrets.POSTGRESQL_PASSWORD }}"
+          --set postgresqlha.pgpool.customUsers.passwords="${{ secrets.POSTGRESQL_PASSWORD }}"
+          --wait
+          --timeout 3m
+          --debug
+          iris-gateway ./infrastructure/iris-gateway
+
+      - name: Delete downloaded helm charts
+        if: ${{ always() }}
+        run: >
+          rm -rf iris-gateway/infrastructure/iris-gateway/charts
+
+  deployment-prod:
+    needs: deployment-test
     runs-on: [self-hosted, env-prod]
     container: alpine/helm:3.5.4
 
