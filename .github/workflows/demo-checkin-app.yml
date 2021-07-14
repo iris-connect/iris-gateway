@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - develop
-      - chore/fix_develop_image_tag
     paths:
       - demo-checkin-app/**
       - .github/workflows/demo-checkin-app.yml
