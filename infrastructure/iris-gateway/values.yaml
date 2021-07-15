@@ -73,3 +73,46 @@ publicProxyEps:
 domains:
   test: test.iris-gateway.de
   production: iris-gateway.de
+
+postgresqlha:
+  clusterDomain: cluster.local
+  serviceAccount:
+    enabled: true
+  postgresql:
+    backupDir: /backups
+    database: locations
+    username: locations
+    password: undefined #will be set by cli
+    replicaCount: 3
+    resources: {}
+      # limits:
+      #   cpu: 250m
+      #   memory: 256Mi
+      # requests:
+      #   cpu: 250m
+      #   memory: 256Mi
+  pgpool:
+    #customUsersSecret: iris-gateway-locations-postgres
+    customUsers:
+      usernames: locations
+      passwords: undefined ## will be set by cli
+  volumePermissions:
+    enabled: true
+    resources: {}
+      # limits:
+      #   cpu: 100m
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 128Mi
+  metrics:
+    enabled: true
+    resources: {}
+      # limits:
+      #   cpu: 250m
+      #   memory: 256Mi
+      # requests:
+      #   cpu: 250m
+      #   memory: 256Mi
+  # networkPolicy:
+  #   enabled: true
