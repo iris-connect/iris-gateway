@@ -1,9 +1,12 @@
-name: Build, package and deploy (to test) all services on push to develop branch
+name: Build, package and publish location service on push to develop branch
 
 on:
   push:
     branches:
       - develop
+    paths:
+      - iris-location-service/**
+      - .github/workflows/iris-location-service.yml
 
 jobs:
   # https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image
@@ -29,7 +32,7 @@ jobs:
         run: >
           mvn -B spring-boot:build-image -am -pl iris-location-service
           -Dspring-boot.build-image.publish=true
-          -Dversion.tag="${{ github.sha }}"
+          -Dversion.tag="develop"
         env:
           DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
           DOCKER_HUB_PW: ${{ secrets.DOCKER_HUB_PW }}
