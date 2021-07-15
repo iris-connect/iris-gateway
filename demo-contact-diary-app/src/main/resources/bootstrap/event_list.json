@@ -1,13 +1,13 @@
 {
   "events": [
     {
-      "name": "Restaurant Hirsch",
-      "phone": "12345678",
+      "name": "Restaurantbesuch Da Michele",
+      "phone": "0151 47110815",
       "address": {
-        "street": "Schlossallee",
+        "street": "Europaplatz 5",
         "houseNumber": "42",
-        "zipCode": "12345",
-        "city": "Neustadt"
+        "zipCode": "64293",
+        "city": "Darmstadt"
       },
       "additionalInformation": "Nichts"
     },
