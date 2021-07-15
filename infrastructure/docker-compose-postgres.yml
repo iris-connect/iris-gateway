@@ -2,7 +2,7 @@
 # provides a Postgresql database
 # DB: login = postgres:postgres; hostname = postgres; port = 5432; volume = psqldata_iris
 ########################################################
-version: '2.3'
+version: '3'
 services:
   postgres:
     image: hzibraunschweig/sormas-postgres:${SORMAS_DOCKER_VERSION:-latest}
