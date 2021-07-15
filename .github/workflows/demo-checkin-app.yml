@@ -6,7 +6,7 @@ name: demo-checkin-app Develop
 on:
   push:
     branches:
-      - main
+      - develop
     paths:
       - demo-checkin-app/**
       - .github/workflows/demo-checkin-app.yml
@@ -32,7 +32,10 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: build, package and publish the image
-        run: mvn -B spring-boot:build-image -am -pl demo-checkin-app -Dspring-boot.build-image.publish=true
+        run: >
+          mvn -B spring-boot:build-image -am -pl demo-checkin-app
+          -Dspring-boot.build-image.publish=true
+          -Dversion.tag="develop"
         env:
           DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
           DOCKER_HUB_PW: ${{ secrets.DOCKER_HUB_PW }}
