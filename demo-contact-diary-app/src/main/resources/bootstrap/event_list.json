@@ -1,0 +1,20 @@
+{
+  "events": [
+    {
+      "name": "Restaurantbesuch Da Michele",
+      "phone": "0151 47110815",
+      "address": {
+        "street": "Europaplatz 5",
+        "houseNumber": "42",
+        "zipCode": "64293",
+        "city": "Darmstadt"
+      },
+      "additionalInformation": "Nichts"
+    },
+    {
+      "name": "Gruppen-Wanderung"
+    }
+  ],
+  "startDate": "2021-03-28T19:21:28.071Z",
+  "endDate": "2021-03-28T23:21:28.071Z"
+}

@@ -1,0 +1,41 @@
+# https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image
+
+# Build and package image for demo-contact-diary-app and deploy it to docker.io
+name: demo-contact-diary-app Develop
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - demo-contact-diary-app/**
+      - .github/workflows/demo-contact-diary-app.yml
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.3.4
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v2.1.6
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: build, package and publish the image
+        run: >
+          mvn -B spring-boot:build-image -am -pl demo-contact-diary-app
+          -Dspring-boot.build-image.publish=true
+          -Dversion.tag="develop"
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+          DOCKER_HUB_PW: ${{ secrets.DOCKER_HUB_PW }}
