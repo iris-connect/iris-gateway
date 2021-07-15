@@ -38,8 +38,6 @@ public class RPCClientConfig {
 	@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 	public JsonRpcHttpClient rpcClient(String clientUrl) throws MalformedURLException, NoSuchAlgorithmException, KeyManagementException {
 
-		objectMapper.registerModule(new JavaTimeModule());
-
 		JsonRpcHttpClient client = new JsonRpcHttpClient(
 				objectMapper,
 				new URL(clientUrl),
