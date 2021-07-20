@@ -34,7 +34,7 @@ services:
       - EPS_SETTINGS=settings/dev/roles/ls-1
     command: [ "--level", "debug", "server", "run" ]
 
-  iris-app-checkin-demo:
+  iris-app-api-demo:
     image: inoeg/demo-checkin-app:${GATEWAY_VERSION}
     environment:
       - EPS_CLIENT_CLIENT_URL=https://iris-app-api-demo-eps:5554/jsonrpc
