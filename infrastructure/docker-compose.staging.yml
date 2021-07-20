@@ -1,31 +1,24 @@
 ########################################################
-# Intended for the all in one staging environment on the VM 
-# 
-# provides a NGINX server with certificates and configuration for staging.iris-gateway.de
-# togehter with the IRIS applications and with a Postgresql database and SORMAS
-# DB: look at docker-compose-postgres.yml
-# SORMAS: port = /; look at docker-compose-sormas.base.yml
-# IRIS public: port = /
-# IRIS location: port = /
-# IRIS client: port = /; look at docker-compose-hd-client.base.yml
-# IRIS frontend: port = /; look at docker-compose-hd-client.base.yml
-# NGINX: port = 443
+# Intended for the gateway deployment on DEV server.
+# All services are watchtower-enabled.
 ########################################################
 version: '3'
 services:
 
   iris-location:
-    image: inoeg/iris-location-service:develop
+    image: inoeg/iris-location-service:${GATEWAY_VERSION}
     restart: unless-stopped
     depends_on:
       - ls-1
     expose:
       - 8080
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     environment:
       SPRING_PROFILES_ACTIVE: docker
 
   ls-1:
-    image: inoeg/eps:v0.1.32
+    image: inoeg/eps:${EPS_VERSION}
     depends_on:
       sd-1:
         condition: service_started
@@ -35,12 +28,14 @@ services:
       - 4445:4445
     volumes:
       - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     environment:
       - EPS_SETTINGS=settings/dev/roles/ls-1
     command: [ "--level", "debug", "server", "run" ]
 
-  iris-app-api-demo:
-    image: inoeg/demo-checkin-app:develop
+  iris-app-checkin-demo:
+    image: inoeg/demo-checkin-app:${GATEWAY_VERSION}
     environment:
       - EPS_CLIENT_CLIENT_URL=https://iris-app-api-demo-eps:5554/jsonrpc
     depends_on:
@@ -50,10 +45,23 @@ services:
         condition: service_started
     ports:
       - 8091:8091
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
+
+  iris-app-diary-demo:
+    image: inoeg/demo-contact-diary-app:${GATEWAY_VERSION}
+    depends_on:
+      public-proxy:
+        condition: service_started
+    ports:
+      - 8093:8093
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
 
   iris-app-api-demo-eps:
-    image: inoeg/eps:v0.1.32
+    image: inoeg/eps:${EPS_VERSION}
     depends_on:
       sd-1:
         condition: service_started
@@ -63,12 +71,14 @@ services:
       - 4444:4444
     volumes:
       - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     environment:
       - EPS_SETTINGS=settings/dev/roles/demo-app
     command: [ "--level", "trace", "server", "run" ]
 
   public-proxy:
-    image: inoeg/proxy:v0.1.32
+    image: inoeg/proxy:${EPS_VERSION}
     expose:
       - 4433
       - 9999
@@ -84,7 +94,7 @@ services:
     command: [ "--level", "trace", "run", "public" ]
 
   public-proxy-eps:
-    image: inoeg/eps:v0.1.32
+    image: inoeg/eps:${EPS_VERSION}
     depends_on:
       sd-1:
         condition: service_started
@@ -95,12 +105,14 @@ services:
       - 5559:5559
     volumes:
       - /home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     environment:
       - EPS_SETTINGS=settings/dev/roles/public-proxy-eps-1
     command: [ "--level", "trace", "server", "run" ]
 
   sd-1:
-    image: inoeg/sd:v0.1.32
+    image: inoeg/sd:${EPS_VERSION}
     expose:
       - 3322
     ports:
@@ -108,6 +120,8 @@ services:
     volumes:
       - /home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings
       - /home/iris/service-directory:/tmp
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     environment:
       - SD_SETTINGS=settings/dev/roles/sd-1
     entrypoint: ./sd
