@@ -1,5 +1,8 @@
 package iris.location_service.utils;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 public class ValidationHelper {
 
 	public static final String regexEmail = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w-_]+\\.)+[\\w]+[\\w]$";
@@ -18,4 +21,87 @@ public class ValidationHelper {
 			return false;
 		return phoneNumber.matches(regexPhone);
 	}
+
+	public static boolean isNotShowingSignsForAttacks(String input) {
+		if (input == null)
+			return false;
+
+		if (input.length() <= 0)
+			return false;
+
+		if (input.contains("<script"))
+			return false;
+
+		if (input.contains("SELECT") && input.contains("FROM"))
+			return false;
+
+		String[] forbiddenSymbolsArray = {
+			"=",
+			"<",
+			">",
+			"!",
+			"\"",
+			"§",
+			"$",
+			"%",
+			"&",
+			"/",
+			"(",
+			")",
+			"?",
+			"´",
+			"`",
+			"¿",
+			"≠",
+			"¯",
+			"}",
+			"·",
+			"{",
+			"˜",
+			"\\",
+			"]",
+			"^",
+			"ﬁ",
+			"[",
+			"¢",
+			"¶",
+			"“",
+			"¡",
+			"¬",
+			"”",
+			"#",
+			"£",
+			"+",
+			"*",
+			"±",
+			"",
+			"‘",
+			"’",
+			"'",
+			"-",
+			"_",
+			".",
+			":",
+			"…",
+			"÷",
+			"∞",
+			";",
+			"˛",
+			"æ",
+			"Æ",
+			"œ",
+			"Œ",
+			"@",
+			"•",
+			"°",
+			"„" };
+		Stream<String> forbiddenSymbolsStream = Arrays.stream(forbiddenSymbolsArray);
+		int forbiddenSymbolCounter = (int) forbiddenSymbolsStream.filter(symbol -> input.startsWith(symbol) == true).count();
+
+		if (forbiddenSymbolCounter > 0)
+			return false;
+
+		return true;
+	}
+
 }
