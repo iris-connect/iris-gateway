@@ -1,13 +1,16 @@
 package iris.location_service.jsonrpc;
 
+import static iris.location_service.utils.LoggingHelper.*;
+
 import iris.location_service.dto.LocationInformation;
 import iris.location_service.dto.LocationOverviewDto;
 import iris.location_service.dto.LocationQueryResult;
 import iris.location_service.service.LocationService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
@@ -23,6 +26,7 @@ import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
 @AutoJsonRpcServiceImpl
 @AllArgsConstructor
 @Service
+@Slf4j
 public class LocationRPCImpl implements LocationRPC {
 
 	private final @NotNull LocationService locationService;
@@ -30,56 +34,78 @@ public class LocationRPCImpl implements LocationRPC {
 
 	@Override
 	public String postLocationsToSearchIndex(JsonRpcClientDto client, List<LocationInformation> locationList) {
-		List<String> listOfInvalidAddresses = locationService.addLocations(client.getName(), locationList);
+
+		var listOfInvalidAddresses = locationService.addLocations(client.getName(), locationList);
+
+		var ret = "OK";
+		var logRes = ret;
 
 		if (!listOfInvalidAddresses.isEmpty()) {
-			StringBuilder outputString = new StringBuilder();
-			outputString.append("Invalid Locations detected: ");
-			for (int i = 0; i < listOfInvalidAddresses.size(); i++) {
-				outputString.append(listOfInvalidAddresses.get(i) + ", ");
-			}
 
-			String output = outputString.toString();
-			return output.substring(0, output.length() - 2);
-		} else {
-			return "OK";
+			ret = listOfInvalidAddresses.stream()
+					.collect(Collectors.joining(", ", "Invalid Locations detected: ", ""));
+			logRes = "Invalid Locations detected";
 		}
+
+		log.debug("JSON-RPC - Post locations for client: {} (locations: {}) => result: {}", client.getName(),
+				locationList.size(), logRes);
+
+		return ret;
 	}
 
 	@Override
 	public List<LocationOverviewDto> getProviderLocations(JsonRpcClientDto client) {
-		return locationService.getProviderLocations(client.getName());
+
+		var providerLocations = locationService.getProviderLocations(client.getName());
+
+		log.debug("JSON-RPC - Get provider locations for client: {} => returns {} locations", client.getName(),
+				providerLocations.size());
+
+		return providerLocations;
 	}
 
 	@Override
 	public String deleteLocationFromSearchIndex(JsonRpcClientDto client, String locationId) {
+
+		var ret = "NOT FOUND";
+
 		if (locationService.deleteLocation(client.getName(), locationId))
-			return "OK";
-		return "NOT FOUND";
+			ret = "OK";
+
+		log.debug("JSON-RPC - Delete location for client: {}; locationId: {} => result: {}", client.getName(),
+				obfuscate(locationId), ret);
+
+		return ret;
 	}
 
 	@Override
 	public LocationQueryResult searchForLocation(JsonRpcClientDto client, String searchKeyword, PageableDto dto) {
 
-		var pageable = PageRequest.of(dto.getPage(), dto.getSize());
-
-		if (dto.getSortBy() != null) {
-			pageable = PageRequest.of(dto.getPage(), dto.getSize(), Sort.by(dto.getDirection(), dto.getSortBy()));
-		}
+		var pageable = PageRequest.of(dto.getPage(), dto.getSize(),
+				dto.getSortBy() != null
+						? Sort.by(dto.getDirection(), dto.getSortBy())
+						: Sort.unsorted());
 
 		Page<LocationInformation> page = locationService.search(searchKeyword, pageable);
 
+		log.debug("JSON-RPC - Search location for client: {} => returns page {} with {} locations; total: {}",
+				client.getName(), page.getNumber(), page.getSize(), page.getTotalElements());
+
 		return LocationQueryResult.builder()
-			.size(page.getSize())
-			.page(page.getNumber())
-			.locations(page.getContent())
-			.totalElements(page.getTotalElements())
-			.build();
+				.size(page.getSize())
+				.page(page.getNumber())
+				.locations(page.getContent())
+				.totalElements(page.getTotalElements())
+				.build();
 	}
 
 	@Override
 	public Object getLocationDetails(JsonRpcClientDto client, String providerId, String locationId) {
-		Optional<LocationInformation> locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId, locationId);
+
+		var locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId, locationId);
+
+		log.debug("JSON-RPC - Get location details for client: {}; providerId: {}, locationId: {} => found: {}",
+				client.getName(), obfuscate(providerId), obfuscate(locationId), locationInformation.isPresent());
 
 		if (locationInformation.isPresent())
 			return locationInformation;
@@ -89,6 +115,11 @@ public class LocationRPCImpl implements LocationRPC {
 
 	@Override
 	public Status getHealth(JsonRpcClientDto client) {
-		return healthEndpoint.health().getStatus();
+
+		var status = healthEndpoint.health().getStatus();
+
+		log.debug("JSON-RPC - Get health status for client: {} => result: {}", client.getName(), status);
+
+		return status;
 	}
 }
