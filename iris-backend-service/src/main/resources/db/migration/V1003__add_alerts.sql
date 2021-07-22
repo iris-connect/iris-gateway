@@ -1,0 +1,4 @@
+CREATE TABLE ALERTS (
+    ID uuid NOT NULL,
+    CONSTRAINT alert_pkey PRIMARY KEY (ID)
+)
