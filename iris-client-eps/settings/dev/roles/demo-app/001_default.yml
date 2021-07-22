@@ -19,10 +19,6 @@ channels: # defines all the channels that we want to open when starting the serv
     type: jsonrpc_client
     settings:
       endpoint: http://host.docker.internal:8091/data-request-rpc
-      tls:
-        ca_certificate_files: ["$DIR/../../certs/root.crt"]
-        certificate_file: "$DIR/../../certs/demo-app.crt"
-        key_file: "$DIR/../../certs/demo-app.key"
   - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
     type: grpc_client
     settings:
