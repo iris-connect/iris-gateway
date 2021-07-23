@@ -3,16 +3,6 @@ directory:
   type: json
   settings:
     path: "$DIR/../../directory"
-#  type: api
-#  settings:
-#    jsonrpc_client:
-#      tls:
-#        certificate_file: "$DIR/../../certs/hd-1.crt"
-#        key_file: "$DIR/../../certs/hd-1.key"
-#        ca_certificate_files: ["$DIR/../../certs/root.crt"]
-#    ca_certificate_files: ["$DIR/../../certs/root.crt"]
-#    endpoints: ["https://localhost:3322/jsonrpc"]
-#    server_names: ["sd-1"]
 channels: # defines all the channels that we want to open when starting the server
   - name: main gRPC server # accepts incoming gRPC connections to deliver and receive messages
     type: grpc_server
@@ -33,6 +23,8 @@ channels: # defines all the channels that we want to open when starting the serv
     type: jsonrpc_server 
     settings:
       bind_address: "0.0.0.0:5544"
+      cors:
+        allowed_hosts: [ "^http(?:s)?://localhost\\:\\d+$" ]
       tls:
         ca_certificate_files: ["$DIR/../../certs/root.crt"]
         certificate_file: "$DIR/../../certs/public-proxy-1.crt"
@@ -40,9 +32,9 @@ channels: # defines all the channels that we want to open when starting the serv
   - name: main JSON-RPC client # creates outgoing JSONRPC connections to deliver and receive messages
     type: jsonrpc_client
     settings:
-      endpoint: https://0.0.0.0:6655/jsonrpc
-      server_name: public-proxy-1
+      endpoint: https://public-proxy:6655/jsonrpc
       tls:
+        server_name: public-proxy-1
         ca_certificate_files: ["$DIR/../../certs/root.crt"]
         certificate_file: "$DIR/../../certs/public-proxy-1.crt"
         key_file: "$DIR/../../certs/public-proxy-1.key"
