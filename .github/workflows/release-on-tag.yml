@@ -35,6 +35,20 @@ jobs:
           DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
           DOCKER_HUB_PW: ${{ secrets.DOCKER_HUB_PW }}
 
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r deployment-${{ steps.get_version.outputs.VERSION }}.zip infrastructure
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          prerelease: true
+          files: |
+            **/target/*${{ steps.get_version.outputs.VERSION }}.jar
+            **/deployment-${{ steps.get_version.outputs.VERSION }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   deployment-test:
     needs: build
     runs-on: [self-hosted, env-test]
