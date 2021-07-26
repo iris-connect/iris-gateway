@@ -76,7 +76,7 @@ jobs:
       - name: Delete downloaded helm charts
         if: ${{ always() }}
         run: >
-          rm -rf iris-gateway/infrastructure/iris-gateway/charts
+          rm -rf ./infrastructure/iris-gateway/charts/
 
   deployment-prod:
     needs: deployment-test
@@ -119,4 +119,4 @@ jobs:
       - name: Delete downloaded helm charts
         if: ${{ always() }}
         run: >
-          rm -rf  /actions-runner/_work/iris-gateway/iris-gateway/infrastructure/iris-gateway/charts/
+          rm -rf ./infrastructure/iris-gateway/charts/
