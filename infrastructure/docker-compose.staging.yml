@@ -29,8 +29,6 @@ services:
       - 4445:4445
     volumes:
       - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
     environment:
       - EPS_SETTINGS=settings/dev/roles/ls-1
     command: [ "--level", "debug", "server", "run" ]
@@ -72,14 +70,12 @@ services:
       - 4444:4444
     volumes:
       - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
     environment:
       - EPS_SETTINGS=settings/dev/roles/demo-app
     command: [ "--level", "trace", "server", "run" ]
 
   public-proxy:
-    image: inoeg/proxy:${GATEWAY_VERSION}
+    image: inoeg/proxy:${EPS_VERSION}
     expose:
       - 4433
       - 9999
@@ -106,14 +102,12 @@ services:
       - 5559:5559
     volumes:
       - /home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
     environment:
       - EPS_SETTINGS=settings/dev/roles/public-proxy-eps-1
     command: [ "--level", "trace", "server", "run" ]
 
   sd-1:
-    image: inoeg/sd:${GATEWAY_VERSION}
+    image: inoeg/sd:${EPS_VERSION}
     expose:
       - 3322
     ports:
@@ -121,8 +115,6 @@ services:
     volumes:
       - /home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings
       - /home/iris/service-directory:/tmp
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
     environment:
       - SD_SETTINGS=settings/dev/roles/sd-1
     entrypoint: ./sd
