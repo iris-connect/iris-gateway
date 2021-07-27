@@ -1,8 +1,10 @@
 package iris.location_service.utils;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
+
+@Slf4j
 public class ValidationHelper {
 
 	public static final String regexEmail = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w-_]+\\.)+[\\w]+[\\w]$";
@@ -22,18 +24,16 @@ public class ValidationHelper {
 		return phoneNumber.matches(regexPhone);
 	}
 
-	public static boolean isNotShowingSignsForAttacks(String input) {
-		if (input == null)
-			return false;
+	public static boolean isPossibleAttackForRequiredValue(String input, String message) {
+		if (input == null || input.length() <= 0) {
+			log.warn(ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE + message);
+			return true;
+		}
 
-		if (input.length() <= 0)
-			return false;
+		return isPossibleAttack(input, message);
+	}
 
-		if (input.contains("<script"))
-			return false;
-
-		if (input.contains("SELECT") && input.contains("FROM"))
-			return false;
+	public static boolean isPossibleAttack(String input, String message) {
 
 		String[] forbiddenSymbolsArray = {
 			"=",
@@ -95,13 +95,15 @@ public class ValidationHelper {
 			"•",
 			"°",
 			"„" };
-		Stream<String> forbiddenSymbolsStream = Arrays.stream(forbiddenSymbolsArray);
-		int forbiddenSymbolCounter = (int) forbiddenSymbolsStream.filter(symbol -> input.startsWith(symbol) == true).count();
 
-		if (forbiddenSymbolCounter > 0)
-			return false;
+		if (input.contains("<script")
+			|| input.contains("SELECT") && input.contains("FROM")
+			|| StringUtils.startsWithAny(input, forbiddenSymbolsArray)) {
+			log.warn(ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE + message);
+			return true;
+		}
 
-		return true;
+		return false;
 	}
 
 }
