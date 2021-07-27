@@ -1,9 +1,9 @@
 {
   "records": [
     {
+      "name": "demo-app",
       "created_at": "2021-05-21T09:11:27+00:00",
       "section": "channels",
-      "name": "demo-app",
       "data": [
         {
           "type": "grpc_server",
@@ -14,9 +14,28 @@
       ]
     },
     {
+      "name": "demo-app",
+      "created_at": "2021-05-21T09:11:27+00:00",
+      "section": "services",
+      "data": [
+        {
+          "name": "locations",
+          "permissions": [{"group": "*", "rights" : ["call"]}],
+          "methods": [
+            {
+              "name": "createDataRequest"
+            },
+            {
+              "name": "abortDataRequest"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ls-1",
       "created_at": "2021-05-21T09:11:27+00:00",
       "section": "channels",
-      "name": "ls-1",
       "data": [
         {
           "type": "grpc_server",
@@ -27,12 +46,65 @@
       ]
     },
     {
+      "name": "ls-1",
       "created_at": "2021-05-21T09:11:27+00:00",
-      "section": "channels",
-      "name": "hd-1",
+      "section": "services",
       "data": [
         {
+          "name": "locations",
+          "permissions": [{"group": "*", "rights" : ["call"]}],
+          "methods": [
+            {
+              "name": "getHealth"
+            },
+            {
+              "name": "postLocationsToSearchIndex"
+            },
+            {
+              "name": "getProviderLocations"
+            },
+            {
+              "name": "deleteLocationFromSearchIndex"
+            },
+            {
+              "name": "searchForLocation"
+            },
+            {
+              "name": "getLocationDetails"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "hd-1",
+      "created_at": "2021-05-21T09:11:27+00:00",
+      "section": "channels",
+      "data": [
+        {
+          "type" : "grpc_server",
+          "settings" : {
+            "address" : "hd-1:4446"
+          }
+        },
+        {
           "type": "grpc_client"
+        }
+      ]
+    },
+    {
+      "name": "hd-1",
+      "created_at": "2021-05-21T09:11:27+00:00",
+      "section": "services",
+      "data": [
+        {
+          "name": "locations",
+          "permissions": [{"group": "*", "rights" : ["call"]}],
+          "methods": [
+            {
+              "name": "submitGuestList"
+            }
+          ]
         }
       ]
     },
@@ -53,6 +125,22 @@
       ]
     },
     {
+      "created_at": "2021-05-17T10:00:00Z",
+      "section": "channels",
+      "name": "public-proxy-1",
+      "data" : [
+        {
+          "type" : "grpc_server",
+          "settings" : {
+            "address" : "public-proxy-eps:5559"
+          }
+        },
+        {
+          "type" : "grpc_client"
+        }
+      ]
+    },
+    {
       "created_at": "2021-05-22T08:50:00Z",
       "section": "groups",
       "name": "public-proxy-1",
@@ -67,17 +155,13 @@
       "data": [
         {
           "name": "proxy",
-          "permissions": [
-            {
-              "group": "proxy-users",
-              "rights": [
-                "call"
-              ]
-            }
-          ],
+          "permissions": [{"group": "*", "rights": ["call"]}],
           "methods": [
             {
-              "name": "announceConnection"
+              "name": "announceConnections"
+            },
+            {
+              "name": "getAnnouncements"
             }
           ]
         }

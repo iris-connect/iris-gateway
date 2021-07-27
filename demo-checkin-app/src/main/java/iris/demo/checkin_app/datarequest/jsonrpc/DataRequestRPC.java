@@ -14,4 +14,8 @@ public interface DataRequestRPC {
 			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
 			@JsonRpcParam(value = "dataRequest") LocationDataRequestDto locationDataRequestDto);
 
+	String abortDataRequest(
+			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
+			@JsonRpcParam(value = "dataRequest") LocationDataRequestDto locationDataRequestDto);
+
 }
