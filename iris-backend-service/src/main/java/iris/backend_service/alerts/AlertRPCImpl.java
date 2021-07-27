@@ -21,7 +21,7 @@ class AlertRPCImpl implements AlertRPC {
 	private final ModelMapper mapper;
 
 	@Override
-	public String postAlerts(@Valid JsonRpcClientDto client, List<AlertDto> alertDtos) {
+	public String postAlerts(@Valid JsonRpcClientDto client, @Valid List<AlertDto> alertDtos) {
 
 		log.trace("Alert - JSON-RPC - Post alert invoked for client: {} with {} alerts", client.getName(),
 				alertDtos.size());

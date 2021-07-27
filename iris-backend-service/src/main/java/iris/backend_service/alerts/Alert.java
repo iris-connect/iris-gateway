@@ -1,6 +1,8 @@
 package iris.backend_service.alerts;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -24,11 +26,13 @@ import javax.persistence.Table;
 @Table(name = "alerts")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @EqualsAndHashCode
 public class Alert {
 
 	@EmbeddedId
-	private AlertIdentifier id = AlertIdentifier.of(UUID.randomUUID());
+	private final AlertIdentifier id = AlertIdentifier.of(UUID.randomUUID());
 
 	private String title;
 	private String text;
