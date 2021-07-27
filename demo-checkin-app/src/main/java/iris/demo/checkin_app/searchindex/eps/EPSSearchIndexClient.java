@@ -30,7 +30,7 @@ public class EPSSearchIndexClient implements SearchIndexClient {
 		UpdateLocationsDTO updateLocationsDTO = UpdateLocationsDTO.builder()
 				.locations(locationsDto.getLocations())
 				.build();
-		var methodName = epsClientProperties.getLocationServiceEndpoint() + ".postLocationsToSearchIndex";
+		var methodName = epsClientProperties.getBackendServiceEndpoint() + ".postLocationsToSearchIndex";
 		try {
 			log.info(
 					"Sent request with response " + rpcClient.invoke(methodName, updateLocationsDTO, JsonRPCStringResult.class));
@@ -44,7 +44,7 @@ public class EPSSearchIndexClient implements SearchIndexClient {
 		DeleteLocationDTO deleteLocationDTO = DeleteLocationDTO.builder()
 				.locationId(locationDto.getId().toString())
 				.build();
-		var methodName = epsClientProperties.getLocationServiceEndpoint() + ".deleteLocationFromSearchIndex";
+		var methodName = epsClientProperties.getBackendServiceEndpoint() + ".deleteLocationFromSearchIndex";
 		try {
 			log.info(
 					"Sent request with response " + rpcClient.invoke(methodName, deleteLocationDTO, JsonRPCStringResult.class));
