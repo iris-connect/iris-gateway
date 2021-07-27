@@ -5,12 +5,12 @@ on:
     branches:
       - develop
     paths:
-      - iris-location-service/**
-      - .github/workflows/iris-location-service.yml
+      - iris-backend-service/**
+      - .github/workflows/iris-backend-service.yml
 
 jobs:
   # https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image
-  build-location-service:
+  build-backend-service:
     runs-on: ubuntu-20.04
     defaults:
       run:
@@ -30,7 +30,7 @@ jobs:
 
       - name: build, package and publish the image
         run: >
-          mvn -B spring-boot:build-image -am -pl iris-location-service
+          mvn -B spring-boot:build-image -am -pl iris-backend-service
           -Dspring-boot.build-image.publish=true
           -Dversion.tag="develop"
         env:
