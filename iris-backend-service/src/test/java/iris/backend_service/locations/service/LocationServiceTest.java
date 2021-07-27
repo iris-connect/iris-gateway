@@ -1,15 +1,14 @@
 package iris.backend_service.locations.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import iris.backend_service.jsonrpc.JsonRpcClientDto;
 import iris.backend_service.locations.dto.LocationContact;
 import iris.backend_service.locations.dto.LocationInformation;
 import iris.backend_service.locations.search.db.DBSearchIndex;
 import iris.backend_service.locations.search.db.LocationDAO;
-import iris.backend_service.locations.service.LocationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +19,10 @@ import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
+@ActiveProfiles("dev_env")
 public class LocationServiceTest {
 
 	String LOCATION_ID_1 = "ID_0001_Valid";

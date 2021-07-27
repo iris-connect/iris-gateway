@@ -1,13 +1,11 @@
 package iris.backend_service.locations.search.db;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import iris.backend_service.locations.dto.LocationAddress;
 import iris.backend_service.locations.dto.LocationContact;
 import iris.backend_service.locations.dto.LocationInformation;
 import iris.backend_service.locations.dto.LocationQueryResult;
-import iris.backend_service.locations.search.db.DBSearchIndex;
-import iris.backend_service.locations.search.db.LocationDAO;
 import iris.backend_service.locations.search.db.model.Location;
 import iris.backend_service.locations.search.db.model.LocationIdentifier;
 
@@ -17,11 +15,13 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
+@ActiveProfiles("dev_env")
 class DBSearchIndexTest {
 
 	@Autowired
