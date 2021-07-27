@@ -1,6 +1,7 @@
 package iris.backend_service.alerts.slack;
 
 import lombok.Data;
+import lombok.NonNull;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
@@ -11,9 +12,8 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConfigurationProperties(prefix = "iris.alerts.slack")
 @ConstructorBinding
 @Data
-public class SlackProperties {
+class SlackProperties {
 
-	private String apiAddress;
-	private String group;
-	private String customer;
+	private final @NonNull String token;
+	private final @NonNull String channel;
 }

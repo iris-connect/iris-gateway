@@ -8,11 +8,8 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 @Getter
-class Ticket {
-	private final String title;
-	private final String group;
-	private final String customer_id;
-	private final Article article;
-
-	private String id;
+public class Tag {
+	private final String item;
+	private final String o_id;
+	private String object = "Ticket";
 }

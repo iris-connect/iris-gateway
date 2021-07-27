@@ -11,8 +11,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @Getter
 class Article {
-	private final String subject;
 	private final String body;
-	private String type = "note";
+	private String content_type = "text/html";
 	private boolean internal = true;
 }

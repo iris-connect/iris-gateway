@@ -11,11 +11,13 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImplExporter;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
+@EnableScheduling
 public class IrisBackendServiceApplication {
 
 	public static void main(String[] args) throws Exception {
@@ -25,7 +27,8 @@ public class IrisBackendServiceApplication {
 
 			@Override
 			protected String getApplicationVersion(Class<?> sourceClass) {
-				return properties.getProperty("git.build.version", "-") + " (" + properties.getProperty("git.commit.id.abbrev", "-") + ")";
+				return properties.getProperty("git.build.version", "-") + " ("
+						+ properties.getProperty("git.commit.id.abbrev", "-") + ")";
 			}
 		};
 

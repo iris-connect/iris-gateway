@@ -1,7 +1,21 @@
 package iris.backend_service.alerts.zammad;
 
+import iris.backend_service.alerts.Alert;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,18 +24,57 @@ import org.springframework.web.client.RestTemplate;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ZammadTicketCreator {
 
 	private final RestTemplate rest;
 	private final ZammadProperties properties;
 
-	public void createTicket(String ticketTitle, String noteSubject, String message) {
+	@PostConstruct
+	void postConstruct() {
 
-		var ticket = new Ticket(ticketTitle, properties.getGroup(), new Article(noteSubject, message),
-				properties.getCustomer());
+		rest.getInterceptors().add(new ClientHttpRequestInterceptor() {
 
-		var resp = rest.postForEntity(properties.getApiAddress(), ticket, null);
+			@Override
+			public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+					throws IOException {
 
-		System.out.println(resp);
+				var headers = request.getHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+				headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + properties.getToken());
+
+				return execution.execute(request, body);
+			}
+		});
+	}
+
+	public boolean createTicket(Alert alert) {
+
+		if ("DISABLED".equals(properties.getToken())) {
+			return true;
+		}
+
+		var customerId = "guess:" + StringUtils.deleteWhitespace(alert.getClient()) + "@alert.iris-connect.de";
+		var text = alert.getText() + "<br /><br /><i>(" + "Version: " + alert.getVersion() + ")</i>";
+
+		var ticket = new Ticket(alert.getTitle(), properties.getGroup(), customerId, new Article(text));
+
+		var response = rest.postForEntity(properties.getTicketUri(), ticket, Ticket.class);
+
+		if (!response.getStatusCode().is2xxSuccessful()) {
+			log.error("Alert - Zammad - ticket could not be created => Errors: {}", response.getBody());
+			return false;
+		}
+
+		var envTag = new Tag(properties.getEnvironment(), response.getBody().getId());
+		var response2 = rest.postForEntity(properties.getTagUri(), envTag, String.class);
+
+		if (response2.getStatusCode().is2xxSuccessful()) {
+			return true;
+		}
+
+		log.error("Alert - Zammad - tag could not be created => Errors: {}", response.getBody());
+		return false;
 	}
 }
