@@ -21,6 +21,8 @@ public class AlertDto {
 	@Size(max = 1000)
 	String text;
 	@Size(max = 50)
-	String version;
+	String sourceApp;
+	@Size(max = 50)
+	String appVersion;
 	AlertType alertType;
 }

@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
@@ -55,8 +54,10 @@ public class ZammadTicketCreator {
 			return true;
 		}
 
-		var customerId = "guess:" + StringUtils.deleteWhitespace(alert.getClient()) + "@alert.iris-connect.de";
-		var text = alert.getText() + "<br /><br /><i>(" + "Version: " + alert.getVersion() + ")</i>";
+		var customerId = "guess:" + properties.getCustomerIds().getOrDefault(alert.getSourceApp(),
+				"unknown@alert.iris-connect.de");
+		var text = alert.getText() + "<br /><br /><i>Client: " + alert.getClient() + "<br />App-Version: "
+				+ alert.getAppVersion() + "</i>";
 
 		var ticket = new Ticket(alert.getTitle(), properties.getGroup(), customerId, new Article(text));
 

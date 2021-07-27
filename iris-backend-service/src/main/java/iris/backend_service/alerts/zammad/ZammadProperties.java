@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 import java.net.URI;
+import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
@@ -19,6 +20,7 @@ public class ZammadProperties {
 	private final @NonNull URI apiAddress;
 	private final @NonNull String token;
 	private final @NonNull String environment;
+	private final @NonNull Map<String, String> customerIds;
 	private final String group = "Users";
 
 	public URI getTicketUri() {

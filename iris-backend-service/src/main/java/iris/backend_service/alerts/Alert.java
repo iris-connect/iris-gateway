@@ -33,7 +33,8 @@ public class Alert {
 	private String title;
 	private String text;
 	private String client;
-	private String version;
+	private String sourceApp;
+	private String appVersion;
 
 	@Column(nullable = false) @Enumerated(EnumType.STRING)
 	private AlertType alertType;

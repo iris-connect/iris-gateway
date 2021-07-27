@@ -43,7 +43,7 @@ public class SlackMessageCreator {
 				SectionBlock.builder()
 						.text(
 								MarkdownTextObject.builder()
-										.text("*" + alert.getClient() + " → " + alert.getTitle() + "*")
+										.text("*" + alert.getSourceApp() + " → " + alert.getTitle() + "*")
 										.build())
 						.build(),
 				SectionBlock.builder()
@@ -53,7 +53,7 @@ public class SlackMessageCreator {
 						.build(),
 				SectionBlock.builder()
 						.text(MarkdownTextObject.builder()
-								.text("_(Version: " + alert.getVersion() + ")_")
+								.text("_(Client: " + alert.getClient() + "  |  App-Version: " + alert.getAppVersion() + ")_")
 								.build())
 						.build());
 
