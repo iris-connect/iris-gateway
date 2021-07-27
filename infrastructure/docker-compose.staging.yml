@@ -1,0 +1,123 @@
+########################################################
+# Intended for the gateway deployment on DEV server.
+# All services are watchtower-enabled.
+# Proxy and Service-Directory use GATEWAY_VERSION.
+########################################################
+version: '3'
+services:
+
+  iris-location:
+    image: inoeg/iris-location-service:${GATEWAY_VERSION}
+    restart: unless-stopped
+    depends_on:
+      - ls-1
+    expose:
+      - 8080
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+  ls-1:
+    image: inoeg/eps:${EPS_VERSION}
+    depends_on:
+      sd-1:
+        condition: service_started
+    expose:
+      - 4445
+    ports:
+      - 4445:4445
+    volumes:
+      - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
+    environment:
+      - EPS_SETTINGS=settings/dev/roles/ls-1
+    command: [ "--level", "debug", "server", "run" ]
+
+  iris-app-api-demo:
+    image: inoeg/demo-checkin-app:${GATEWAY_VERSION}
+    environment:
+      - EPS_CLIENT_CLIENT_URL=https://iris-app-api-demo-eps:5554/jsonrpc
+    depends_on:
+      iris-location:
+        condition: service_started
+      iris-app-api-demo-eps:
+        condition: service_started
+    ports:
+      - 8091:8091
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
+
+  iris-app-diary-demo:
+    image: inoeg/demo-contact-diary-app:${GATEWAY_VERSION}
+    depends_on:
+      public-proxy:
+        condition: service_started
+    ports:
+      - 8093:8093
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
+
+  iris-app-api-demo-eps:
+    image: inoeg/eps:${EPS_VERSION}
+    depends_on:
+      sd-1:
+        condition: service_started
+    expose:
+      - 4444
+    ports:
+      - 4444:4444
+    volumes:
+      - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
+    environment:
+      - EPS_SETTINGS=settings/dev/roles/demo-app
+    command: [ "--level", "trace", "server", "run" ]
+
+  public-proxy:
+    image: inoeg/proxy:${EPS_VERSION}
+    expose:
+      - 4433
+      - 9999
+      - 6655
+    ports:
+      - 4433:4433
+      - 9999:9999
+    volumes:
+      - /home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings
+      - /home/iris/pub-proxy-db:/tmp
+    environment:
+      - PROXY_SETTINGS=settings/dev/roles/public-proxy-1
+    command: [ "--level", "trace", "run", "public" ]
+
+  public-proxy-eps:
+    image: inoeg/eps:${EPS_VERSION}
+    depends_on:
+      sd-1:
+        condition: service_started
+    expose:
+      - 5559
+      - 5544
+    ports:
+      - 5559:5559
+    volumes:
+      - /home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings
+    environment:
+      - EPS_SETTINGS=settings/dev/roles/public-proxy-eps-1
+    command: [ "--level", "trace", "server", "run" ]
+
+  sd-1:
+    image: inoeg/sd:${EPS_VERSION}
+    expose:
+      - 3322
+    ports:
+      - 3322:3322
+    volumes:
+      - /home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings
+      - /home/iris/service-directory:/tmp
+    environment:
+      - SD_SETTINGS=settings/dev/roles/sd-1
+    entrypoint: ./sd
+    command: [ "--level", "trace", "run" ]
+
+
