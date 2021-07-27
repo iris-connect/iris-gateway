@@ -1,12 +1,12 @@
 public:
   name: public-proxy-1
   database_file: /tmp/public-proxy-announcements.db
-  tls_bind_address: localhost:4433
-  internal_bind_address: localhost:9999
+  tls_bind_address: 0.0.0.0:4433
+  internal_bind_address: 0.0.0.0:9999
   jsonrpc_client:
-    endpoint: https://localhost:5544/jsonrpc
-    server_name: public-proxy-1
+    endpoint: https://public-proxy-eps:5544/jsonrpc
     tls:
+      server_name: public-proxy-1
       ca_certificate_files: ["$DIR/../../certs/root.crt"]
       certificate_file: "$DIR/../../certs/public-proxy-1.crt"
       key_file: "$DIR/../../certs/public-proxy-1.key"

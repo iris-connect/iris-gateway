@@ -31,4 +31,16 @@ public class DataRequestRPCImpl implements DataRequestRPC {
 			return "ERROR: " + e.getMessage();
 		}
 	}
+
+	@Override
+	public String abortDataRequest(JsonRpcClientDto client, LocationDataRequestDto locationDataRequestDto) {
+		try {
+			log.info(
+					"Abort data request " + locationDataRequestDto.getDataAuthorizationToken() + " for hd " + client.getName());
+			return "OK";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "ERROR: " + e.getMessage();
+		}
+	}
 }
