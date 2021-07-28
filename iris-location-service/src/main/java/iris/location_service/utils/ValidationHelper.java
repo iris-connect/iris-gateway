@@ -96,8 +96,13 @@ public class ValidationHelper {
 			"°",
 			"„" };
 
-		if (input.contains("<script")
-			|| input.contains("SELECT") && input.contains("FROM")
+		if (input == null) {
+			return false;
+		}
+
+		String inputUpper = input.toUpperCase();
+		if (inputUpper.contains("<SCRIPT")
+			|| inputUpper.contains("SELECT") && inputUpper.contains("FROM")
 			|| StringUtils.startsWithAny(input, forbiddenSymbolsArray)) {
 			log.warn(ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE + message);
 			return true;
