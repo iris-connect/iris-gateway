@@ -6,7 +6,7 @@
 version: '3'
 services:
 
-  iris-backend:
+  iris-location:
     image: inoeg/iris-backend-service:${GATEWAY_VERSION}
     restart: unless-stopped
     depends_on:
@@ -38,7 +38,7 @@ services:
     environment:
       - EPS_CLIENT_CLIENT_URL=https://iris-app-api-demo-eps:5554/jsonrpc
     depends_on:
-      iris-backend:
+      iris-location:
         condition: service_started
       iris-app-api-demo-eps:
         condition: service_started
