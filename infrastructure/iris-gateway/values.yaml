@@ -45,7 +45,7 @@ eps:
   configMountPath: /config
 
 locations:
-  image: inoeg/iris-location-service
+  image: inoeg/iris-backend-service
   tag: undefined  # will be set during deployment
   port: 8080
 

@@ -13,7 +13,7 @@ run `./setup-cluster.sh` to setup a local cluster with the required secrets prec
 
 ## test local images
 in order to test the deployment of a local image just build it with:
-`mvn -B spring-boot:build-image -am -pl iris-location-service -Dversion.tag=$(git rev-parse HEAD)`
+`mvn -B spring-boot:build-image -am -pl iris-backend-service -Dversion.tag=$(git rev-parse HEAD)`
 
 ## install helm chart locally
 run `./local-install.sh` to create the helm on the current `KUBE_CONFIG`
