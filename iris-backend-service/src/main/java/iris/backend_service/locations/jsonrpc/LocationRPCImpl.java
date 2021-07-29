@@ -1,12 +1,15 @@
 package iris.backend_service.locations.jsonrpc;
 
-import static iris.backend_service.locations.utils.LoggingHelper.*;
+import static iris.backend_service.locations.utils.LoggingHelper.obfuscate;
 
 import iris.backend_service.jsonrpc.JsonRpcClientDto;
+import iris.backend_service.locations.dto.LocationContext;
 import iris.backend_service.locations.dto.LocationInformation;
 import iris.backend_service.locations.dto.LocationOverviewDto;
 import iris.backend_service.locations.dto.LocationQueryResult;
 import iris.backend_service.locations.service.LocationService;
+import iris.backend_service.locations.utils.ErrorMessageHelper;
+import iris.backend_service.locations.utils.ValidationHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,7 +54,7 @@ public class LocationRPCImpl implements LocationRPC {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE);
 		}
 
-		List<LocationInformation> locationListValidated = locationInformationInputValidated(locationList);
+		List<LocationInformation> locationListValidated = validateLocationInformation(locationList);
 
 		var listOfInvalidAddresses = locationService.addLocations(client.getName(), locationListValidated);
 
@@ -183,17 +186,6 @@ public class LocationRPCImpl implements LocationRPC {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE);
 		}
 	}
-<<<<<<< HEAD:iris-location-service/src/main/java/iris/location_service/jsonrpc/LocationRPCImpl.java
-
-	@Override
-	public Status getHealth(JsonRpcClientDto client) {
-
-		var status = healthEndpoint.health().getStatus();
-
-		log.debug("JSON-RPC - Get health status for client: {} => result: {}", client.getName(), status);
-
-		return status;
-	}
 
 	private boolean isJsonRpcClientDtoInputValid(JsonRpcClientDto client) {
 		if (client == null || ValidationHelper.isPossibleAttackForRequiredValue(client.getName(), EXCEPTION_MESSAGE_PROVIDER_ID + client.getName())) {
@@ -203,7 +195,7 @@ public class LocationRPCImpl implements LocationRPC {
 		return true;
 	}
 
-	private List<LocationInformation> locationInformationInputValidated(List<LocationInformation> locationList) {
+	private List<LocationInformation> validateLocationInformation(List<LocationInformation> locationList) {
 
 		List<LocationInformation> validatedLocationList = new ArrayList<LocationInformation>();
 
@@ -301,7 +293,4 @@ public class LocationRPCImpl implements LocationRPC {
 
 		return validatedLocationList;
 	}
-
-=======
->>>>>>> develop:iris-backend-service/src/main/java/iris/backend_service/locations/jsonrpc/LocationRPCImpl.java
 }

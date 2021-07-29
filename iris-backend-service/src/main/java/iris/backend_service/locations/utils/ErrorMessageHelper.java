@@ -1,4 +1,4 @@
-package iris.location_service.utils;
+package iris.backend_service.locations.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
