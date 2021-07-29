@@ -1,22 +1,16 @@
 package iris.backend_service.alerts.zammad;
 
+import static org.springframework.http.MediaType.*;
+
 import iris.backend_service.alerts.Alert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.ClientHttpRequestExecution;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * @author Jens Kutzsche
@@ -26,27 +20,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class ZammadTicketCreator {
 
-	private final RestTemplate rest;
 	private final ZammadProperties properties;
-
-	@PostConstruct
-	void postConstruct() {
-
-		rest.getInterceptors().add(new ClientHttpRequestInterceptor() {
-
-			@Override
-			public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
-					throws IOException {
-
-				var headers = request.getHeaders();
-				headers.setContentType(MediaType.APPLICATION_JSON);
-				headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-				headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + properties.getToken());
-
-				return execution.execute(request, body);
-			}
-		});
-	}
 
 	public boolean createTicket(Alert alert) {
 
@@ -61,21 +35,55 @@ public class ZammadTicketCreator {
 
 		var ticket = new Ticket(alert.getTitle(), properties.getGroup(), customerId, new Article(text));
 
-		var response = rest.postForEntity(properties.getTicketUri(), ticket, Ticket.class);
+		var responseOpt = WebClient.create(properties.getTicketUri().toString())
+				.post()
+				.headers(this::setHeaders)
+				.bodyValue(ticket)
+				.retrieve()
+				.toEntity(Ticket.class)
+				.blockOptional();
 
+		if (responseOpt.isEmpty()) {
+
+			log.error("Alert - Zammad - ticket could not be created => http call ends without result");
+			return false;
+		}
+
+		var response = responseOpt.get();
 		if (!response.getStatusCode().is2xxSuccessful()) {
 			log.error("Alert - Zammad - ticket could not be created => Errors: {}", response.getBody());
 			return false;
 		}
 
 		var envTag = new Tag(properties.getEnvironment(), response.getBody().getId());
-		var response2 = rest.postForEntity(properties.getTagUri(), envTag, String.class);
+
+		var response2Opt = WebClient.create(properties.getTagUri().toString())
+				.post()
+				.headers(this::setHeaders)
+				.bodyValue(envTag)
+				.retrieve()
+				.toEntity(String.class)
+				.blockOptional();
+
+		if (response2Opt.isEmpty()) {
+
+			log.error("Alert - Zammad - tag could not be created => http call ends without result");
+			return false;
+		}
+
+		var response2 = responseOpt.get();
 
 		if (response2.getStatusCode().is2xxSuccessful()) {
 			return true;
 		}
 
-		log.error("Alert - Zammad - tag could not be created => Errors: {}", response.getBody());
+		log.error("Alert - Zammad - tag could not be created => Errors: {}", response2.getBody());
 		return false;
+	}
+
+	private void setHeaders(HttpHeaders headers) {
+		headers.setContentType(APPLICATION_JSON);
+		headers.setAccept(List.of(APPLICATION_JSON));
+		headers.setBearerAuth(properties.getToken());
 	}
 }

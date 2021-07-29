@@ -1,6 +1,10 @@
-# IRIS Location Service
+# IRIS Backend Services
 
-Service allowing [Contact Tracing Apps](https://www.wirfuerdigitalisierung.de/ber-uns) to upload their location data (Restaurants, Shops, Hairdressers). The index can be searched by Healthe Authoritiy employees to easily request contact data from those IRIS enabled locations. 
+One module of this is the Location Service.  
+This service allowing [Contact Tracing Apps](https://www.wirfuerdigitalisierung.de/ber-uns) to upload their location data (Restaurants, Shops, Hairdressers). The index can be searched by Healthe Authoritiy employees to easily request contact data from those IRIS enabled locations. 
+
+The second module is the Alert Service.  
+Other components can send an alert to this service, which caches them and sends them to Slack and Zammad depending on the type. 
 
 ## Postman Collection
 

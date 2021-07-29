@@ -1,12 +1,10 @@
 package iris.backend_service.alerts;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -45,13 +43,13 @@ public class Alert {
 
 	@Embeddable
 	@EqualsAndHashCode
-	@RequiredArgsConstructor(staticName = "of")
-	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+	@AllArgsConstructor(staticName = "of")
+	@NoArgsConstructor
 	public static class AlertIdentifier implements Serializable {
 
 		private static final long serialVersionUID = -8326230397174984557L;
 
-		private final UUID id;
+		private UUID id;
 	}
 
 	public enum AlertType {

@@ -2,8 +2,6 @@ package iris.backend_service.locations.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import iris.backend_service.locations.utils.ValidationHelper;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;

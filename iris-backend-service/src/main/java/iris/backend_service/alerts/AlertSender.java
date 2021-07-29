@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service()
 @RequiredArgsConstructor
-class AlertCreator {
+class AlertSender {
 
 	private final AlertRepository alertRepo;
 	private final SlackMessageCreator slack;
