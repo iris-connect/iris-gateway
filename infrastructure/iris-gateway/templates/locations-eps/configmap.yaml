@@ -42,7 +42,7 @@ data:
         type: jsonrpc_client
         settings:
           # needs to match the endpoint configuration in the spring boot app
-          endpoint: http://{{ include "iris-gateway.locations" . }}:{{ .Values.locations.port }}/location-rpc
+          endpoint: http://{{ include "iris-gateway.locations" . }}:{{ .Values.locations.port }}/backend-rpc
       - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
         type: grpc_client
         settings:

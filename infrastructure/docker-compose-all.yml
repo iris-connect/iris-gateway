@@ -41,7 +41,7 @@ services:
     restart: unless-stopped
 
   iris-location:
-    image: inoeg/iris-location-service:${IRIS_VERSION}
+    image: inoeg/iris-backend-service:${IRIS_VERSION}
     ports:
       - 8080:8080
     environment:

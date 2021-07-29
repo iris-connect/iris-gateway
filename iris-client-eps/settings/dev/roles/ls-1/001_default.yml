@@ -19,7 +19,7 @@ channels: # defines all the channels that we want to open when starting the serv
   - name: main JSON-RPC client # creates outgoing JSONRPC connections to deliver and receive messages
     type: jsonrpc_client
     settings:
-      endpoint: http://host.docker.internal:8080/location-rpc
+      endpoint: http://host.docker.internal:8080/backend-rpc
   - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
     type: grpc_client
     settings:

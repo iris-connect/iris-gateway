@@ -3,12 +3,10 @@ package iris.demo.checkin_app.config;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import lombok.RequiredArgsConstructor;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
-import org.springframework.context.annotation.Configuration;
-
-import javax.validation.constraints.NotNull;
 
 @ConstructorBinding
 @AllArgsConstructor
@@ -16,6 +14,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class EPSClientProperties {
 
-	private final @NotNull String locationServiceEndpoint;
+	private final @NotNull String backendServiceEndpoint;
 
 }
