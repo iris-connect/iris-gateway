@@ -1,4 +1,4 @@
-name: ls-1
+name: bs-1
 directory:
   type: api
   settings:
@@ -14,7 +14,7 @@ channels: # defines all the channels that we want to open when starting the serv
   - name: main gRPC server # accepts incoming gRPC connections to deliver and receive messages
     type: grpc_server
     settings:
-      bind_address: "0.0.0.0:4445"
+      bind_address: "0.0.0.0:4441"
       tls:
         ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
         certificate_file: "$DIR/../../certs/bs-1.crt"
