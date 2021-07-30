@@ -23,6 +23,21 @@ services:
       - IRIS_ALERTS_ZAMMAD_APIADDRESS=${IRIS_ALERTS_ZAMMAD_APIADDRESS}
       - IRIS_ALERTS_ZAMMAD_ENVIRONMENT=${IRIS_ALERTS_ZAMMAD_ENVIRONMENT}
 
+  bs-1:
+    image: inoeg/eps:${EPS_VERSION}
+    depends_on:
+      sd-1:
+        condition: service_started
+    expose:
+      - 4441
+    ports:
+      - 4441:4441
+    volumes:
+      - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
+    environment:
+      - EPS_SETTINGS=settings/dev/roles/bs-1
+    command: [ "--level", "debug", "server", "run" ]
+
   ls-1:
     image: inoeg/eps:${EPS_VERSION}
     depends_on:
