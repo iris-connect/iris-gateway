@@ -1,0 +1,17 @@
+########################################################
+# Intended for the gateway deployment on DEV server.
+# All services are watchtower-enabled.
+# Proxy and Service-Directory use GATEWAY_VERSION.
+########################################################
+version: '3'
+services:
+
+  iris-app-diary-demo:
+    image: inoeg/demo-contact-diary-app:develop
+    ports:
+      - 8094:8093
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
+    environment:
+      - PROXY_SERVICE_PORT=32325
