@@ -1,17 +1,17 @@
 {
   "id": "7dd80f34-f9cd-456a-9b60-357d0a3485c7",
-  "name": "Da Michele",
-  "publicKey": "Da Michele",
+  "name": "IRIS connect Demo",
+  "publicKey": "IRIS connect Demo",
   "contact": {
-    "officialName": "SmartMeeting GmbH",
-    "representative": "Tim Lusa",
+    "officialName": "IRIS connect Demo",
+    "representative": "Iris Demo",
     "address": {
-      "street": "Europaplatz 5",
-      "city": "Darmstadt",
-      "zip": "64293"
+      "street": "Petristr. 12",
+      "zipCode": "71364",
+      "city": "Winnenden"
     },
-    "ownerEmail": "tim@smartmeeting.online",
-    "email": "tim@smartmeeting.online",
+    "ownerEmail": "rollout@iris-connect.de",
+    "email": "rollout@iris-connect.de",
     "phone": "0151 47110815"
   },
   "contexts": [

@@ -1,9 +1,9 @@
 {
-  "name": "SmartMeeting",
+  "name": "IRIS connect Demo",
   "address": {
-    "street": "Europaplatz",
-    "houseNumber": "5",
-    "zipCode": "64293",
-    "city": "Darmstadt"
+    "street": "Petristr.",
+    "houseNumber": "12",
+    "zipCode": "71364",
+    "city": "Winnenden"
   }
 }
