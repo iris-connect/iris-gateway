@@ -1,8 +1,10 @@
 package iris.backend_service.locations.jsonrpc;
 
-import static iris.backend_service.locations.utils.LoggingHelper.obfuscate;
+import static iris.backend_service.locations.utils.LoggingHelper.*;
 
 import iris.backend_service.jsonrpc.JsonRpcClientDto;
+import iris.backend_service.locations.dto.LocationAddress;
+import iris.backend_service.locations.dto.LocationContact;
 import iris.backend_service.locations.dto.LocationContext;
 import iris.backend_service.locations.dto.LocationInformation;
 import iris.backend_service.locations.dto.LocationOverviewDto;
@@ -31,30 +33,30 @@ import org.springframework.web.server.ResponseStatusException;
 @Slf4j
 public class LocationRPCImpl implements LocationRPC {
 
-	private static final String EXCEPTION_MESSAGE_SEARCH_KEYWORD = " - searchKeyword: ";
-	private static final String EXCEPTION_MESSAGE_ZIP = " - zip: ";
-	private static final String EXCEPTION_MESSAGE_STREET = " - street: ";
-	private static final String EXCEPTION_MESSAGE_CITY = " - city: ";
-	private static final String EXCEPTION_MESSAGE_PHONE = " - phone: ";
-	private static final String EXCEPTION_MESSAGE_EMAIL = " - email: ";
-	private static final String EXCEPTION_MESSAGE_OWNER_EMAIL = " - ownerEmail: ";
-	private static final String EXCEPTION_MESSAGE_REPRESENTATIVE = " - representative: ";
-	private static final String EXCEPTION_MESSAGE_OFFICIAL_NAME = " - officialName: ";
-	private static final String EXCEPTION_MESSAGE_PUBLIC_KEY = " - publicKey: ";
-	private static final String EXCEPTION_MESSAGE_ID = " - id: ";
-	private static final String EXCEPTION_MESSAGE_NAME = " - name: ";
-	private static final String EXCEPTION_MESSAGE_LOCATION_ID = " - locationId: ";
-	private static final String EXCEPTION_MESSAGE_PROVIDER_ID = " - providerId: ";
+	private static final String FIELD_SEARCH_KEYWORD = "searchKeyword";
+	private static final String FIELD_ZIP = "zip";
+	private static final String FIELD_STREET = "street";
+	private static final String FIELD_CITY = "city";
+	private static final String FIELD_PHONE = "phone";
+	private static final String FIELD_EMAIL = "email";
+	private static final String FIELD_OWNER_EMAIL = "ownerEmail";
+	private static final String FIELD_REPRESENTATIVE = "representative";
+	private static final String FIELD_OFFICIAL_NAME = "officialName";
+	private static final String FIELD_PUBLIC_KEY = "publicKey";
+	private static final String FIELD_ID = "id";
+	private static final String FIELD_NAME = "name";
+	private static final String FIELD_LOCATION_ID = "locationId";
+	private static final String FIELD_PROVIDER_ID = "providerId";
+
 	private final @NotNull LocationService locationService;
+	private final @NotNull ValidationHelper validHelper;
 
 	@Override
 	public String postLocationsToSearchIndex(JsonRpcClientDto client, List<LocationInformation> locationList) {
 
-		if (!isJsonRpcClientDtoInputValid(client)) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE);
-		}
+		validateJsonRpcClientDto(client);
 
-		List<LocationInformation> locationListValidated = validateLocationInformation(locationList);
+		List<LocationInformation> locationListValidated = validateLocationInformation(locationList, client.getName());
 
 		var listOfInvalidAddresses = locationService.addLocations(client.getName(), locationListValidated);
 
@@ -67,7 +69,8 @@ public class LocationRPCImpl implements LocationRPC {
 			logRes = "Invalid Locations detected";
 		}
 
-		log.debug("JSON-RPC - Post locations for client: {} (locations: {}) => result: {}", client.getName(), locationList.size(), logRes);
+		log.debug("JSON-RPC - Post locations for client: {} (locations: {}) => result: {}", client.getName(),
+				locationList.size(), logRes);
 
 		return ret;
 	}
@@ -75,17 +78,19 @@ public class LocationRPCImpl implements LocationRPC {
 	@Override
 	public List<LocationOverviewDto> getProviderLocations(JsonRpcClientDto client) {
 
-		validateInputForGetProviderLocations(client);
+		validateJsonRpcClientDto(client);
 
 		var providerLocations = locationService.getProviderLocations(client.getName());
 
-		log.debug("JSON-RPC - Get provider locations for client: {} => returns {} locations", client.getName(), providerLocations.size());
+		log.debug("JSON-RPC - Get provider locations for client: {} => returns {} locations", client.getName(),
+				providerLocations.size());
 
 		return providerLocations;
 	}
 
 	@Override
 	public String deleteLocationFromSearchIndex(JsonRpcClientDto client, String locationId) {
+
 		validateInputForDeleteLocationFromSearchIndex(client, locationId);
 
 		var ret = "NOT FOUND";
@@ -93,7 +98,8 @@ public class LocationRPCImpl implements LocationRPC {
 		if (locationService.deleteLocation(client.getName(), locationId))
 			ret = "OK";
 
-		log.debug("JSON-RPC - Delete location for client: {}; locationId: {} => result: {}", client.getName(), obfuscate(locationId), ret);
+		log.debug("JSON-RPC - Delete location for client: {}; locationId: {} => result: {}", client.getName(),
+				obfuscateEndPart(locationId), ret);
 
 		return ret;
 	}
@@ -101,43 +107,43 @@ public class LocationRPCImpl implements LocationRPC {
 	@Override
 	public LocationQueryResult searchForLocation(JsonRpcClientDto client, String searchKeyword, PageableDto dto) {
 
-		if (ValidationHelper.isPossibleAttack(searchKeyword, EXCEPTION_MESSAGE_SEARCH_KEYWORD + searchKeyword)) {
+		if (validHelper.isPossibleAttack(searchKeyword, FIELD_SEARCH_KEYWORD, true, client.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE);
 		}
 
-		var pageable =
-			PageRequest.of(dto.getPage(), dto.getSize(), dto.getSortBy() != null ? Sort.by(dto.getDirection(), dto.getSortBy()) : Sort.unsorted());
+		var pageable = PageRequest.of(dto.getPage(), dto.getSize(),
+				dto.getSortBy() != null ? Sort.by(dto.getDirection(), dto.getSortBy()) : Sort.unsorted());
 
 		Page<LocationInformation> page = locationService.search(searchKeyword, pageable);
 
 		log.debug(
-			"JSON-RPC - Search location for client: {} => returns page {} with {} locations; total: {}",
-			client.getName(),
-			page.getNumber(),
-			page.getSize(),
-			page.getTotalElements());
+				"JSON-RPC - Search location for client: {} => returns page {} with {} locations; total: {}",
+				client.getName(),
+				page.getNumber(),
+				page.getSize(),
+				page.getTotalElements());
 
 		return LocationQueryResult.builder()
-			.size(page.getSize())
-			.page(page.getNumber())
-			.locations(page.getContent())
-			.totalElements(page.getTotalElements())
-			.build();
+				.size(page.getSize())
+				.page(page.getNumber())
+				.locations(page.getContent())
+				.totalElements(page.getTotalElements())
+				.build();
 	}
 
 	@Override
 	public Object getLocationDetails(JsonRpcClientDto client, String providerId, String locationId) {
 
-		validateInputForGetLocationDetails(providerId, locationId);
+		validateInputForGetLocationDetails(providerId, locationId, client);
 
 		var locationInformation = locationService.getLocationByProviderIdAndLocationId(providerId, locationId);
 
 		log.debug(
-			"JSON-RPC - Get location details for client: {}; providerId: {}, locationId: {} => found: {}",
-			client.getName(),
-			obfuscate(providerId),
-			obfuscate(locationId),
-			locationInformation.isPresent());
+				"JSON-RPC - Get location details for client: {}; providerId: {}, locationId: {} => found: {}",
+				client.getName(),
+				obfuscateEndPart(providerId),
+				obfuscateEndPart(locationId),
+				locationInformation.isPresent());
 
 		if (locationInformation.isPresent())
 			return locationInformation;
@@ -145,152 +151,125 @@ public class LocationRPCImpl implements LocationRPC {
 		return "NOT FOUND";
 	}
 
-	private void validateInputForGetProviderLocations(JsonRpcClientDto client) {
-		if (client == null || ValidationHelper.isPossibleAttackForRequiredValue(client.getName(), EXCEPTION_MESSAGE_NAME + client.getName())) {
+	private void validateJsonRpcClientDto(JsonRpcClientDto client) {
+		if (client == null
+				|| validHelper.isPossibleAttackForRequiredValue(client.getName(), FIELD_NAME, false, client.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE);
 		}
 	}
 
 	private void validateInputForDeleteLocationFromSearchIndex(JsonRpcClientDto client, String locationId) {
-		boolean isInvalid = false;
 
-		if (client == null) {
-			isInvalid = true;
-		}
+		validateJsonRpcClientDto(client);
 
-		if (client != null && ValidationHelper.isPossibleAttackForRequiredValue(client.getName(), EXCEPTION_MESSAGE_NAME + client.getName())) {
-			isInvalid = true;
-		}
-
-		if (ValidationHelper.isPossibleAttackForRequiredValue(locationId, EXCEPTION_MESSAGE_LOCATION_ID + locationId)) {
-			isInvalid = true;
-		}
-
-		if (isInvalid) {
+		if (validHelper.isPossibleAttackForRequiredValue(locationId, FIELD_LOCATION_ID, true, client.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE);
 		}
 	}
 
-	private void validateInputForGetLocationDetails(String providerId, String locationId) {
-		boolean isInvalid = false;
+	private void validateInputForGetLocationDetails(String providerId, String locationId, JsonRpcClientDto client) {
 
-		if (ValidationHelper.isPossibleAttackForRequiredValue(providerId, EXCEPTION_MESSAGE_PROVIDER_ID + providerId)) {
-			isInvalid = true;
-		}
+		if (validHelper.isPossibleAttackForRequiredValue(providerId, FIELD_PROVIDER_ID, true, client.getName())
+				|| validHelper.isPossibleAttackForRequiredValue(locationId, FIELD_LOCATION_ID, true, client.getName())) {
 
-		if (ValidationHelper.isPossibleAttackForRequiredValue(locationId, EXCEPTION_MESSAGE_LOCATION_ID + locationId)) {
-			isInvalid = true;
-		}
-
-		if (isInvalid) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE);
 		}
 	}
 
-	private boolean isJsonRpcClientDtoInputValid(JsonRpcClientDto client) {
-		if (client == null || ValidationHelper.isPossibleAttackForRequiredValue(client.getName(), EXCEPTION_MESSAGE_PROVIDER_ID + client.getName())) {
-			return false;
-		}
+	private List<LocationInformation> validateLocationInformation(List<LocationInformation> locationList, String client) {
 
-		return true;
+		return locationList.stream()
+				.map(it -> validateLocationInformation(it, client))
+				.collect(Collectors.toList());
 	}
 
-	private List<LocationInformation> validateLocationInformation(List<LocationInformation> locationList) {
+	private LocationInformation validateLocationInformation(LocationInformation locationInformation, String client) {
 
-		List<LocationInformation> validatedLocationList = new ArrayList<LocationInformation>();
-
-		for (LocationInformation locationInformation : locationList) {
-			if (ValidationHelper.isPossibleAttack(locationInformation.getId(), EXCEPTION_MESSAGE_ID + locationInformation.getId())) {
-				locationInformation.setId(ErrorMessageHelper.INVALID_INPUT_STRING);
-			}
-
-			if (ValidationHelper
-				.isPossibleAttack(locationInformation.getProviderId(), EXCEPTION_MESSAGE_PROVIDER_ID + locationInformation.getProviderId())) {
-				locationInformation.setProviderId(ErrorMessageHelper.INVALID_INPUT_STRING);
-			}
-
-			if (ValidationHelper.isPossibleAttack(locationInformation.getName(), EXCEPTION_MESSAGE_NAME + locationInformation.getName())) {
-				locationInformation.setName(ErrorMessageHelper.INVALID_INPUT_STRING);
-			}
-
-			if (ValidationHelper
-				.isPossibleAttack(locationInformation.getPublicKey(), EXCEPTION_MESSAGE_PUBLIC_KEY + locationInformation.getPublicKey())) {
-				locationInformation.setPublicKey(ErrorMessageHelper.INVALID_INPUT_STRING);
-			}
-
-			if (locationInformation.getContact() != null) {
-				if (ValidationHelper.isPossibleAttack(
-					locationInformation.getContact().getOfficialName(),
-					EXCEPTION_MESSAGE_OFFICIAL_NAME + locationInformation.getContact().getOfficialName())) {
-					locationInformation.getContact().setOfficialName(ErrorMessageHelper.INVALID_INPUT_STRING);
-				}
-
-				if (ValidationHelper.isPossibleAttack(
-					locationInformation.getContact().getRepresentative(),
-					EXCEPTION_MESSAGE_REPRESENTATIVE + locationInformation.getContact().getRepresentative())) {
-					locationInformation.getContact().setRepresentative(ErrorMessageHelper.INVALID_INPUT_STRING);
-				}
-
-				if (ValidationHelper.isPossibleAttack(
-					locationInformation.getContact().getOwnerEmail(),
-					EXCEPTION_MESSAGE_OWNER_EMAIL + locationInformation.getContact().getOwnerEmail())) {
-					locationInformation.getContact().setOwnerEmail(ErrorMessageHelper.INVALID_INPUT_STRING);
-				}
-
-				if (ValidationHelper.isPossibleAttack(
-					locationInformation.getContact().getEmail(),
-					EXCEPTION_MESSAGE_EMAIL + locationInformation.getContact().getEmail())) {
-					locationInformation.getContact().setEmail(ErrorMessageHelper.INVALID_INPUT_STRING);
-				}
-
-				if (ValidationHelper.isPossibleAttack(
-					locationInformation.getContact().getPhone(),
-					EXCEPTION_MESSAGE_PHONE + locationInformation.getContact().getPhone())) {
-					locationInformation.getContact().setPhone(ErrorMessageHelper.INVALID_INPUT_STRING);
-				}
-
-				if (locationInformation.getContact().getAddress() != null) {
-					if (ValidationHelper.isPossibleAttack(
-						locationInformation.getContact().getAddress().getCity(),
-						EXCEPTION_MESSAGE_CITY + locationInformation.getContact().getAddress().getCity())) {
-						locationInformation.getContact().getAddress().setCity(ErrorMessageHelper.INVALID_INPUT_STRING);
-					}
-
-					if (ValidationHelper.isPossibleAttack(
-						locationInformation.getContact().getAddress().getStreet(),
-						EXCEPTION_MESSAGE_STREET + locationInformation.getContact().getAddress().getStreet())) {
-						locationInformation.getContact().getAddress().setStreet(ErrorMessageHelper.INVALID_INPUT_STRING);
-					}
-
-					if (ValidationHelper.isPossibleAttack(
-						locationInformation.getContact().getAddress().getZip(),
-						EXCEPTION_MESSAGE_ZIP + locationInformation.getContact().getAddress().getZip())) {
-						locationInformation.getContact().getAddress().setZip(ErrorMessageHelper.INVALID_INPUT_STRING);
-					}
-				}
-			}
-
-			if (locationInformation.getContexts() != null) {
-				List<LocationContext> contextsValidated = new ArrayList<LocationContext>();
-
-				for (LocationContext locationContext : locationInformation.getContexts()) {
-					if (ValidationHelper.isPossibleAttack(locationContext.getId(), EXCEPTION_MESSAGE_ID + locationContext.getId())) {
-						locationContext.setId(ErrorMessageHelper.INVALID_INPUT_STRING);
-					}
-
-					if (ValidationHelper.isPossibleAttack(locationContext.getName(), EXCEPTION_MESSAGE_NAME + locationContext.getName())) {
-						locationContext.setName(ErrorMessageHelper.INVALID_INPUT_STRING);
-					}
-
-					contextsValidated.add(locationContext);
-				}
-
-				locationInformation.setContexts(contextsValidated);
-			}
-
-			validatedLocationList.add(locationInformation);
+		if (validHelper.isPossibleAttack(locationInformation.getId(), FIELD_ID, true, client)) {
+			locationInformation.setId(ErrorMessageHelper.INVALID_INPUT_STRING);
 		}
 
-		return validatedLocationList;
+		if (validHelper.isPossibleAttack(locationInformation.getProviderId(), FIELD_PROVIDER_ID, true, client)) {
+			locationInformation.setProviderId(ErrorMessageHelper.INVALID_INPUT_STRING);
+		}
+
+		if (validHelper.isPossibleAttack(locationInformation.getName(), FIELD_NAME, true, client)) {
+			locationInformation.setName(ErrorMessageHelper.INVALID_INPUT_STRING);
+		}
+
+		if (validHelper.isPossibleAttack(locationInformation.getPublicKey(), FIELD_PUBLIC_KEY, true, client)) {
+			locationInformation.setPublicKey(ErrorMessageHelper.INVALID_INPUT_STRING);
+		}
+
+		if (locationInformation.getContact() != null) {
+			validateContact(locationInformation.getContact(), client);
+		}
+
+		if (locationInformation.getContexts() != null) {
+			var validateContext = validateContext(locationInformation.getContexts(), client);
+			locationInformation.setContexts(validateContext);
+		}
+
+		return locationInformation;
+	}
+
+	private void validateContact(LocationContact contact, String client) {
+
+		if (validHelper.isPossibleAttack(contact.getOfficialName(), FIELD_OFFICIAL_NAME, true, client)) {
+			contact.setOfficialName(ErrorMessageHelper.INVALID_INPUT_STRING);
+		}
+
+		if (validHelper.isPossibleAttack(contact.getRepresentative(), FIELD_REPRESENTATIVE, true, client)) {
+			contact.setRepresentative(ErrorMessageHelper.INVALID_INPUT_STRING);
+		}
+
+		if (validHelper.isPossibleAttack(contact.getOwnerEmail(), FIELD_OWNER_EMAIL, true, client)) {
+			contact.setOwnerEmail(ErrorMessageHelper.INVALID_INPUT_STRING);
+		}
+
+		if (validHelper.isPossibleAttack(contact.getEmail(), FIELD_EMAIL, true, client)) {
+			contact.setEmail(ErrorMessageHelper.INVALID_INPUT_STRING);
+		}
+
+		if (validHelper.isPossibleAttack(contact.getPhone(), FIELD_PHONE, true, client)) {
+			contact.setPhone(ErrorMessageHelper.INVALID_INPUT_STRING);
+		}
+
+		if (contact.getAddress() != null) {
+			validateAddress(contact.getAddress(), client);
+		}
+	}
+
+	private void validateAddress(LocationAddress address, String client) {
+
+		if (validHelper.isPossibleAttack(address.getCity(), FIELD_CITY, true, client)) {
+			address.setCity(ErrorMessageHelper.INVALID_INPUT_STRING);
+		}
+
+		if (validHelper.isPossibleAttack(address.getStreet(), FIELD_STREET, true, client)) {
+			address.setStreet(ErrorMessageHelper.INVALID_INPUT_STRING);
+		}
+
+		if (validHelper.isPossibleAttack(address.getZip(), FIELD_ZIP, true, client)) {
+			address.setZip(ErrorMessageHelper.INVALID_INPUT_STRING);
+		}
+	}
+
+	private List<LocationContext> validateContext(List<LocationContext> contexts, String client) {
+		var contextsValidated = new ArrayList<LocationContext>();
+
+		for (var locationContext : contexts) {
+			if (validHelper.isPossibleAttack(locationContext.getId(), FIELD_ID, true, client)) {
+				locationContext.setId(ErrorMessageHelper.INVALID_INPUT_STRING);
+			}
+
+			if (validHelper.isPossibleAttack(locationContext.getName(), FIELD_NAME, true, client)) {
+				locationContext.setName(ErrorMessageHelper.INVALID_INPUT_STRING);
+			}
+
+			contextsValidated.add(locationContext);
+		}
+
+		return contextsValidated;
 	}
 }

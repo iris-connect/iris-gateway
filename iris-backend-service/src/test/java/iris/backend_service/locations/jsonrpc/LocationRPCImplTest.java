@@ -8,6 +8,7 @@ import iris.backend_service.jsonrpc.JsonRpcClientDto;
 import iris.backend_service.locations.dto.LocationContact;
 import iris.backend_service.locations.dto.LocationInformation;
 import iris.backend_service.locations.service.LocationService;
+import iris.backend_service.locations.utils.ValidationHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +29,12 @@ public class LocationRPCImplTest {
 
 	@Mock
 	LocationService locationService;
+	@Mock
+	ValidationHelper validationHelper;
 
 	@BeforeEach
 	void setUp() {
-		systemUnderTest = new LocationRPCImpl(locationService);
+		systemUnderTest = new LocationRPCImpl(locationService, validationHelper);
 	}
 
 	@Test

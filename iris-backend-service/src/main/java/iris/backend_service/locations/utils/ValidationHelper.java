@@ -1,41 +1,30 @@
 package iris.backend_service.locations.utils;
 
+import static org.apache.commons.lang3.StringUtils.*;
+
+import iris.backend_service.alerts.AlertService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.Range;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
+
+@Component
 @Slf4j
+@RequiredArgsConstructor()
 public class ValidationHelper {
 
-	public static final String regexEmail = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w-_]+\\.)+[\\w]+[\\w]$";
-	public static final String regexPhone =
-		"^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$|^((((\\()?0\\d{3,4}(\\))?)|(\\+49 (\\()?\\d{4}(\\))?))([/ -])(\\d{6}(-\\d{2})?))$"
-			+ "|^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
+	public static final Pattern REGEX_EMAIL = Pattern.compile("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w-_]+\\.)+[\\w]+[\\w]$");
+	public static final Pattern REGEX_PHONE = Pattern.compile(
+			"^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$|^((((\\()?0\\d{3,4}(\\))?)|(\\+49 (\\()?\\d{4}(\\))?))([/ -])(\\d{6}(-\\d{2})?))$"
+					+ "|^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$");
 
-	public static boolean isValidAndNotNullEmail(String email) {
-		if (email == null)
-			return false;
-		return email.matches(regexEmail);
-	}
-
-	public static boolean isValidAndNotNullPhoneNumber(String phoneNumber) {
-		if (phoneNumber == null)
-			return false;
-		return phoneNumber.matches(regexPhone);
-	}
-
-	public static boolean isPossibleAttackForRequiredValue(String input, String message) {
-		if (input == null || input.length() <= 0) {
-			log.warn(ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE + message);
-			return true;
-		}
-
-		return isPossibleAttack(input, message);
-	}
-
-	public static boolean isPossibleAttack(String input, String message) {
-
-		String[] forbiddenSymbolsArray = {
+	private static final String[] FORBIDDEN_SYMBOLS = {
 			"=",
 			"<",
 			">",
@@ -96,19 +85,95 @@ public class ValidationHelper {
 			"°",
 			"„" };
 
+	private static final String[][] FORBIDDEN_KEYWORDS = {
+			{ "<SCRIPT" }, { "SELECT", "FROM" }, { "INSERT", "INTO" }, { "UPDATE", "SET" }, { "DELETE", "FROM" },
+			{ "CREATE", "TABLE" }, { "DROP", "TABLE" }, { "ALTER", "TABLE" },
+			{ "CREATE", "INDEX" }, { "DROP", "INDEX" }, { "CREATE", "VIEW" }, { "DROP", "VIEW" }
+	};
+
+	public static boolean isValidAndNotNullEmail(String email) {
+		if (email == null)
+			return false;
+		return REGEX_EMAIL.matcher(email).matches();
+	}
+
+	public static boolean isValidAndNotNullPhoneNumber(String phoneNumber) {
+		if (phoneNumber == null)
+			return false;
+		return REGEX_PHONE.matcher(phoneNumber).matches();
+	}
+
+	private final AlertService alerts;
+
+	public boolean isPossibleAttackForRequiredValue(String input, String field, boolean obfuscateLogging, String client) {
+		if (isBlank(input)) {
+			log.warn(ErrorMessageHelper.MISSING_REQUIRED_INPUT_MESSAGE + " - {}", field);
+			return true;
+		}
+
+		return isPossibleAttack(input, field, obfuscateLogging, client);
+	}
+
+	public boolean isPossibleAttack(String input, String field, boolean obfuscateLogging, String client) {
+
 		if (input == null) {
 			return false;
 		}
 
 		String inputUpper = input.toUpperCase();
-		if (inputUpper.contains("<SCRIPT")
-			|| inputUpper.contains("SELECT") && inputUpper.contains("FROM")
-			|| StringUtils.startsWithAny(input, forbiddenSymbolsArray)) {
-			log.warn(ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE + message);
+		Optional<Range<Integer>> range;
+		if ((range = testKeywords(inputUpper, FORBIDDEN_KEYWORDS)).isPresent()
+				|| (range = testSymbols(input, FORBIDDEN_SYMBOLS)).isPresent()) {
+
+			var logableValue = calculateLogableValue(input, obfuscateLogging, range.get());
+
+			log.warn(ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE + " - {}: {}", field,
+					logableValue);
+
+			alerts.createAlertMessage("Input validation - possible attack",
+					String.format("Input `%s` from client `%s` contain the character or keyword `%s` that is a potential attack!",
+							field, client, logableValue));
+
 			return true;
 		}
 
 		return false;
 	}
 
+	private static Optional<Range<Integer>> testKeywords(String str, String[]... keywords) {
+
+		return Arrays.stream(keywords)
+				.map(it -> testKeywordsAndLinked(str, it))
+				.flatMap(Optional<Range<Integer>>::stream)
+				.findFirst();
+	}
+
+	private static Optional<Range<Integer>> testKeywordsAndLinked(String str, String... keywords) {
+
+		for (var keyword : keywords) {
+			if (indexOf(str, keyword) < 0) {
+				return Optional.empty();
+			}
+		}
+
+		var lastKeyword = keywords[keywords.length - 1];
+
+		return Optional.of(Range.between(indexOf(str, keywords[0]), indexOf(str, lastKeyword) + lastKeyword.length() - 1));
+	}
+
+	private static Optional<Range<Integer>> testSymbols(String input, String[] forbiddenSymbolsArray) {
+
+		if (StringUtils.startsWithAny(input, forbiddenSymbolsArray)) {
+			return Optional.of(Range.is(0));
+		}
+
+		return Optional.empty();
+	}
+
+	private static String calculateLogableValue(String input, boolean obfuscateLogging, Range<Integer> range) {
+
+		return obfuscateLogging
+				? LoggingHelper.obfuscateOutsiteExtRange(input, range)
+				: input;
+	}
 }
