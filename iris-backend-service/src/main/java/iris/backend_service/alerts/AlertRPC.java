@@ -12,5 +12,5 @@ public interface AlertRPC {
 
 	String postAlerts(
 			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
-			@Valid @JsonRpcParam(value = "alert") List<AlertDto> alertDtos);
+			@Valid @JsonRpcParam(value = "alertList") List<AlertDto> alertDtos);
 }
