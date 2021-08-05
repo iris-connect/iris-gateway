@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -44,7 +43,7 @@ public class DataSubmissionService {
 
 		List<GuestDto> guests;
 
-		if (locationDataRequest.getLocationId().equals("53cfaa3f-4cff-4fab-8842-9fecd81ba563")) {
+		if (locationDataRequest.getLocationId().equals("a7184b09-f33e-4f0c-9986-cd031d0c0f41")) {
 			guests = guestLoader.getNaughtyGuests();
 		} else {
 			guests = guestLoader.getGuests();
