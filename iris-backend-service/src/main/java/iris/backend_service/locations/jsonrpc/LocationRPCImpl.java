@@ -55,6 +55,7 @@ public class LocationRPCImpl implements LocationRPC {
 	public String postLocationsToSearchIndex(JsonRpcClientDto client, List<LocationInformation> locationList) {
 
 		validateJsonRpcClientDto(client);
+		validatePostLimit(locationList, client.getName());
 
 		List<LocationInformation> locationListValidated = validateLocationInformation(locationList, client.getName());
 
@@ -154,6 +155,12 @@ public class LocationRPCImpl implements LocationRPC {
 	private void validateJsonRpcClientDto(JsonRpcClientDto client) {
 		if (client == null
 				|| validHelper.isPossibleAttackForRequiredValue(client.getName(), FIELD_NAME, false, client.getName())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE);
+		}
+	}
+
+	private void validatePostLimit(List<LocationInformation> locationList, String client) {
+		if (validHelper.isPostOutOfLimit(locationList, client)) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE);
 		}
 	}

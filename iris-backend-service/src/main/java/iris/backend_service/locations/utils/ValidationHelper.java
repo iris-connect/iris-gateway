@@ -3,15 +3,18 @@ package iris.backend_service.locations.utils;
 import static org.apache.commons.lang3.StringUtils.*;
 
 import iris.backend_service.alerts.AlertService;
+import iris.backend_service.locations.dto.LocationInformation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -91,6 +94,9 @@ public class ValidationHelper {
 			{ "CREATE", "INDEX" }, { "DROP", "INDEX" }, { "CREATE", "VIEW" }, { "DROP", "VIEW" }
 	};
 
+	@Value("${iris.locations.post-limit:5000}")
+	private int postLimit;
+
 	public static boolean isValidAndNotNullEmail(String email) {
 		if (email == null)
 			return false;
@@ -104,6 +110,23 @@ public class ValidationHelper {
 	}
 
 	private final AlertService alerts;
+
+	public boolean isPostOutOfLimit(List<LocationInformation> locationList, String client) {
+
+		if (locationList.size() > postLimit) {
+
+			var msg = String.format(
+					"Input from client `%s` contains %d locations at once. We prevent this as a possible attack! {threshold = %d}",
+					client,
+					locationList.size(), postLimit);
+			log.warn(msg);
+			alerts.createAlertMessage("Input validation - to many location posted", msg);
+
+			return true;
+		}
+
+		return false;
+	}
 
 	public boolean isPossibleAttackForRequiredValue(String input, String field, boolean obfuscateLogging, String client) {
 		if (isBlank(input)) {
