@@ -20,8 +20,6 @@ import iris.backend_service.locations.search.db.model.LocationIdentifier;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -41,14 +39,14 @@ public class LocationDAO {
 	@Autowired
 	private LocationRepository locationRepo;
 
-	@Transactional
+	// @Transactional(isolation = Isolation.SERIALIZABLE)
 	public void saveLocations(List<Location> locations) {
 
 		locationRepo.saveAll(locations);
 
-		if (isPostgresActive()) {
-			locationRepo.updateTokens();
-		}
+		// if (isPostgresActive()) {
+		// locationRepo.updateTokens();
+		// }
 	}
 
 	public Page<Location> searchLocations(String keyword, Pageable pageable) {
