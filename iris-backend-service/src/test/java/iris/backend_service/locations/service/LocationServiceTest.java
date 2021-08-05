@@ -8,7 +8,7 @@ import iris.backend_service.jsonrpc.JsonRpcClientDto;
 import iris.backend_service.locations.dto.LocationContact;
 import iris.backend_service.locations.dto.LocationInformation;
 import iris.backend_service.locations.search.db.DBSearchIndex;
-import iris.backend_service.locations.search.db.LocationDAO;
+import iris.backend_service.locations.search.db.LocationRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,14 +50,14 @@ public class LocationServiceTest {
 	ModelMapper mapper;
 
 	@Mock
-	LocationDAO locationDao;
+	LocationRepository locationRepo;
 
 	@Mock
 	DBSearchIndex index;
 
 	@BeforeEach
 	void setUp() {
-		systemUnderTest = new LocationService(mapper, locationDao, index);
+		systemUnderTest = new LocationService(mapper, locationRepo, index);
 	}
 
 	@Test
@@ -67,7 +67,7 @@ public class LocationServiceTest {
 
 		List<String> listOfReturnStrings = systemUnderTest.addLocations(clientDto.getName(), locationList);
 
-		verify(locationDao).saveLocations(anyList());
+		verify(locationRepo).saveAll(anyList());
 		assertEquals(0, listOfReturnStrings.size());
 	}
 
@@ -78,7 +78,7 @@ public class LocationServiceTest {
 
 		List<String> listOfReturnStrings = systemUnderTest.addLocations(clientDto.getName(), locationList);
 
-		verify(locationDao).saveLocations(anyList());
+		verify(locationRepo).saveAll(anyList());
 		assertEquals(5, listOfReturnStrings.size());
 		assertEquals(LOCATION_ID_2, listOfReturnStrings.get(0));
 		assertEquals(LOCATION_ID_3, listOfReturnStrings.get(1));
