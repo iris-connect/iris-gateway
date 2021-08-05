@@ -3,7 +3,7 @@ package iris.backend_service.locations.service;
 import iris.backend_service.locations.dto.LocationInformation;
 import iris.backend_service.locations.dto.LocationOverviewDto;
 import iris.backend_service.locations.search.db.DBSearchIndex;
-import iris.backend_service.locations.search.db.LocationDAO;
+import iris.backend_service.locations.search.db.LocationRepository;
 import iris.backend_service.locations.search.db.model.Location;
 import iris.backend_service.locations.search.db.model.LocationIdentifier;
 import iris.backend_service.locations.utils.ValidationHelper;
@@ -26,7 +26,7 @@ public class LocationService {
 
 	private final @NotNull ModelMapper mapper;
 
-	private final @NotNull LocationDAO locationDao;
+	private final @NotNull LocationRepository locationRepo;
 
 	private final @NotNull DBSearchIndex index;
 
@@ -48,7 +48,7 @@ public class LocationService {
 			}
 		}
 
-		locationDao.saveLocations(listOfValidLocations);
+		locationRepo.saveAll(listOfValidLocations);
 
 		return listOfInvalidLocations;
 	}
@@ -68,7 +68,7 @@ public class LocationService {
 
 	public List<LocationOverviewDto> getProviderLocations(String providerId) {
 
-		var providerLocations = locationDao.findByIdProviderId(providerId.toString());
+		var providerLocations = locationRepo.findByIdProviderId(providerId.toString());
 
 		return providerLocations.map(location -> {
 			return new LocationOverviewDto(location.getId().getLocationId(), location.getName());
@@ -80,9 +80,9 @@ public class LocationService {
 		// Construct a new ID to match the (provider, id) pair key
 		LocationIdentifier ident = new LocationIdentifier(providerId.toString(), locationId);
 
-		Optional<Location> match = locationDao.findById(ident);
+		Optional<Location> match = locationRepo.findById(ident);
 		if (match.isPresent()) {
-			locationDao.delete(match.get());
+			locationRepo.delete(match.get());
 			return true;
 		}
 		return false;
@@ -95,7 +95,7 @@ public class LocationService {
 	public Optional<LocationInformation> getLocationByProviderIdAndLocationId(String providerId, String locationId) {
 		var ident = new LocationIdentifier(providerId, locationId);
 
-		return locationDao.findById(ident).map(this::toDto);
+		return locationRepo.findById(ident).map(this::toDto);
 	}
 
 	private LocationInformation toDto(Location it) {

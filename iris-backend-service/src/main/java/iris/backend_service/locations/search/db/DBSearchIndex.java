@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
 public class DBSearchIndex implements SearchIndex {
 
   @Getter
-  private final LocationDAO locationDao;
+  private final LocationRepository locationRepo;
 
   private final ModelMapper mapper;
 
   @Override
   public Page<LocationInformation> search(String keyword, Pageable pageable) {
-	return locationDao.searchLocations(keyword, pageable).map(res -> {
+	return locationRepo.searchLocations(keyword, pageable).map(res -> {
 	  var location = mapper.map(res, LocationInformation.class);
 	  location.setId(res.getId().getLocationId());
 	  location.setProviderId(res.getId().getProviderId());
