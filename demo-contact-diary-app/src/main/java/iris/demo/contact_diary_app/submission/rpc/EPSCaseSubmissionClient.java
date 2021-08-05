@@ -2,7 +2,6 @@ package iris.demo.contact_diary_app.submission.rpc;
 
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import iris.demo.contact_diary_app.config.ProxyServiceConfig;
-import iris.demo.contact_diary_app.config.RPCClientConfig;
 import iris.demo.contact_diary_app.submission.rpc.dto.CaseSubmissionDto;
 import iris.demo.contact_diary_app.submission.rpc.dto.JsonRPCStringResult;
 import lombok.AllArgsConstructor;
@@ -23,9 +22,9 @@ public class EPSCaseSubmissionClient {
 			String port = proxyServiceConfig.getPort();
 			if(hdEndpoint.startsWith("localhost")) {
 				protocol = "http";
-				port = "8092";
+				port = "8092/data-submission-rpc";
 			}
-			JsonRpcHttpClient rpcClient = rpcClientProvider.getObject(protocol + "://" + hdEndpoint + ":" + port + "/data-submission-rpc");
+			JsonRpcHttpClient rpcClient = rpcClientProvider.getObject(protocol + "://" + hdEndpoint + ":" + port);
 			return rpcClient.invoke(methodName, submissionDto, JsonRPCStringResult.class);
 
 		} catch (Throwable t) {
