@@ -1,43 +1,45 @@
 package iris.demo.checkin_app.searchindex.bootstrap;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import iris.demo.checkin_app.config.ResourceHelper;
 import iris.demo.checkin_app.searchindex.model.LocationDto;
 import iris.demo.checkin_app.searchindex.model.LocationsDto;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.io.support.ResourcePatternUtils;
+
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.xml.stream.Location;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Component
 public class LocationsLoader {
 
-    private ResourceHelper resourceLoader;
+	@Value("${use-naughty-location:false}")
+	private boolean useNaughtyLocation;
 
-    private ObjectMapper objectMapper;
+	private final ResourceHelper resourceLoader;
 
-    @SneakyThrows
-    public LocationsDto getDemoLocations() {
+	private final ObjectMapper objectMapper;
 
-        List<LocationDto> locations = new ArrayList<>();
+	@SneakyThrows
+	public LocationsDto getDemoLocations() {
 
-        var resources = resourceLoader.loadResources("classpath:bootstrap/locations/*.json");
+		var locations = new ArrayList<LocationDto>();
 
-        for (var resource: resources){
-            var location = objectMapper.readValue(resource.getInputStream(), LocationDto.class);
-            locations.add(location);
-        }
+		var resources = resourceLoader.loadResources("classpath:bootstrap/locations/*.json");
 
-        return LocationsDto.builder().locations(locations).build();
-    }
+		for (var resource : resources) {
 
+			if (useNaughtyLocation || !resource.getFilename().equals("a-naughty-place.json")) {
+
+				var location = objectMapper.readValue(resource.getInputStream(), LocationDto.class);
+				locations.add(location);
+			}
+		}
+
+		return LocationsDto.builder().locations(locations).build();
+	}
 }

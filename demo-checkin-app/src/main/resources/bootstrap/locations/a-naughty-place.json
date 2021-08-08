@@ -1,0 +1,23 @@
+{
+  "id": "53cfaa3f-4cff-4fab-8842-9fecd81ba563",
+  "name": "A Naughty Place",
+  "publicKey": "A Naughty Place",
+  "contact": {
+    "officialName": "Bad Actors Incorporated",
+    "representative": "Kai",
+    "address": {
+      "street": "teststraße",
+      "city": "Babylon",
+      "zip": "666"
+    },
+    "ownerEmail": "\uD83D\uDE08@\uD83E\uDD2C.⁶⁶⁶",
+    "email": "\uD83D\uDE08@\uD83E\uDD2C.⁶⁶⁶",
+    "phone": "0xabad1dea"
+  },
+  "contexts": [
+    {
+      "id": "53cfaa3f-4cff-4fab-8842-9fecd81ba563",
+      "name": "1;DROP TABLE users"
+    }
+  ]
+}

@@ -41,18 +41,24 @@ public class DataSubmissionService {
 
 	public void sendDataForRequest(LocationDataRequestDto locationDataRequest) throws Exception {
 
-		List<GuestDto> guests = guestLoader.getGuests();
+		List<GuestDto> guests;
 
-		var start = Optional.ofNullable(locationDataRequest.getStart())
-				.map(it -> it.minus(random.nextInt(100), ChronoUnit.MINUTES));
-		var end = Optional.ofNullable(locationDataRequest.getEnd())
-				.map(it -> it.plus(random.nextInt(100), ChronoUnit.MINUTES));
-		// 2 of 3 should have plausible values
-		for (int i = 0; i < 2; i++) {
+		if (locationDataRequest.getLocationId().equals("a7184b09-f33e-4f0c-9986-cd031d0c0f41")) {
+			guests = guestLoader.getNaughtyGuests();
+		} else {
+			guests = guestLoader.getGuests();
 
-			var guest = guests.get(i);
-			guest.getAttendanceInformation().setAttendFrom(start.orElse(null));
-			guest.getAttendanceInformation().setAttendTo(end.orElse(null));
+			var start = Optional.ofNullable(locationDataRequest.getStart())
+					.map(it -> it.minus(random.nextInt(100), ChronoUnit.MINUTES));
+			var end = Optional.ofNullable(locationDataRequest.getEnd())
+					.map(it -> it.plus(random.nextInt(100), ChronoUnit.MINUTES));
+			// 2 of 3 should have plausible values
+			for (int i = 0; i < 2; i++) {
+
+				var guest = guests.get(i);
+				guest.getAttendanceInformation().setAttendFrom(start.orElse(null));
+				guest.getAttendanceInformation().setAttendTo(end.orElse(null));
+			}
 		}
 
 		DataProviderDto dataProvider = dataProviderLoader.getDataProvider();

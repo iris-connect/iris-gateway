@@ -1,13 +1,15 @@
 package iris.demo.checkin_app.searchindex.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Data
 @NoArgsConstructor
@@ -16,14 +18,14 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LocationsDto {
 
-    private List<LocationDto> locations;
+	private List<LocationDto> locations;
 
-    @JsonIgnore
-    public Integer getCount() {
-        return locations.size();
-    }
+	@JsonIgnore
+	public Integer getCount() {
+		return locations.size();
+	}
 
-    public LocationDto getLocationByIndex(Integer index) {
-        return locations.get(index);
-    }
+	public LocationDto getLocationById(UUID uuid) {
+		return locations.stream().filter(it -> it.getId().equals(uuid)).findFirst().get();
+	}
 }
