@@ -15,17 +15,16 @@ public class EPSDataSubmissionClient {
 
 	private final JsonRpcHttpClient rpcClient;
 
-	private final static String TEMPORARY_PROVIDER_ID = "demo-app";
-
-	public void postDataSubmissionGuests(DataSubmissionDto dataSubmissionDto, String hdEndpoint)
+	public String postDataSubmissionGuests(DataSubmissionDto dataSubmissionDto, String hdEndpoint)
 			throws IRISDataSubmissionException {
 
+		JsonRPCStringResult result;
 		try {
 			var methodName = hdEndpoint + ".submitGuestList";
-			rpcClient.invoke(methodName, dataSubmissionDto, JsonRPCStringResult.class);
+			 result = rpcClient.invoke(methodName, dataSubmissionDto, JsonRPCStringResult.class);
 		} catch (Throwable t) {
 			throw new IRISDataSubmissionException(t);
 		}
-
+		return result.toString();
 	}
 }

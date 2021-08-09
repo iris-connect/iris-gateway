@@ -39,7 +39,7 @@ public class DataSubmissionService {
 
 	private final Random random = new Random();
 
-	public void sendDataForRequest(LocationDataRequestDto locationDataRequest) throws Exception {
+	public String sendDataForRequest(LocationDataRequestDto locationDataRequest) throws Exception {
 
 		List<GuestDto> guests;
 
@@ -70,6 +70,6 @@ public class DataSubmissionService {
 				.dataAuthorizationToken(locationDataRequest.getDataAuthorizationToken())
 				.guestList(guestList).build();
 
-		dataSubmissionClient.postDataSubmissionGuests(dataSubmissionDto, locationDataRequest.getHdEndpoint());
+		return dataSubmissionClient.postDataSubmissionGuests(dataSubmissionDto, locationDataRequest.getHdEndpoint());
 	}
 }

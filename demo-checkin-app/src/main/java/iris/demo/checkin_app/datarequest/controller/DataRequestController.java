@@ -26,9 +26,10 @@ public class DataRequestController {
     @PostMapping
     public ResponseEntity<String> postDataRequest(@Valid @RequestBody LocationDataRequestDto locationDataRequestDto) {
         var headers = new HttpHeaders();
+        String result;
 
         try {
-            dataSubmissionService.sendDataForRequest(locationDataRequestDto);
+            result = dataSubmissionService.sendDataForRequest(locationDataRequestDto);
         } catch (Exception e) {
         	
         	log.error(e.getMessage());
@@ -36,7 +37,7 @@ public class DataRequestController {
         	return new ResponseEntity<>("Could not send data. The error was logged.", headers, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(headers, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
     }
 
 
