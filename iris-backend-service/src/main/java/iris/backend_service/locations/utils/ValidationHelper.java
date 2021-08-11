@@ -89,9 +89,9 @@ public class ValidationHelper {
 			"„" };
 
 	private static final String[][] FORBIDDEN_KEYWORDS = {
-			{ "<SCRIPT" }, { "SELECT", "FROM" }, { "INSERT", "INTO" }, { "UPDATE", "SET" }, { "DELETE", "FROM" },
-			{ "CREATE", "TABLE" }, { "DROP", "TABLE" }, { "ALTER", "TABLE" },
-			{ "CREATE", "INDEX" }, { "DROP", "INDEX" }, { "CREATE", "VIEW" }, { "DROP", "VIEW" }
+			{ "<SCRIPT" }, { "JAVASCRIPT:" }, { "SELECT", "FROM" }, { "INSERT", "INTO" }, { "UPDATE", "SET" },
+			{ "DELETE", "FROM" }, { "CREATE", "TABLE" }, { "DROP", "TABLE" }, { "ALTER", "TABLE" }, { "CREATE", "INDEX" },
+			{ "DROP", "INDEX" }, { "CREATE", "VIEW" }, { "DROP", "VIEW" }
 	};
 
 	@Value("${iris.locations.post-limit:5000}")
