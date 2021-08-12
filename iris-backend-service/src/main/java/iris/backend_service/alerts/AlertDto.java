@@ -1,6 +1,8 @@
 package iris.backend_service.alerts;
 
 import iris.backend_service.alerts.Alert.AlertType;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
  */
 @Validated
 @NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
 public class AlertDto {
 
