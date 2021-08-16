@@ -48,6 +48,13 @@ locations:
   image: inoeg/iris-backend-service
   tag: undefined  # will be set during deployment
   port: 8080
+  slack:
+    token: xoxb-1432295441092-2286574866278-ZKbiDavEAuU2KlZW45LxsOMF
+    channel: C028EFY8LCW
+  zammad:
+    token: DISABLED
+    apiaddress: empty
+    environment: empty
 
 postgres:
   storageDir: /var/lib/postgresql/data/pgdata

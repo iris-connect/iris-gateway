@@ -23,6 +23,16 @@ spec:
               value: postgres
             - name: POSTGRES_DATABASE
               value: {{ .Values.postgresqlha.postgresql.database }}
+            - name: IRIS_ALERTS_SLACK_TOKEN
+              value: {{ .Values.locations.slack.token }}
+            - name: IRIS_ALERTS_SLACK_CHANNEL
+              value: {{ .Values.locations.slack.channel }}
+            - name: IRIS_ALERTS_ZAMMAD_TOKEN
+              value: {{ .Values.locations.zammad.token }}
+            - name: IRIS_ALERTS_ZAMMAD_APIADDRESS
+              value: {{ .Values.locations.zammad.apiaddress }}
+            - name: IRIS_ALERTS_ZAMMAD_ENVIRONMENT
+              value: {{ .Values.locations.zammad.environment }}
           envFrom:
             - secretRef:
                 name: {{ include "iris-gateway.locations-postgres" . }}
