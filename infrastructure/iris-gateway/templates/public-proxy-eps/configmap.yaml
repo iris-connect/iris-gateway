@@ -5,6 +5,8 @@ metadata:
 data:
   settings.yml: |
     name: {{ (index .Values.serviceNames .Values.environment).publicProxy }}
+    metrics:
+      bind_address: "0.0.0.0:2112"
     directory:
       type: api
       settings:
