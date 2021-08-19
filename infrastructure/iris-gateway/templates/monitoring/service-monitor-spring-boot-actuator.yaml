@@ -7,9 +7,6 @@ spec:
     - interval: 15s
       path: /actuator/prometheus
       port: http
-    - interval: 15s
-      path: /prometheus
-      port: http
   selector:
     matchLabels:
       prometheusMetricsType: spring-boot-actuator
