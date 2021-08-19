@@ -47,7 +47,7 @@ eps:
     scrape: true
     scheme: http
     path: prometheus
-    port: "2112"
+    port: 2112
 
 locations:
   image: inoeg/iris-backend-service
