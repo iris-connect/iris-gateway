@@ -43,6 +43,11 @@ serviceNames:
 eps:
   image: inoeg/eps
   configMountPath: /config
+  prometheus:
+    scrape: 'true'
+    scheme: 'http'
+    path: 'prometheus'
+    port: '2112'
 
 locations:
   image: inoeg/iris-backend-service
