@@ -5,7 +5,7 @@ metadata:
     prometheus.io/scrape: {{ .Values.eps.prometheus.scrape }}
     prometheus.io/scheme: {{ .Values.eps.prometheus.scheme }}
     prometheus.io/path: {{ .Values.eps.prometheus.path }}
-    prometheus.io/port: {{ .Values.eps.prometheus.port }}  
+    prometheus.io/port: {{ .Values.eps.prometheus.port }}
   name: {{ include "iris-gateway.locations-eps" . }}
   labels:
     {{- include "iris-gateway.locations-eps-labels" . | nindent 4 }}
