@@ -21,10 +21,5 @@ spec:
       targetPort: json-rpc-eps
       protocol: TCP
       name: json-rpc-eps
-    - port: {{ .Values.eps.prometheus.port }}
-      targetPort: http
-      nodePort: {{ .Values.eps.prometheus.port }}
-      name: prometheus
-      protocol: TCP
   selector:
     {{- include "iris-gateway.public-proxy-eps-labels" . | nindent 4 }}

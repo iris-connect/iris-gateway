@@ -17,11 +17,5 @@ spec:
       nodePort: {{ .Values.nodePorts.locationsEps }}
       protocol: TCP
       name: grpc
-  type: ClusterIP
-  ports:
-    - port: {{ .Values.eps.prometheus.port }}
-      targetPort: http
-      name: prometheus
-      protocol: TCP
   selector:
     {{- include "iris-gateway.locations-eps-labels" . | nindent 4 }}
