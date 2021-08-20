@@ -27,7 +27,7 @@ spec:
         - alert: OpenFileDescriptorsTooHigh
           expr: sum(process_open_fds{namespace="iris-gateway"}) > 1024
           annotations:
-            message: "Too many open files in namespace {{ "{{ $labels.namespace }}" }} : {{ "{{ $value }}" }} LABELS: {{ "{{ $labels }}" }}"
+            message: "Too many open files in namespace {{ "{{ $labels.namespace }}" }} : {{ "{{ $value }}" }}\n LABELS: {{ "{{ $labels }}" }}"
             summary: Open filedescriptors too high
           for: 1m
           labels:
