@@ -25,6 +25,9 @@ spec:
             - name: grpc
               containerPort: {{ .Values.nodePorts.locationsEps }}
               protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.eps.prometheus.port }}
+              protocol: TCP
           volumeMounts:
             - mountPath: {{ .Values.tls.mountPath }}
               name: tls
