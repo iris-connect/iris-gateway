@@ -10,7 +10,7 @@ spec:
   ports:
     - port: {{ .Values.eps.prometheus.port }}
       protocol: TCP
-      name: iris-gateway-public-proxy-eps-prometheus
+      name: {{ include "iris-gateway.fullname" . }}-eps-prometheus
       targetPort: prometheus
   selector:
     {{- include "iris-gateway.public-proxy-eps-labels" . | nindent 4 }}
