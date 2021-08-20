@@ -6,7 +6,7 @@ spec:
   endpoints:
     - interval: 15s
       path: /prometheus
-      port: http
+      port: prometheus
   selector:
     matchLabels:
       prometheusMetricsType: eps-actuator
