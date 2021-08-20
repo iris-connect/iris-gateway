@@ -6,7 +6,7 @@ spec:
   endpoints:
     - interval: 15s
       path: /prometheus
-      port: prometheus
+      port: iris-gateway-locations-eps-prometheus
   selector:
     matchLabels:
       prometheusMetricsType: eps-actuator
