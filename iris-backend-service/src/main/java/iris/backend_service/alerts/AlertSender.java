@@ -8,13 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.stream.Collectors;
 
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Jens Kutzsche
  */
 @Slf4j
-@Service()
+@Component
 @RequiredArgsConstructor
 class AlertSender {
 
@@ -46,17 +46,17 @@ class AlertSender {
 			case MESSAGE:
 				return createAlertMessage(alert);
 			case TICKET:
-				return sendAlertTicket(alert);
+				return createAlertTicket(alert);
 			default:
 				return false;
 		}
 	}
 
-	private boolean createAlertMessage(Alert alert) {
+	boolean createAlertMessage(Alert alert) {
 		return slack.createMessage(alert);
 	}
 
-	private boolean sendAlertTicket(Alert alert) {
+	boolean createAlertTicket(Alert alert) {
 		return zammad.createTicket(alert);
 	}
 }

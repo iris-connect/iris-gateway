@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import iris.backend_service.alerts.Alert.AlertType;
-import iris.backend_service.alerts.slack.SlackMessageCreator;
-import iris.backend_service.alerts.zammad.ZammadTicketCreator;
 import iris.backend_service.jsonrpc.JsonRpcClientDto;
 
 import java.util.List;
@@ -15,8 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -24,6 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
  * @author Jens Kutzsche
  */
 @SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("dev_env")
 class AlertRPCTests {
 
@@ -33,11 +32,8 @@ class AlertRPCTests {
 	@SpyBean
 	AlertRepository repo;
 
-	@MockBean
-	SlackMessageCreator slack;
-
-	@MockBean
-	ZammadTicketCreator zammad;
+	@SpyBean
+	AlertSender sender;
 
 	@Captor
 	ArgumentCaptor<List<Alert>> alertsCaptor;
@@ -65,9 +61,9 @@ class AlertRPCTests {
 		assertThat(value).hasSize(1)
 				.element(0).extracting("title", "text", "alertType").contains("Title", "Text", AlertType.MESSAGE);
 
-		Thread.sleep(16000);
+		sender.sendAlerts();
 
-		verify(slack).createMessage(alertCaptor.capture());
+		verify(sender).createAlertMessage(alertCaptor.capture());
 
 		var value2 = alertCaptor.getValue();
 		assertThat(value2).extracting("title", "text", "alertType").contains("Title", "Text", AlertType.MESSAGE);
@@ -89,9 +85,9 @@ class AlertRPCTests {
 		assertThat(value).hasSize(1)
 				.element(0).extracting("title", "text", "alertType").contains("Title", "Text", AlertType.TICKET);
 
-		Thread.sleep(16000);
+		sender.sendAlerts();
 
-		verify(zammad).createTicket(alertCaptor.capture());
+		verify(sender).createAlertTicket(alertCaptor.capture());
 
 		var value2 = alertCaptor.getValue();
 		assertThat(value2).extracting("title", "text", "alertType").contains("Title", "Text", AlertType.TICKET);

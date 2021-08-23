@@ -1,11 +1,17 @@
 package iris.backend_service.locations.utils;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import iris.backend_service.MemoryAppender;
 import iris.backend_service.alerts.AlertService;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
@@ -13,7 +19,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This test runs only with mvn successfully, because the logback must exclude during test run!
@@ -22,12 +28,22 @@ import org.slf4j.Logger;
 class ValidationHelperTest {
 
 	@Mock
-	Logger logger;
-	@Mock
 	AlertService alerts;
 
 	@InjectMocks
 	ValidationHelper sut;
+
+	private MemoryAppender memoryAppender;
+
+	@BeforeEach
+	public void setup() {
+		Logger logger = (Logger) LoggerFactory.getLogger(ValidationHelper.class);
+		memoryAppender = new MemoryAppender();
+		memoryAppender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
+		logger.setLevel(Level.DEBUG);
+		logger.addAppender(memoryAppender);
+		memoryAppender.start();
+	}
 
 	@ParameterizedTest
 	@ValueSource(strings = { "a@b.de", "rick4711@yahoo.com", "r@sub.main.org", "r@foo-bar.org" })
@@ -64,8 +80,10 @@ class ValidationHelperTest {
 
 		assertTrue(sut.isPossibleAttackForRequiredValue(input, "Field", false, "client"));
 
-		verify(logger).warn(startsWith("Die übergebenen Daten dürfen nicht leer sein"), any(Object.class));
-		verifyNoMoreInteractions(logger, alerts);
+		assertThat(memoryAppender.countEventsForLogger(ValidationHelper.class)).isEqualTo(1);
+		assertThat(memoryAppender.contains("Die übergebenen Daten dürfen nicht leer sein", Level.WARN)).isTrue();
+
+		verifyNoMoreInteractions(alerts);
 	}
 
 	@ParameterizedTest
@@ -73,17 +91,24 @@ class ValidationHelperTest {
 			"SELECT iuaeuia uiae FROM", "INSERT    INTO" })
 	void checkPossibleAttackTrue(String input) {
 
-		assertTrue(sut.isPossibleAttackForRequiredValue(input, "Field", false, "client"));
+		assertTrue(sut.isPossibleAttackForRequiredValue(input, "Field1", false, "client"));
 
-		verify(logger).warn(startsWith("Die übergebenen Eingabedaten sind nicht erlaubt"), eq("Field"), eq(input));
+		assertThat(memoryAppender.countEventsForLogger(ValidationHelper.class)).isEqualTo(1);
+		assertThat(memoryAppender.contains("Die übergebenen Eingabedaten sind nicht erlaubt", Level.WARN)).isTrue();
+		assertThat(memoryAppender.contains("Field1", Level.WARN)).isTrue();
+		assertThat(memoryAppender.contains(input, Level.WARN)).isTrue();
+
 		verify(alerts).createAlertMessage(any(), contains(input));
 
-		assertTrue(sut.isPossibleAttack(input, "Field", false, "client"));
+		assertTrue(sut.isPossibleAttack(input, "Field2", false, "client"));
 
-		verify(logger, times(2)).warn(startsWith("Die übergebenen Eingabedaten sind nicht erlaubt"), eq("Field"),
-				eq(input));
+		assertThat(memoryAppender.countEventsForLogger(ValidationHelper.class)).isEqualTo(2);
+		assertThat(memoryAppender.contains("Die übergebenen Eingabedaten sind nicht erlaubt", Level.WARN)).isTrue();
+		assertThat(memoryAppender.contains("Field2", Level.WARN)).isTrue();
+		assertThat(memoryAppender.contains(input, Level.WARN)).isTrue();
+
 		verify(alerts, times(2)).createAlertMessage(any(), contains(input));
-		verifyNoMoreInteractions(logger, alerts);
+		verifyNoMoreInteractions(alerts);
 	}
 
 	@ParameterizedTest
@@ -93,7 +118,7 @@ class ValidationHelperTest {
 		assertFalse(sut.isPossibleAttackForRequiredValue(input, "Field", false, "client"));
 		assertFalse(sut.isPossibleAttack(input, "Field", false, "client"));
 
-		verifyNoInteractions(logger, alerts);
+		verifyNoInteractions(alerts);
 	}
 
 	@ParameterizedTest
@@ -103,7 +128,7 @@ class ValidationHelperTest {
 
 		assertFalse(sut.isPossibleAttack(input, "Field", false, "client"));
 
-		verifyNoInteractions(logger, alerts);
+		verifyNoInteractions(alerts);
 	}
 
 	@ParameterizedTest
@@ -114,9 +139,12 @@ class ValidationHelperTest {
 
 		assertTrue(sut.isPossibleAttack(input, "Field", true, "client"));
 
-		verify(logger).warn(startsWith("Die übergebenen Eingabedaten sind nicht erlaubt"), eq("Field"),
-				endsWith("Tes*****"));
+		assertThat(memoryAppender.countEventsForLogger(ValidationHelper.class)).isEqualTo(1);
+		assertThat(memoryAppender.contains("Die übergebenen Eingabedaten sind nicht erlaubt", Level.WARN)).isTrue();
+		assertThat(memoryAppender.contains("Field", Level.WARN)).isTrue();
+		assertThat(memoryAppender.contains("Tes*****", Level.WARN)).isTrue();
+
 		verify(alerts).createAlertMessage(any(), contains("Tes*****"));
-		verifyNoMoreInteractions(logger, alerts);
+		verifyNoMoreInteractions(alerts);
 	}
 }
