@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "iris-gateway.fullname" . }}-eps-actuator
+spec:
+  endpoints:
+    - interval: 15s
+      path: /prometheus
+      port: {{ include "iris-gateway.fullname" . }}-eps-prometheus
+  selector:
+    matchLabels:
+      prometheusMetricsType: eps-actuator

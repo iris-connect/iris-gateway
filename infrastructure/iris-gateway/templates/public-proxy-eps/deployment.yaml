@@ -28,6 +28,9 @@ spec:
             - name: json-rpc-eps
               containerPort: {{ .Values.publicProxyEps.jsonRpcPort }}
               protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.eps.prometheus.port }}
+              protocol: TCP
           volumeMounts:
             - mountPath: {{ .Values.tls.mountPath }}
               name: tls

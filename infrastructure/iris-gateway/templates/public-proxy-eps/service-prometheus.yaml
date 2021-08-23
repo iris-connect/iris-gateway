@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "iris-gateway.public-proxy-eps" . }}-prometheus
+  labels:
+    {{- include "iris-gateway.public-proxy-eps-labels" . | nindent 4 }}
+    prometheusMetricsType: eps-actuator
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.eps.prometheus.port }}
+      protocol: TCP
+      name: {{ include "iris-gateway.fullname" . }}-eps-prometheus
+      targetPort: prometheus
+  selector:
+    {{- include "iris-gateway.public-proxy-eps-labels" . | nindent 4 }}

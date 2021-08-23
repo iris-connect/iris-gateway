@@ -24,3 +24,12 @@ spec:
           labels:
             receiver: iris-alerts-{{ .Values.environment }}
             severity: warning
+        - alert: OpenFileDescriptorsTooHigh
+          expr: sum(process_open_fds{namespace="iris-gateway"}) > 1024
+          annotations:
+            message: "Too many open files in namespace iris-gateway : {{ "{{ $value }}" }}"
+            summary: Open filedescriptors too high
+          for: 1m
+          labels:
+            receiver: iris-alerts-{{ .Values.environment }}
+            severity: warning
