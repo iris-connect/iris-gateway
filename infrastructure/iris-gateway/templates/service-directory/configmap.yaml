@@ -14,7 +14,10 @@ data:
         certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}.crt"
         key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).serviceDirectory }}.key"
     directory:
-      database_file: {{ .Values.serviceDirectory.storageDir }}/service-directory.records
+      datastore:
+        type: file
+        settings:
+          filename: {{ .Values.serviceDirectory.storageDir }}/service-directory.records
       ca_intermediate_certificate_files:
 {{- range (index .Values.tls.intermediateCertificates .Values.environment) }}
         - "{{ $.Values.tls.mountPath }}/{{ . }}"
