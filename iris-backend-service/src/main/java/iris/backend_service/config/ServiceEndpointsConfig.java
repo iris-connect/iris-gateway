@@ -31,6 +31,8 @@ public class ServiceEndpointsConfig {
 		compositeJsonServiceExporter.setServices(new Object[] { health, locations, alerts, configurations, hdSearch });
 		compositeJsonServiceExporter.setAllowExtraParams(true);
 		compositeJsonServiceExporter.setAllowLessParams(true);
+		compositeJsonServiceExporter.setShouldLogInvocationErrors(false);
+		compositeJsonServiceExporter.setErrorResolver(new JsonRpcErrorResolver());
 
 		return compositeJsonServiceExporter;
 	}
