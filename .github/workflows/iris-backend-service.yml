@@ -1,4 +1,4 @@
-name: Build, package and publish location service on push to develop branch
+name: backend-service Develop
 
 on:
   push:
