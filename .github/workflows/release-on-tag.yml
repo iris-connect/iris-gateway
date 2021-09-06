@@ -1,4 +1,4 @@
-name: Build and release runnable Jars for IRIS apps
+name: Release on tag
 
 on:
   push:
@@ -131,6 +131,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2.3.4
+
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
