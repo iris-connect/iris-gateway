@@ -45,13 +45,3 @@ data:
         settings:
           # needs to match the endpoint configuration in the spring boot app
           endpoint: http://{{ include "iris-gateway.locations" . }}:{{ .Values.locations.port }}/backend-rpc
-      - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
-        type: grpc_client
-        settings:
-          tls:
-            ca_certificate_files:
-{{- range (index .Values.tls.rootCertificates .Values.environment) }}
-              - "{{ $.Values.tls.mountPath }}/{{ . }}"
-{{- end}}
-            certificate_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.crt"
-            key_file: "{{ .Values.tls.mountPath }}/{{ (index .Values.serviceNames .Values.environment).locations }}.key"
