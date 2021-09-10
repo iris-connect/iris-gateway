@@ -38,6 +38,7 @@ public class LocationServiceTest {
 	String INVALID_EMAIL = "jane.doe.gmx.de";
 
 	String VALID_PHONE = "0123456789";
+	String VALID_PHONE2 = "+49 35204 789 33";
 	String INVALID_PHONE = "0123A56789";
 
 	String REPRESENTATIVE_NAME = "Cliff Hanger";

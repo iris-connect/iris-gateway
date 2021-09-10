@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,9 +24,7 @@ import org.springframework.stereotype.Component;
 public class ValidationHelper {
 
 	public static final Pattern REGEX_EMAIL = Pattern.compile("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w-_]+\\.)+[\\w]+[\\w]$");
-	public static final Pattern REGEX_PHONE = Pattern.compile(
-			"^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$|^((((\\()?0\\d{3,4}(\\))?)|(\\+49 (\\()?\\d{4}(\\))?))([/ -])(\\d{6}(-\\d{2})?))$"
-					+ "|^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$");
+	public static final Pattern REGEX_PHONE = Pattern.compile("^\\+?[0-9][\\/\\.\\(\\)\\s\\-0-9]{6,}?[0-9]$");
 
 	private static final String[] FORBIDDEN_SYMBOLS = {
 			"=",
@@ -138,6 +137,15 @@ public class ValidationHelper {
 	}
 
 	public boolean isPossibleAttack(String input, String field, boolean obfuscateLogging, String client) {
+		return isPossibleAttack(input, field, obfuscateLogging, client, FORBIDDEN_SYMBOLS);
+	}
+
+	public boolean isPossibleAttackForPhone(String input, String field, boolean obfuscateLogging, String client) {
+		return isPossibleAttack(input, field, obfuscateLogging, client, ArrayUtils.removeElement(FORBIDDEN_SYMBOLS, "+"));
+	}
+
+	public boolean isPossibleAttack(String input, String field, boolean obfuscateLogging, String client,
+			String[] forbidenSymbols) {
 
 		if (input == null) {
 			return false;
@@ -146,7 +154,7 @@ public class ValidationHelper {
 		String inputUpper = input.toUpperCase();
 		Optional<Range<Integer>> range;
 		if ((range = testKeywords(inputUpper, FORBIDDEN_KEYWORDS)).isPresent()
-				|| (range = testSymbols(input, FORBIDDEN_SYMBOLS)).isPresent()) {
+				|| (range = testSymbols(input, forbidenSymbols)).isPresent()) {
 
 			var logableValue = calculateLogableValue(input, obfuscateLogging, range.get());
 

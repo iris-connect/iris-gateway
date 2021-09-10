@@ -60,9 +60,10 @@ class ValidationHelperTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = { "0123456789", "+4912345678", "+3412345678", "0172 111567" }) // other variants:
-																																												// "0172/111567", "0222 6578-22"
+	@ValueSource(strings = { "0123456789", "+49 12345 67833", "+3412345678", "0172 111567" }) // other variants:
+	// "0172/111567", "0222 6578-22"
 	void checkValidPhoneNumbers(String phone) {
+		assertFalse(sut.isPossibleAttackForPhone(phone, "field", true, "client"));
 		assertTrue(ValidationHelper.isValidAndNotNullPhoneNumber(phone));
 	}
 

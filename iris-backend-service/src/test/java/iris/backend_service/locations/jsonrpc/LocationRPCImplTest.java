@@ -73,8 +73,8 @@ public class LocationRPCImplTest {
 	}
 
 	List<LocationInformation> getLocationInformationList() {
-		List<LocationInformation> locationList = new ArrayList<LocationInformation>();
-		locationList.add(
+
+		return List.of(
 				getLocationInformation(
 						LOCATION_ID_1,
 						"providerId",
@@ -84,8 +84,7 @@ public class LocationRPCImplTest {
 						"representative",
 						"ownerEmail",
 						"email",
-						"phone"));
-		locationList.add(
+						"phone"),
 				getLocationInformation(
 						LOCATION_ID_2,
 						"providerId",
@@ -96,7 +95,6 @@ public class LocationRPCImplTest {
 						"ownerEmail",
 						"email",
 						"phone"));
-		return locationList;
 	}
 
 	LocationInformation getLocationInformation(

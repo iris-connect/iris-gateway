@@ -57,7 +57,7 @@ public class LocationRPCImpl implements LocationRPC {
 		validateJsonRpcClientDto(client);
 		validatePostLimit(locationList, client.getName());
 
-		List<LocationInformation> locationListValidated = validateLocationInformation(locationList, client.getName());
+		var locationListValidated = validateLocationInformation(locationList, client.getName());
 
 		var listOfInvalidAddresses = locationService.addLocations(client.getName(), locationListValidated);
 
@@ -238,7 +238,7 @@ public class LocationRPCImpl implements LocationRPC {
 			contact.setEmail(ErrorMessageHelper.INVALID_INPUT_STRING);
 		}
 
-		if (validHelper.isPossibleAttack(contact.getPhone(), FIELD_PHONE, true, client)) {
+		if (validHelper.isPossibleAttackForPhone(contact.getPhone(), FIELD_PHONE, true, client)) {
 			contact.setPhone(ErrorMessageHelper.INVALID_INPUT_STRING);
 		}
 
