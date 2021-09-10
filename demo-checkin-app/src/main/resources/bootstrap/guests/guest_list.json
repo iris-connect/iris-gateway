@@ -27,8 +27,8 @@
     "dateOfBirth": "2021-03-28",
     "sex": "UNKNOWN",
     "email": "eh0gi84olwi@temporary-mail.net",
-    "phone": "string",
-    "mobilePhone": "0151 12345678",
+    "phone": "+49 35204 123 45",
+    "mobilePhone": "+49 (0151) 12345678",
     "address": {
       "street": "Lietzensee-Ufer",
       "houseNumber": "65",
