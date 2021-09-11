@@ -1,0 +1,23 @@
+{
+  "id": "99999999-9999-9999-9999-999999999999",
+  "name": "Place for exception",
+  "publicKey": "Place for exception",
+  "contact": {
+    "officialName": "Bad Actors Incorporated",
+    "representative": "Test",
+    "address": {
+      "street": "Petristr. 12",
+      "zipCode": "71364",
+      "city": "Winnenden"
+    },
+    "ownerEmail": "rollout@iris-connect.de",
+    "email": "rollout@iris-connect.de",
+    "phone": "0151 47110815"
+  },
+  "contexts": [
+    {
+      "id": "4adba054-1b1d-4511-b3fc-ea5ce769cf10",
+      "name": "Tisch 1"
+    }
+  ]
+}
