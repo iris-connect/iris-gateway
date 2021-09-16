@@ -1,6 +1,9 @@
 public:
   name: public-proxy-1
-  database_file: /tmp/public-proxy-announcements.db
+  datastore:
+    type: file
+    settings:
+      filename: /tmp/public-proxy-announcements.db
   tls_bind_address: 0.0.0.0:4433
   internal_bind_address: 0.0.0.0:9999
   jsonrpc_client:

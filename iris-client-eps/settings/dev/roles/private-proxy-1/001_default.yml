@@ -1,7 +1,9 @@
 private:
   name: private-proxy-1
-  database_file: /tmp/private-proxy-announcements.db
-
+  datastore:
+    type: file
+    settings:
+      filename: /tmp/private-proxy-announcements.db
   internal_endpoint: 
     address: host.docker.internal:8092
     jsonrpc_path: /data-submission-rpc
