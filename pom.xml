@@ -21,7 +21,6 @@
 		<module>iris-backend-service</module>
 		<module>demo-checkin-app</module>
 		<module>demo-contact-diary-app</module>
-		<module>iris-feedback-service</module>
 	</modules>
 
 	<build>

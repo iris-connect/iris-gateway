@@ -1,6 +1,8 @@
 package iris.backend_service;
 
 import iris.backend_service.locations.jsonrpc.LocationRPCImpl;
+import iris.backend_service.messages.AlertDto;
+import iris.backend_service.messages.Message;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,8 @@ public class IrisBackendServiceApplication {
 		var mapper = new ModelMapper();
 		// mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 		mapper.getConfiguration().setAmbiguityIgnored(true);
-		// mapper.typeMap(Location.class, LocationInformation.class).addMappings(m -> m.skip(LocationInformation::setId));
+		mapper.typeMap(AlertDto.class, Message.class)
+				.addMappings(it -> it.map(AlertDto::getAlertType, Message::setMessageType));
 
 		return mapper;
 	}

@@ -61,6 +61,10 @@ locations:
     token: DISABLED
     apiaddress: empty
     environment: empty
+  github:
+    token: DISABLED
+    org: empty
+    repo: empty
 
 postgres:
   storageDir: /var/lib/postgresql/data/pgdata

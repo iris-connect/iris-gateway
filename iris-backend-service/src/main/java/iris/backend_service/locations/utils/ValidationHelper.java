@@ -2,8 +2,8 @@ package iris.backend_service.locations.utils;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
-import iris.backend_service.alerts.AlertService;
 import iris.backend_service.locations.dto.LocationInformation;
+import iris.backend_service.messages.AlertService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
