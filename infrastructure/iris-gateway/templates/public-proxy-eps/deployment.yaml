@@ -16,6 +16,13 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/public-proxy-eps/configmap.yaml") . | sha256sum }}
     spec:
+      {{- if .Values.dnsPolicy }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
+      {{- end }}
+      {{- with .Values.dnsConfig }}
+      dnsConfig:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: public-proxy-eps
           image: {{ .Values.eps.image }}:{{ .Values.epsRepoTag }}
