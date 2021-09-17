@@ -32,6 +32,32 @@
 			},
 			"response": []
 		},
+			"name": "Add locations to s ind. other Provider",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"locations\": [\n    {\n      \"id\": \"0d4b783a-59fa-4687-9bf8-d1f7e15d040d\",\n      \"name\": \"Pizzeria de Angelo\",\n      \"publicKey\": \"Pizzeria de Angelo\",\n      \"contact\": {\n        \"officialName\": \"De Angelo GmbH\",\n        \"representative\": \"Gerd Meier\",\n        \"address\": {\n          \"street\": \"Breite Straße 76\",\n          \"city\": \"Darmstadt\",\n          \"zip\": \"64293\"\n        },\n        \"ownerEmail\": \"gerdmeier@t-online.de\",\n        \"email\": \"gerdmeier@t-online.de\",\n        \"phone\": \"0151 34780815\"\n      },\n      \"contexts\": [\n        {\n          \"id\": \"4395f4b1b-35b8-4de7-a6af-61a30f355b9b\",\n          \"name\": \"Tisch 1\"\n        }\n      ]\n    }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/search-index/locations",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"search-index",
+						"locations"
+					]
+				}
+			},
+			"response": []
+		},
 		{
 			"name": "Delete locations from search index",
 			"request": {
