@@ -68,6 +68,9 @@ jobs:
           --set postgresqlha.pgpool.adminPassword="${{ secrets.PGPOOL_ADMIN_PASSWORD }}"
           --set postgresqlha.postgresql.password="${{ secrets.POSTGRESQL_PASSWORD }}"
           --set postgresqlha.pgpool.customUsers.passwords="${{ secrets.POSTGRESQL_PASSWORD }}"
+          --set locations.slack.token="${{ secrets.SLACK_TOKEN }}"
+          --set locations.slack.channel=C028EFY8LCW
+          --set locations.proxy="${{ secrets.AKDB_PROXY }}"
           --wait
           --timeout 3m
           --debug
@@ -111,6 +114,9 @@ jobs:
           --set postgresqlha.pgpool.adminPassword="${{ secrets.PGPOOL_ADMIN_PASSWORD }}"
           --set postgresqlha.postgresql.password="${{ secrets.POSTGRESQL_PASSWORD }}"
           --set postgresqlha.pgpool.customUsers.passwords="${{ secrets.POSTGRESQL_PASSWORD }}"
+          --set locations.slack.token="${{ secrets.SLACK_TOKEN }}"
+          --set locations.slack.channel=C02EXH4L80M
+          --set locations.proxy="${{ secrets.AKDB_PROXY }}"
           --atomic
           --timeout 3m
           --debug
