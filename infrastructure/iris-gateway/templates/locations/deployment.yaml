@@ -16,13 +16,6 @@ spec:
       labels:
         {{- include "iris-gateway.locations-labels" . | nindent 8 }}
     spec:
-      {{- if .Values.dnsPolicy }}
-      dnsPolicy: {{ .Values.dnsPolicy }}
-      {{- end }}
-      {{- with .Values.dnsConfig }}
-      dnsConfig:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       containers:
         - name: location
           image: {{ .Values.locations.image }}:{{ .Values.locations.tag }}
