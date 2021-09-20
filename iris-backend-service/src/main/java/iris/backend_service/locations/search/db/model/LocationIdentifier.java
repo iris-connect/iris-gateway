@@ -21,5 +21,4 @@ public class LocationIdentifier implements Serializable {
 	private String providerId;
 
 	private String locationId;
-
 }

@@ -18,6 +18,7 @@
 		<java.version>11</java.version>
 		<docker.image.prefix>inoeg</docker.image.prefix>
 		<version.tag>${project.version}</version.tag>
+		<hibernate.search.version>6.0.6.Final</hibernate.search.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -115,6 +116,18 @@
 			<artifactId>jaxws-ri</artifactId>
 			<version>2.3.5</version><!-- Must be <3 because jsonrpc4j need javax.jws.WebParam! -->
 			<type>pom</type>
+		</dependency>
+
+		<!-- fuzzy search -->
+		<dependency>
+			<groupId>org.hibernate.search</groupId>
+			<artifactId>hibernate-search-mapper-orm</artifactId>
+			<version>${hibernate.search.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.search</groupId>
+			<artifactId>hibernate-search-backend-lucene</artifactId>
+			<version>${hibernate.search.version}</version>
 		</dependency>
 
 		<!--Spring Docs -->

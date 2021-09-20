@@ -31,17 +31,17 @@ public class LocationService {
 	private final @NotNull DBSearchIndex index;
 
 	public List<String> addLocations(String providerId, List<LocationInformation> locations) {
-		// TODO: Authenticate API Access
-		List<String> listOfInvalidLocations = new ArrayList<String>();
-		List<Location> listOfValidLocations = new ArrayList<Location>();
+
+		var listOfInvalidLocations = new ArrayList<String>();
+		var listOfValidLocations = new ArrayList<Location>();
 
 		for (LocationInformation locationInformation : locations) {
-			Location location = getLocationFromLocationInformation(providerId, locationInformation);
+			var location = getLocationFromLocationInformation(providerId, locationInformation);
 
 			if (location.getName() != null
-				&& location.getContactRepresentative() != null
-				&& (ValidationHelper.isValidAndNotNullEmail(location.getContactEmail())
-					|| ValidationHelper.isValidAndNotNullPhoneNumber(location.getContactPhone()))) {
+					&& location.getContactRepresentative() != null
+					&& (ValidationHelper.isValidAndNotNullEmail(location.getContactEmail())
+							|| ValidationHelper.isValidAndNotNullPhoneNumber(location.getContactPhone()))) {
 				listOfValidLocations.add(location);
 			} else {
 				listOfInvalidLocations.add(locationInformation.getId());
@@ -56,7 +56,7 @@ public class LocationService {
 	private Location getLocationFromLocationInformation(String providerId, LocationInformation entry) {
 		// Reset possibly sent provider id. We need to ensure this comes from
 		// the authentication system and isn't user-provided!
-		entry.setProviderId(providerId.toString());
+		entry.setProviderId(providerId);
 		var location = mapper.map(entry, Location.class);
 
 		// For the search index, we are only interested in a subset of the data structure for location information
@@ -78,7 +78,7 @@ public class LocationService {
 
 	public boolean deleteLocation(String providerId, String locationId) {
 		// Construct a new ID to match the (provider, id) pair key
-		LocationIdentifier ident = new LocationIdentifier(providerId.toString(), locationId);
+		var ident = new LocationIdentifier(providerId, locationId);
 
 		Optional<Location> match = locationRepo.findById(ident);
 		if (match.isPresent()) {

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -45,8 +46,8 @@ class DBSearchIndexTest {
 		locationRepo.saveAll(Collections.singletonList(location));
 
 		// assert
-		assertEquals(1, searchIndex.search("Zwoeinz", null).getContent().size());
-		assertEquals(1, searchIndex.search("zwoeinz", null).getContent().size());
+		assertEquals(1, searchIndex.search("Zwoeinz", PageRequest.of(0, 20)).getContent().size());
+		assertEquals(1, searchIndex.search("zwoeinz", PageRequest.of(0, 20)).getContent().size());
 	}
 
 	@Test
