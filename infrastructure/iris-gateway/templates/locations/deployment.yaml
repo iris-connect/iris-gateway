@@ -52,3 +52,7 @@ spec:
             - name: http
               containerPort: {{ .Values.locations.port }}
               protocol: TCP
+      volumes:
+        - name: persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ include "iris-gateway.locations" . }}
