@@ -52,7 +52,10 @@ spec:
             - name: http
               containerPort: {{ .Values.locations.port }}
               protocol: TCP
+          volumeMounts:
+            - mountPath: {{ .Values.locations.storageDir }}
+              name: persistent-storage
       volumes:
         - name: persistent-storage
           persistentVolumeClaim:
-            claimName: {{ include "iris-gateway.locations" . }}
+            claimName: {{ include "iris-gateway.locations" . }}-index
