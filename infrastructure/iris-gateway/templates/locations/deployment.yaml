@@ -40,6 +40,14 @@ spec:
               value: {{ .Values.locations.zammad.apiaddress }}
             - name: IRIS_ALERTS_ZAMMAD_ENVIRONMENT
               value: {{ .Values.locations.zammad.environment }}
+            - name: HTTP_PROXY
+              value: {{ .Values.locations.proxy }}
+            - name: HTTPS_PROXY
+              value: {{ .Values.locations.proxy }}
+            - name: http_proxy
+              value: {{ .Values.locations.proxy }}
+            - name: https_proxy
+              value: {{ .Values.locations.proxy }}
           envFrom:
             - secretRef:
                 name: {{ include "iris-gateway.locations-postgres" . }}
