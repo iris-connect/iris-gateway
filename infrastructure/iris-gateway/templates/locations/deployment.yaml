@@ -57,6 +57,8 @@ spec:
           volumeMounts:
             - mountPath: {{ .Values.locations.storageDir }}
               name: persistent-storage
+          securityContext:
+            runAsNonRoot: true
       volumes:
         - name: persistent-storage
           persistentVolumeClaim:
