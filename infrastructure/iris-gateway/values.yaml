@@ -52,6 +52,7 @@ eps:
 locations:
   image: inoeg/iris-backend-service
   tag: undefined  # will be set during deployment
+  storageDir: /index-directory
   port: 8080
   slack:
     token: DISABLED
