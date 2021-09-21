@@ -9,6 +9,8 @@ spec:
   selector:
     matchLabels:
       {{- include "iris-gateway.locations-labels" . | nindent 6 }}
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
