@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 
 import java.util.stream.Collectors;
 
+import org.hibernate.search.engine.search.predicate.dsl.PredicateFinalStep;
+import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.modelmapper.ModelMapper;
@@ -29,18 +31,7 @@ public class DBSearchIndex implements SearchIndex {
 	public Page<LocationInformation> search(String keyword, Pageable pageable) {
 
 		var result = searchSession.search(Location.class)
-				.where(f -> f.bool()
-						.should(f2 -> f2.match()
-								.field("name_search").boost(2f)
-								.field("contactAddressCity").boost(2.5f)
-								.fields(FIELDS)
-								.matching(keyword)
-								.fuzzy())
-						.should(f2 -> f2.wildcard()
-								.field("name_search").boost(2f)
-								.field("contactAddressCity").boost(1.5f)
-								.fields(FIELDS)
-								.matching(String.format("*%s*", keyword))))
+				.where(f -> createQuery(keyword, f))
 				.sort(f -> f.composite(b -> {
 					if (pageable != null) {
 						pageable.getSort().forEach(s -> {
@@ -56,6 +47,27 @@ public class DBSearchIndex implements SearchIndex {
 				.collect(Collectors.toList());
 
 		return new PageImpl<>(locations, pageable, result.total().hitCount());
+	}
+
+	private PredicateFinalStep createQuery(String keyword, SearchPredicateFactory f) {
+
+		if (keyword.startsWith("query:")) {
+			return f.simpleQueryString().fields(FIELDS).field("name_search").field("contactAddressCity")
+					.matching(keyword.substring(6));
+		}
+
+		return f.bool()
+				.should(f2 -> f2.match()
+						.field("name_search").boost(2f)
+						.field("contactAddressCity").boost(2.5f)
+						.fields(FIELDS)
+						.matching(keyword)
+						.fuzzy())
+				.should(f2 -> f2.wildcard()
+						.field("name_search").boost(2f)
+						.field("contactAddressCity").boost(1.5f)
+						.fields(FIELDS)
+						.matching(String.format("*%s*", keyword)));
 	}
 
 	private LocationInformation toLocationInformation(Location res) {
