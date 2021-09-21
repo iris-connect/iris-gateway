@@ -48,21 +48,40 @@ class DBSearchIndexTest {
 		// assert
 		assertEquals(1, searchIndex.search("Zwoeinz", PageRequest.of(0, 20)).getContent().size());
 		assertEquals(1, searchIndex.search("zwoeinz", PageRequest.of(0, 20)).getContent().size());
+		assertEquals(1, searchIndex.search("Berl", PageRequest.of(0, 20)).getContent().size());
+		assertEquals(1, searchIndex.search("Beris", PageRequest.of(0, 20)).getContent().size());
+		assertEquals(1, searchIndex.search("mail.com", PageRequest.of(0, 20)).getContent().size());
+		assertEquals(1, searchIndex.search("Quit", PageRequest.of(0, 20)).getContent().size());
 	}
 
 	@Test
 	public void map() throws JsonProcessingException {
-		var in = "{\n" + "  \"locations\": [\n" + "    {\n" + "      \"id\": \"5eddd61036d39a0ff8b11fdb\",\n"
-				+ "      \"name\": \"Restaurant Alberts\",\n" + "      \"publicKey\": \"string\",\n" + "      \"contact\": {\n"
-				+ "        \"officialName\": \"Darfichrein GmbH\",\n" + "        \"representative\": \"Silke \",\n"
+		var in = "{\n" + "  \"locations\": [\n"
+				+ "    {\n"
+				+ "      \"id\": \"5eddd61036d39a0ff8b11fdb\",\n"
+				+ "      \"name\": \"Restaurant Alberts\",\n"
+				+ "      \"publicKey\": \"string\",\n"
+				+ "      \"contact\": {\n"
+				+ "        \"officialName\": \"Darfichrein GmbH\",\n"
+				+ "        \"representative\": \"Silke \",\n"
 				+ "        \"address\": {\n"
-				+ "          \"street\": \"Türkenstr. 7\",\n" + "          \"city\": \"München\",\n"
-				+ "          \"zip\": \"80333\"\n" + "        },\n"
-				+ "        \"ownerEmail\": \"covid@restaurant.de\",\n" + "        \"email\": \"covid2@restaurant.de\",\n"
-				+ "        \"phone\": \"die bleibt privat :-)\"\n" + "      },\n" + "      \"contexts\": [\n" + "        {\n"
-				+ "          \"id\": \"5f4bfff742c1bf5f72918851\",\n" + "          \"name\": \"Raum 0815\"\n" + "        }\n"
-				+ "      ]\n" + "    }\n"
-				+ "  ],\n" + " \"totalElements\": 3 }";
+				+ "          \"street\": \"Türkenstr. 7\",\n"
+				+ "          \"city\": \"München\",\n"
+				+ "          \"zip\": \"80333\"\n"
+				+ "        },\n"
+				+ "        \"ownerEmail\": \"covid@restaurant.de\",\n"
+				+ "        \"email\": \"covid2@restaurant.de\",\n"
+				+ "        \"phone\": \"die bleibt privat :-)\"\n"
+				+ "      },\n"
+				+ "      \"contexts\": [\n"
+				+ "        {\n"
+				+ "          \"id\": \"5f4bfff742c1bf5f72918851\",\n"
+				+ "          \"name\": \"Raum 0815\"\n"
+				+ "        }\n"
+				+ "      ]\n"
+				+ "    }\n"
+				+ "  ],\n"
+				+ " \"totalElements\": 3 }";
 		var ll = oMapper.readValue(in, LocationQueryResult.class);
 		assertEquals(1, ll.getLocations().size());
 		assertEquals(3, ll.getTotalElements());
@@ -98,5 +117,4 @@ class DBSearchIndexTest {
 		location_flat.setId(new LocationIdentifier("provider-id", location.getId()));
 		return location_flat;
 	}
-
 }
