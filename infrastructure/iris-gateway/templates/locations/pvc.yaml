@@ -6,7 +6,7 @@ metadata:
   {{- include "iris-gateway.locations-labels" . | nindent 4 }}
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   storageClassName: ""
   volumeName: locations
   resources:
