@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class DBSearchIndex implements SearchIndex {
 
-	private static final String[] FIELDS = { "name_search", "officialName_search", "representative_search",
-			"street_search", "contactAddressCity", "contactAddressZip", "contactEmail", "contactPhone" };
+	private static final String[] FIELDS = { "officialName_search", "representative_search",
+			"street_search", "contactAddressZip", "contactEmail", "contactPhone" };
 
 	private final SearchSession searchSession;
 	private final ModelMapper mapper;
@@ -31,10 +31,14 @@ public class DBSearchIndex implements SearchIndex {
 		var result = searchSession.search(Location.class)
 				.where(f -> f.bool()
 						.should(f2 -> f2.match()
+								.field("name_search").boost(2f)
+								.field("contactAddressCity").boost(2.5f)
 								.fields(FIELDS)
 								.matching(keyword)
 								.fuzzy())
 						.should(f2 -> f2.wildcard()
+								.field("name_search").boost(2f)
+								.field("contactAddressCity").boost(1.5f)
 								.fields(FIELDS)
 								.matching(String.format("*%s*", keyword))))
 				.sort(f -> f.composite(b -> {
