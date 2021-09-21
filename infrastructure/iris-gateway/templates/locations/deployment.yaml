@@ -33,6 +33,8 @@ spec:
               value: {{ .Values.locations.zammad.apiaddress }}
             - name: IRIS_ALERTS_ZAMMAD_ENVIRONMENT
               value: {{ .Values.locations.zammad.environment }}
+            - name: SPRING_JPA_PROPERTIES_HIBERNATE_SEARCH_BACKEND_DIRECTORY_ROOT
+              value: {{ .Values.locations.storageDir }}
           envFrom:
             - secretRef:
                 name: {{ include "iris-gateway.locations-postgres" . }}
