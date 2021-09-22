@@ -37,6 +37,16 @@ spec:
               value: {{ .Values.locations.zammad.environment }}
             - name: SPRING_JPA_PROPERTIES_HIBERNATE_SEARCH_BACKEND_DIRECTORY_ROOT
               value: {{ .Values.locations.storageDir }}
+            - name: HTTP_PROXY
+              value: http://{{ .Values.locations.proxy.host }}:{{ .Values.locations.proxy.port }}
+            - name: HTTPS_PROXY
+              value: http://{{ .Values.locations.proxy.host }}:{{ .Values.locations.proxy.port }}
+            - name: http_proxy
+              value: http://{{ .Values.locations.proxy.host }}:{{ .Values.locations.proxy.port }}
+            - name: https_proxy
+              value: http://{{ .Values.locations.proxy.host }}:{{ .Values.locations.proxy.port }}
+            - name: _JAVA_OPTIONS
+              value: -Dhttp.proxyHost={{ .Values.locations.proxy.host }} -Dhttp.proxyPort={{ .Values.locations.proxy.port }} -Dhttps.proxyHost={{ .Values.locations.proxy.host }} -Dhttps.proxyPort={{ .Values.locations.proxy.port }}
           envFrom:
             - secretRef:
                 name: {{ include "iris-gateway.locations-postgres" . }}
