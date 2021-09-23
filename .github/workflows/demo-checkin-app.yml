@@ -33,7 +33,7 @@ jobs:
 
       - name: build, package and publish the image
         run: >
-          mvn -B spring-boot:build-image -am -pl demo-checkin-app
+          mvn -B clean verify spring-boot:build-image -am -pl demo-checkin-app
           -Dspring-boot.build-image.publish=true
           -Dversion.tag="develop"
         env:

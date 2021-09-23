@@ -10,7 +10,7 @@ on:
 
 jobs:
   # https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image
-  build-backend-service:
+  build:
     runs-on: ubuntu-20.04
     defaults:
       run:
@@ -30,15 +30,42 @@ jobs:
 
       - name: build, package and publish the image
         run: >
-          mvn -B spring-boot:build-image -am -pl iris-backend-service
+          mvn -B clean verify spring-boot:build-image -am -pl iris-backend-service
           -Dspring-boot.build-image.publish=true
           -Dversion.tag="develop"
         env:
           DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
           DOCKER_HUB_PW: ${{ secrets.DOCKER_HUB_PW }}
+          
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-reports
+          path: |
+            **/surefire-reports/*.xml
+            **/failsafe-reports/*.xml
+
+  publish-test-results:
+    name: Publish Test Results
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: test-reports
+          path: reports
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        with:
+          files: reports/**/*.xml
+          report_individual_runs: true
+          check_run_annotations_branch: "*"
 
   container_scan:
-    needs: build-backend-service
+    needs: build
     name: Trivy Container Scan
     runs-on: ubuntu-20.04
     steps:
