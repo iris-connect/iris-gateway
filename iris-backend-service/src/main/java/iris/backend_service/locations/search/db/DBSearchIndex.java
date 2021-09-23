@@ -76,7 +76,7 @@ public class DBSearchIndex implements SearchIndex {
 						.fuzzy())
 				.should(f2 -> f2.wildcard()
 						.fields(FIELDS)
-						.matching(keyword + "*"));
+						.matching(String.format("*%s*", keyword)));
 	}
 
 	private LocationInformation toLocationInformation(Location res) {
