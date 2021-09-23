@@ -37,7 +37,7 @@ public class Location {
 	@FullTextField(name = "street_search", analyzer = "german") @GenericField(sortable = Sortable.YES)
 	private String contactAddressStreet;
 
-	@KeywordField(sortable = Sortable.YES)
+	@KeywordField(sortable = Sortable.YES, normalizer = "german")
 	private String contactAddressCity;
 
 	@GenericField(sortable = Sortable.YES)
@@ -45,7 +45,7 @@ public class Location {
 
 	private String contactOwnerEmail;
 
-	@KeywordField(sortable = Sortable.YES)
+	@KeywordField(sortable = Sortable.YES, normalizer = "german")
 	private String contactEmail;
 
 	@GenericField(sortable = Sortable.YES)
