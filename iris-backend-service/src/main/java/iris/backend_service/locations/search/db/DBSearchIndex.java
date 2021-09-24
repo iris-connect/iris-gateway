@@ -52,12 +52,6 @@ public class DBSearchIndex implements SearchIndex {
 
 	private PredicateFinalStep createQuery(String keyword, SearchPredicateFactory f) {
 
-		if (keyword.startsWith("query:")) {
-			return f.simpleQueryString()
-					.fields(FIELDS)
-					.matching(keyword.substring(6));
-		}
-
 		var boolPred = f.bool();
 
 		for (var keywordPart : StringUtils.split(keyword)) {
