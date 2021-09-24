@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.search.engine.search.predicate.dsl.PredicateFinalStep;
+import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.modelmapper.ModelMapper;
@@ -19,8 +22,8 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class DBSearchIndex implements SearchIndex {
 
-	private static final String[] FIELDS = { "officialName_search", "representative_search",
-			"street_search", "contactAddressZip", "contactEmail", "contactPhone" };
+	private static final String[] FIELDS = { "name_search", "officialName_search", "representative_search",
+			"street_search", "contactAddressCity", "contactAddressZip", "contactEmail", "contactPhone" };
 
 	private final SearchSession searchSession;
 	private final ModelMapper mapper;
@@ -29,18 +32,7 @@ public class DBSearchIndex implements SearchIndex {
 	public Page<LocationInformation> search(String keyword, Pageable pageable) {
 
 		var result = searchSession.search(Location.class)
-				.where(f -> f.bool()
-						.should(f2 -> f2.match()
-								.field("name_search").boost(2f)
-								.field("contactAddressCity").boost(2.5f)
-								.fields(FIELDS)
-								.matching(keyword)
-								.fuzzy())
-						.should(f2 -> f2.wildcard()
-								.field("name_search").boost(2f)
-								.field("contactAddressCity").boost(1.5f)
-								.fields(FIELDS)
-								.matching(String.format("*%s*", keyword))))
+				.where(f -> createQuery(keyword, f))
 				.sort(f -> f.composite(b -> {
 					if (pageable != null) {
 						pageable.getSort().forEach(s -> {
@@ -56,6 +48,29 @@ public class DBSearchIndex implements SearchIndex {
 				.collect(Collectors.toList());
 
 		return new PageImpl<>(locations, pageable, result.total().hitCount());
+	}
+
+	private PredicateFinalStep createQuery(String keyword, SearchPredicateFactory f) {
+
+		var boolPred = f.bool();
+
+		for (var keywordPart : StringUtils.split(keyword)) {
+			boolPred = boolPred.must(f2 -> createQueryPart(keywordPart, f2));
+		}
+
+		return boolPred;
+	}
+
+	private PredicateFinalStep createQueryPart(String keyword, SearchPredicateFactory f) {
+
+		return f.bool()
+				.should(f2 -> f2.match()
+						.fields(FIELDS)
+						.matching(keyword)
+						.fuzzy())
+				.should(f2 -> f2.wildcard()
+						.fields(FIELDS)
+						.matching(String.format("*%s*", keyword)));
 	}
 
 	private LocationInformation toLocationInformation(Location res) {

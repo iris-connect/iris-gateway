@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 
 import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.de.GermanNormalizationFilterFactory;
 import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilterFactory;
 import org.apache.lucene.analysis.snowball.SnowballPorterFilterFactory;
 import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
@@ -56,11 +57,20 @@ public class HibernateSearchConfig {
 
 		@Override
 		public void configure(LuceneAnalysisConfigurationContext context) {
+
 			context.analyzer("german").custom()
 					.tokenizer(StandardTokenizerFactory.class)
 					.tokenFilter(LowerCaseFilterFactory.class)
+					.tokenFilter(GermanNormalizationFilterFactory.class)
 					.tokenFilter(SnowballPorterFilterFactory.class)
-					.param("language", "German")
+					.param("language", "German2")
+					.tokenFilter(ASCIIFoldingFilterFactory.class);
+
+			context.normalizer("german").custom()
+					.tokenFilter(LowerCaseFilterFactory.class)
+					.tokenFilter(GermanNormalizationFilterFactory.class)
+					.tokenFilter(SnowballPorterFilterFactory.class)
+					.param("language", "German2")
 					.tokenFilter(ASCIIFoldingFilterFactory.class);
 		}
 	}
