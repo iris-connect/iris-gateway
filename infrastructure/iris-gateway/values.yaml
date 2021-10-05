@@ -26,7 +26,7 @@ tls:
 nodePorts:
   locationsEps: 32323
   serviceDirectory: 32324
-  publicProxyTls: 32325
+  publicProxyTls: 443
   publicProxyInternal: 32326
   publicProxyEps: 32327
 
