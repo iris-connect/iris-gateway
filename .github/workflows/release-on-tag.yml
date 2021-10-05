@@ -43,6 +43,7 @@ jobs:
           path: |
             **/surefire-reports/*.xml
             **/failsafe-reports/*.xml
+            !**/failsafe-reports/failsafe-summary.xml
 
   deployment-test:
     needs: build
