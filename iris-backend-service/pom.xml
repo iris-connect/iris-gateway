@@ -15,7 +15,7 @@
 	<name>IRIS Backend Services</name>
 	<description>Backend services provider for IRIS (e.g. the location search provider)</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<docker.image.prefix>inoeg</docker.image.prefix>
 		<version.tag>${project.version}</version.tag>
 		<hibernate.search.version>6.0.6.Final</hibernate.search.version>
