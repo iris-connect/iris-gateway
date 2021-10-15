@@ -25,18 +25,18 @@ class MessageSender {
 	@Scheduled(fixedDelay = 15000)
 	public void sendMessages() {
 
-		log.trace("Message - Creator - send messages invoked");
+		log.trace("Message - Sender - send messages invoked");
 
 		var forDelete = messageRepo.findAll().stream()
 				.filter(this::sendMessage)
 				.collect(Collectors.toList());
 
-		log.debug("JSON-RPC - sent successfully: {}; not sent {}", forDelete.size(),
+		log.debug("Message - Sender - sent successfully: {}; not sent {}", forDelete.size(),
 				messageRepo.findAll().size() - forDelete.size());
 
 		messageRepo.deleteAll(forDelete);
 
-		log.trace("Message - Creator - messages sent and deleted");
+		log.trace("Message - Sender - messages sent and deleted");
 	}
 
 	private boolean sendMessage(Message message) {
