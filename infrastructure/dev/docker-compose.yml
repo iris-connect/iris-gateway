@@ -88,9 +88,9 @@ services:
       sd-1:
         condition: service_started
     expose:
-      - 4444
+      - 4442
     ports:
-      - 4444:4444
+      - 4442:4444
     volumes:
       - "/home/iris/iris-eps/iris-gateway/infrastructure/eps/settings:/app/settings"
     environment:
