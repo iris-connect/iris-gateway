@@ -1,4 +1,4 @@
-package iris.backend_service.alerts.zammad;
+package iris.backend_service.messages.zammad;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +17,5 @@ class Ticket {
 	private final Article article;
 
 	private String id;
+	private String number;
 }

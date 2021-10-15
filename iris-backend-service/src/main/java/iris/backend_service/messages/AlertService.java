@@ -1,7 +1,7 @@
-package iris.backend_service.alerts;
+package iris.backend_service.messages;
 
-import iris.backend_service.alerts.Alert.AlertBuilder;
-import iris.backend_service.alerts.Alert.AlertType;
+import iris.backend_service.messages.Message.MessageBuilder;
+import iris.backend_service.messages.Message.MessageType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AlertService {
 
-	private final AlertRepository alertRepo;
+	private final MessageRepository alertRepo;
 
 	private static final String APP = "iris-bs";
 	private String version = "";
@@ -62,16 +62,16 @@ public class AlertService {
 		saveAlert(List.of(message(title, text), ticket(title, text)));
 	}
 
-	private Alert message(String title, String text) {
-		return createAlertBuilder(title, text).alertType(AlertType.MESSAGE).build();
+	private Message message(String title, String text) {
+		return createAlertBuilder(title, text).messageType(MessageType.MESSAGE).build();
 	}
 
-	private Alert ticket(String title, String text) {
-		return createAlertBuilder(title, text).alertType(AlertType.TICKET).build();
+	private Message ticket(String title, String text) {
+		return createAlertBuilder(title, text).messageType(MessageType.TICKET).build();
 	}
 
-	private AlertBuilder createAlertBuilder(String title, String text) {
-		return Alert.builder()
+	private MessageBuilder createAlertBuilder(String title, String text) {
+		return Message.builder()
 				.title(title)
 				.text(text)
 				.sourceApp(APP)
@@ -79,7 +79,7 @@ public class AlertService {
 				.client(APP);
 	}
 
-	private void saveAlert(List<Alert> alerts) {
+	private void saveAlert(List<Message> alerts) {
 
 		try {
 

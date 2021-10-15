@@ -1,4 +1,4 @@
-package iris.backend_service.alerts;
+package iris.backend_service.messages;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,38 +21,39 @@ import javax.persistence.Table;
  * @author Jens Kutzsche
  */
 @Entity
-@Table(name = "alerts")
+@Table(name = "messages")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
-public class Alert {
+public class Message {
 
 	@EmbeddedId
-	private final AlertIdentifier id = AlertIdentifier.of(UUID.randomUUID());
+	private final MessageIdentifier id = MessageIdentifier.of(UUID.randomUUID());
 
 	private String title;
 	private String text;
 	private String client;
 	private String sourceApp;
 	private String appVersion;
+	private String sender;
 
 	@Column(nullable = false) @Enumerated(EnumType.STRING)
-	private AlertType alertType;
+	private MessageType messageType;
 
 	@Embeddable
 	@EqualsAndHashCode
 	@AllArgsConstructor(staticName = "of")
 	@NoArgsConstructor
-	public static class AlertIdentifier implements Serializable {
+	public static class MessageIdentifier implements Serializable {
 
 		private static final long serialVersionUID = -8326230397174984557L;
 
 		private UUID id;
 	}
 
-	public enum AlertType {
-		TICKET, MESSAGE
+	public enum MessageType {
+		TICKET, MESSAGE, FEEDBACK
 	}
 }

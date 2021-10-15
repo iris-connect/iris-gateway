@@ -1,4 +1,4 @@
-package iris.backend_service.alerts;
+package iris.backend_service.messages;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -7,7 +7,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import iris.backend_service.MemoryAppender;
-import iris.backend_service.alerts.Alert.AlertType;
+import iris.backend_service.messages.Message.MessageType;
 
 import java.util.List;
 
@@ -32,10 +32,10 @@ class AlertServiceTests {
 	AlertService sut;
 
 	@MockBean
-	AlertRepository repo;
+	MessageRepository repo;
 
 	@Captor
-	ArgumentCaptor<List<Alert>> alertCaptor;
+	ArgumentCaptor<List<Message>> messageCaptor;
 
 	private MemoryAppender memoryAppender;
 
@@ -57,11 +57,11 @@ class AlertServiceTests {
 		assertThat(memoryAppender.countEventsForLogger(AlertService.class)).isEqualTo(2);
 		assertThat(memoryAppender.contains("Alert: Title - Text", Level.WARN)).isTrue();
 
-		verify(repo).saveAllAndFlush(alertCaptor.capture());
+		verify(repo).saveAllAndFlush(messageCaptor.capture());
 
-		var value = alertCaptor.getValue();
+		var value = messageCaptor.getValue();
 		assertThat(value).hasSize(1)
-				.element(0).extracting("title", "text", "alertType").contains("Title", "Text", AlertType.MESSAGE);
+				.element(0).extracting("title", "text", "messageType").contains("Title", "Text", MessageType.MESSAGE);
 	}
 
 	@Test
@@ -72,12 +72,12 @@ class AlertServiceTests {
 		assertThat(memoryAppender.countEventsForLogger(AlertService.class)).isEqualTo(2);
 		assertThat(memoryAppender.contains("Alert: Title - Text", Level.WARN)).isTrue();
 
-		verify(repo).saveAllAndFlush(alertCaptor.capture());
+		verify(repo).saveAllAndFlush(messageCaptor.capture());
 
-		var value = alertCaptor.getValue();
+		var value = messageCaptor.getValue();
 		assertThat(value).hasSize(2)
-				.extracting("title", "text", "alertType")
-				.contains(tuple("Title", "Text", AlertType.MESSAGE),
-						tuple("Title", "Text", AlertType.TICKET));
+				.extracting("title", "text", "messageType")
+				.contains(tuple("Title", "Text", MessageType.MESSAGE),
+						tuple("Title", "Text", MessageType.TICKET));
 	}
 }

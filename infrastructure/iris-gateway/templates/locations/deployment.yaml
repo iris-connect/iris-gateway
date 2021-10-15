@@ -25,16 +25,22 @@ spec:
               value: postgres
             - name: POSTGRES_DATABASE
               value: {{ .Values.postgresqlha.postgresql.database }}
-            - name: IRIS_ALERTS_SLACK_TOKEN
+            - name: IRIS_MESSAGES_SLACK_TOKEN
               value: {{ .Values.locations.slack.token }}
-            - name: IRIS_ALERTS_SLACK_CHANNEL
+            - name: IRIS_MESSAGES_SLACK_CHANNEL
               value: {{ .Values.locations.slack.channel }}
-            - name: IRIS_ALERTS_ZAMMAD_TOKEN
+            - name: IRIS_MESSAGES_ZAMMAD_TOKEN
               value: {{ .Values.locations.zammad.token }}
-            - name: IRIS_ALERTS_ZAMMAD_APIADDRESS
+            - name: IRIS_MESSAGES_ZAMMAD_API_ADDRESS
               value: {{ .Values.locations.zammad.apiaddress }}
-            - name: IRIS_ALERTS_ZAMMAD_ENVIRONMENT
+            - name: IRIS_MESSAGES_ZAMMAD_ENVIRONMENT
               value: {{ .Values.locations.zammad.environment }}
+            - name: IRIS_MESSAGES_GITHUB_PERSONAL_ACCESS_TOKEN
+              value: {{ .Values.locations.github.token }}
+            - name: IRIS_MESSAGES_GITHUB_REPO_ORG
+              value: {{ .Values.locations.github.org }}
+            - name: IRIS_MESSAGES_GITHUB_REPO_NAME
+              value: {{ .Values.locations.github.repo }}
             - name: SPRING_JPA_PROPERTIES_HIBERNATE_SEARCH_BACKEND_DIRECTORY_ROOT
               value: {{ .Values.locations.storageDir }}
             - name: HTTP_PROXY

@@ -1,6 +1,7 @@
-package iris.backend_service.alerts;
+package iris.backend_service.messages;
 
 import iris.backend_service.jsonrpc.JsonRpcClientDto;
+import iris.backend_service.messages.zammad.ZammadTicketCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,10 +16,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-class AlertRPCImpl implements AlertRPC {
+class MessageRPCImpl implements MessageRPC {
 
-	private final AlertRepository alertRepo;
+	private final MessageRepository messageRepo;
 	private final ModelMapper mapper;
+	private final ZammadTicketCreator zammad;
+	private final FeedbackMessageConverter feedbackConverter;
 
 	@Override
 	public String postAlerts(@Valid JsonRpcClientDto client, @Valid List<AlertDto> alertDtos) {
@@ -26,14 +29,14 @@ class AlertRPCImpl implements AlertRPC {
 		log.trace("Alert - JSON-RPC - Post alert invoked for client: {} with {} alerts", client.getName(),
 				alertDtos.size());
 
-		var alerts = alertDtos.stream()
-				.map(it -> mapper.map(it, Alert.class))
+		var messages = alertDtos.stream()
+				.map(it -> mapper.map(it, Message.class))
 				.peek(it -> it.setClient(client.getName()))
 				.collect(Collectors.toList());
 
 		try {
 
-			alertRepo.saveAllAndFlush(alerts);
+			messageRepo.saveAllAndFlush(messages);
 
 			log.debug("Alert - JSON-RPC - Post alert for client: {} => result: OK", client.getName());
 
@@ -45,5 +48,20 @@ class AlertRPCImpl implements AlertRPC {
 
 			return "ERROR";
 		}
+	}
+
+	@Override
+	public FeedbackResponseDto postFeedback(@Valid JsonRpcClientDto client, @Valid FeedbackDto request) {
+
+		var message = feedbackConverter.convertToMessage(request);
+		message.setClient(client.getName());
+
+		var result = zammad.createTicket(message);
+
+		if (result.isError()) {
+			throw new RuntimeException("Can't sent the feedback to the target system.");
+		}
+
+		return new FeedbackResponseDto(result.getIdFromSystem().orElse("DISABLED"));
 	}
 }

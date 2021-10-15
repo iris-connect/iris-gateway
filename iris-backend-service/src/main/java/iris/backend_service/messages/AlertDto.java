@@ -1,6 +1,5 @@
-package iris.backend_service.alerts;
+package iris.backend_service.messages;
 
-import iris.backend_service.alerts.Alert.AlertType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,4 +27,8 @@ public class AlertDto {
 	@Size(max = 50)
 	String appVersion;
 	AlertType alertType;
+
+	public enum AlertType {
+		TICKET, MESSAGE
+	}
 }

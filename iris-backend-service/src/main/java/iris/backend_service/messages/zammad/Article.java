@@ -1,4 +1,4 @@
-package iris.backend_service.alerts.zammad;
+package iris.backend_service.messages.zammad;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

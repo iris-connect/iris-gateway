@@ -1,6 +1,7 @@
-package iris.backend_service.alerts.zammad;
+package iris.backend_service.messages.zammad;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.net.URI;
@@ -12,7 +13,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 /**
  * @author Jens Kutzsche
  */
-@ConfigurationProperties(prefix = "iris.alerts.zammad")
+@ConfigurationProperties(prefix = "iris.messages.zammad")
 @ConstructorBinding
 @Data
 public class ZammadProperties {

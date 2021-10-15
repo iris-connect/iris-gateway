@@ -1,14 +1,16 @@
-package iris.backend_service.alerts.slack;
+package iris.backend_service.messages.slack;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
-import iris.backend_service.alerts.Alert;
+import iris.backend_service.messages.Message;
+import iris.backend_service.messages.MessageSendingResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.slack.api.Slack;
@@ -30,10 +32,10 @@ public class SlackMessageCreator {
 
 	private final SlackProperties properties;
 
-	public boolean createMessage(Alert alert) {
+	public MessageSendingResult createMessage(Message message) {
 
-		if ("DISABLED".equals(properties.getToken())) {
-			return true;
+		if (StringUtils.equalsAny("DISABLED", properties.getToken(), properties.getChannel())) {
+			return MessageSendingResult.disabled();
 		}
 
 		// Initialize an API Methods client with the given token
@@ -43,24 +45,24 @@ public class SlackMessageCreator {
 				SectionBlock.builder()
 						.text(
 								MarkdownTextObject.builder()
-										.text("*" + alert.getSourceApp() + " → " + alert.getTitle() + "*")
+										.text("*" + message.getSourceApp() + " → " + message.getTitle() + "*")
 										.build())
 						.build(),
 				SectionBlock.builder()
 						.text(MarkdownTextObject.builder()
-								.text(alert.getText())
+								.text(message.getText())
 								.build())
 						.build(),
 				SectionBlock.builder()
 						.text(MarkdownTextObject.builder()
-								.text("_(Client: " + alert.getClient() + "  |  App-Version: " + alert.getAppVersion() + ")_")
+								.text("_(Client: " + message.getClient() + "  |  App-Version: " + message.getAppVersion() + ")_")
 								.build())
 						.build());
 
 		// Build a request object
 		var request = ChatPostMessageRequest.builder()
 				.channel(properties.getChannel()) // Use a channel ID `C1234567` is preferrable
-				.text(firstNonBlank(alert.getTitle(), alert.getText()))
+				.text(firstNonBlank(message.getTitle(), message.getText()))
 				.blocks(blocks)
 				.build();
 
@@ -70,16 +72,18 @@ public class SlackMessageCreator {
 			var response = methods.chatPostMessage(request);
 
 			if (response.isOk()) {
-				return true;
+
+				log.debug("Message - Slack - message sent");
+				return MessageSendingResult.successful();
 			}
 
-			log.error("Alert - Slack - message could not be sent => Errors: {}", response.getErrors());
-			return false;
+			log.error("Message - Slack - message could not be sent => Errors: {}", response.getErrors());
+			return MessageSendingResult.withError();
 
 		} catch (IOException | SlackApiException e) {
 
-			log.error("Alert - Slack - message could not be sent => Exception", e);
-			return false;
+			log.error("Message - Slack - message could not be sent => Exception", e);
+			return MessageSendingResult.withError();
 		}
 	}
 }

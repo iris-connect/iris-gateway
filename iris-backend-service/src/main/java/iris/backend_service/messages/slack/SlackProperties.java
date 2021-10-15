@@ -1,4 +1,4 @@
-package iris.backend_service.alerts.slack;
+package iris.backend_service.messages.slack;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 /**
  * @author Jens Kutzsche
  */
-@ConfigurationProperties(prefix = "iris.alerts.slack")
+@ConfigurationProperties(prefix = "iris.messages.slack")
 @ConstructorBinding
 @Data
 class SlackProperties {
