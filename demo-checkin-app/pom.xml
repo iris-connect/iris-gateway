@@ -14,7 +14,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Demo for Checkin Apps</name>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <docker.image.prefix>inoeg</docker.image.prefix>
         <version.tag>${project.version}</version.tag>
     </properties>
