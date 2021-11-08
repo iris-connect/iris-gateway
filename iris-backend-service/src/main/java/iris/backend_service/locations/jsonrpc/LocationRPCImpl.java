@@ -2,8 +2,8 @@ package iris.backend_service.locations.jsonrpc;
 
 import static iris.backend_service.locations.utils.LoggingHelper.*;
 
-import iris.backend_service.config.JsonRpcDataValidator;
 import iris.backend_service.jsonrpc.JsonRpcClientDto;
+import iris.backend_service.jsonrpc.JsonRpcDataValidator;
 import iris.backend_service.locations.dto.LocationAddress;
 import iris.backend_service.locations.dto.LocationContact;
 import iris.backend_service.locations.dto.LocationContext;

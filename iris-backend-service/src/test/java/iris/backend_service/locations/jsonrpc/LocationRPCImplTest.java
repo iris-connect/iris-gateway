@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import iris.backend_service.config.JsonRpcDataValidator;
 import iris.backend_service.jsonrpc.JsonRpcClientDto;
+import iris.backend_service.jsonrpc.JsonRpcDataValidator;
 import iris.backend_service.locations.dto.LocationContact;
 import iris.backend_service.locations.dto.LocationInformation;
 import iris.backend_service.locations.service.LocationService;
@@ -37,7 +37,7 @@ public class LocationRPCImplTest {
 
 	@BeforeEach
 	void setUp() {
-		systemUnderTest = new LocationRPCImpl(locationService, validationHelper,jsonRpcDataValidator);
+		systemUnderTest = new LocationRPCImpl(locationService, validationHelper, jsonRpcDataValidator);
 	}
 
 	@Test

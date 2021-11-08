@@ -1,10 +1,6 @@
 package iris.backend_service.locations.jsonrpc;
 
-import com.googlecode.jsonrpc4j.JsonRpcClientException;
-import com.googlecode.jsonrpc4j.JsonRpcError;
-import com.googlecode.jsonrpc4j.JsonRpcErrors;
 import iris.backend_service.jsonrpc.JsonRpcClientDto;
-import iris.backend_service.jsonrpc.ValidationException;
 import iris.backend_service.locations.dto.LocationInformation;
 import iris.backend_service.locations.dto.LocationOverviewDto;
 import iris.backend_service.locations.dto.LocationQueryResult;
