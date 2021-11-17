@@ -21,7 +21,7 @@ spec:
           containers:
             - name: ubuntu
               image: ubuntu
-              imagePullPolicy: {{ include "iris-gateway.pullPolicy" . }}
+              imagePullPolicy: {{ .Values.global.PullPolicy }}
               command: [ /scripts/backup.sh ]
               volumeMounts:
                 - mountPath: {{ .Values.serviceDirectory.storageDir }}
