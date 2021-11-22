@@ -27,6 +27,9 @@
             },
             {
               "name": "abortDataRequest"
+            },
+            {
+              "name": "_ping"
             }
           ]
         }
