@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 public class ValidationHelper {
 
 	public static final Pattern REGEX_EMAIL = Pattern.compile("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w-_]+\\.)+[\\w]+[\\w]$");
-	public static final Pattern REGEX_PHONE = Pattern.compile("^\\+?[0-9][\\/\\.\\(\\)\\s\\-0-9]{6,}?[0-9]$");
+	public static final Pattern REGEX_PHONE = Pattern.compile("^\\+?[0-9][\\/\\.\\(\\) \\-0-9]{6,}?[0-9]$");
 
 	private static final String[] FORBIDDEN_SYMBOLS = {
 			"=",

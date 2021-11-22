@@ -1,5 +1,7 @@
 package iris.backend_service.locations.service;
 
+import static org.apache.commons.lang3.StringUtils.*;
+
 import iris.backend_service.locations.dto.LocationInformation;
 import iris.backend_service.locations.dto.LocationOverviewDto;
 import iris.backend_service.locations.search.db.DBSearchIndex;
@@ -36,13 +38,18 @@ public class LocationService {
 		var listOfValidLocations = new ArrayList<Location>();
 
 		for (LocationInformation locationInformation : locations) {
+
 			var location = getLocationFromLocationInformation(providerId, locationInformation);
+
+			location.setContactPhone(normalizeSpace(location.getContactPhone()));
 
 			if (location.getName() != null
 					&& location.getContactRepresentative() != null
 					&& (ValidationHelper.isValidAndNotNullEmail(location.getContactEmail())
 							|| ValidationHelper.isValidAndNotNullPhoneNumber(location.getContactPhone()))) {
+
 				listOfValidLocations.add(location);
+
 			} else {
 				listOfInvalidLocations.add(locationInformation.getId());
 			}
