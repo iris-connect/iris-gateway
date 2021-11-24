@@ -21,7 +21,7 @@ spec:
           containers:
             - name: postgres
               image: postgres
-              imagePullPolicy: {{ include "iris-gateway.pullPolicy" . }}
+              imagePullPolicy: {{ .Values.global.PullPolicy }}
               command: [ /scripts/backup.sh ]
               envFrom:
                 - secretRef:

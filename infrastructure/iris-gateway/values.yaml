@@ -5,6 +5,9 @@ environment: undefined
 
 epsRepoTag: v0.1.68
 
+global:
+  PullPolicy: IfNotPresent
+
 tls:
   keystoreSecretName: tls-keystore
   keystoreCredentialsSecretName: tls-keystore-credentials

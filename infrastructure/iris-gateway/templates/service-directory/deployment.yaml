@@ -19,7 +19,7 @@ spec:
       containers:
         - name: service-directory
           image: {{ .Values.serviceDirectory.image }}:{{ .Values.epsRepoTag }}
-          imagePullPolicy: {{ include "iris-gateway.pullPolicy" . }}
+          imagePullPolicy: {{ .Values.global.PullPolicy }}
           args: [--level, trace, run]
           ports:
             - name: grpc

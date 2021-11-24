@@ -19,7 +19,7 @@ spec:
       containers:
         - name: location
           image: {{ .Values.locations.image }}:{{ .Values.locations.tag }}
-          imagePullPolicy: {{ include "iris-gateway.pullPolicy" . }}
+          imagePullPolicy: {{ .Values.global.PullPolicy }}
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: postgres
