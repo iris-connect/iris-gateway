@@ -88,6 +88,8 @@ jobs:
           --set locations.slack.channel=C028EFY8LCW
           --set locations.proxy.host="${{ secrets.AKDB_PROXY_HOST }}"
           --set locations.proxy.port="${{ secrets.AKDB_PROXY_PORT }}"
+          --set locations.catSalt="${{ secrets.CAT_SALT }}"
+          --set locations.datSalt="${{ secrets.DAT_SALT }}"
           --wait
           --timeout 3m
           --debug
