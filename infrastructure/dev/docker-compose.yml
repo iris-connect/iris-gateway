@@ -25,6 +25,8 @@ services:
       - IRIS_MESSAGES_GITHUB_PERSONAL_ACCESS_TOKEN=${IRIS_MESSAGES_GITHUB_PERSONAL_ACCESS_TOKEN}
       - IRIS_MESSAGES_GITHUB_REPO_ORG=${IRIS_MESSAGES_GITHUB_REPO_ORG}
       - IRIS_MESSAGES_GITHUB_REPO_NAME=${IRIS_MESSAGES_GITHUB_REPO_NAME}
+      - IRIS_TOKENS_CAT_SALT=${IRIS_TOKENS_CAT_SALT}
+      - IRIS_TOKENS_DAT_SALT=${IRIS_TOKENS_DAT_SALT}
     healthcheck:
       test: "/cnb/lifecycle/launcher java -cp /workspace/BOOT-INF/classes:/workspace/BOOT-INF/lib/* iris.tools.HealthChecker || exit 1"
       interval: 20s
