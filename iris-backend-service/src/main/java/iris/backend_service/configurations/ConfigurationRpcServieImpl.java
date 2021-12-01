@@ -3,6 +3,7 @@ package iris.backend_service.configurations;
 import static java.lang.String.*;
 
 import iris.backend_service.jsonrpc.JsonRpcClientDto;
+import iris.backend_service.messages.AlertService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +19,7 @@ class ConfigurationRpcServieImpl implements ConfigurationRpcService {
 
 	private final @NotNull CentralConfiguration config;
 	private final @NotNull TokenProperties tokenProps;
+	private final @NotNull AlertService alerts;
 
 	@Override
 	public Configuration getHdConfiguration(@Valid JsonRpcClientDto client) {
@@ -25,7 +27,8 @@ class ConfigurationRpcServieImpl implements ConfigurationRpcService {
 		var hdProxyConfig = config.getHdProxyConfigFor(client.getName())
 				.orElseThrow(() -> {
 
-					log.warn("JSON-RPC - Can't find a HD proxy configuration for client: {}", client.getName());
+					alerts.createAlertMessage("Missing HD configuration",
+							String.format("Can't find a HD proxy configuration for client: %s", client.getName()));
 
 					return new CentralConfigurationException(
 							format("Can't find a health department proxy configuration for your client: %s", client.getName()));

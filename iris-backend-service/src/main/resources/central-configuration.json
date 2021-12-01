@@ -3,7 +3,7 @@
 		{
 			"hdName": "hd-1",
 			"abbreviation": "000",
-			"proxySubDomain": "proxy.test-gesundheitsamt.de"
+			"proxySubDomain": "proxy.dev.test-gesundheitsamt.de"
 		}
 	]
 }
