@@ -197,7 +197,7 @@
           "environment": "production",
           "settings": {
             "allowed_domains": [
-              ".proxy.test-gesundheitsamt.de"
+              ".proxy.dev.test-gesundheitsamt.de"
             ]
           }
         }
@@ -213,7 +213,7 @@
           "environment": "production",
           "settings": {
             "allowed_domains": [
-              ".proxy.test-gesundheitsamt.de"
+              ".proxy.dev.test-gesundheitsamt.de"
             ]
           }
         }
