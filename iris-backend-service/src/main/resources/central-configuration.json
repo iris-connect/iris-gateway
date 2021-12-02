@@ -4,6 +4,11 @@
 			"hdName": "hd-1",
 			"abbreviation": "000",
 			"proxySubDomain": "proxy.dev.test-gesundheitsamt.de"
+		},
+		{
+			"hdName": "ga-showcase",
+			"abbreviation": "001",
+			"proxySubDomain": "proxy.showcase.test-gesundheitsamt.de"
 		}
 	]
 }
