@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
@@ -53,101 +53,41 @@ jobs:
 
   deployment-test:
     needs: build
-    runs-on: [self-hosted, env-test]
-    container: alpine/helm:3.5.4
-
-    environment: test
-
-    steps:
-      - uses: actions/checkout@v1
-
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-
-      - name: Prepare k8s config
-        run: >
-          rm -rf ~/.kube &&
-          mkdir ~/.kube &&
-          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
-
-      - name: Update Helm dependencys
-        run: helm dependency update ./infrastructure/iris-gateway
-
-      - name: Run helm deployment
-        run: >
-          helm upgrade --install
-          --namespace iris-gateway
-          --set environment=test
-          --set locations.tag="${{ steps.get_version.outputs.VERSION }}"
-          --set postgresqlha.postgresql.repmgrPassword="${{ secrets.REPMGR_PASSWORD }}"
-          --set postgresqlha.pgpool.adminPassword="${{ secrets.PGPOOL_ADMIN_PASSWORD }}"
-          --set postgresqlha.postgresql.password="${{ secrets.POSTGRESQL_PASSWORD }}"
-          --set postgresqlha.pgpool.customUsers.passwords="${{ secrets.POSTGRESQL_PASSWORD }}"
-          --set locations.slack.token="${{ secrets.SLACK_TOKEN }}"
-          --set locations.slack.channel=C028EFY8LCW
-          --set locations.proxy.host="${{ secrets.AKDB_PROXY_HOST }}"
-          --set locations.proxy.port="${{ secrets.AKDB_PROXY_PORT }}"
-          --set locations.catSalt="${{ secrets.CAT_SALT }}"
-          --set locations.datSalt="${{ secrets.DAT_SALT }}"
-          --wait
-          --timeout 3m
-          --debug
-          iris-gateway ./infrastructure/iris-gateway
-
-      - name: Delete downloaded helm charts
-        if: ${{ always() }}
-        run: >
-          rm -rf ./infrastructure/iris-gateway/charts/
+    uses: iris-connect/iris-gateway/.github/workflows/helm-deployment.yml@chore/reused_deployment2
+    with: 
+      runs_on: "[ 'self-hosted', 'env-test' ]"
+      env: test
+      helm_option: --wait
+      slack_channel: C028EFY8LCW
+    secrets:
+      KUBECONFIG: ${{ secrets.KUBECONFIG }}
+      REPMGR_PASSWORD: ${{ secrets.REPMGR_PASSWORD }}
+      PGPOOL_ADMIN_PASSWORD: ${{ secrets.PGPOOL_ADMIN_PASSWORD }}
+      POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
+      SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+      AKDB_PROXY_HOST: ${{ secrets.AKDB_PROXY_HOST }}
+      AKDB_PROXY_PORT: ${{ secrets.AKDB_PROXY_PORT }}
+      CAT_SALT: ${{ secrets.CAT_SALT }}
+      DAT_SALT: ${{ secrets.DAT_SALT }}
 
   deployment-prod:
     needs: deployment-test
-    runs-on: [self-hosted, env-prod]
-    container: alpine/helm:3.5.4
-
-    environment: production
-
-    steps:
-      - uses: actions/checkout@v1
-
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-
-      - name: Prepare k8s config
-        run: >
-          rm -rf ~/.kube &&
-          mkdir ~/.kube &&
-          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
-
-      - name: Update Helm dependencys
-        run: helm dependency update ./infrastructure/iris-gateway
-
-      - name: Run helm deployment
-        run: >
-          helm upgrade --install
-          --namespace iris-gateway
-          --set environment=production
-          --set locations.tag="${{ steps.get_version.outputs.VERSION }}"
-          --set postgresqlha.postgresql.repmgrPassword="${{ secrets.REPMGR_PASSWORD }}"
-          --set postgresqlha.pgpool.adminPassword="${{ secrets.PGPOOL_ADMIN_PASSWORD }}"
-          --set postgresqlha.postgresql.password="${{ secrets.POSTGRESQL_PASSWORD }}"
-          --set postgresqlha.pgpool.customUsers.passwords="${{ secrets.POSTGRESQL_PASSWORD }}"
-          --set locations.slack.token="${{ secrets.SLACK_TOKEN }}"
-          --set locations.slack.channel=C02EXH4L80M
-          --set locations.proxy.host="${{ secrets.AKDB_PROXY_HOST }}"
-          --set locations.proxy.port="${{ secrets.AKDB_PROXY_PORT }}"
-          --set locations.catSalt="${{ secrets.CAT_SALT }}"
-          --set locations.datSalt="${{ secrets.DAT_SALT }}"
-          --atomic
-          --timeout 3m
-          --debug
-          iris-gateway ./infrastructure/iris-gateway
-
-      - name: Delete downloaded helm charts
-        if: ${{ always() }}
-        run: >
-          rm -rf ./infrastructure/iris-gateway/charts/
+    uses: iris-connect/iris-gateway/.github/workflows/helm-deployment.yml@chore/reused_deployment2
+    with:
+      runs_on: "[ 'self-hosted', 'env-prod' ]"
+      env: production
+      helm_option: --atomic
+      slack_channel: C02EXH4L80M
+    secrets:
+      KUBECONFIG: ${{ secrets.KUBECONFIG }}
+      REPMGR_PASSWORD: ${{ secrets.REPMGR_PASSWORD }}
+      PGPOOL_ADMIN_PASSWORD: ${{ secrets.PGPOOL_ADMIN_PASSWORD }}
+      POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
+      SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+      AKDB_PROXY_HOST: ${{ secrets.AKDB_PROXY_HOST }}
+      AKDB_PROXY_PORT: ${{ secrets.AKDB_PROXY_PORT }}
+      CAT_SALT: ${{ secrets.CAT_SALT }}
+      DAT_SALT: ${{ secrets.DAT_SALT }}
 
   publish-test-results:
     name: Publish Test Results
@@ -172,7 +112,7 @@ jobs:
   container_scan:
     needs: build
     name: Trivy Container Scan
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         image: [ 'iris-backend-service', 'demo-checkin-app', 'demo-contact-diary-app']

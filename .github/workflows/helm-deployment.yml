@@ -1,0 +1,88 @@
+name: Deploy gateway with helm
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        description: 'The environment for this deployment'
+        required: true
+        type: string
+      slack_channel:
+        description: 'Token of the slack channel for this deployment'
+        required: true
+        type: string
+      helm_option:
+        required: true
+        type: string
+      runs_on:
+        required: true
+        type: string
+    secrets:
+      KUBECONFIG:
+        required: true
+      REPMGR_PASSWORD:
+        required: true
+      PGPOOL_ADMIN_PASSWORD:
+        required: true
+      POSTGRESQL_PASSWORD:
+        required: true
+      SLACK_TOKEN:
+        required: true
+      AKDB_PROXY_HOST:
+        required: true
+      AKDB_PROXY_PORT:
+        required: true
+      CAT_SALT:
+        required: true
+      DAT_SALT:
+        required: true
+
+jobs:
+  deployment:
+    runs-on: ${{fromJson(inputs.runs_on)}}
+    container: alpine/helm:3.5.4
+
+    environment: ${{inputs.env}}
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+      - name: Prepare k8s config
+        run: >
+          rm -rf ~/.kube &&
+          mkdir ~/.kube &&
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+
+      - name: Update Helm dependencys
+        run: helm dependency update ./infrastructure/iris-gateway
+
+      - name: Run helm deployment
+        run: >
+          helm upgrade --install
+          --dry-run
+          --namespace iris-gateway
+          --set environment=${{inputs.env}}
+          --set locations.tag="${{ steps.get_version.outputs.VERSION }}"
+          --set postgresqlha.postgresql.repmgrPassword="${{ secrets.REPMGR_PASSWORD }}"
+          --set postgresqlha.pgpool.adminPassword="${{ secrets.PGPOOL_ADMIN_PASSWORD }}"
+          --set postgresqlha.postgresql.password="${{ secrets.POSTGRESQL_PASSWORD }}"
+          --set postgresqlha.pgpool.customUsers.passwords="${{ secrets.POSTGRESQL_PASSWORD }}"
+          --set locations.slack.token="${{ secrets.SLACK_TOKEN }}"
+          --set locations.slack.channel=${{inputs.slack_channel}}
+          --set locations.proxy.host="${{ secrets.AKDB_PROXY_HOST }}"
+          --set locations.proxy.port="${{ secrets.AKDB_PROXY_PORT }}"
+          --set locations.catSalt="${{ secrets.CAT_SALT }}"
+          --set locations.datSalt="${{ secrets.DAT_SALT }}"
+          ${{inputs.helm_option}}
+          --timeout 3m
+          --debug
+          iris-gateway ./infrastructure/iris-gateway
+
+      - name: Delete downloaded helm charts
+        if: ${{ always() }}
+        run: >
+          rm -rf ./infrastructure/iris-gateway/charts/
