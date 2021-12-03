@@ -7,11 +7,13 @@ import iris.demo.checkin_app.searchindex.model.LocationsDto;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,7 +28,8 @@ public class LocationUpdater {
 	private SearchIndexClient searchIndexClient;
 
 	@PostConstruct
-	public void init() {
+	@Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
+	public void initLocations() {
 		LocationsDto locations = locationsLoader.getDemoLocations();
 
 		log.info(String.format("Updating %d locations", locations.getCount()));
