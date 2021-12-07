@@ -55,8 +55,4 @@ public class IrisBackendServiceApplication {
 	public static AutoJsonRpcServiceImplExporter autoJsonRpcServiceImplExporter() {
 		return new AutoJsonRpcServiceImplExporter();
 	}
-
-	@Autowired
-	public LocationRPCImpl locationRPC;
-
 }

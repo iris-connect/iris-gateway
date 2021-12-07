@@ -31,19 +31,20 @@ import org.springframework.stereotype.Component;
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
-public class HibernateSearchConfig {
+class HibernateSearchConfig {
 
 	private final @NonNull EntityManagerFactory emf;
+	private SearchSession session;
 
 	@Bean
 	SearchSession getSearchSession() {
-		return Search.session(emf.createEntityManager());
+		return createAndGetSearchSession();
 	}
 
 	@PostConstruct
 	void initialize() throws InterruptedException {
 
-		MassIndexer indexer = getSearchSession().massIndexer(Location.class).threadsToLoadObjects(2);
+		MassIndexer indexer = createAndGetSearchSession().massIndexer(Location.class).threadsToLoadObjects(2);
 		try {
 			indexer.startAndWait();
 		} catch (InterruptedException e) {
@@ -52,8 +53,15 @@ public class HibernateSearchConfig {
 		}
 	}
 
+	SearchSession createAndGetSearchSession() {
+
+		return session == null
+				? session = Search.session(emf.createEntityManager())
+				: session;
+	}
+
 	@Component("DocumentAnalysisConfigurer")
-	public static class DocumentAnalysisConfigurer implements LuceneAnalysisConfigurer {
+	static class DocumentAnalysisConfigurer implements LuceneAnalysisConfigurer {
 
 		@Override
 		public void configure(LuceneAnalysisConfigurationContext context) {
@@ -76,7 +84,7 @@ public class HibernateSearchConfig {
 	}
 
 	@Component("SearchMappingConfigurer")
-	public static class SearchMappingConfigurer implements HibernateOrmSearchMappingConfigurer {
+	static class SearchMappingConfigurer implements HibernateOrmSearchMappingConfigurer {
 		@Override
 		public void configure(HibernateOrmMappingConfigurationContext context) {
 			context.bridges().exactType(LocationIdentifier.class).identifierBridge(new IdBridge());

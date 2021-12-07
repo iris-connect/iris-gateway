@@ -5,8 +5,6 @@ import iris.backend_service.locations.search.SearchIndex;
 import iris.backend_service.locations.search.db.model.Location;
 import lombok.AllArgsConstructor;
 
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.engine.search.predicate.dsl.PredicateFinalStep;
 import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
@@ -45,7 +43,7 @@ public class DBSearchIndex implements SearchIndex {
 
 		var locations = result.hits().stream()
 				.map(this::toLocationInformation)
-				.collect(Collectors.toList());
+				.toList();
 
 		return new PageImpl<>(locations, pageable, result.total().hitCount());
 	}
