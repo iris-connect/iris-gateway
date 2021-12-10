@@ -6,7 +6,7 @@ version: '3'
 services:
 
   ls-1:
-    image: inoeg/eps:v0.1.67
+    image: inoeg/eps:v0.1.69
     expose:
       - 4445
       - 5555
@@ -22,7 +22,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   demo-app:
-    image: inoeg/eps:v0.1.67
+    image: inoeg/eps:v0.1.69
     expose:
       - 4444
       - 5554
@@ -38,7 +38,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   hd-1:
-    image: inoeg/eps:v0.1.67
+    image: inoeg/eps:v0.1.69
     expose:
       - 4446
       - 5556
@@ -54,7 +54,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   public-proxy:
-    image: inoeg/proxy:v0.1.67
+    image: inoeg/proxy:v0.1.69
     expose:
       - 4433
       - 9999
@@ -65,13 +65,13 @@ services:
       - 6655:6655
     volumes:
       - ./settings:/app/settings
-#      - ./pub-proxy-db:/tmp # to make proxy db persistant
+      - ./pub-proxy-db:/tmp # to make proxy db persistant
     environment:
       - PROXY_SETTINGS=settings/dev/roles/public-proxy-1
     command: [ "--level", "debug", "run", "public" ]
 
   public-proxy-eps:
-    image: inoeg/eps:v0.1.67
+    image: inoeg/eps:v0.1.69
     expose:
       - 5559
       - 5544
@@ -82,18 +82,18 @@ services:
     command: [ "--level", "debug", "server", "run" ]
 
   private-proxy:
-    image: inoeg/proxy:v0.1.67
+    image: inoeg/proxy:v0.1.69
     expose:
       - 8877
     volumes:
       - ./settings:/app/settings
-#      - ./private-proxy-db:/tmp # to make proxy db persistant
+      - ./private-proxy-db:/tmp # to make proxy db persistant
     environment:
       - PROXY_SETTINGS=settings/dev/roles/private-proxy-1
     command: [ "--level", "debug", "run", "private" ]
 
   private-proxy-1:
-    image: inoeg/eps:v0.1.67
+    image: inoeg/eps:v0.1.69
     expose:
       - 7766
       - 7776
