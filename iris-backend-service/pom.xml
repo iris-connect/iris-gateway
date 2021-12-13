@@ -120,7 +120,7 @@
 			<!-- Added to fix current vulnerability until Spring is adjusted: avd.aquasec.com/nvd/cve-2021-43797 -->
 			<groupId>io.netty</groupId>
 			<artifactId>netty-codec-http</artifactId>
-			<version>4.1.71.Final</version>
+			<version>4.1.72.Final</version>
 		</dependency>
 
 		<!-- jsonrpc4j -->
