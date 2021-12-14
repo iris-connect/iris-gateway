@@ -6,7 +6,7 @@ name: demo-contact-diary-app Develop
 on:
   push:
     branches:
-      - develop
+      - main
     paths:
       - demo-contact-diary-app/**
       - .github/workflows/demo-contact-diary-app.yml

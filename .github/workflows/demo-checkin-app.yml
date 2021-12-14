@@ -6,7 +6,7 @@ name: demo-checkin-app Develop
 on:
   push:
     branches:
-      - develop
+      - main
     paths:
       - demo-checkin-app/**
       - .github/workflows/demo-checkin-app.yml

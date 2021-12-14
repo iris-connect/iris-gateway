@@ -3,7 +3,7 @@ name: backend-service Develop
 on:
   push:
     branches:
-      - develop
+      - main
     paths:
       - iris-backend-service/**
       - .github/workflows/iris-backend-service.yml

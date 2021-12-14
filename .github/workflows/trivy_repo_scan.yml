@@ -1,9 +1,9 @@
 name: Trivy Repo Scan
 on:
   push:
-    branches: [ develop, release ]
+    branches: [ main ]
   pull_request:
-    branches: [ develop, release ]
+    branches: [ main ]
 jobs:
   repo_scan:
     name: Trivy Repo Scan
