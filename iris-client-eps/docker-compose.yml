@@ -6,7 +6,7 @@ version: '3'
 services:
 
   ls-1:
-    image: inoeg/eps:v0.1.69
+    image: inoeg/eps:v0.2.1
     expose:
       - 4445
       - 5555
@@ -22,7 +22,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   demo-app:
-    image: inoeg/eps:v0.1.69
+    image: inoeg/eps:v0.2.1
     expose:
       - 4444
       - 5554
@@ -38,7 +38,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   hd-1:
-    image: inoeg/eps:v0.1.69
+    image: inoeg/eps:v0.2.1
     expose:
       - 4446
       - 5556
@@ -54,7 +54,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   public-proxy:
-    image: inoeg/proxy:v0.1.69
+    image: inoeg/proxy:v0.2.1
     expose:
       - 4433
       - 9999
@@ -71,7 +71,7 @@ services:
     command: [ "--level", "debug", "run", "public" ]
 
   public-proxy-eps:
-    image: inoeg/eps:v0.1.69
+    image: inoeg/eps:v0.2.1
     expose:
       - 5559
       - 5544
@@ -82,7 +82,7 @@ services:
     command: [ "--level", "debug", "server", "run" ]
 
   private-proxy:
-    image: inoeg/proxy:v0.1.69
+    image: inoeg/proxy:v0.2.1
     expose:
       - 8877
     volumes:
@@ -93,7 +93,7 @@ services:
     command: [ "--level", "debug", "run", "private" ]
 
   private-proxy-1:
-    image: inoeg/eps:v0.1.69
+    image: inoeg/eps:v0.2.1
     expose:
       - 7766
       - 7776
