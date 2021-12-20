@@ -57,7 +57,7 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-			<version>8.2.2</version><!-- Added to fix current vulnerability in h2 until Spring is adjusted. avd.aquasec.com/nvd/cve-2021-23463 -->
+			<version>8.2.3</version><!-- Added to fix current vulnerability in h2 until Spring is adjusted. avd.aquasec.com/nvd/cve-2021-23463 -->
 		</dependency>
 		<dependency>
 			<groupId>org.modelmapper</groupId>
