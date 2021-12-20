@@ -104,7 +104,7 @@
 		<dependency>
 			<groupId>com.slack.api</groupId>
 			<artifactId>slack-api-client</artifactId>
-			<version>1.15.0</version>
+			<version>1.16.0</version>
 		</dependency>
 		<dependency>
 			<!-- Added to fix current vulnerability in versions <2.15.0 until Spring 
