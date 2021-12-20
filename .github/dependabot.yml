@@ -5,11 +5,16 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    schedule:
+      interval: "weekly"
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
       interval: "weekly"
   - package-ecosystem: "docker"
-    directory: "infrastructure/docker/nginx/Dockerfile"
+    directory: "/infrastructure/docker/nginx"
     schedule:
       interval: "weekly"
+ 
