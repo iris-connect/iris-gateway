@@ -4,10 +4,12 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  schedule:
+    - cron: '10 4 * * *'
 jobs:
   repo_scan:
     name: Trivy Repo Scan
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
