@@ -47,6 +47,7 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
+			<version>2.0.202</version><!-- Added to fix current vulnerability until Spring is adjusted. avd.aquasec.com/nvd/cve-2021-23463 -->
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -56,6 +57,7 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
+			<version>8.2.2</version><!-- Added to fix current vulnerability in h2 until Spring is adjusted. avd.aquasec.com/nvd/cve-2021-23463 -->
 		</dependency>
 		<dependency>
 			<groupId>org.modelmapper</groupId>
