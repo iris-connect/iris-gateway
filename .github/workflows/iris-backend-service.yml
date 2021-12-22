@@ -12,10 +12,6 @@ jobs:
   # https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2.4.0
