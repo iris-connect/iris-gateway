@@ -21,14 +21,7 @@ jobs:
         with:
           distribution: 'liberica'
           java-version: '17'
-
-      - name: Cache local Maven repository
-        uses: actions/cache@v2.1.7
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          cache: 'maven'
 
       - name: Get the version
         id: get_version
