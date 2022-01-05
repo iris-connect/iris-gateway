@@ -75,6 +75,19 @@
             <version>2.3.5</version><!-- Must be <3 because jsonrpc4j need javax.jws.WebParam! -->
             <type>pom</type>
         </dependency>
+        
+		<dependency>
+			<!-- Added to fix current vulnerability in versions ≤2.17.0 until Spring 
+				is adjusted. https://github.com/iris-connect/iris-gateway/security/code-scanning/355?query=ref%3Arefs%2Fheads%2Fmain -->
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.17.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-to-slf4j</artifactId>
+			<version>2.17.1</version>
+		</dependency>
     </dependencies>
 
     <build>
