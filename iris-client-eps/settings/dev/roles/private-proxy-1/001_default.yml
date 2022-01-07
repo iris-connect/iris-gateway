@@ -12,16 +12,16 @@ private:
     tls:
       verify_client: false
       server_name: "private-proxy-1"
-      ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
-      certificate_file: "$DIR/../../certs/private-proxy-1.crt"
-      key_file: "$DIR/../../certs/private-proxy-1.key"
+      ca_certificate_files: [ "/$DIR/../../certs/root.crt" ]
+      certificate_file: "/$DIR/../../certs/private-proxy-1.crt"
+      key_file: "/$DIR/../../certs/private-proxy-1.key"
 
   jsonrpc_client:
     endpoint: https://private-proxy-1:7766/jsonrpc
     tls:
       server_name: private-proxy-1
-      ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
-      certificate_file: "$DIR/../../certs/private-proxy-1.crt"
-      key_file: "$DIR/../../certs/private-proxy-1.key"
+      ca_certificate_files: [ "/$DIR/../../certs/root.crt" ]
+      certificate_file: "/$DIR/../../certs/private-proxy-1.crt"
+      key_file: "/$DIR/../../certs/private-proxy-1.key"
   jsonrpc_server: # the JSON-RPC server that the EPS server uses for communication
     bind_address: 0.0.0.0:8877

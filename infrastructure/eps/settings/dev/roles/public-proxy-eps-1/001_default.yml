@@ -4,10 +4,10 @@ directory:
   settings:
     jsonrpc_client:
       tls:
-        certificate_file: "$DIR/../../certs/public-proxy-1.crt"
-        key_file: "$DIR/../../certs/public-proxy-1.key"
-        ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
-    ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
+        certificate_file: "/$DIR/../../certs/public-proxy-1.crt"
+        key_file: "/$DIR/../../certs/public-proxy-1.key"
+        ca_certificate_files: [ "/$DIR/../../certs/root.crt" ]
+    ca_certificate_files: [ "/$DIR/../../certs/root.crt" ]
     endpoints: [ "https://iris.staging.iris-gateway.de:3322/jsonrpc" ]
     server_names: [ "sd-1" ]
 channels: # defines all the channels that we want to open when starting the server
@@ -16,33 +16,33 @@ channels: # defines all the channels that we want to open when starting the serv
     settings:
       bind_address: "0.0.0.0:5559"
       tls:
-        ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
-        certificate_file: "$DIR/../../certs/public-proxy-1.crt"
-        key_file: "$DIR/../../certs/public-proxy-1.key"
+        ca_certificate_files: [ "/$DIR/../../certs/root.crt" ]
+        certificate_file: "/$DIR/../../certs/public-proxy-1.crt"
+        key_file: "/$DIR/../../certs/public-proxy-1.key"
   - name: main JSON-RPC client # creates outgoing JSONRPC connections to deliver and receive messages
     type: jsonrpc_client
     settings:
       endpoint: https://public-proxy:6655/jsonrpc
       tls:
         server_name: public-proxy-1
-        ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
-        certificate_file: "$DIR/../../certs/public-proxy-1.crt"
-        key_file: "$DIR/../../certs/public-proxy-1.key"
+        ca_certificate_files: [ "/$DIR/../../certs/root.crt" ]
+        certificate_file: "/$DIR/../../certs/public-proxy-1.crt"
+        key_file: "/$DIR/../../certs/public-proxy-1.key"
   - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
     type: grpc_client
     settings:
       tls:
-        ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
-        certificate_file: "$DIR/../../certs/public-proxy-1.crt"
-        key_file: "$DIR/../../certs/public-proxy-1.key"
+        ca_certificate_files: [ "/$DIR/../../certs/root.crt" ]
+        certificate_file: "/$DIR/../../certs/public-proxy-1.crt"
+        key_file: "/$DIR/../../certs/public-proxy-1.key"
   - name: main JSON-RPC server # accepts incoming JSONRPC connections to deliver and receive messages
     type: jsonrpc_server
     settings:
       bind_address: "0.0.0.0:5544"
       tls:
-        certificate_file: "$DIR/../../certs/public-proxy-1.crt"
-        key_file: "$DIR/../../certs/public-proxy-1.key"
-        ca_certificate_files: [ "$DIR/../../certs/root.crt" ]
+        certificate_file: "/$DIR/../../certs/public-proxy-1.crt"
+        key_file: "/$DIR/../../certs/public-proxy-1.key"
+        ca_certificate_files: [ "/$DIR/../../certs/root.crt" ]
         verify_client: false
 
 
