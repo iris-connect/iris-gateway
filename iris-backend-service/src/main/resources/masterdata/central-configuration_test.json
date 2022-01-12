@@ -1,0 +1,11 @@
+{
+	"hdConfigs": {
+		"ga-showcase": {
+			"rkiCode": "99.00.0.01.",
+			"proxyConfig": {
+				"abbreviation": "001",
+				"proxySubDomain": "proxy.showcase.test-gesundheitsamt.de"
+			}
+		}
+	}
+}

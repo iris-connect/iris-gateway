@@ -1,0 +1,11 @@
+{
+	"hdConfigs": {
+		"hd-1": {
+			"rkiCode": "99.00.0.00.",
+			"proxyConfig": {
+				"abbreviation": "000",
+				"proxySubDomain": "proxy.dev.test-gesundheitsamt.de"
+			}
+		}
+	}
+}
