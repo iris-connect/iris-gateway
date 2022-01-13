@@ -43,9 +43,7 @@ public class RPCClientConfig {
 				new URL(clientUrl),
 				new HashMap<>());
 
-		// Can be removed when we include the root certs
-		SSLContext sc = getAllCertsTrustedSSLContext();
-		client.setSslContext(sc);
+		// NoopHostnameVerifier is needed because the internal eps address is not necessarily part of certs SAN
 		client.setHostNameVerifier(new NoopHostnameVerifier());
 
 		// This is SO! important
@@ -54,24 +52,4 @@ public class RPCClientConfig {
 		return client;
 	}
 
-	private SSLContext getAllCertsTrustedSSLContext() throws NoSuchAlgorithmException, KeyManagementException {
-		TrustManager[] trustAllCerts = new TrustManager[] {
-				new X509TrustManager() {
-					public X509Certificate[] getAcceptedIssuers() {
-						return null;
-					}
-
-					public void checkClientTrusted(
-							X509Certificate[] certs, String authType) {}
-
-					public void checkServerTrusted(
-							X509Certificate[] certs, String authType) {}
-				}
-		};
-
-		SSLContext sc = SSLContext.getInstance("SSL");
-		sc.init(null, trustAllCerts, new SecureRandom());
-		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-		return sc;
-	}
 }
