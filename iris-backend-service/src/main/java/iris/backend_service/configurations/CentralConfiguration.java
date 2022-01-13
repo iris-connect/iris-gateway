@@ -1,10 +1,11 @@
 package iris.backend_service.configurations;
 
+import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonMerge;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -23,25 +25,34 @@ public class CentralConfiguration {
 	private final @NonNull ObjectMapper objectMapper;
 
 	@Value("classpath:central-configuration.json")
-	Resource configResource;
+	Resource configBaseResource;
+
+	@Value("${central-configuration.profil_resource}")
+	Resource configProfilResource;
 
 	private ConfigurationData configurationData;
 
 	@PostConstruct
 	private void initialize() throws IOException {
 
-		configurationData = objectMapper.registerModule(new JavaTimeModule())
-				.readValue(configResource.getInputStream(), ConfigurationData.class);
+		var configurationBase = objectMapper.registerModule(new JavaTimeModule())
+				.readValue(configBaseResource.getInputStream(), ConfigurationData.class);
+
+		var updater = objectMapper.readerForUpdating(configurationBase);
+		configurationData = updater.readValue(configProfilResource.getInputStream());
 	}
 
 	Optional<HdProxyConfig> getHdProxyConfigFor(String client) {
 
-		return configurationData.hdProxyConfigs.stream()
-				.filter(it -> client.equals(it.hdName))
-				.findFirst();
+		return Optional.ofNullable(configurationData.hdProxyConfigs.get(client));
 	}
 
-	record ConfigurationData(List<HdProxyConfig> hdProxyConfigs) {}
+	record ConfigurationData(@JsonMerge Map<String, HdProxyConfig> hdProxyConfigs) {}
 
-	record HdProxyConfig(String hdName, String abbreviation, String proxySubDomain) {}
+	@Data
+	static class HdProxyConfig {
+
+		String abbreviation;
+		String proxySubDomain;
+	}
 }

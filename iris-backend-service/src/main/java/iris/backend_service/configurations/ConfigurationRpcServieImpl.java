@@ -36,7 +36,7 @@ class ConfigurationRpcServieImpl implements ConfigurationRpcService {
 
 		log.debug("JSON-RPC - Get HD configuration for client: {}", client.getName());
 
-		return new Configuration(hdProxyConfig.abbreviation(), hdProxyConfig.proxySubDomain(), tokenProps.getCatSalt(),
-				tokenProps.getDatSalt(), tokenProps.getCatLength(), tokenProps.getDatLength());
+		return new Configuration(hdProxyConfig.getAbbreviation(), hdProxyConfig.getProxySubDomain(),
+				tokenProps.getCatSalt(), tokenProps.getDatSalt(), tokenProps.getCatLength(), tokenProps.getDatLength());
 	}
 }
