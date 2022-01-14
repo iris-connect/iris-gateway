@@ -1,0 +1,8 @@
+{
+	"hdProxyConfigs": {
+		"ga-showcase": {
+			"abbreviation": "001",
+			"proxySubDomain": "proxy.showcase.test-gesundheitsamt.de"
+		}
+	}
+}

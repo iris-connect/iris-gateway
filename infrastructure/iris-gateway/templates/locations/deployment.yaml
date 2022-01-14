@@ -22,7 +22,7 @@ spec:
           imagePullPolicy: {{ .Values.global.PullPolicy }}
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: postgres
+              value: postgres,stage_{{ .Values.environment }}
             - name: POSTGRES_DATABASE
               value: {{ .Values.postgresqlha.postgresql.database }}
             - name: IRIS_MESSAGES_SLACK_TOKEN

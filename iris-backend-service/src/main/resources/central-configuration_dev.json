@@ -1,0 +1,8 @@
+{
+	"hdProxyConfigs": {
+		"hd-1": {
+			"abbreviation": "000",
+			"proxySubDomain": "proxy.dev.test-gesundheitsamt.de"
+		}
+	}
+}
