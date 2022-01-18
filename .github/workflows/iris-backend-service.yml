@@ -3,7 +3,7 @@ name: backend-service Develop
 on:
   push:
     branches:
-      - test_maven_cache
+      - main
     paths:
       - iris-backend-service/**
       - .github/workflows/iris-backend-service.yml
