@@ -4,7 +4,7 @@ import static java.lang.String.*;
 
 import iris.backend_service.jsonrpc.JsonRpcClientDto;
 import iris.backend_service.messages.AlertService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.Valid;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 class ConfigurationRpcServieImpl implements ConfigurationRpcService {
 
@@ -24,7 +24,7 @@ class ConfigurationRpcServieImpl implements ConfigurationRpcService {
 	@Override
 	public Configuration getHdConfiguration(@Valid JsonRpcClientDto client) {
 
-		var hdProxyConfig = config.getHdProxyConfigFor(client.getName())
+		var proxyConfig = config.getHdProxyConfigFor(client.getName())
 				.orElseThrow(() -> {
 
 					alerts.createAlertMessage("Missing HD configuration",
@@ -36,7 +36,7 @@ class ConfigurationRpcServieImpl implements ConfigurationRpcService {
 
 		log.debug("JSON-RPC - Get HD configuration for client: {}", client.getName());
 
-		return new Configuration(hdProxyConfig.getAbbreviation(), hdProxyConfig.getProxySubDomain(),
-				tokenProps.getCatSalt(), tokenProps.getDatSalt(), tokenProps.getCatLength(), tokenProps.getDatLength());
+		return new Configuration(proxyConfig.getAbbreviation(), proxyConfig.getProxySubDomain(), tokenProps.getCatSalt(),
+				tokenProps.getDatSalt(), tokenProps.getCatLength(), tokenProps.getDatLength());
 	}
 }

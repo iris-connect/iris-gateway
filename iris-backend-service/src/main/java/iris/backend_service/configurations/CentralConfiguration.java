@@ -24,7 +24,7 @@ public class CentralConfiguration {
 
 	private final @NonNull ObjectMapper objectMapper;
 
-	@Value("classpath:central-configuration.json")
+	@Value("classpath:masterdata/central-configuration.json")
 	Resource configBaseResource;
 
 	@Value("${central-configuration.profil_resource}")
@@ -42,15 +42,32 @@ public class CentralConfiguration {
 		configurationData = updater.readValue(configProfilResource.getInputStream());
 	}
 
-	Optional<HdProxyConfig> getHdProxyConfigFor(String client) {
+	public Optional<String> getHdNameFor(String rkiCode) {
 
-		return Optional.ofNullable(configurationData.hdProxyConfigs.get(client));
+		return configurationData.hdConfigs.values().stream()
+				.filter(it -> rkiCode.equals(it.rkiCode))
+				.findFirst()
+				.map(HdConfig::getHdName);
 	}
 
-	record ConfigurationData(@JsonMerge Map<String, HdProxyConfig> hdProxyConfigs) {}
+	Optional<ProxyConfig> getHdProxyConfigFor(String client) {
+
+		return Optional.ofNullable(configurationData.hdConfigs.get(client))
+				.map(HdConfig::getProxyConfig);
+	}
+
+	record ConfigurationData(@JsonMerge Map<String, HdConfig> hdConfigs) {}
 
 	@Data
-	static class HdProxyConfig {
+	static class HdConfig {
+
+		String hdName;
+		String rkiCode;
+		ProxyConfig proxyConfig;
+	}
+
+	@Data
+	static class ProxyConfig {
 
 		String abbreviation;
 		String proxySubDomain;
