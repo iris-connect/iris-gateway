@@ -5,7 +5,7 @@ To communicate with the distributed services, IRIS uses its own EPS (endpoint se
 ## Local development setup
 ### Install EPS
 The following steps are necessary:
-* In `iris-client-eps` directory run `docker run -v ./settings:/app/settings luckylusa/iris-eps-scripts certs` to generate certificates for development
+* In `iris-client-eps` directory run `docker run -v <Linux Bash: $( pwd ) | Windows: absolute path of iris-client-eps directory>/settings:/app/settings luckylusa/iris-eps-scripts certs` to generate certificates for development
 * Run demo-eps config with `docker-compose up -d`
 * `eps-client.clientUrl=https://localhost:5556/jsonrpc` should be set in iris-client-bff
 * Please make sure `host.docker.internal` points to `172.17.0.1` on linux
