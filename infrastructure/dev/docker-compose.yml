@@ -16,7 +16,7 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker,stage_dev
+      - SPRING_PROFILES_ACTIVE=stage_dev
       - IRIS_MESSAGES_SLACK_TOKEN=${IRIS_MESSAGES_SLACK_TOKEN}
       - IRIS_MESSAGES_SLACK_CHANNEL=${IRIS_MESSAGES_SLACK_CHANNEL}
       - IRIS_MESSAGES_ZAMMAD_TOKEN=${IRIS_MESSAGES_ZAMMAD_TOKEN}
