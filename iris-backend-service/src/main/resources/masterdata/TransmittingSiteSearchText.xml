@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf8"?>
 <TransmittingSites xmlns="http://www.rki.de/PlzToolTransmittingSiteSearchText.xsd">
-  <TransmittingSite Name="Showcase" Code="99.00.0.01." Department="Showcase Department" Street="Showcase Street" Postalcode="00000" Place="Showcase City" Phone="Showcase Phone" Fax="Showcase Fax" Email="Showcase Email" Covid19Hotline="" Covid19EMail="" Covid19Fax="" EinreiseAnmeldungHotline="" EinreiseAnmeldungEMail="" EinreiseAnmeldungFax="">
-    <SearchText Value="00000"/>
-    <SearchText Value="Showcase"/>
-  </TransmittingSite>  
-  <TransmittingSite Name="HD-1" Code="99.00.0.00." Department="HD-1 Department" Street="HD-1 Street" Postalcode="00001" Place="HD-1 City" Phone="HD-1 Phone" Fax="HD-1 Fax" Email="HD-1 Email" Covid19Hotline="" Covid19EMail="" Covid19Fax="" EinreiseAnmeldungHotline="" EinreiseAnmeldungEMail="" EinreiseAnmeldungFax="">
-    <SearchText Value="00001"/>
-    <SearchText Value="HD-1"/>
-  </TransmittingSite>  
   <TransmittingSite Name="Kreis Dithmarschen" Code="1.01.0.51." Department="Fachdienst Gesundheitsschutz" Street="Esmarchstr. 50" Postalcode="25746" Place="Heide" Phone="0481 9749000" Fax="0481 974931" Email="fd-gesundheitsschutz@dithmarschen.de" Covid19Hotline="" Covid19EMail="" Covid19Fax="" EinreiseAnmeldungHotline="" EinreiseAnmeldungEMail="" EinreiseAnmeldungFax="">
     <SearchText Value="Welmbüttel"/>
     <SearchText Value="Wennbüttel"/>
