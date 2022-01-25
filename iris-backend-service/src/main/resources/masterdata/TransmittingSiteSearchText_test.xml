@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf8"?>
+<TransmittingSites xmlns="http://www.rki.de/PlzToolTransmittingSiteSearchText.xsd">
+   <TransmittingSite Name="Showcase" Code="99.00.0.01." Department="Showcase Department" Street="Showcase Street" Postalcode="00000" Place="Showcase City" Phone="Showcase Phone" Fax="Showcase Fax" Email="Showcase Email" Covid19Hotline="" Covid19EMail="" Covid19Fax="" EinreiseAnmeldungHotline="" EinreiseAnmeldungEMail="" EinreiseAnmeldungFax="">
+     <SearchText Value="00000"/>
+     <SearchText Value="Showcase"/>
+   </TransmittingSite>  
+</TransmittingSites>

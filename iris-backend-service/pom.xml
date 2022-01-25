@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.2</version>
+		<version>2.6.3</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>iris-gateway</groupId>
@@ -20,7 +20,7 @@
 		<docker.image.prefix>inoeg</docker.image.prefix>
 		<version.tag>${project.version}</version.tag>
 		<hibernate.search.version>6.0.7.Final</hibernate.search.version>
-		<xmlprojector.version>1.4.20</xmlprojector.version>
+		<xmlprojector.version>1.4.22</xmlprojector.version>
 	</properties>
 	
 	<profiles>
@@ -76,7 +76,7 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-			<version>8.4.1</version><!-- Added to fix current vulnerability in h2 
+			<version>8.4.2</version><!-- Added to fix current vulnerability in h2 
 				until Spring is adjusted. avd.aquasec.com/nvd/cve-2021-23463 -->
 		</dependency>
 		<dependency>
@@ -124,19 +124,7 @@
 		<dependency>
 			<groupId>com.slack.api</groupId>
 			<artifactId>slack-api-client</artifactId>
-			<version>1.16.1</version>
-		</dependency>
-		<dependency>
-			<!-- Added to fix current vulnerability in versions ≤2.17.0 until Spring 
-				is adjusted. https://github.com/iris-connect/iris-gateway/security/code-scanning/355?query=ref%3Arefs%2Fheads%2Fmain -->
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>2.17.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-to-slf4j</artifactId>
-			<version>2.17.1</version>
+			<version>1.17.0</version>
 		</dependency>
 
 		<!-- For XML projection of RKI PLZTool data -->
