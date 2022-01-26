@@ -44,7 +44,7 @@ jobs:
 
   deployment-test:
     needs: build
-    uses: iris-connect/iris-gateway/.github/workflows/helm-deployment.yml@develop
+    uses: iris-connect/iris-gateway/.github/workflows/helm-deployment.yml@main
     with: 
       runs_on: "[ 'self-hosted', 'env-test' ]"
       env: test
@@ -63,7 +63,7 @@ jobs:
 
   deployment-prod:
     needs: deployment-test
-    uses: iris-connect/iris-gateway/.github/workflows/helm-deployment.yml@develop
+    uses: iris-connect/iris-gateway/.github/workflows/helm-deployment.yml@main
     with:
       runs_on: "[ 'self-hosted', 'env-prod' ]"
       env: production
