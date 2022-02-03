@@ -24,17 +24,19 @@ class ConfigurationRpcServieImpl implements ConfigurationRpcService {
 	@Override
 	public Configuration getHdConfiguration(@Valid JsonRpcClientDto client) {
 
-		var proxyConfig = config.getHdProxyConfigFor(client.getName())
+		var clientName = client.getName();
+
+		var proxyConfig = config.getHdProxyConfigFor(clientName)
 				.orElseThrow(() -> {
 
 					alerts.createAlertMessage("Missing HD configuration",
-							String.format("Can't find a HD proxy configuration for client: %s", client.getName()));
+							String.format("Can't find a HD proxy configuration for client: %s", clientName));
 
 					return new CentralConfigurationException(
-							format("Can't find a health department proxy configuration for your client: %s", client.getName()));
+							format("Can't find a health department proxy configuration for your client: %s", clientName));
 				});
 
-		log.debug("JSON-RPC - Get HD configuration for client: {}", client.getName());
+		log.debug("JSON-RPC - Get HD configuration for client: {}", clientName);
 
 		return new Configuration(proxyConfig.getAbbreviation(), proxyConfig.getProxySubDomain(), tokenProps.getCatSalt(),
 				tokenProps.getDatSalt(), tokenProps.getCatLength(), tokenProps.getDatLength());

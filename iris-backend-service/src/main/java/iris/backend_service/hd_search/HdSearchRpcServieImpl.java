@@ -29,7 +29,7 @@ class HdSearchRpcServieImpl implements HdSearchRpcService {
 
 		var hds = healthDepartments.findDepartmentsContains(searchKeyword);
 
-		log.debug("JSON-RPC - Search HD for: {} ⇒ found: {}", searchKeyword, hds.size());
+		log.debug("JSON-RPC - Client {} searchs HD for: {} ⇒ found: {}", client.getName(), searchKeyword, hds.size());
 
 		return hds.stream().map(this::mapToDto).toList();
 	}
