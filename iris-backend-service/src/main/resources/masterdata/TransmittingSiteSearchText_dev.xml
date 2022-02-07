@@ -4,4 +4,8 @@
      <SearchText Value="00001"/>
      <SearchText Value="HD-1"/>
    </TransmittingSite>
+   <TransmittingSite Name="Gotham" Code="99.00.0.10." Department="GA" Street="Street" Postalcode="00010" Place="City" Phone="Phone" Fax="Fax" Email="Email" Covid19Hotline="" Covid19EMail="" Covid19Fax="" EinreiseAnmeldungHotline="" EinreiseAnmeldungEMail="" EinreiseAnmeldungFax="">
+     <SearchText Value="00010"/>
+     <SearchText Value="Gotham"/>
+   </TransmittingSite>
 </TransmittingSites>

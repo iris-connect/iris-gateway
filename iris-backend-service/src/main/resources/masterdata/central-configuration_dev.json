@@ -6,6 +6,13 @@
 				"abbreviation": "000",
 				"proxySubDomain": "proxy.dev.test-gesundheitsamt.de"
 			}
+		},
+		"ga-gotham": {
+			"rkiCode": "99.00.0.10.",
+			"proxyConfig": {
+				"abbreviation": "010",
+				"proxySubDomain": "gotham.dev.test-gesundheitsamt.de"
+			}
 		}
 	}
 }
