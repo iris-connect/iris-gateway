@@ -29,6 +29,7 @@ public class ServiceEndpointsConfig {
 
 		var compositeJsonServiceExporter = new CompositeJsonServiceExporter();
 		compositeJsonServiceExporter.setServices(new Object[] { health, locations, alerts, configurations, hdSearch });
+		compositeJsonServiceExporter.setAllowExtraParams(true);
 
 		return compositeJsonServiceExporter;
 	}

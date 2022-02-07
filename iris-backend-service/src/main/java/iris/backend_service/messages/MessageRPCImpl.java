@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -26,25 +25,27 @@ class MessageRPCImpl implements MessageRPC {
 	@Override
 	public String postAlerts(@Valid JsonRpcClientDto client, @Valid List<AlertDto> alertDtos) {
 
-		log.trace("Alert - JSON-RPC - Post alert invoked for client: {} with {} alerts", client.getName(),
+		var clientName = client.getName();
+
+		log.trace("Alert - JSON-RPC - Post alert invoked for client: {} with {} alerts", clientName,
 				alertDtos.size());
 
 		var messages = alertDtos.stream()
 				.map(it -> mapper.map(it, Message.class))
-				.peek(it -> it.setClient(client.getName()))
-				.collect(Collectors.toList());
+				.peek(it -> it.setClient(clientName))
+				.toList();
 
 		try {
 
 			messageRepo.saveAllAndFlush(messages);
 
-			log.debug("Alert - JSON-RPC - Post alert for client: {} => result: OK", client.getName());
+			log.debug("Alert - JSON-RPC - Post alert for client: {} => result: OK", clientName);
 
 			return "OK";
 
 		} catch (Exception e) {
 
-			log.error(String.format("Alert - JSON-RPC - Can't save alert for client: %s => result: ", client.getName()), e);
+			log.error(String.format("Alert - JSON-RPC - Can't save alert for client: %s => result: ", clientName), e);
 
 			return "ERROR";
 		}

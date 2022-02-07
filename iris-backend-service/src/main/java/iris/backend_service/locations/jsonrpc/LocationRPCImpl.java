@@ -55,11 +55,13 @@ public class LocationRPCImpl implements LocationRPC {
 	public String postLocationsToSearchIndex(JsonRpcClientDto client, List<LocationInformation> locationList) {
 
 		validateJsonRpcClientDto(client);
-		validatePostLimit(locationList, client.getName());
 
-		var locationListValidated = validateLocationInformation(locationList, client.getName());
+		var clientName = client.getName();
+		validatePostLimit(locationList, clientName);
 
-		var listOfInvalidAddresses = locationService.addLocations(client.getName(), locationListValidated);
+		var locationListValidated = validateLocationInformation(locationList, clientName);
+
+		var listOfInvalidAddresses = locationService.addLocations(clientName, locationListValidated);
 
 		var ret = "OK";
 		var logRes = ret;
@@ -70,7 +72,7 @@ public class LocationRPCImpl implements LocationRPC {
 			logRes = "Invalid Locations detected";
 		}
 
-		log.debug("JSON-RPC - Post locations for client: {} (locations: {}) => result: {}", client.getName(),
+		log.debug("JSON-RPC - Post locations for client: {} (locations: {}) => result: {}", clientName,
 				locationList.size(), logRes);
 
 		return ret;
