@@ -29,8 +29,14 @@ jobs:
           mvn -B clean verify spring-boot:repackage spring-boot:build-image -Dspring-boot.build-image.publish=true -Dversion.tag=${{ steps.get_version.outputs.VERSION }}
         env:
           GIT_TAG: ${{ steps.get_version.outputs.VERSION }}
-          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
-          DOCKER_HUB_PW: ${{ secrets.DOCKER_HUB_PW }}
+
+      - name: Sign and push docker image
+        uses: sudo-bot/action-docker-sign@latest
+        with:
+          image-ref: 'inoeg/iris-backend-service:${{ steps.get_version.outputs.VERSION }}'
+          private-key-id: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY_IDENTIFIER }}
+          private-key: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY }}
+          private-key-passphrase: ${{ secrets.DOCKER_HUB_DCT_PASSPHRASE }}
           
       - name: Upload Test Reports
         if: always()
