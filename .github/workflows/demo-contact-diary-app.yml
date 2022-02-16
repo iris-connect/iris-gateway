@@ -26,6 +26,12 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USER }}
+          password: ${{ secrets.DOCKER_HUB_PW }}
+
       - name: build, package and publish the image
         run: >
           mvn -B clean verify spring-boot:build-image -am -pl demo-contact-diary-app
