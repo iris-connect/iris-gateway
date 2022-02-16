@@ -29,11 +29,16 @@ jobs:
       - name: build, package and publish the image
         run: >
           mvn -B clean verify spring-boot:build-image -am -pl demo-checkin-app
-          -Dspring-boot.build-image.publish=true
+          -Dspring-boot.build-image.publish=false
           -Dversion.tag="develop"
-        env:
-          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
-          DOCKER_HUB_PW: ${{ secrets.DOCKER_HUB_PW }}
+
+      - name: Sign and push docker image
+        uses: sudo-bot/action-docker-sign@latest
+        with:
+          image-ref: 'inoeg/demo-checkin-app:develop'
+          private-key-id: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY_IDENTIFIER }}
+          private-key: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY }}
+          private-key-passphrase: ${{ secrets.DOCKER_HUB_DCT_PASSPHRASE }}
 
   container_scan:
     needs: build
