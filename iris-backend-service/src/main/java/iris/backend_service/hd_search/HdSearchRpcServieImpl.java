@@ -38,13 +38,18 @@ class HdSearchRpcServieImpl implements HdSearchRpcService {
 
 		var epsName = config.getHdNameFor(hd.getCode()).orElse(null);
 
-		var address = new Address(hd.getAddress().getStreet(), hd.getAddress().getZipCode(), hd.getAddress().getPlace());
+		var baseAddress = hd.getAddress();
+		var address = new Address(baseAddress.getStreet(), baseAddress.getZipCode(), baseAddress.getPlace());
+
 		var contact = new ContactData(hd.getPhone(), hd.getFax(), hd.getEmail());
-		var covidContact = new ContactData(hd.getCovid19ContactData().getHotline(), hd.getCovid19ContactData().getFax(),
-				hd.getCovid19ContactData().getEmail());
-		var entryContact = new ContactData(hd.getEinreiseContactData().getHotline(),
-				hd.getEinreiseContactData().getFax(),
-				hd.getEinreiseContactData().getEmail());
+
+		var covid19ContactData = hd.getCovid19ContactData();
+		var covidContact = new ContactData(covid19ContactData.getHotline(), covid19ContactData.getFax(),
+				covid19ContactData.getEmail());
+
+		var entryContactData = hd.getEinreiseContactData();
+		var entryContact = new ContactData(entryContactData.getHotline(), entryContactData.getFax(),
+				entryContactData.getEmail());
 
 		return new HealthDepartmentDto(hd.getName(), hd.getCode(), epsName, hd.getDepartment(), address, contact,
 				covidContact, entryContact);

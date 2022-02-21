@@ -6,10 +6,12 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -44,10 +46,10 @@ public class CentralConfiguration {
 
 	public Optional<String> getHdNameFor(String rkiCode) {
 
-		return configurationData.hdConfigs.values().stream()
-				.filter(it -> rkiCode.equals(it.rkiCode))
-				.findFirst()
-				.map(HdConfig::getHdName);
+		return configurationData.hdConfigs.entrySet().stream()
+				.filter(it -> StringUtils.equals(it.getValue().rkiCode, rkiCode))
+				.map(Entry::getKey)
+				.findFirst();
 	}
 
 	Optional<ProxyConfig> getHdProxyConfigFor(String client) {
@@ -61,7 +63,6 @@ public class CentralConfiguration {
 	@Data
 	static class HdConfig {
 
-		String hdName;
 		String rkiCode;
 		ProxyConfig proxyConfig;
 	}
