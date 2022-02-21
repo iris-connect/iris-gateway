@@ -19,6 +19,12 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USER }}
+          password: ${{ secrets.DOCKER_HUB_PW }}
+
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
@@ -26,7 +32,7 @@ jobs:
       - name: build Jars and Images
         run: |
           mvn versions:set -DnewVersion=${{ steps.get_version.outputs.VERSION }} -DprocessAllModules=true
-          mvn -B clean verify spring-boot:repackage spring-boot:build-image -Dspring-boot.build-image.publish=true -Dversion.tag=${{ steps.get_version.outputs.VERSION }}
+          mvn -B clean verify spring-boot:repackage spring-boot:build-image -Dspring-boot.build-image.publish=false -Dversion.tag=${{ steps.get_version.outputs.VERSION }}
         env:
           GIT_TAG: ${{ steps.get_version.outputs.VERSION }}
 
