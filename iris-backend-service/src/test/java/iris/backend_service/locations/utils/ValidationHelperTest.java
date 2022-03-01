@@ -69,9 +69,9 @@ class ValidationHelperTest {
 
 	@ParameterizedTest
 	@NullSource
-	@ValueSource(strings = { "", "0123A56789", "01234%678", "0815 47+11", "0123456*89", "0", "12345678" })
+	@ValueSource(strings = { "", "0123A56789", "01234%678", "0815 47+11", "0123456*89", "0", "1234567" })
 	void checkInvalidPhoneNumbers(String phone) {
-		assertFalse(ValidationHelper.isValidAndNotNullEmail(phone));
+		assertFalse(ValidationHelper.isValidAndNotNullPhoneNumber(phone));
 	}
 
 	@ParameterizedTest
