@@ -75,4 +75,5 @@ to the specific _environment_ (`test` or `production`)
       root.crt: ...  # b64 encoded
       sd-1.crt: ...  # b64 encoded
       sd-1.key: ...  # b64 encoded
+      dtrust-test-root.crt: ... #b64 encoded (only at test)
     ```
