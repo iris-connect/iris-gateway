@@ -1,4 +1,181 @@
 {
 	"hdConfigs": {
+		"eps.ga-hagen.iris-connect.nrw.de": {
+			"rkiCode": "1.05.9.14.",
+			"proxyConfig": {
+				"abbreviation": "544",
+				"proxySubDomain": "ga-hagen.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-kleve.iris-connect.nrw.de": {
+			"rkiCode": "1.05.1.54.",
+			"proxyConfig": {
+				"abbreviation": "511",
+				"proxySubDomain": "ga-kleve.iris-connect.nrw.de"
+			}
+		},
+		
+		"eps.Iris-14511.iris.lecos.de": {
+			"rkiCode": "1.14.5.11.",
+			"proxyConfig": {
+				"abbreviation": "D11",
+				"proxySubDomain": "iris-14511.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14521.iris.lecos.de": {
+			"rkiCode": "1.14.5.21.02.",
+			"proxyConfig": {
+				"abbreviation": "D21",
+				"proxySubDomain": "iris-14521.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14522.iris.lecos.de": {
+			"rkiCode": "1.14.5.22.01.",
+			"proxyConfig": {
+				"abbreviation": "D22",
+				"proxySubDomain": "iris-14522.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14523.iris.lecos.de": {
+			"rkiCode": "1.14.5.23.02.",
+			"proxyConfig": {
+				"abbreviation": "D23",
+				"proxySubDomain": "iris-14523.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14524.iris.lecos.de": {
+			"rkiCode": "1.14.5.24.01.",
+			"proxyConfig": {
+				"abbreviation": "D24",
+				"proxySubDomain": "iris-14524.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14612.iris.lecos.de": {
+			"rkiCode": "1.14.6.12.",
+			"proxyConfig": {
+				"abbreviation": "D12",
+				"proxySubDomain": "iris-14612.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14625.iris.lecos.de": {
+			"rkiCode": "1.14.6.25.03.",
+			"proxyConfig": {
+				"abbreviation": "D25",
+				"proxySubDomain": "iris-14625.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14626.iris.lecos.de": {
+			"rkiCode": "1.14.6.26.01.",
+			"proxyConfig": {
+				"abbreviation": "D26",
+				"proxySubDomain": "iris-14626.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14627.iris.lecos.de": {
+			"rkiCode": "1.14.6.27.01.",
+			"proxyConfig": {
+				"abbreviation": "D27",
+				"proxySubDomain": "iris-14627.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14628.iris.lecos.de": {
+			"rkiCode": "1.14.6.28.01.",
+			"proxyConfig": {
+				"abbreviation": "D28",
+				"proxySubDomain": "iris-14628.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14713.iris.lecos.de": {
+			"rkiCode": "1.14.7.13.",
+			"proxyConfig": {
+				"abbreviation": "D13",
+				"proxySubDomain": "iris-14713.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14729.iris.lecos.de": {
+			"rkiCode": "1.14.7.29.01.",
+			"proxyConfig": {
+				"abbreviation": "D29",
+				"proxySubDomain": "iris-14729.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14730.iris.lecos.de": {
+			"rkiCode": "1.14.7.30.01.",
+			"proxyConfig": {
+				"abbreviation": "D30",
+				"proxySubDomain": "iris-14730.iris.lecos.de"
+			}
+		},
+		
+		"eps.altenburg.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.77.",
+			"proxyConfig": {
+				"abbreviation": "F77",
+				"proxySubDomain": "altenburg.irisconnect.thueringen.de"
+			}
+		},
+		"eps.apolda.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.71.",
+			"proxyConfig": {
+				"abbreviation": "F71",
+				"proxySubDomain": "apolda.irisconnect.thueringen.de"
+			}
+		},
+		"eps.arnstadt.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.70.02.",
+			"proxyConfig": {
+				"abbreviation": "F70",
+				"proxySubDomain": "arnstadt.irisconnect.thueringen.de"
+			}
+		},
+		"eps.eisenberg.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.74.",
+			"proxyConfig": {
+				"abbreviation": "F74",
+				"proxySubDomain": "eisenberg.irisconnect.thueringen.de"
+			}
+		},
+		"eps.erfurt.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.51.",
+			"proxyConfig": {
+				"abbreviation": "F51",
+				"proxySubDomain": "erfurt.irisconnect.thueringen.de"
+			}
+		},
+		"eps.gera.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.52.",
+			"proxyConfig": {
+				"abbreviation": "F52",
+				"proxySubDomain": "gera.irisconnect.thueringen.de"
+			}
+		},
+		"eps.heiligenstadt.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.61.",
+			"proxyConfig": {
+				"abbreviation": "F61",
+				"proxySubDomain": "heiligenstadt.irisconnect.thueringen.de"
+			}
+		},
+		"eps.hildburghausen.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.69.",
+			"proxyConfig": {
+				"abbreviation": "F69",
+				"proxySubDomain": "hildburghausen.irisconnect.thueringen.de"
+			}
+		},
+		"eps.schleiz.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.75.03.",
+			"proxyConfig": {
+				"abbreviation": "F75",
+				"proxySubDomain": "schleiz.irisconnect.thueringen.de"
+			}
+		},
+		"eps.sondershausen.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.65.01.",
+			"proxyConfig": {
+				"abbreviation": "F65",
+				"proxySubDomain": "sondershausen.irisconnect.thueringen.de"
+			}
+		}
 	}
 }

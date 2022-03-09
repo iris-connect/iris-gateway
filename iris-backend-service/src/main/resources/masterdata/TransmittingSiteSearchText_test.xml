@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf8"?>
 <TransmittingSites xmlns="http://www.rki.de/PlzToolTransmittingSiteSearchText.xsd">
-   <TransmittingSite Name="Showcase" Code="99.00.0.01." Department="Showcase Department" Street="Showcase Street" Postalcode="00000" Place="Showcase City" Phone="Showcase Phone" Fax="Showcase Fax" Email="Showcase Email" Covid19Hotline="" Covid19EMail="" Covid19Fax="" EinreiseAnmeldungHotline="" EinreiseAnmeldungEMail="" EinreiseAnmeldungFax="">
-     <SearchText Value="00000"/>
+   <TransmittingSite Name="Showcase" Code="99.00.0.10." Department="Showcase Department" Street="Showcase Street" Postalcode="00010" Place="Showcase City" Phone="Showcase Phone" Fax="Showcase Fax" Email="Showcase Email" Covid19Hotline="" Covid19EMail="" Covid19Fax="" EinreiseAnmeldungHotline="" EinreiseAnmeldungEMail="" EinreiseAnmeldungFax="">
+     <SearchText Value="00010"/>
      <SearchText Value="Showcase"/>
+   </TransmittingSite>  
+   <TransmittingSite Name="Deployment Test" Code="99.00.0.11." Department="Deployment TestDepartment" Street="Deployment Test Street" Postalcode="00011" Place="Deployment Test City" Phone="Deployment Test Phone" Fax="Deployment Test Fax" Email="Deployment Test Email" Covid19Hotline="" Covid19EMail="" Covid19Fax="" EinreiseAnmeldungHotline="" EinreiseAnmeldungEMail="" EinreiseAnmeldungFax="">
+     <SearchText Value="00011"/>
+     <SearchText Value="Deployment Test"/>
+   </TransmittingSite>  
+   <TransmittingSite Name="Stadt AKTB" Code="99.00.0.12." Department="Stadt AKTB Department" Street="Stadt AKTB Street" Postalcode="00012" Place="Stadt AKTB City" Phone="Stadt AKTB Phone" Fax="Stadt AKTB Fax" Email="Stadt AKTB Email" Covid19Hotline="" Covid19EMail="" Covid19Fax="" EinreiseAnmeldungHotline="" EinreiseAnmeldungEMail="" EinreiseAnmeldungFax="">
+     <SearchText Value="00012"/>
+     <SearchText Value="Stadt AKTB"/>
    </TransmittingSite>  
 </TransmittingSites>

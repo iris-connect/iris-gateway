@@ -8,9 +8,9 @@
 			}
 		},
 		"ga-gotham": {
-			"rkiCode": "99.00.0.10.",
+			"rkiCode": "99.00.0.01.",
 			"proxyConfig": {
-				"abbreviation": "010",
+				"abbreviation": "001",
 				"proxySubDomain": "gotham.dev.test-gesundheitsamt.de"
 			}
 		}

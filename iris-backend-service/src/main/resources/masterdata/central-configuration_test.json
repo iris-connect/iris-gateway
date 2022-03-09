@@ -1,9 +1,23 @@
 {
 	"hdConfigs": {
 		"ga-showcase": {
-			"rkiCode": "99.00.0.01.",
+			"rkiCode": "99.00.0.10.",
 			"proxyConfig": {
-				"abbreviation": "001",
+				"abbreviation": "010",
+				"proxySubDomain": "proxy.showcase.test-gesundheitsamt.de"
+			}
+		},
+		"ga-deployment-test": {
+			"rkiCode": "99.00.0.11.",
+			"proxyConfig": {
+				"abbreviation": "011",
+				"proxySubDomain": "proxy.showcase.test-gesundheitsamt.de"
+			}
+		},
+		"ga-stadt-akdb-staging": {
+			"rkiCode": "99.00.0.12.",
+			"proxyConfig": {
+				"abbreviation": "012",
 				"proxySubDomain": "proxy.showcase.test-gesundheitsamt.de"
 			}
 		}
