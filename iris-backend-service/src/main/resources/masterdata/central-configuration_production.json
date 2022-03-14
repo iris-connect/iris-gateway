@@ -1,4 +1,405 @@
 {
 	"hdConfigs": {
+		"eps.ga-aachen.iris-connect.nrw.de": {
+			"rkiCode": "1.05.3.34.",
+			"proxyConfig": {
+				"abbreviation": "519",
+				"proxySubDomain": "ga-aachen.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-bergheim.iris-connect.nrw.de": {
+			"rkiCode": "1.05.3.62.",
+			"proxyConfig": {
+				"abbreviation": "521",
+				"proxySubDomain": "ga-bergheim.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-bonn.iris-connect.nrw.de": {
+			"rkiCode": "1.05.3.14.",
+			"proxyConfig": {
+				"abbreviation": "516",
+				"proxySubDomain": "ga-bonn.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-borken.iris-connect.nrw.de": {
+			"rkiCode": "1.05.5.54.",
+			"proxyConfig": {
+				"abbreviation": "530",
+				"proxySubDomain": "ga-borken.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-bottrop.iris-connect.nrw.de": {
+			"rkiCode": "1.05.5.12.",
+			"proxyConfig": {
+				"abbreviation": "527",
+				"proxySubDomain": "ga-bottrop.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-dortmund.iris-connect.nrw.de": {
+			"rkiCode": "1.05.9.13.",
+			"proxyConfig": {
+				"abbreviation": "543",
+				"proxySubDomain": "ga-dortmund.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-duesseldorf.iris-connect.nrw.de": {
+			"rkiCode": "1.05.1.11.",
+			"proxyConfig": {
+				"abbreviation": "501",
+				"proxySubDomain": "ga-duesseldorf.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-euskirchen.iris-connect.nrw.de": {
+			"rkiCode": "1.05.3.66.",
+			"proxyConfig": {
+				"abbreviation": "522",
+				"proxySubDomain": "ga-euskirchen.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-grevenbroich.iris-connect.nrw.de": {
+			"rkiCode": "1.05.1.62.",
+			"proxyConfig": {
+				"abbreviation": "513",
+				"proxySubDomain": "ga-grevenbroich.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-gummersbach.iris-connect.nrw.de": {
+			"rkiCode": "1.05.3.74.",
+			"proxyConfig": {
+				"abbreviation": "524",
+				"proxySubDomain": "ga-gummersbach.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-hagen.iris-connect.nrw.de": {
+			"rkiCode": "1.05.9.14.",
+			"proxyConfig": {
+				"abbreviation": "544",
+				"proxySubDomain": "ga-hagen.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-heinsberg.iris-connect.nrw.de": {
+			"rkiCode": "1.05.3.70.",
+			"proxyConfig": {
+				"abbreviation": "523",
+				"proxySubDomain": "ga-heinsberg.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-herne.iris-connect.nrw.de": {
+			"rkiCode": "1.05.9.16.",
+			"proxyConfig": {
+				"abbreviation": "546",
+				"proxySubDomain": "ga-herne.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-hoexter.iris-connect.nrw.de": {
+			"rkiCode": "1.05.7.62.",
+			"proxyConfig": {
+				"abbreviation": "538",
+				"proxySubDomain": "ga-hoexter.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-kleve.iris-connect.nrw.de": {
+			"rkiCode": "1.05.1.54.",
+			"proxyConfig": {
+				"abbreviation": "511",
+				"proxySubDomain": "ga-kleve.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-koeln.iris-connect.nrw.de": {
+			"rkiCode": "1.05.3.15.",
+			"proxyConfig": {
+				"abbreviation": "517",
+				"proxySubDomain": "ga-koeln.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-krefeld.iris-connect.nrw.de": {
+			"rkiCode": "1.05.1.14.",
+			"proxyConfig": {
+				"abbreviation": "504",
+				"proxySubDomain": "ga-krefeld.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-kreis-olpe.iris-connect.nrw.de": {
+			"rkiCode": "1.05.9.66.",
+			"proxyConfig": {
+				"abbreviation": "550",
+				"proxySubDomain": "ga-kreis-olpe.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-lemgo.iris-connect.nrw.de": {
+			"rkiCode": "1.05.7.66.",
+			"proxyConfig": {
+				"abbreviation": "539",
+				"proxySubDomain": "ga-lemgo.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-luedenscheid.iris-connect.nrw.de": {
+			"rkiCode": "1.05.9.62.",
+			"proxyConfig": {
+				"abbreviation": "549",
+				"proxySubDomain": "ga-luedenscheid.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-meschede.iris-connect.nrw.de": {
+			"rkiCode": "1.05.9.58.",
+			"proxyConfig": {
+				"abbreviation": "548",
+				"proxySubDomain": "ga-meschede.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-minden.iris-connect.nrw.de": {
+			"rkiCode": "1.05.7.70.",
+			"proxyConfig": {
+				"abbreviation": "540",
+				"proxySubDomain": "ga-minden.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-moenchengladbach.iris-connect.nrw.de": {
+			"rkiCode": "1.05.1.16.",
+			"proxyConfig": {
+				"abbreviation": "505",
+				"proxySubDomain": "ga-moenchengladbach.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-moers.iris-connect.nrw.de": {
+			"rkiCode": "1.05.1.70.",
+			"proxyConfig": {
+				"abbreviation": "515",
+				"proxySubDomain": "ga-moers.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-oberhausen.iris-connect.nrw.de": {
+			"rkiCode": "1.05.1.19.",
+			"proxyConfig": {
+				"abbreviation": "507",
+				"proxySubDomain": "ga-oberhausen.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-paderborn.iris-connect.nrw.de": {
+			"rkiCode": "1.05.7.74.",
+			"proxyConfig": {
+				"abbreviation": "541",
+				"proxySubDomain": "ga-paderborn.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-schwelm.iris-connect.nrw.de": {
+			"rkiCode": "1.05.9.54.",
+			"proxyConfig": {
+				"abbreviation": "547",
+				"proxySubDomain": "ga-schwelm.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-siegburg.iris-connect.nrw.de": {
+			"rkiCode": "1.05.3.82.",
+			"proxyConfig": {
+				"abbreviation": "526",
+				"proxySubDomain": "ga-siegburg.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-siegen.iris-connect.nrw.de": {
+			"rkiCode": "1.05.9.70.",
+			"proxyConfig": {
+				"abbreviation": "551",
+				"proxySubDomain": "ga-siegen.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-soest.iris-connect.nrw.de": {
+			"rkiCode": "1.05.9.74.",
+			"proxyConfig": {
+				"abbreviation": "552",
+				"proxySubDomain": "ga-soest.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-solingen.iris-connect.nrw.de": {
+			"rkiCode": "1.05.1.22.",
+			"proxyConfig": {
+				"abbreviation": "509",
+				"proxySubDomain": "ga-solingen.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-unna.iris-connect.nrw.de": {
+			"rkiCode": "1.05.9.78.",
+			"proxyConfig": {
+				"abbreviation": "553",
+				"proxySubDomain": "ga-unna.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-viersen.iris-connect.nrw.de": {
+			"rkiCode": "1.05.1.66.",
+			"proxyConfig": {
+				"abbreviation": "514",
+				"proxySubDomain": "ga-viersen.iris-connect.nrw.de"
+			}
+		},
+		"eps.ga-warendorf.iris-connect.nrw.de": {
+			"rkiCode": "1.05.5.70.",
+			"proxyConfig": {
+				"abbreviation": "534",
+				"proxySubDomain": "ga-warendorf.iris-connect.nrw.de"
+			}
+		},
+		
+		"eps.Iris-14511.iris.lecos.de": {
+			"rkiCode": "1.14.5.11.",
+			"proxyConfig": {
+				"abbreviation": "D11",
+				"proxySubDomain": "iris-14511.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14521.iris.lecos.de": {
+			"rkiCode": "1.14.5.21.02.",
+			"proxyConfig": {
+				"abbreviation": "D21",
+				"proxySubDomain": "iris-14521.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14522.iris.lecos.de": {
+			"rkiCode": "1.14.5.22.01.",
+			"proxyConfig": {
+				"abbreviation": "D22",
+				"proxySubDomain": "iris-14522.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14523.iris.lecos.de": {
+			"rkiCode": "1.14.5.23.02.",
+			"proxyConfig": {
+				"abbreviation": "D23",
+				"proxySubDomain": "iris-14523.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14524.iris.lecos.de": {
+			"rkiCode": "1.14.5.24.01.",
+			"proxyConfig": {
+				"abbreviation": "D24",
+				"proxySubDomain": "iris-14524.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14612.iris.lecos.de": {
+			"rkiCode": "1.14.6.12.",
+			"proxyConfig": {
+				"abbreviation": "D12",
+				"proxySubDomain": "iris-14612.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14625.iris.lecos.de": {
+			"rkiCode": "1.14.6.25.03.",
+			"proxyConfig": {
+				"abbreviation": "D25",
+				"proxySubDomain": "iris-14625.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14626.iris.lecos.de": {
+			"rkiCode": "1.14.6.26.01.",
+			"proxyConfig": {
+				"abbreviation": "D26",
+				"proxySubDomain": "iris-14626.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14627.iris.lecos.de": {
+			"rkiCode": "1.14.6.27.01.",
+			"proxyConfig": {
+				"abbreviation": "D27",
+				"proxySubDomain": "iris-14627.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14628.iris.lecos.de": {
+			"rkiCode": "1.14.6.28.01.",
+			"proxyConfig": {
+				"abbreviation": "D28",
+				"proxySubDomain": "iris-14628.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14713.iris.lecos.de": {
+			"rkiCode": "1.14.7.13.",
+			"proxyConfig": {
+				"abbreviation": "D13",
+				"proxySubDomain": "iris-14713.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14729.iris.lecos.de": {
+			"rkiCode": "1.14.7.29.01.",
+			"proxyConfig": {
+				"abbreviation": "D29",
+				"proxySubDomain": "iris-14729.iris.lecos.de"
+			}
+		},
+		"eps.Iris-14730.iris.lecos.de": {
+			"rkiCode": "1.14.7.30.01.",
+			"proxyConfig": {
+				"abbreviation": "D30",
+				"proxySubDomain": "iris-14730.iris.lecos.de"
+			}
+		},
+		
+		"eps.altenburg.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.77.",
+			"proxyConfig": {
+				"abbreviation": "F77",
+				"proxySubDomain": "altenburg.irisconnect.thueringen.de"
+			}
+		},
+		"eps.apolda.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.71.",
+			"proxyConfig": {
+				"abbreviation": "F71",
+				"proxySubDomain": "apolda.irisconnect.thueringen.de"
+			}
+		},
+		"eps.arnstadt.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.70.02.",
+			"proxyConfig": {
+				"abbreviation": "F70",
+				"proxySubDomain": "arnstadt.irisconnect.thueringen.de"
+			}
+		},
+		"eps.eisenberg.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.74.",
+			"proxyConfig": {
+				"abbreviation": "F74",
+				"proxySubDomain": "eisenberg.irisconnect.thueringen.de"
+			}
+		},
+		"eps.erfurt.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.51.",
+			"proxyConfig": {
+				"abbreviation": "F51",
+				"proxySubDomain": "erfurt.irisconnect.thueringen.de"
+			}
+		},
+		"eps.gera.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.52.",
+			"proxyConfig": {
+				"abbreviation": "F52",
+				"proxySubDomain": "gera.irisconnect.thueringen.de"
+			}
+		},
+		"eps.heiligenstadt.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.61.",
+			"proxyConfig": {
+				"abbreviation": "F61",
+				"proxySubDomain": "heiligenstadt.irisconnect.thueringen.de"
+			}
+		},
+		"eps.hildburghausen.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.69.",
+			"proxyConfig": {
+				"abbreviation": "F69",
+				"proxySubDomain": "hildburghausen.irisconnect.thueringen.de"
+			}
+		},
+		"eps.schleiz.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.75.03.",
+			"proxyConfig": {
+				"abbreviation": "F75",
+				"proxySubDomain": "schleiz.irisconnect.thueringen.de"
+			}
+		},
+		"eps.sondershausen.irisconnect.thueringen.de": {
+			"rkiCode": "1.16.0.65.01.",
+			"proxyConfig": {
+				"abbreviation": "F65",
+				"proxySubDomain": "sondershausen.irisconnect.thueringen.de"
+			}
+		}
 	}
 }
