@@ -56,6 +56,7 @@ data:
       - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
         type: grpc_client
         settings:
+          useProxy: false
           tls:
             ca_certificate_files:
 {{- range (index .Values.tls.rootCertificates .Values.environment) }}
