@@ -11,7 +11,13 @@ import com.googlecode.jsonrpc4j.JsonRpcParam;
 public interface HdSearchRpcService {
 
 	List<HealthDepartmentDto> searchForHd(@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
-			@JsonRpcParam(value = "searchKeyword") String searchKeyword);
+			@JsonRpcParam(value = "searchKeyword") String searchKeyword,
+			@JsonRpcParam(value = "withDetails") boolean withDetails,
+			@JsonRpcParam(value = "alsoNotConnectedHds") boolean alsoNotConnected);
+
+	List<HealthDepartmentDto> getAllHds(@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
+			@JsonRpcParam(value = "withDetails") boolean withDetails,
+			@JsonRpcParam(value = "alsoNotConnectedHds") boolean alsoNotConnected);
 
 	record HealthDepartmentDto(String name,
 			String rkiCode,
