@@ -31,6 +31,7 @@ channels: # defines all the channels that we want to open when starting the serv
   - name: main gRPC client # creates outgoing gRPC connections to deliver and receive messages
     type: grpc_client
     settings:
+      useProxy: false
       tls:
         ca_certificate_files: [ "/$DIR/../../certs/root.crt" ]
         certificate_file: "/$DIR/../../certs/public-proxy-1.crt"
