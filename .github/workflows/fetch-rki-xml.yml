@@ -20,7 +20,7 @@ jobs:
           destination: 'iris-backend-service/src/main/resources/masterdata'
       
       - name: Fix encoding and formatting
-        uses: pipeline-components/xmllint@v0.1.0
+        uses: pipeline-components/xmllint@v0.3.4
         with:
           directory: iris-backend-service/src/main/resources/masterdata/TransmittingSiteSearchText.xml
           options: --format --encode utf8 -o iris-backend-service/src/main/resources/masterdata/TransmittingSiteSearchText.xml
