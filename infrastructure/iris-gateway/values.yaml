@@ -3,7 +3,7 @@
 #   production: --set environment=production
 environment: undefined
 
-epsRepoTag: v0.2.5
+epsRepoTag: v0.2.6
 
 global:
   PullPolicy: IfNotPresent
