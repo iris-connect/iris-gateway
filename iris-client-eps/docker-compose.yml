@@ -6,7 +6,7 @@ version: '3'
 services:
 
   ls-1:
-    image: inoeg/eps:v0.2.1
+    image: inoeg/eps:${EPS_VERSION}
     expose:
       - 4445
       - 5555
@@ -14,7 +14,7 @@ services:
       - 4445:4445
       - 5555:5555
     volumes:
-      - ./settings:/app/settings
+      - ${LOCAL_MOUNT_DIR}/settings:/app/settings
     environment:
       - EPS_SETTINGS=settings/dev/roles/ls-1
     command: [ "--level", "debug", "server", "run" ]
@@ -22,7 +22,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   demo-app:
-    image: inoeg/eps:v0.2.1
+    image: inoeg/eps:${EPS_VERSION}
     expose:
       - 4444
       - 5554
@@ -30,7 +30,7 @@ services:
       - 4444:4444
       - 5554:5554
     volumes:
-      - ./settings:/app/settings
+      - ${LOCAL_MOUNT_DIR}/settings:/app/settings
     environment:
       - EPS_SETTINGS=settings/dev/roles/demo-app
     command: [ "--level", "debug", "server", "run" ]
@@ -38,7 +38,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   hd-1:
-    image: inoeg/eps:v0.2.1
+    image: inoeg/eps:${EPS_VERSION}
     expose:
       - 4446
       - 5556
@@ -46,7 +46,7 @@ services:
       - 4446:4446
       - 5556:5556
     volumes:
-      - ./settings:/app/settings
+      - ${LOCAL_MOUNT_DIR}/settings:/app/settings
     environment:
       - EPS_SETTINGS=settings/dev/roles/hd-1
     command: [ "--level", "debug", "server", "run" ]
@@ -54,7 +54,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   public-proxy:
-    image: inoeg/proxy:v0.2.1
+    image: inoeg/proxy:${EPS_VERSION}
     expose:
       - 4433
       - 9999
@@ -64,43 +64,43 @@ services:
       - 9999:9999
       - 6655:6655
     volumes:
-      - ./settings:/app/settings
+      - ${LOCAL_MOUNT_DIR}/settings:/app/settings
       - ./pub-proxy-db:/tmp # to make proxy db persistant
     environment:
       - PROXY_SETTINGS=settings/dev/roles/public-proxy-1
     command: [ "--level", "debug", "run", "public" ]
 
   public-proxy-eps:
-    image: inoeg/eps:v0.2.1
+    image: inoeg/eps:${EPS_VERSION}
     expose:
       - 5559
       - 5544
     volumes:
-      - ./settings:/app/settings
+      - ${LOCAL_MOUNT_DIR}/settings:/app/settings
     environment:
       - EPS_SETTINGS=settings/dev/roles/public-proxy-eps-1
     command: [ "--level", "debug", "server", "run" ]
 
   private-proxy:
-    image: inoeg/proxy:v0.2.1
+    image: inoeg/proxy:${EPS_VERSION}
     expose:
       - 8877
     volumes:
-      - ./settings:/app/settings
+      - ${LOCAL_MOUNT_DIR}/settings:/app/settings
       - ./private-proxy-db:/tmp # to make proxy db persistant
     environment:
       - PROXY_SETTINGS=settings/dev/roles/private-proxy-1
     command: [ "--level", "debug", "run", "private" ]
 
   private-proxy-1:
-    image: inoeg/eps:v0.2.1
+    image: inoeg/eps:${EPS_VERSION}
     expose:
       - 7766
       - 7776
     ports:
       - 7766:7766
     volumes:
-      - ./settings:/app/settings
+      - ${LOCAL_MOUNT_DIR}/settings:/app/settings
     environment:
       - EPS_SETTINGS=settings/dev/roles/private-proxy-eps-1
     command: [ "--level", "debug", "server", "run" ]
