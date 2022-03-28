@@ -46,7 +46,7 @@ jobs:
             !**/failsafe-reports/failsafe-summary.xml
       
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v4
         with:
           add-paths: iris-backend-service/src/main/resources/masterdata/TransmittingSiteSearchText.xml
           commit-message: 'fix: updates the RKI XML for HD search'
