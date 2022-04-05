@@ -58,8 +58,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'inoeg/demo-checkin-app:develop'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
+          format: 'sarif'
           output: 'trivy-results.sarif'
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH,MEDIUM'
