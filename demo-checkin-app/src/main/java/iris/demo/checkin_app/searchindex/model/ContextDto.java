@@ -12,6 +12,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class ContextDto {
-    UUID id;
-    String name;
+	UUID id;
+	String name;
 }

@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 /**
  * This class holds the information about the connected git repo.
- * 
+ *
  * @author Ostfalia Gruppe 12
  * @author Jens Kutzsche
  */

@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class SubmissionWebDto {
-    private String dataAuthorizationToken;
-    private String connectionAuthorizationToken;
-    private String zipCodeHealthDepartment;
+	private String dataAuthorizationToken;
+	private String connectionAuthorizationToken;
+	private String zipCodeHealthDepartment;
 }

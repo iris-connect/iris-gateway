@@ -25,16 +25,20 @@ public class Location {
 	@EmbeddedId
 	private LocationIdentifier id;
 
-	@FullTextField(name = "name_search", analyzer = "german") @GenericField(sortable = Sortable.YES)
+	@FullTextField(name = "name_search", analyzer = "german")
+	@GenericField(sortable = Sortable.YES)
 	private String name;
 
-	@FullTextField(name = "officialName_search", analyzer = "german") @GenericField(sortable = Sortable.YES)
+	@FullTextField(name = "officialName_search", analyzer = "german")
+	@GenericField(sortable = Sortable.YES)
 	private String contactOfficialName;
 
-	@FullTextField(name = "representative_search", analyzer = "german") @GenericField(sortable = Sortable.YES)
+	@FullTextField(name = "representative_search", analyzer = "german")
+	@GenericField(sortable = Sortable.YES)
 	private String contactRepresentative;
 
-	@FullTextField(name = "street_search", analyzer = "german") @GenericField(sortable = Sortable.YES)
+	@FullTextField(name = "street_search", analyzer = "german")
+	@GenericField(sortable = Sortable.YES)
 	private String contactAddressStreet;
 
 	@KeywordField(sortable = Sortable.YES, normalizer = "german")

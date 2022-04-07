@@ -8,8 +8,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class CaseSubmissionDto {
-    private UUID dataAuthorizationToken;
-    private Contacts contacts;
-    private Events events;
-    private CaseDataProvider dataProvider;
+	private UUID dataAuthorizationToken;
+	private Contacts contacts;
+	private Events events;
+	private CaseDataProvider dataProvider;
 }

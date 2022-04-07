@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ContactDto {
 
-    String officialName;
-    String representative;
-    AddressDto address;
-    String ownerEmail;
-    String email;
-    String phone;
+	String officialName;
+	String representative;
+	AddressDto address;
+	String ownerEmail;
+	String email;
+	String phone;
 
 }

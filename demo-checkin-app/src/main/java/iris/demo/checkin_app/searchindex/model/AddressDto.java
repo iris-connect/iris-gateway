@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AddressDto {
 
-    String street;
-    String city;
-    String zip;
+	String street;
+	String city;
+	String zip;
 
 }

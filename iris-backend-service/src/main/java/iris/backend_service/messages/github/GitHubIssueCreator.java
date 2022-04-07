@@ -17,7 +17,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * This class posts the issue to GitHub.
- * 
+ *
  * @author Ostfalia Gruppe 12
  * @author Jens Kutzsche
  */
@@ -30,7 +30,7 @@ public class GitHubIssueCreator {
 
 	/**
 	 * Posts the issue
-	 * 
+	 *
 	 * @throws RestClientException is thrown if connection to Git-API fails
 	 * @param message object of Iris-Client-Backend
 	 * @return response object containing the gitIssueId

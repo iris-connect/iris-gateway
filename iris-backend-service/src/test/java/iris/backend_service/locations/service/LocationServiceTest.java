@@ -95,146 +95,146 @@ public class LocationServiceTest {
 	}
 
 	List<LocationInformation> getLocationInformationList() {
-		List<LocationInformation> locationList = new ArrayList<LocationInformation>();
+		List<LocationInformation> locationList = new ArrayList<>();
 		locationList.add(
-			getLocationInformation(
-				LOCATION_ID_1,
-				"providerId",
-				LOCATION_NAME,
-				"publicKey",
-				"officialName",
-				REPRESENTATIVE_NAME,
-				"ownerEmail",
-				VALID_EMAIL,
-				VALID_PHONE));
+				getLocationInformation(
+						LOCATION_ID_1,
+						"providerId",
+						LOCATION_NAME,
+						"publicKey",
+						"officialName",
+						REPRESENTATIVE_NAME,
+						"ownerEmail",
+						VALID_EMAIL,
+						VALID_PHONE));
 		locationList.add(
-			getLocationInformation(
-				LOCATION_ID_2,
-				"providerId",
-				null,
-				"publicKey",
-				"officialName",
-				REPRESENTATIVE_NAME,
-				"ownerEmail",
-				VALID_EMAIL,
-				VALID_PHONE));
+				getLocationInformation(
+						LOCATION_ID_2,
+						"providerId",
+						null,
+						"publicKey",
+						"officialName",
+						REPRESENTATIVE_NAME,
+						"ownerEmail",
+						VALID_EMAIL,
+						VALID_PHONE));
 		locationList.add(
-			getLocationInformation(
-				LOCATION_ID_3,
-				"providerId",
-				LOCATION_NAME,
-				"publicKey",
-				"officialName",
-				null,
-				"ownerEmail",
-				VALID_EMAIL,
-				VALID_PHONE));
+				getLocationInformation(
+						LOCATION_ID_3,
+						"providerId",
+						LOCATION_NAME,
+						"publicKey",
+						"officialName",
+						null,
+						"ownerEmail",
+						VALID_EMAIL,
+						VALID_PHONE));
 		locationList.add(
-			getLocationInformation(
-				LOCATION_ID_4,
-				"providerId",
-				LOCATION_NAME,
-				"publicKey",
-				"officialName",
-				REPRESENTATIVE_NAME,
-				"ownerEmail",
-				null,
-				null));
+				getLocationInformation(
+						LOCATION_ID_4,
+						"providerId",
+						LOCATION_NAME,
+						"publicKey",
+						"officialName",
+						REPRESENTATIVE_NAME,
+						"ownerEmail",
+						null,
+						null));
 		locationList.add(
-			getLocationInformation(
-				LOCATION_ID_5,
-				"providerId",
-				LOCATION_NAME,
-				"publicKey",
-				"officialName",
-				REPRESENTATIVE_NAME,
-				"ownerEmail",
-				null,
-				VALID_PHONE));
+				getLocationInformation(
+						LOCATION_ID_5,
+						"providerId",
+						LOCATION_NAME,
+						"publicKey",
+						"officialName",
+						REPRESENTATIVE_NAME,
+						"ownerEmail",
+						null,
+						VALID_PHONE));
 		locationList.add(
-			getLocationInformation(
-				LOCATION_ID_6,
-				"providerId",
-				LOCATION_NAME,
-				"publicKey",
-				"officialName",
-				REPRESENTATIVE_NAME,
-				"ownerEmail",
-				INVALID_EMAIL,
-				null));
+				getLocationInformation(
+						LOCATION_ID_6,
+						"providerId",
+						LOCATION_NAME,
+						"publicKey",
+						"officialName",
+						REPRESENTATIVE_NAME,
+						"ownerEmail",
+						INVALID_EMAIL,
+						null));
 		locationList.add(
-			getLocationInformation(
-				LOCATION_ID_7,
-				"providerId",
-				LOCATION_NAME,
-				"publicKey",
-				"officialName",
-				REPRESENTATIVE_NAME,
-				"ownerEmail",
-				VALID_EMAIL,
-				null));
+				getLocationInformation(
+						LOCATION_ID_7,
+						"providerId",
+						LOCATION_NAME,
+						"publicKey",
+						"officialName",
+						REPRESENTATIVE_NAME,
+						"ownerEmail",
+						VALID_EMAIL,
+						null));
 		locationList.add(
-			getLocationInformation(
-				LOCATION_ID_8,
-				"providerId",
-				LOCATION_NAME,
-				"publicKey",
-				"officialName",
-				REPRESENTATIVE_NAME,
-				"ownerEmail",
-				null,
-				INVALID_PHONE));
+				getLocationInformation(
+						LOCATION_ID_8,
+						"providerId",
+						LOCATION_NAME,
+						"publicKey",
+						"officialName",
+						REPRESENTATIVE_NAME,
+						"ownerEmail",
+						null,
+						INVALID_PHONE));
 		return locationList;
 	}
 
 	List<LocationInformation> getLocationInformationListWithOnlyValidCases() {
-		List<LocationInformation> locationList = new ArrayList<LocationInformation>();
+		List<LocationInformation> locationList = new ArrayList<>();
 		locationList.add(
-			getLocationInformation(
-				LOCATION_ID_1,
-				"providerId",
-				LOCATION_NAME,
-				"publicKey",
-				"officialName",
-				REPRESENTATIVE_NAME,
-				"ownerEmail",
-				VALID_EMAIL,
-				VALID_PHONE));
+				getLocationInformation(
+						LOCATION_ID_1,
+						"providerId",
+						LOCATION_NAME,
+						"publicKey",
+						"officialName",
+						REPRESENTATIVE_NAME,
+						"ownerEmail",
+						VALID_EMAIL,
+						VALID_PHONE));
 		locationList.add(
-			getLocationInformation(
-				LOCATION_ID_5,
-				"providerId",
-				LOCATION_NAME,
-				"publicKey",
-				"officialName",
-				REPRESENTATIVE_NAME,
-				"ownerEmail",
-				null,
-				VALID_PHONE));
+				getLocationInformation(
+						LOCATION_ID_5,
+						"providerId",
+						LOCATION_NAME,
+						"publicKey",
+						"officialName",
+						REPRESENTATIVE_NAME,
+						"ownerEmail",
+						null,
+						VALID_PHONE));
 		locationList.add(
-			getLocationInformation(
-				LOCATION_ID_7,
-				"providerId",
-				LOCATION_NAME,
-				"publicKey",
-				"officialName",
-				REPRESENTATIVE_NAME,
-				"ownerEmail",
-				VALID_EMAIL,
-				null));
+				getLocationInformation(
+						LOCATION_ID_7,
+						"providerId",
+						LOCATION_NAME,
+						"publicKey",
+						"officialName",
+						REPRESENTATIVE_NAME,
+						"ownerEmail",
+						VALID_EMAIL,
+						null));
 		return locationList;
 	}
 
 	LocationInformation getLocationInformation(
-		String id,
-		String providerId,
-		String name,
-		String publicKey,
-		String officialName,
-		String representative,
-		String ownerEmail,
-		String email,
-		String phone) {
+			String id,
+			String providerId,
+			String name,
+			String publicKey,
+			String officialName,
+			String representative,
+			String ownerEmail,
+			String email,
+			String phone) {
 		LocationInformation location = new LocationInformation();
 		location.setId(id);
 		location.setName(name);

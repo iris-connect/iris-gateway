@@ -97,14 +97,16 @@ public class ValidationHelper {
 	private int postLimit;
 
 	public static boolean isValidAndNotNullEmail(String email) {
-		if (email == null)
+		if (email == null) {
 			return false;
+		}
 		return REGEX_EMAIL.matcher(email).matches();
 	}
 
 	public static boolean isValidAndNotNullPhoneNumber(String phoneNumber) {
-		if (phoneNumber == null)
+		if (phoneNumber == null) {
 			return false;
+		}
 		return REGEX_PHONE.matcher(phoneNumber).matches();
 	}
 

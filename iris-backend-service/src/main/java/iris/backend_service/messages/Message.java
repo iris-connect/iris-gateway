@@ -39,7 +39,8 @@ public class Message {
 	private String appVersion;
 	private String sender;
 
-	@Column(nullable = false) @Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
 	private MessageType messageType;
 
 	@Embeddable

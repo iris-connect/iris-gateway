@@ -10,7 +10,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CaseDataProvider {
-    String firstName;
-    String lastName;
-    Instant dateOfBirth;
+	String firstName;
+	String lastName;
+	Instant dateOfBirth;
 }

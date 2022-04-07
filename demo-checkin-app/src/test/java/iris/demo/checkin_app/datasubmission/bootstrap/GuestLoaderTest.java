@@ -1,6 +1,6 @@
 package iris.demo.checkin_app.datasubmission.bootstrap;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import iris.demo.checkin_app.IrisWebIntegrationTest;
 import iris.demo.checkin_app.datasubmission.model.dto.GuestDto;

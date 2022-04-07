@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 /**
  * This class represents the needed JSON structure of a GitHub request.
- * 
+ *
  * @author Ostfalia Gruppe 12
  * @author Jens Kutzsche
  */

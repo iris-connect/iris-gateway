@@ -14,22 +14,22 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("dev_env")
 class LocationRepositoryTest {
 
-  @Autowired
-  private LocationRepository repo;
+	@Autowired
+	private LocationRepository repo;
 
-  @Test
-  public void demoForUsingTheRepo() {
+	@Test
+	public void demoForUsingTheRepo() {
 
-	// when
-	var id = new LocationIdentifier("provider", "location");
-	var location = new Location();
-	location.setId(id);
-	repo.save(location);
+		// when
+		var id = new LocationIdentifier("provider", "location");
+		var location = new Location();
+		location.setId(id);
+		repo.save(location);
 
-	// then
-	var res = repo.findById(new LocationIdentifier("provider", "location"));
+		// then
+		var res = repo.findById(new LocationIdentifier("provider", "location"));
 
-	// assert
-	assertEquals("location", res.get().getId().getLocationId());
-  }
+		// assert
+		assertEquals("location", res.get().getId().getLocationId());
+	}
 }

@@ -98,8 +98,9 @@ public class LocationRPCImpl implements LocationRPC {
 
 		var ret = "NOT FOUND";
 
-		if (locationService.deleteLocation(client.getName(), locationId))
+		if (locationService.deleteLocation(client.getName(), locationId)) {
 			ret = "OK";
+		}
 
 		log.debug("JSON-RPC - Delete location for client: {}; locationId: {} => result: {}", client.getName(),
 				obfuscateEndPart(locationId), ret);
@@ -148,8 +149,9 @@ public class LocationRPCImpl implements LocationRPC {
 				obfuscateEndPart(locationId),
 				locationInformation.isPresent());
 
-		if (locationInformation.isPresent())
+		if (locationInformation.isPresent()) {
 			return locationInformation;
+		}
 
 		return "NOT FOUND";
 	}

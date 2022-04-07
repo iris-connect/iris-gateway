@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DataProviderDto {
 
-    private String name;
+	private String name;
 
-    private AddressDto address;
+	private AddressDto address;
 
 }

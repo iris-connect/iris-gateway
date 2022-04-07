@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Contacts {
-    List<ContactPerson> contactPersons = null;
-    Instant startDate;
-    Instant endDate;
+	List<ContactPerson> contactPersons = null;
+	Instant startDate;
+	Instant endDate;
 }

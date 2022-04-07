@@ -12,7 +12,7 @@ import javax.validation.constraints.Email;
 /**
  * This class represents the json structure of a request to EPS. It is also the input json of Iris-Client-Backend uses
  * this structure.
- * 
+ *
  * @author Ostfalia Gruppe 12
  * @author Jens Kutzsche
  */

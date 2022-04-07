@@ -1,5 +1,12 @@
 package iris.demo.checkin_app.config;
 
+import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.net.ssl.SSLContext;
+
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -21,67 +28,59 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import javax.net.ssl.SSLContext;
-import java.nio.charset.StandardCharsets;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-
-
 @Component
 public class BlockingRestTemplateCustomizer implements RestTemplateCustomizer {
 
-    public ClientHttpRequestFactory clientHttpRequestFactory() throws NoSuchAlgorithmException, KeyManagementException {
+	public ClientHttpRequestFactory clientHttpRequestFactory() throws NoSuchAlgorithmException, KeyManagementException {
 
+		RequestConfig requestConfig = RequestConfig
+				.custom()
+				.setConnectionRequestTimeout(10000)
+				.setSocketTimeout(10000)
+				.build();
 
-        RequestConfig requestConfig = RequestConfig
-                .custom()
-                .setConnectionRequestTimeout(10000)
-                .setSocketTimeout(10000)
-                .build();
+		TrustStrategy acceptingTrustStrategy = (cert, authType) -> true;
+		SSLContext sslContext = null;
+		try {
+			sslContext = SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
+		} catch (KeyStoreException e) {
+			e.printStackTrace();
+		}
+		assert sslContext != null;
+		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,
+				NoopHostnameVerifier.INSTANCE);
 
-        TrustStrategy acceptingTrustStrategy = (cert, authType) -> true;
-        SSLContext sslContext = null;
-        try {
-            sslContext = SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        }
-        assert sslContext != null;
-        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,
-                NoopHostnameVerifier.INSTANCE);
+		Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create()
+				.register("https", sslsf)
+				.register("http", new PlainConnectionSocketFactory())
+				.build();
 
-        Registry<ConnectionSocketFactory> socketFactoryRegistry =
-                RegistryBuilder.<ConnectionSocketFactory>create()
-                        .register("https", sslsf)
-                        .register("http", new PlainConnectionSocketFactory())
-                        .build();
+		PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
+				socketFactoryRegistry);
+		connectionManager.setMaxTotal(100);
+		connectionManager.setDefaultMaxPerRoute(20);
 
-        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
-        connectionManager.setMaxTotal(100);
-        connectionManager.setDefaultMaxPerRoute(20);
+		CloseableHttpClient httpClient = HttpClients
+				.custom()
+				.setConnectionManager(connectionManager)
+				.setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())
+				.setDefaultRequestConfig(requestConfig)
+				.setSSLHostnameVerifier(new NoopHostnameVerifier())
+				.setSSLSocketFactory(sslsf)
+				.build();
 
-        CloseableHttpClient httpClient = HttpClients
-                .custom()
-                .setConnectionManager(connectionManager)
-                .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())
-                .setDefaultRequestConfig(requestConfig)
-                .setSSLHostnameVerifier(new NoopHostnameVerifier())
-                .setSSLSocketFactory(sslsf)
-                .build();
+		return new HttpComponentsClientHttpRequestFactory(httpClient);
+	}
 
-        return new HttpComponentsClientHttpRequestFactory(httpClient);
-    }
-
-    @Override
-    public void customize(RestTemplate restTemplate) {
-        try {
-            restTemplate.setRequestFactory(this.clientHttpRequestFactory());
-        } catch (KeyManagementException | NoSuchAlgorithmException cause) {
-            throw new BeanInitializationException(
-                    "Failed to disable HTTPS verification for REST template <" + restTemplate + ">!", cause);
-        }
-        restTemplate.getMessageConverters()
-                .add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
-    }
+	@Override
+	public void customize(RestTemplate restTemplate) {
+		try {
+			restTemplate.setRequestFactory(this.clientHttpRequestFactory());
+		} catch (KeyManagementException | NoSuchAlgorithmException cause) {
+			throw new BeanInitializationException(
+					"Failed to disable HTTPS verification for REST template <" + restTemplate + ">!", cause);
+		}
+		restTemplate.getMessageConverters()
+				.add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+	}
 }

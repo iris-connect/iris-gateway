@@ -1,12 +1,13 @@
 package iris.demo.contact_diary_app;
 
-import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImplExporter;
+import java.security.Security;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 
-import java.security.Security;
+import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImplExporter;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan

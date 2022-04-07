@@ -94,7 +94,7 @@ public class LocationServiceTest {
 	}
 
 	List<LocationInformation> getLocationInformationList() {
-		List<LocationInformation> locationList = new ArrayList<LocationInformation>();
+		List<LocationInformation> locationList = new ArrayList<>();
 		locationList.add(
 				getLocationInformation(
 						LOCATION_ID_1,
@@ -187,7 +187,7 @@ public class LocationServiceTest {
 	}
 
 	List<LocationInformation> getLocationInformationListWithOnlyValidCases() {
-		List<LocationInformation> locationList = new ArrayList<LocationInformation>();
+		List<LocationInformation> locationList = new ArrayList<>();
 		locationList.add(
 				getLocationInformation(
 						LOCATION_ID_1,

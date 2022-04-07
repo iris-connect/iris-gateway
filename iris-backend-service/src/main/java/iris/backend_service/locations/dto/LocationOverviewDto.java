@@ -7,8 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class LocationOverviewDto {
 
-    private String id;
+	private String id;
 
-    private String name;
+	private String name;
 
 }

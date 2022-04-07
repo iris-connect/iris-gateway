@@ -39,7 +39,7 @@ public class LocationRPCImplTest {
 
 	@Test
 	public void postLocationsToSearchIndexWithCorrectData() {
-		List<String> returnList = new ArrayList<String>();
+		List<String> returnList = new ArrayList<>();
 
 		when(locationService.addLocations(any(), any())).thenReturn(returnList);
 
@@ -52,7 +52,7 @@ public class LocationRPCImplTest {
 
 	@Test
 	public void postLocationsToSearchIndexWithIncorrectData() {
-		List<String> returnList = new ArrayList<String>();
+		List<String> returnList = new ArrayList<>();
 		returnList.add(LOCATION_ID_1);
 		returnList.add(LOCATION_ID_2);
 

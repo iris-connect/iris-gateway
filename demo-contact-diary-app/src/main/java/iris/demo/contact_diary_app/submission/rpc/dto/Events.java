@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Events {
-    List<Event> events;
-    Instant startDate;
-    Instant endDate;
+	List<Event> events;
+	Instant startDate;
+	Instant endDate;
 }

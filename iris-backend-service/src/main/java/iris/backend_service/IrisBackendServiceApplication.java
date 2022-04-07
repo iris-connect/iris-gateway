@@ -1,11 +1,9 @@
 package iris.backend_service;
 
-import iris.backend_service.locations.jsonrpc.LocationRPCImpl;
 import iris.backend_service.messages.AlertDto;
 import iris.backend_service.messages.Message;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ResourceBanner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -21,7 +21,7 @@ public class EPSDataSubmissionClient {
 		JsonRPCStringResult result;
 		try {
 			var methodName = hdEndpoint + ".submitGuestList";
-			 result = rpcClient.invoke(methodName, dataSubmissionDto, JsonRPCStringResult.class);
+			result = rpcClient.invoke(methodName, dataSubmissionDto, JsonRPCStringResult.class);
 		} catch (Throwable t) {
 			throw new IRISDataSubmissionException(t);
 		}

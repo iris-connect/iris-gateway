@@ -1,7 +1,6 @@
 package iris.backend_service.messages.zammad;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NonNull;
 
 import java.net.URI;

@@ -1,12 +1,14 @@
 package iris.demo.contact_diary_app.submission.rpc;
 
-import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import iris.demo.contact_diary_app.config.ProxyServiceConfig;
 import iris.demo.contact_diary_app.submission.rpc.dto.CaseSubmissionDto;
 import iris.demo.contact_diary_app.submission.rpc.dto.JsonRPCStringResult;
 import lombok.AllArgsConstructor;
+
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
+
+import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 
 @Service
 @AllArgsConstructor
@@ -20,7 +22,7 @@ public class EPSCaseSubmissionClient {
 			String methodName = "submitContactAndEventData";
 			String protocol = "https";
 			String port = proxyServiceConfig.getPort();
-			if(hdEndpoint.startsWith("localhost")) {
+			if (hdEndpoint.startsWith("localhost")) {
 				protocol = "http";
 				port = "8092/data-submission-rpc";
 			}

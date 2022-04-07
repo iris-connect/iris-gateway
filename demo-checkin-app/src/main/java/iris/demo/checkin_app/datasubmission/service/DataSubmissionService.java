@@ -43,9 +43,9 @@ public class DataSubmissionService {
 
 		List<GuestDto> guests;
 
-		if (locationDataRequest.getLocationId().equals("a7184b09-f33e-4f0c-9986-cd031d0c0f41")) {
+		if ("a7184b09-f33e-4f0c-9986-cd031d0c0f41".equals(locationDataRequest.getLocationId())) {
 			guests = guestLoader.getNaughtyGuests();
-		} else if (locationDataRequest.getLocationId().equals("99999999-9999-9999-9999-999999999999")) {
+		} else if ("99999999-9999-9999-9999-999999999999".equals(locationDataRequest.getLocationId())) {
 			throw new RuntimeException("Hier gab es einen Fehler ;)");
 		} else {
 			guests = guestLoader.getGuests();

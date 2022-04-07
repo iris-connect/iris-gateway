@@ -33,7 +33,7 @@ public class LocationsLoader {
 
 		for (var resource : resources) {
 
-			if (useNaughtyLocation || !resource.getFilename().equals("a-naughty-place.json")) {
+			if (useNaughtyLocation || !"a-naughty-place.json".equals(resource.getFilename())) {
 
 				var location = objectMapper.readValue(resource.getInputStream(), LocationDto.class);
 				locations.add(location);

@@ -77,9 +77,8 @@ public class LocationService {
 
 		var providerLocations = locationRepo.findByIdProviderId(providerId.toString());
 
-		return providerLocations.map(location -> {
-			return new LocationOverviewDto(location.getId().getLocationId(), location.getName());
-		}).toList();
+		return providerLocations
+				.map(location -> new LocationOverviewDto(location.getId().getLocationId(), location.getName())).toList();
 
 	}
 

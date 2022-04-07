@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * This class converts a request to a git issue dto.
- * 
+ *
  * @author Ostfalia Gruppe 12
  * @author Jens Kutzsche
  */
@@ -19,7 +19,7 @@ public class FeedbackMessageConverter {
 
 	/**
 	 * Converts request object to git issue object.
-	 * 
+	 *
 	 * @param feedback object of Iris-Client-Backend
 	 * @return git issue object
 	 */
@@ -37,7 +37,7 @@ public class FeedbackMessageConverter {
 
 	/**
 	 * Extracts title information of a request object.
-	 * 
+	 *
 	 * @param request object of Iris-Client-Backend
 	 * @return title as string
 	 */

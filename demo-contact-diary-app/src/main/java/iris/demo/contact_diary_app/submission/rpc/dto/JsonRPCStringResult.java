@@ -1,9 +1,10 @@
 package iris.demo.contact_diary_app.submission.rpc.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @AllArgsConstructor
@@ -11,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 // TODO: common code with checkin demo app
 public class JsonRPCStringResult {
 
-    @JsonProperty("_")
-    private String status;
+	@JsonProperty("_")
+	private String status;
 
 }

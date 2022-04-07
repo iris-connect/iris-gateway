@@ -12,8 +12,8 @@ import lombok.Setter;
 @Getter
 public class LocationSearchEntry {
 
-    private String providerId;
+	private String providerId;
 
-    private LocationInformation locationInformation;
+	private LocationInformation locationInformation;
 
 }

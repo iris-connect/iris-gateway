@@ -1,8 +1,12 @@
 package iris.backend_service.locations.jsonrpc;
 
-import org.springframework.data.domain.Sort;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import lombok.*;
+import org.springframework.data.domain.Sort;
 
 @Builder
 @Data

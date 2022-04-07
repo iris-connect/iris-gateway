@@ -18,7 +18,7 @@ public interface LocationRPC {
 
 	/**
 	 * adds a list of locations to the location service
-	 * 
+	 *
 	 * @param locationList list of locations
 	 * @return status response string
 	 */
@@ -28,14 +28,14 @@ public interface LocationRPC {
 
 	/**
 	 * returns all locations from a given provider
-	 * 
+	 *
 	 * @return list of Locationreferences
 	 */
 	List<LocationOverviewDto> getProviderLocations(@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client);
 
 	/**
 	 * deletes a specified location
-	 * 
+	 *
 	 * @param locationId the location ID
 	 * @return a response string
 	 */
@@ -45,7 +45,7 @@ public interface LocationRPC {
 
 	/**
 	 * searches a location with a given keyword
-	 * 
+	 *
 	 * @param searchKeyword the keyword
 	 * @return a locationlist object containing all matching locations
 	 */
@@ -56,7 +56,7 @@ public interface LocationRPC {
 
 	/**
 	 * returns an object containing all data about a given location
-	 * 
+	 *
 	 * @param providerId the provider ID
 	 * @param locationId the location ID
 	 * @return a LocationInformation object

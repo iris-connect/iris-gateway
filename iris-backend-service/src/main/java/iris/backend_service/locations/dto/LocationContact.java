@@ -7,18 +7,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LocationContact   {
+public class LocationContact {
 
-  private String officialName = null;
+	private String officialName = null;
 
-  private String representative = null;
+	private String representative = null;
 
-  private LocationAddress address = null;
+	private LocationAddress address = null;
 
-  private String ownerEmail = null;
+	private String ownerEmail = null;
 
-  private String email = null;
+	private String email = null;
 
-  private String phone = null;
+	private String phone = null;
 
 }
