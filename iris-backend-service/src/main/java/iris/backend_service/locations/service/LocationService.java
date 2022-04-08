@@ -8,10 +8,8 @@ import iris.backend_service.locations.search.db.DBSearchIndex;
 import iris.backend_service.locations.search.db.LocationRepository;
 import iris.backend_service.locations.search.db.model.Location;
 import iris.backend_service.locations.search.db.model.LocationIdentifier;
-import iris.backend_service.locations.utils.ValidationHelper;
 import lombok.AllArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,32 +30,14 @@ public class LocationService {
 
 	private final @NotNull DBSearchIndex index;
 
-	public List<String> addLocations(String providerId, List<LocationInformation> locations) {
+	public void addLocations(String providerId, List<LocationInformation> locationDtos) {
 
-		var listOfInvalidLocations = new ArrayList<String>();
-		var listOfValidLocations = new ArrayList<Location>();
+		var locations = locationDtos.stream()
+				.map(it -> getLocationFromLocationInformation(providerId, it))
+				.peek(it -> it.setContactPhone(normalizeSpace(it.getContactPhone())))
+				.toList();
 
-		for (LocationInformation locationInformation : locations) {
-
-			var location = getLocationFromLocationInformation(providerId, locationInformation);
-
-			location.setContactPhone(normalizeSpace(location.getContactPhone()));
-
-			if (location.getName() != null
-					&& location.getContactRepresentative() != null
-					&& (ValidationHelper.isValidAndNotNullEmail(location.getContactEmail())
-							|| ValidationHelper.isValidAndNotNullPhoneNumber(location.getContactPhone()))) {
-
-				listOfValidLocations.add(location);
-
-			} else {
-				listOfInvalidLocations.add(locationInformation.getId());
-			}
-		}
-
-		locationRepo.saveAll(listOfValidLocations);
-
-		return listOfInvalidLocations;
+		locationRepo.saveAll(locations);
 	}
 
 	private Location getLocationFromLocationInformation(String providerId, LocationInformation entry) {

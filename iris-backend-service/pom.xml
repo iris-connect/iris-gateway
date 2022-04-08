@@ -14,7 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>IRIS Backend Services</name>
 	<description>Backend services provider for IRIS (e.g. the location search provider)</description>
-	
+
 	<properties>
 		<java.version>17</java.version>
 		<docker.image.prefix>inoeg</docker.image.prefix>
@@ -22,7 +22,7 @@
 		<hibernate.search.version>6.1.3.Final</hibernate.search.version>
 		<xmlprojector.version>1.4.22</xmlprojector.version>
 	</properties>
-	
+
 	<profiles>
 		<profile>
 			<id>localDev</id>
@@ -37,7 +37,7 @@
 			</properties>
 		</profile>
 	</profiles>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -129,6 +129,11 @@
 			<groupId>com.slack.api</groupId>
 			<artifactId>slack-api-client</artifactId>
 			<version>1.20.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.libphonenumber</groupId>
+			<artifactId>libphonenumber</artifactId>
+			<version>8.12.46</version>
 		</dependency>
 
 		<!-- For XML projection of RKI PLZTool data -->
