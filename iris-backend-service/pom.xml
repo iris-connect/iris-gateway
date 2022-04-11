@@ -65,7 +65,7 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
-			<version>2.1.210</version><!-- Added to fix current vulnerability until 
+			<version>2.1.212</version><!-- Added to fix current vulnerability until 
 				Spring is adjusted. avd.aquasec.com/nvd/cve-2021-23463 -->
 		</dependency>
 		<dependency>
