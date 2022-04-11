@@ -1,5 +1,6 @@
 package iris.backend_service.locations.jsonrpc;
 
+import iris.backend_service.core.validation.NoSignOfAttack;
 import iris.backend_service.jsonrpc.JsonRpcClientDto;
 import iris.backend_service.locations.dto.LocationInformation;
 import iris.backend_service.locations.dto.LocationOverviewDto;
@@ -8,12 +9,17 @@ import iris.backend_service.locations.dto.LocationQueryResult;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.validation.annotation.Validated;
 
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 
 /**
  * JSON RPC controller for adding/deleting/editing/searching location data in the location service
  */
+@Validated
 public interface LocationRPC {
 
 	/**
@@ -23,15 +29,16 @@ public interface LocationRPC {
 	 * @return status response string
 	 */
 	String postLocationsToSearchIndex(
-			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
-			@JsonRpcParam(value = "locations") List<LocationInformation> locationList);
+			@JsonRpcParam(value = "_client") @NotNull @Valid JsonRpcClientDto client,
+			@JsonRpcParam(value = "locations") @Valid List<LocationInformation> locations);
 
 	/**
 	 * returns all locations from a given provider
 	 *
 	 * @return list of Locationreferences
 	 */
-	List<LocationOverviewDto> getProviderLocations(@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client);
+	List<LocationOverviewDto> getProviderLocations(
+			@JsonRpcParam(value = "_client") @NotNull @Valid JsonRpcClientDto client);
 
 	/**
 	 * deletes a specified location
@@ -40,8 +47,8 @@ public interface LocationRPC {
 	 * @return a response string
 	 */
 	String deleteLocationFromSearchIndex(
-			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
-			@JsonRpcParam(value = "locationId") String locationId);
+			@JsonRpcParam(value = "_client") @NotNull @Valid JsonRpcClientDto client,
+			@JsonRpcParam(value = "locationId") @NotBlank @NoSignOfAttack String locationId);
 
 	/**
 	 * searches a location with a given keyword
@@ -50,8 +57,8 @@ public interface LocationRPC {
 	 * @return a locationlist object containing all matching locations
 	 */
 	LocationQueryResult searchForLocation(
-			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
-			@JsonRpcParam(value = "searchKeyword") String searchKeyword,
+			@JsonRpcParam(value = "_client") @NotNull @Valid JsonRpcClientDto client,
+			@JsonRpcParam(value = "searchKeyword") @NoSignOfAttack String searchKeyword,
 			@JsonRpcParam(value = "pageable") PageableDto pageable);
 
 	/**
@@ -62,7 +69,7 @@ public interface LocationRPC {
 	 * @return a LocationInformation object
 	 */
 	Object getLocationDetails(
-			@Valid @JsonRpcParam(value = "_client") JsonRpcClientDto client,
-			@JsonRpcParam(value = "providerId") String providerId,
-			@JsonRpcParam(value = "locationId") String locationId);
+			@JsonRpcParam(value = "_client") @NotNull @Valid JsonRpcClientDto client,
+			@JsonRpcParam(value = "providerId") @NotBlank @NoSignOfAttack String providerId,
+			@JsonRpcParam(value = "locationId") @NotBlank @NoSignOfAttack String locationId);
 }

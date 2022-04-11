@@ -1,6 +1,5 @@
 package iris.backend_service.locations.search.db;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -65,26 +64,9 @@ public class LocationServiceTest {
 		JsonRpcClientDto clientDto = getJsonClientDto();
 		List<LocationInformation> locationList = getLocationInformationListWithOnlyValidCases();
 
-		List<String> listOfReturnStrings = systemUnderTest.addLocations(clientDto.getName(), locationList);
+		systemUnderTest.addLocations(clientDto.getName(), locationList);
 
 		verify(locationRepo).saveAll(anyList());
-		assertEquals(0, listOfReturnStrings.size());
-	}
-
-	@Test
-	public void addLocationsWithInvalidData() {
-		JsonRpcClientDto clientDto = getJsonClientDto();
-		List<LocationInformation> locationList = getLocationInformationList();
-
-		List<String> listOfReturnStrings = systemUnderTest.addLocations(clientDto.getName(), locationList);
-
-		verify(locationRepo).saveAll(anyList());
-		assertEquals(5, listOfReturnStrings.size());
-		assertEquals(LOCATION_ID_2, listOfReturnStrings.get(0));
-		assertEquals(LOCATION_ID_3, listOfReturnStrings.get(1));
-		assertEquals(LOCATION_ID_4, listOfReturnStrings.get(2));
-		assertEquals(LOCATION_ID_6, listOfReturnStrings.get(3));
-		assertEquals(LOCATION_ID_8, listOfReturnStrings.get(4));
 	}
 
 	JsonRpcClientDto getJsonClientDto() {

@@ -1,35 +1,39 @@
 package iris.backend_service.locations.dto;
 
+import iris.backend_service.core.validation.NoSignOfAttack;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
-import org.springframework.validation.annotation.Validated;
-
-/**
- * LocationInformation
- */
-@Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen",
-		date = "2021-03-27T12:26:11.318Z[GMT]")
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @Getter
 @Setter
 public class LocationInformation {
 
+	@NotBlank
+	@NoSignOfAttack
 	String id = null;
 
+	@NotBlank
+	@NoSignOfAttack
 	String providerId = null;
 
+	@NotBlank
+	@NoSignOfAttack
 	String name = null;
 
+	@NoSignOfAttack
 	String publicKey = null;
 
+	@NotNull
+	@Valid
 	LocationContact contact = null;
 
-	List<LocationContext> contexts = null;
-
+	List<@Valid LocationContext> contexts = null;
 }

@@ -1,47 +1,41 @@
 package iris.backend_service.locations.jsonrpc;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
+import iris.backend_service.core.validation.AttackDetector;
 import iris.backend_service.jsonrpc.JsonRpcClientDto;
+import iris.backend_service.locations.dto.LocationAddress;
 import iris.backend_service.locations.dto.LocationContact;
 import iris.backend_service.locations.dto.LocationInformation;
 import iris.backend_service.locations.service.LocationService;
-import iris.backend_service.locations.utils.ValidationHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import javax.validation.ConstraintViolationException;
 
-@ExtendWith(MockitoExtension.class)
-public class LocationRPCImplTest {
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.context.ActiveProfiles;
+
+@SpringBootTest
+@ActiveProfiles("dev_env")
+class LocationRPCImplTest {
 
 	String LOCATION_ID_1 = "ID_0001";
 	String LOCATION_ID_2 = "ID_0002";
 
-	LocationRPCImpl systemUnderTest;
+	@SpyBean
+	LocationRPC systemUnderTest;
 
-	@Mock
+	@MockBean
 	LocationService locationService;
-	@Mock
-	ValidationHelper validationHelper;
-
-	@BeforeEach
-	void setUp() {
-		systemUnderTest = new LocationRPCImpl(locationService, validationHelper);
-	}
+	@MockBean
+	AttackDetector attackDetector;
 
 	@Test
-	public void postLocationsToSearchIndexWithCorrectData() {
-		List<String> returnList = new ArrayList<>();
-
-		when(locationService.addLocations(any(), any())).thenReturn(returnList);
+	void postLocationsToSearchIndexWithCorrectData() {
 
 		JsonRpcClientDto clientDto = getJsonClientDto();
 		List<LocationInformation> locationList = getLocationInformationList();
@@ -51,19 +45,26 @@ public class LocationRPCImplTest {
 	}
 
 	@Test
-	public void postLocationsToSearchIndexWithIncorrectData() {
-		List<String> returnList = new ArrayList<>();
-		returnList.add(LOCATION_ID_1);
-		returnList.add(LOCATION_ID_2);
-
-		when(locationService.addLocations(any(), any())).thenReturn(returnList);
+	void postLocationsToSearchIndexWithIncorrectData() {
 
 		JsonRpcClientDto clientDto = getJsonClientDto();
-		List<LocationInformation> locationList = getLocationInformationList();
-		String returnString = systemUnderTest.postLocationsToSearchIndex(clientDto, locationList);
+		List<LocationInformation> locationList = List.of(
+				getLocationInformation(
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null));
 
-		String expectedReturnString = "Invalid Locations detected: " + LOCATION_ID_1 + ", " + LOCATION_ID_2;
-		assertEquals(expectedReturnString, returnString);
+		assertThrows(ConstraintViolationException.class,
+				() -> systemUnderTest.postLocationsToSearchIndex(clientDto, locationList));
 	}
 
 	JsonRpcClientDto getJsonClientDto() {
@@ -82,9 +83,12 @@ public class LocationRPCImplTest {
 						"publicKey",
 						"officialName",
 						"representative",
-						"ownerEmail",
-						"email",
-						"phone"),
+						"ownerEmail@email.xx",
+						"email@email.xx",
+						"+4935112345678",
+						"street",
+						"city",
+						"99999"),
 				getLocationInformation(
 						LOCATION_ID_2,
 						"providerId",
@@ -92,9 +96,12 @@ public class LocationRPCImplTest {
 						"publicKey",
 						"officialName",
 						"representative",
-						"ownerEmail",
-						"email",
-						"phone"));
+						"ownerEmail@email.xx",
+						"email@email.xx",
+						"+4935112345678",
+						"street",
+						"city",
+						"99999"));
 	}
 
 	LocationInformation getLocationInformation(
@@ -106,7 +113,10 @@ public class LocationRPCImplTest {
 			String representative,
 			String ownerEmail,
 			String email,
-			String phone) {
+			String phone,
+			String street,
+			String city,
+			String zip) {
 		LocationInformation location = new LocationInformation();
 		location.setId(id);
 		location.setName(name);
@@ -119,8 +129,15 @@ public class LocationRPCImplTest {
 		contact.setOwnerEmail(ownerEmail);
 		contact.setPhone(phone);
 		contact.setRepresentative(representative);
+
+		LocationAddress address = new LocationAddress();
+		address.setStreet(street);
+		address.setCity(city);
+		address.setZip(zip);
+		contact.setAddress(address);
+
 		location.setContact(contact);
+
 		return location;
 	}
-
 }

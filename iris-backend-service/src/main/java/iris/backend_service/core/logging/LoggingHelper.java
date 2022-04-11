@@ -1,4 +1,4 @@
-package iris.backend_service.locations.utils;
+package iris.backend_service.core.logging;
 
 import java.util.stream.IntStream;
 

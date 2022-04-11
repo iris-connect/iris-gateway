@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *******************************************************************************/
-package iris.backend_service.locations.utils;
+package iris.backend_service.core.logging;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 class LoggingHelperTest {
 
 	/**
-	 * Test method for {@link iris.backend_service.locations.utils.LoggingHelper#obfuscateEndPart(java.lang.String)}.
+	 * Test method for {@link iris.backend_service.core.logging.LoggingHelper#obfuscateEndPart(java.lang.String)}.
 	 */
 	@Test
 	void testObfuscateEndPart() {
@@ -37,7 +37,7 @@ class LoggingHelperTest {
 
 	/**
 	 * Test method for
-	 * {@link iris.backend_service.locations.utils.LoggingHelper#obfuscateOutsiteExtRange(java.lang.String, org.apache.commons.lang3.Range)}.
+	 * {@link iris.backend_service.core.logging.LoggingHelper#obfuscateOutsiteExtRange(java.lang.String, org.apache.commons.lang3.Range)}.
 	 */
 	@Test
 	void testObfuscateOutsiteExtRange() {

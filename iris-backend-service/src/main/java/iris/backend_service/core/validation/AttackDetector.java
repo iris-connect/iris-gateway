@@ -1,7 +1,8 @@
-package iris.backend_service.locations.utils;
+package iris.backend_service.core.validation;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
+import iris.backend_service.core.logging.LoggingHelper;
 import iris.backend_service.locations.dto.LocationInformation;
 import iris.backend_service.messages.AlertService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Range;
@@ -21,10 +21,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor()
-public class ValidationHelper {
+public class AttackDetector {
 
-	public static final Pattern REGEX_EMAIL = Pattern.compile("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w-_]+\\.)+[\\w]+[\\w]$");
-	public static final Pattern REGEX_PHONE = Pattern.compile("^\\+?[0-9][\\/\\.\\(\\) \\-0-9]{6,}?[0-9]$");
+	public static final String INVALID_INPUT_EXCEPTION_MESSAGE = "Die übergebenen Eingabedaten sind nicht erlaubt";
 
 	private static final String[] FORBIDDEN_SYMBOLS = {
 			"=",
@@ -96,20 +95,6 @@ public class ValidationHelper {
 	@Value("${iris.locations.post-limit:5000}")
 	private int postLimit;
 
-	public static boolean isValidAndNotNullEmail(String email) {
-		if (email == null) {
-			return false;
-		}
-		return REGEX_EMAIL.matcher(email).matches();
-	}
-
-	public static boolean isValidAndNotNullPhoneNumber(String phoneNumber) {
-		if (phoneNumber == null) {
-			return false;
-		}
-		return REGEX_PHONE.matcher(phoneNumber).matches();
-	}
-
 	private final AlertService alerts;
 
 	public boolean isPostOutOfLimit(List<LocationInformation> locationList, String client) {
@@ -129,15 +114,6 @@ public class ValidationHelper {
 		return false;
 	}
 
-	public boolean isPossibleAttackForRequiredValue(String input, String field, boolean obfuscateLogging, String client) {
-		if (isBlank(input)) {
-			log.warn(ErrorMessageHelper.MISSING_REQUIRED_INPUT_MESSAGE + " - {}", field);
-			return true;
-		}
-
-		return isPossibleAttack(input, field, obfuscateLogging, client);
-	}
-
 	public boolean isPossibleAttack(String input, String field, boolean obfuscateLogging, String client) {
 		return isPossibleAttack(input, field, obfuscateLogging, client, FORBIDDEN_SYMBOLS);
 	}
@@ -155,12 +131,12 @@ public class ValidationHelper {
 
 		String inputUpper = input.toUpperCase();
 		Optional<Range<Integer>> range;
-		if ((range = testKeywords(inputUpper, FORBIDDEN_KEYWORDS)).isPresent()
+		if ((range = findAnyOfKeywordTuples(inputUpper, FORBIDDEN_KEYWORDS)).isPresent()
 				|| (range = testSymbols(input, forbidenSymbols)).isPresent()) {
 
 			var logableValue = calculateLogableValue(input, obfuscateLogging, range.get());
 
-			log.warn(ErrorMessageHelper.INVALID_INPUT_EXCEPTION_MESSAGE + " - {}: {}", field,
+			log.warn(INVALID_INPUT_EXCEPTION_MESSAGE + " - {}: {}", field,
 					logableValue);
 
 			alerts.createAlertMessage("Input validation - possible attack",
@@ -173,25 +149,33 @@ public class ValidationHelper {
 		return false;
 	}
 
-	private static Optional<Range<Integer>> testKeywords(String str, String[]... keywords) {
+	private static Optional<Range<Integer>> findAnyOfKeywordTuples(String str, String[][] keywords) {
 
 		return Arrays.stream(keywords)
-				.map(it -> testKeywordsAndLinked(str, it))
+				.map(it -> findKeywordTuple(str, it))
 				.flatMap(Optional<Range<Integer>>::stream)
 				.findFirst();
 	}
 
-	private static Optional<Range<Integer>> testKeywordsAndLinked(String str, String... keywords) {
+	/**
+	 * Searches for the keyword tuple in the input string.
+	 *
+	 * @param input String to be tested
+	 * @param keywordTuple tuple with keywords to find
+	 * @return If found: range in tested string starting at beginning of first keyword, ending at end of last keyword.
+	 */
+	private static Optional<Range<Integer>> findKeywordTuple(String str, String[] keywordTuples) {
 
-		for (var keyword : keywords) {
+		for (var keyword : keywordTuples) {
 			if (indexOf(str, keyword) < 0) {
 				return Optional.empty();
 			}
 		}
 
-		var lastKeyword = keywords[keywords.length - 1];
+		var lastKeyword = keywordTuples[keywordTuples.length - 1];
 
-		return Optional.of(Range.between(indexOf(str, keywords[0]), indexOf(str, lastKeyword) + lastKeyword.length() - 1));
+		return Optional
+				.of(Range.between(indexOf(str, keywordTuples[0]), indexOf(str, lastKeyword) + lastKeyword.length() - 1));
 	}
 
 	private static Optional<Range<Integer>> testSymbols(String input, String[] forbiddenSymbolsArray) {
