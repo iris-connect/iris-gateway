@@ -26,7 +26,7 @@ jobs:
           options: --format --encode utf8 -o iris-backend-service/src/main/resources/masterdata/TransmittingSiteSearchText.xml
 
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'liberica'
           java-version: '17'
