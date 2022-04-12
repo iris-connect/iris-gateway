@@ -42,7 +42,7 @@ public @interface PhoneNumber {
 
 			try {
 
-				var number = util.parse(text, "ZZ");
+				var number = util.parse(text, "DE");
 				return util.isValidNumber(number);
 
 			} catch (NumberParseException e) {

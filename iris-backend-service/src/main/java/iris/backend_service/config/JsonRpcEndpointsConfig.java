@@ -9,6 +9,7 @@ import iris.backend_service.jsonrpc.JsonRpcClientDto;
 import iris.backend_service.locations.jsonrpc.LocationRPC;
 import iris.backend_service.messages.MessageRPC;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -31,6 +32,7 @@ import com.googlecode.jsonrpc4j.spring.CompositeJsonServiceExporter;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class JsonRpcEndpointsConfig {
 
 	public static final String EPS_CLIENT_ATTRIBUTE = "EPS_CLIENT";
@@ -75,7 +77,7 @@ public class JsonRpcEndpointsConfig {
 		return convertedParams;
 	}
 
-	static class JsonRpcErrorResolver implements ErrorResolver {
+	class JsonRpcErrorResolver implements ErrorResolver {
 
 		private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -86,6 +88,8 @@ public class JsonRpcEndpointsConfig {
 
 				var violations = violExc.getConstraintViolations();
 				var data = createData(violations);
+
+				log.warn("Invalid data from client {}: {}", request.getAttribute(EPS_CLIENT_ATTRIBUTE), data.errors());
 
 				return createJsonError(VALIDATION_ERROR_CODE, "Invalid Data", data);
 			}

@@ -20,7 +20,6 @@ public class LocationInformation {
 	@NoSignOfAttack
 	String id = null;
 
-	@NotBlank
 	@NoSignOfAttack
 	String providerId = null;
 
