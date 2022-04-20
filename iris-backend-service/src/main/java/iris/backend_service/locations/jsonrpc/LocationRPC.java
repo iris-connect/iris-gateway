@@ -25,7 +25,7 @@ public interface LocationRPC {
 	/**
 	 * adds a list of locations to the location service
 	 *
-	 * @param locationList list of locations
+	 * @param locations list of locations
 	 * @return status response string
 	 */
 	String postLocationsToSearchIndex(
