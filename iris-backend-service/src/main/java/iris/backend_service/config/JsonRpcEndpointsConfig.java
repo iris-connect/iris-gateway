@@ -5,14 +5,12 @@ import static java.util.stream.Collectors.*;
 import iris.backend_service.configurations.ConfigurationRpcService;
 import iris.backend_service.hd_search.HdSearchRpcService;
 import iris.backend_service.jsonrpc.HealthRPC;
-import iris.backend_service.jsonrpc.JsonRpcClientDto;
 import iris.backend_service.locations.jsonrpc.LocationRPC;
 import iris.backend_service.messages.MessageRPC;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,7 +26,9 @@ import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jsonrpc4j.ErrorResolver;
-import com.googlecode.jsonrpc4j.spring.CompositeJsonServiceExporter;
+import com.googlecode.jsonrpc4j.JsonRpcInterceptor;
+import com.googlecode.jsonrpc4j.ProxyUtil;
+import com.googlecode.jsonrpc4j.spring.JsonServiceExporter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -49,32 +49,34 @@ public class JsonRpcEndpointsConfig {
 	private final HttpServletRequest request;
 
 	@Bean(name = ENDPOINT)
-	public CompositeJsonServiceExporter jsonRpcServiceImplExporter() {
+	public JsonServiceExporter jsonRpcServiceImplExporter() {
 
-		var compositeJsonServiceExporter = new CompositeJsonServiceExporter();
-		compositeJsonServiceExporter.setServiceInterfaces(new Class[] { HealthRPC.class, LocationRPC.class,
-				MessageRPC.class, ConfigurationRpcService.class, HdSearchRpcService.class });
-		compositeJsonServiceExporter.setServices(new Object[] { health, locations, message, configurations, hdSearch });
-		compositeJsonServiceExporter.setAllowExtraParams(true);
-		compositeJsonServiceExporter.setAllowLessParams(true);
-		compositeJsonServiceExporter.setShouldLogInvocationErrors(false);
-		compositeJsonServiceExporter.setErrorResolver(new JsonRpcErrorResolver());
-		compositeJsonServiceExporter
-				.setConvertedParameterTransformer((target, convertedParams) -> setEpsClientAsRequestAttribute(convertedParams));
+		Object[] services = {
+				health,
+				locations,
+				message,
+				configurations,
+				hdSearch };
+		Class<?>[] serviceInterfaces = {
+				HealthRPC.class,
+				LocationRPC.class,
+				MessageRPC.class,
+				ConfigurationRpcService.class,
+				HdSearchRpcService.class };
 
-		return compositeJsonServiceExporter;
-	}
+		// create the composite service
+		var service = ProxyUtil.createCompositeServiceProxy(getClass().getClassLoader(), services, serviceInterfaces,
+				false);
 
-	private Object[] setEpsClientAsRequestAttribute(Object[] convertedParams) {
+		var jsonServiceExporter = new JsonServiceExporter();
+		jsonServiceExporter.setService(service);
+		jsonServiceExporter.setAllowExtraParams(true);
+		jsonServiceExporter.setAllowLessParams(true);
+		jsonServiceExporter.setShouldLogInvocationErrors(false);
+		jsonServiceExporter.setErrorResolver(new JsonRpcErrorResolver());
+		jsonServiceExporter.setInterceptorList(List.of(new EpsClientAsRequestAttributeInterceptor()));
 
-		Arrays.stream(convertedParams)
-				.filter(JsonRpcClientDto.class::isInstance)
-				.findFirst()
-				.map(JsonRpcClientDto.class::cast)
-				.map(JsonRpcClientDto::getName)
-				.ifPresent(it -> request.setAttribute(EPS_CLIENT_ATTRIBUTE, it));
-
-		return convertedParams;
+		return jsonServiceExporter;
 	}
 
 	class JsonRpcErrorResolver implements ErrorResolver {
@@ -113,4 +115,34 @@ public class JsonRpcEndpointsConfig {
 	}
 
 	record InvalidDataErrors(Map<String, String> errors) {}
+
+	/**
+	 * @author Jens Kutzsche
+	 */
+	private final class EpsClientAsRequestAttributeInterceptor implements JsonRpcInterceptor {
+
+		@Override
+		public void preHandleJson(JsonNode json) {
+
+			var clientName = json.findPath("params").findPath("_client").findPath("name");
+			if (clientName.isTextual()) {
+				request.setAttribute(EPS_CLIENT_ATTRIBUTE, clientName.asText(""));
+			}
+		}
+
+		@Override
+		public void preHandle(Object target, Method method, List<JsonNode> params) {
+			// not used
+		}
+
+		@Override
+		public void postHandle(Object target, Method method, List<JsonNode> params, JsonNode result) {
+			// not used
+		}
+
+		@Override
+		public void postHandleJson(JsonNode json) {
+			// not used
+		}
+	}
 }
