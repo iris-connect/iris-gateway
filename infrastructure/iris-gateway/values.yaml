@@ -103,7 +103,8 @@ postgresqlha:
     database: locations
     username: locations
     password: undefined #will be set by cli
-    replicaCount: 3
+    replicaCount: 1
+    upgradeRepmgrExtension: true
     resources: {}
       # limits:
       #   cpu: 250m
