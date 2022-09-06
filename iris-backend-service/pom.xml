@@ -20,7 +20,7 @@
 		<docker.image.prefix>inoeg</docker.image.prefix>
 		<version.tag>${project.version}</version.tag>
 		<hibernate.search.version>6.1.6.Final</hibernate.search.version>
-		<xmlprojector.version>1.4.23</xmlprojector.version>
+		<xmlprojector.version>1.4.24</xmlprojector.version>
 	</properties>
 
 	<profiles>
