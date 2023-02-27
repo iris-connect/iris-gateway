@@ -129,7 +129,7 @@
 		<dependency>
 			<groupId>com.googlecode.libphonenumber</groupId>
 			<artifactId>libphonenumber</artifactId>
-			<version>8.12.56</version>
+			<version>8.13.7</version>
 		</dependency>
 
 		<!-- For XML projection of RKI PLZTool data -->
